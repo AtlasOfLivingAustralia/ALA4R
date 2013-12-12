@@ -1,1 +1,10 @@
 * text=auto !eol
+/DESCRIPTION -text
+/NAMESPACE -text
+R/ala_autocomplete.R -text
+R/ala_species_info.R -text
+R/clean_string.R -text
+man/ALA-R-package.Rd -text
+man/ala_autocomplete.Rd -text
+man/ala_species_info.Rd -text
+man/clean_string.Rd -text
