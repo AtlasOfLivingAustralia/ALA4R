@@ -8,7 +8,7 @@
 	\tabular{ll}{
 	Package: \tab ALA4R\cr
 	Type: \tab Package\cr
-	Version: \tab 0.1\cr
+	Version: \tab 1.1\cr
 	Date: \tab 2014-01-05\cr
 	License: \tab GPL (>= 3)\cr
 }}
