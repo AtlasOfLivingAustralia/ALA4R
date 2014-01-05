@@ -1,9 +1,11 @@
 Package: ALA4R
 Type: Package
-Title: What the package does (short line)
-Version: 1.0
-Date: 2013-12-12
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Title: Atlas of Living Australia (ALA) data and resources in R
+Version: 0.1
+Date: 2014-01-05
+Author: Jeremy VanDerWal, Ben Raymond, Lee Belbin, Atlas of Living Australia
+Maintainer: Jeremy VanDerWal <jjvanderwal@gmail.com>, Ben Raymond <ben@theraymonds.org>, Lee Belbin <leebelbin@gmail.com>
+Description: The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from http://www.ala.org.au/ . Here we provide a subset of the tools to be directly used within R.
+License: GPL (>= 3)
+URL: http://rforge.net/ALA4R/
+LazyLoad: yes
