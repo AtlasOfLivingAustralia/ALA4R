@@ -1,61 +1,20 @@
 \name{ala_species_info}
 \alias{ala_species_info}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-%%  ~~function to do ... ~~
-}
-\description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
-\usage{
-ala_species_info(taxon)
-}
-%- maybe also 'usage' for other objects documented here.
+\title{Taxon or species info}
+\description{Returns the profile information for a given taxon. more needed!!!}
+\usage{ala_species_info(taxon)}
 \arguments{
-  \item{taxon}{
-%%     ~~Describe \code{taxon} here~~
-}
+	\item{taxon}{a character string for the taxon of interest}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+NEED
 }
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+\value{a dataframe of information with columns being:
+	\item{comp1 }{Description of 'comp1'}
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+\references{\url{http://www.ala.org.au/about-the-atlas/downloadable-tools/web-services/}}
+\author{Jeremy VanDerWal \email{jjvanderwal@gmail.com}, Ben Raymond \email{ben@theraymonds.org}}
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (taxon) 
-{
-    taxon = " 3red  kangaroo\n"
-    taxon = clean_string(taxon)
-    out = fromJSON(file = paste("http://bie.ala.org.au/ws/search.json?q=", 
-        taxon, sep = ""))
-  }
+	#find information ALA holds on red kangaroo
+	ala_species_info("red kangaroo")
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
