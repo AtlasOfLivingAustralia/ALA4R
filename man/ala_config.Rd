@@ -1,0 +1,51 @@
+\name{ala_config}
+\alias{ala_config}
+\title{Get or set ALA4R configuration options}
+\description{Get or set configuration options that control ALA4R behaviour}
+\usage{
+ala_config(...)
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{\dots}{Options can be defined using name=value. Valid option
+    names are listed below}
+}
+\details{Invoking ala_config() with no arguments returns a list with the
+  current values of the options.
+
+  Valid options are:
+  \item{caching}{caching can be "on" (results will be cached, and any
+  cached results will be re-used), "refresh" (cached results will be
+  refreshed and the new results stored in the cache), or "off" (no
+  caching, default).}
+  \item{cache_directory}{the directory to use for the cache. By default
+  this is a temporary directory, which means that results will only be
+  cached within an R session. The user may wish to set this to a
+  non-temporary directory for caching across sessions. The directory
+  must exist on the file system.}
+
+}
+\value{For ala_config(), a list of all options. When ala_config(...) is
+  called with arguments, nothing is returned but the configuration is set.
+}
+%\references{
+%% ~put references to the literature/web site here ~
+%}
+\author{Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal \email{jjvanderwal@gmail.com}}
+%\note{
+%%  ~~further notes~~
+%}
+
+%% ~Make other sections like Warning with \section{Warning }{....} ~
+
+%\seealso{
+%% ~~objects to See Also as \code{\link{help}}, ~~~
+%}
+\examples{
+ala_config()
+ala_config(caching="off")
+}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+%\keyword{ ~kwd1 }
+%\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
