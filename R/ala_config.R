@@ -63,7 +63,7 @@ ala_config=function(...) {
                     }
                 }
                 if (identical(this_option_name,"user_agent")) {
-                    if (! is.char(user_options[[i]])) {
+                    if (! is.character(user_options[[i]])) {
                         stop("user_agent should be a string");
                     }
                 }
