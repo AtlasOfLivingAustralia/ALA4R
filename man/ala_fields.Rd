@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Get list of fields for searching}
 \description{Retrieves a list of fields that can be used for searching}
-\usage{ala_fields(fields_type = c("general","occurrence"))}
+\usage{ala_fields(fields_type = "general")}
 \arguments{
   \item{fields_type}{ Either "general" (for searching taxa, datasets,
     layers, and collections metadata) or "occurrence" (for searching

@@ -14,17 +14,19 @@ ala_config(...)
   current values of the options.
 
   Valid options are:
-  \item{caching}{caching can be "on" (results will be cached, and any
-  cached results will be re-used), "refresh" (cached results will be
-  refreshed and the new results stored in the cache), or "off" (no
-  caching, default).}
-  \item{cache_directory}{the directory to use for the cache. By default
-  this is a temporary directory, which means that results will only be
-  cached within an R session. The user may wish to set this to a
-  non-temporary directory for caching across sessions. The directory
-  must exist on the file system.}
-  \item{user_agent}{the user-agent string used with all web requests to
-  the ALA servers.}
+  \itemize{
+    \item{caching}{caching can be "on" (results will be cached, and any
+      cached results will be re-used), "refresh" (cached results will be
+      refreshed and the new results stored in the cache), or "off" (no
+      caching, default).}
+    \item{cache_directory}{the directory to use for the cache. By default
+      this is a temporary directory, which means that results will only be
+      cached within an R session. The user may wish to set this to a
+      non-temporary directory for caching across sessions. The directory
+      must exist on the file system.}
+    \item{user_agent}{the user-agent string used with all web requests to
+      the ALA servers.}
+  }
 }
 \value{For ala_config(), a list of all options. When ala_config(...) is
   called with arguments, nothing is returned but the configuration is set.
