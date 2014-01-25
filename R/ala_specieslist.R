@@ -1,5 +1,6 @@
 ## Get species list as CSV
 ## e.g. http://biocache.ala.org.au/ws/webportal/species.csv?q=macropus&wkt=POLYGON((140 -37,151 -37,151 -26,140.1310 -26,140 -37))&pageSize=100
+## ala_specieslist("macropus",wkt="POLYGON((140 -37,151 -37,151 -26,140.1310 -26,140 -37))")
 
 ala_specieslist=function(taxon="",wkt="",page_size=NA) {
     ## TODO: add filtering functionality (fq parm passed in URL), assuming that it is relevant here

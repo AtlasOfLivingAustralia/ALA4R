@@ -11,7 +11,8 @@ ala_config(...)
     names are listed below}
 }
 \details{Invoking ala_config() with no arguments returns a list with the
-  current values of the options.
+  current values of the options. Invoking ala_config("reset") will reset
+  all options to their default values.
 
   Valid options are:
   \itemize{
@@ -24,6 +25,8 @@ ala_config(...)
       cached within an R session. The user may wish to set this to a
       non-temporary directory for caching across sessions. The directory
       must exist on the file system.}
+    \item{verbose}{should ALA4R give verbose output to assist debugging?
+  (logical, default=FALSE)}
     \item{user_agent}{the user-agent string used with all web requests to
       the ALA servers.}
   }
