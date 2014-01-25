@@ -4,6 +4,15 @@ ala_species_info <- function(taxon) {
         base_url="http://bie.ala.org.au/ws/search.json"
         this_url=parse_url(base_url)
         this_url$query=list(q=taxon)
-        x=GET(url=build_url(this_url),user_agent(ala_config()$user_agent))
-        content(x)[[1]]
+        this_url=build_url(this_url)
+        if (identical(ala_config()$caching,"off")) {
+            ## if we are not caching, get this directly without saving to file at all
+            x=GET(url=this_url,user_agent(ala_config()$user_agent))
+            x=content(x)
+        } else {
+            ## use caching
+            thisfile=ala_download_to_file(this_url)
+            x=fromJSON(file=thisfile)
+        }
+        x[[1]]
 }
