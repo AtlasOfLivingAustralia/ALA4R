@@ -23,7 +23,8 @@ ala_config(...)
   cached within an R session. The user may wish to set this to a
   non-temporary directory for caching across sessions. The directory
   must exist on the file system.}
-
+  \item{user_agent}{the user-agent string used with all web requests to
+  the ALA servers.}
 }
 \value{For ala_config(), a list of all options. When ala_config(...) is
   called with arguments, nothing is returned but the configuration is set.
