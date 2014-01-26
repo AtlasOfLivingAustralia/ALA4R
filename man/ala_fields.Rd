@@ -15,7 +15,7 @@
 %}
 \value{ Data frame containing the field names and various attributes }
 \references{For "occurrence",
-  \url{http://biocache.ala.org.au/ws/index/fields}. For "general", \url{http://bie.ala.org.au/admin/indexFields}
+  \url{http://biocache.ala.org.au/ws/index/fields}. For "general", \url{http://bie.ala.org.au/ws/admin/indexFields}
 }
 \author{Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal \email{jjvanderwal@gmail.com}}
 %\note{
