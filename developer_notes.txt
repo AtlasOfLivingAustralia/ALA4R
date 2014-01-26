@@ -1,10 +1,11 @@
-Last-Modified: <2014-01-26 12:43:51>
+Last-Modified: <2014-01-26 12:49:54>
 
 
 ---
 Questions and issues
 - do we wish to guarantee that the ordering of fields within a returned dataset will match the ordering within the query. e.g. if the user asks for latitude,longitude,state does it matter if we return the results with a different order e.g state,longitude,latitude? If we can allow this mismatch in ordering, our caching will be slightly more efficient. At the moment, the ordering is not preserved (see ala_cache_filename)
 - in ala_specieslist, the returned data has a column named "LSID". Should this be "GUID"?
+- need to check whether the argument name "taxon" is appropriate to use in all functions. This is mapped to the web service parameter name "q", which for some functions may be more general than just taxa.
 
 ---
 General considerations and notes:
