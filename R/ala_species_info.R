@@ -14,5 +14,8 @@ ala_species_info <- function(taxon) {
             thisfile=ala_download_to_file(this_url)
             x=fromJSON(file=thisfile)
         }
-        x[[1]]
+        x=x[[1]]
+        ## reformat results to data frame
+        x$results=rbind.fill(lapply(x$results,as.data.frame)) ## convert each element of results into data frame, then combine
+        x
 }

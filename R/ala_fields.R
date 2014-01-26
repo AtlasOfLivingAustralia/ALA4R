@@ -1,4 +1,17 @@
-## Retrieve a list of all fields. For occurrence searching, http://biocache.ala.org.au/ws/index/fields. For searching searching taxon, datasets, layers, collections metadata, http://bie.ala.org.au/ws/admin/indexFields
+#' Retrieve a list of all fields
+#'
+#' Retrieves a list of field names that can be used with the
+#' data retrieval functions
+#'
+#' @param  fields_type text: either "general" (for searching taxa, datasets,
+#'  layers, and collections metadata) or "occurrence" (for searching
+#'  species occurrence records)
+#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal \email{jjvanderwal@@gmail.com}
+#' @return A data frame containing the field names and various attributes
+#' @export
+#' @references For "occurrence", \url{http://biocache.ala.org.au/ws/index/fields}.
+#'  For "general", \url{http://bie.ala.org.au/ws/admin/indexFields}
+#' @examples ala_fields("general")
 
 ala_fields=function(fields_type="general") {
     fields_type=tolower(fields_type)
