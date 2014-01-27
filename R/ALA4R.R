@@ -4,5 +4,5 @@
 #' 
 #' @name ALA4R
 #' @docType package
-#' @import httr stringr rjson digest plyr
+#' @import httr stringr rjson digest plyr RCurl
 NULL
