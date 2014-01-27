@@ -3,27 +3,28 @@
 #' Used to provide a list of all environmental and contextual layers
 #' provided through ALA.
 #' 
-#' @param type a selection of all, grids or shape associated with all possible layers, only environmental grids or contextual shapefiles
+#' @param type a selection of "all", "grids" or "shapes" associated with all possible layers, only environmental grids or contextual shapefiles
 #' @return A data frame of results
 #' @author Jeremy VanDerWal \email{jjvanderwal@@gmail.com}, Ben Raymond \email{ben@@theraymonds.org}
 #' @references \url{http://spatial.ala.org.au/ws/}
 #' @examples
 #' 
-#' environmental_layers(type="all")
-#' environmental_layers(type="grids")
-#' environmental_layers(type="shape")
+#' enviro_layers(type="all")
+#' enviro_layers(type="grids")
+#' enviro_layers(type="shapes")
 #' 
 #' @export enviro_layers
 enviro_layers = function(type="all") {
-    if (type %in% c('all','grids','shape')) { #confirm appropriate type selected
-        base_url = 'http://spatial.ala.org.au/ws/layers' #define the base url
-		if (type == 'all') out = POST(url=base_url,body=toJSON(taxa),user_agent(ala_config()$user_agent))
-    } else {
-		stop('type must be either all, grids or shape')
+    base_url = 'http://spatial.ala.org.au/ws/layers' #define the base url
+	if (type == 'all') { 
+		out = GET(url=base_url,user_agent(ala_config()$user_agent)) #download all data
+	} else if (type == 'grids') {
+		out = GET(url=paste(base_url,type,sep='/'),user_agent(ala_config()$user_agent)) #download only grids
+	} else if (type == 'shapes') {
+		out = GET(url=paste(base_url,type,sep='/'),user_agent(ala_config()$user_agent)) #download only shapefile info
+	} else {
+		stop('type must be either all, grids or shape') #incorrect type so stop
 	}
-    taxa = lapply(taxa,clean_string) ## clean up the taxon name
-    base_url="http://bie.ala.org.au/ws/species/bulklookup.json"
-    x=POST(url=base_url,body=toJSON(taxa),user_agent(ala_config()$user_agent)) ## no caching on POST operations yet
-    rbind.fill(lapply(content(x)[[1]],as.data.frame)) ## convert each element of content(x)[[1]] into data frame, then combine
+	out = content(out) #keep only the content
+	do.call('rbind.fill',lapply(out,as.data.frame)) #bind the data as a dataframe
 }
-
