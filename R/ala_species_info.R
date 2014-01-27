@@ -1,4 +1,22 @@
-## grab all data for a taxon of interest
+#' Taxon or species info
+#' 
+#' Returns the profile information for a given taxon. more needed!!!
+#' 
+#' NEED
+#' 
+#' @param taxon a character string for the taxon of interest
+#' @return a dataframe of information with columns being: \item{comp1
+#' }{Description of 'comp1'}
+#' @author Jeremy VanDerWal \email{jjvanderwal@@gmail.com}, Ben Raymond
+#' \email{ben@@theraymonds.org}
+#' @references
+#' \url{http://www.ala.org.au/about-the-atlas/downloadable-tools/web-services/}
+#' @examples
+#' 
+#' 	#find information ALA holds on red kangaroo
+#' 	ala_species_info("red kangaroo")
+#' 
+#' @export ala_species_info
 ala_species_info <- function(taxon) {
 	taxon = clean_string(taxon) #clean up the taxon name
         base_url="http://bie.ala.org.au/ws/search.json"

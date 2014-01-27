@@ -1,3 +1,20 @@
+#' Get the name of the cache file associated with the given URL
+#' 
+#' Returns the name of the cache file associated with the given URL. Note that
+#' this file may not actually exist, this function just provides the mapping
+#' from URL to filename
+#' 
+#' 
+#' @param url The URL, as a string
+#' @return the file path and name, as a string
+#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
+#' \email{jjvanderwal@@gmail.com}
+#' @seealso \code{ala_config} for cache settings, particularly the cache
+#' directory
+#' @examples
+#' ala_cache_filename("http://biocache.ala.org.au/ws/index/fields")
+#' 
+#' @export ala_cache_filename
 ala_cache_filename=function(url) {
     ## returns the cache filename associated with the given url
     ## note that this file may not actually exist, this function just provides the mapping from URL to filename

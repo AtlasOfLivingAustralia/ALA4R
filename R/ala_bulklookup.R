@@ -1,3 +1,18 @@
+#' Bulk lookup of GUIDs
+#' 
+#' Used to provide GUIDs for a list of names
+#' 
+#' 
+#' @param taxa A list of names
+#' @return A data frame of results
+#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
+#' \email{jjvanderwal@@gmail.com}
+#' @references \url{http://bie.ala.org.au/bie-service/}
+#' @examples
+#' 
+#' ala_bulklookup(list("Grevillea humilis","Grevillea humilis subsp. maritima"))
+#' 
+#' @export ala_bulklookup
 ala_bulklookup=function(taxa=list()) {
     if (is.character(taxa)) {
         ## single name provided as a string, we were expecting a list of names

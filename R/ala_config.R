@@ -1,3 +1,34 @@
+#' Get or set ALA4R configuration options
+#' 
+#' Get or set configuration options that control ALA4R behaviour
+#' 
+#' Invoking ala_config() with no arguments returns a list with the current
+#' values of the options. Invoking ala_config("reset") will reset all options
+#' to their default values.
+#' 
+#' Valid options are: \itemize{ \itemcachingcaching can be "on" (results will
+#' be cached, and any cached results will be re-used), "refresh" (cached
+#' results will be refreshed and the new results stored in the cache), or "off"
+#' (no caching, default).  \itemcache_directorythe directory to use for the
+#' cache. By default this is a temporary directory, which means that results
+#' will only be cached within an R session. The user may wish to set this to a
+#' non-temporary directory for caching across sessions. The directory must
+#' exist on the file system.  \itemverboseshould ALA4R give verbose output to
+#' assist debugging?  (logical, default=FALSE) \itemuser_agentthe user-agent
+#' string used with all web requests to the ALA servers.  }
+#' 
+#' @param \dots Options can be defined using name=value. Valid option names are
+#' listed below
+#' @return For ala_config(), a list of all options. When ala_config(...) is
+#' called with arguments, nothing is returned but the configuration is set.
+#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
+#' \email{jjvanderwal@@gmail.com}
+#' @examples
+#' 
+#' ala_config()
+#' ala_config(caching="off")
+#' 
+#' @export ala_config
 ala_config=function(...) {
     ## get or set options that control ALA4R behaviour
     ## options are stored as a global option with the name defined in ala_option_name

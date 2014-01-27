@@ -1,18 +1,23 @@
 #' Retrieve a list of all fields
-#'
-#' Retrieves a list of field names that can be used with the
-#' data retrieval functions
-#'
-#' @param  fields_type text: either "general" (for searching taxa, datasets,
-#'  layers, and collections metadata) or "occurrence" (for searching
-#'  species occurrence records)
-#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal \email{jjvanderwal@@gmail.com}
+#' 
+#' Retrieves a list of field names that can be used with the data retrieval
+#' functions
+#' 
+#' 
+#' @param fields_type text: either "general" (for searching taxa, datasets,
+#' layers, and collections metadata) or "occurrence" (for searching species
+#' occurrence records)
 #' @return A data frame containing the field names and various attributes
-#' @export
-#' @references For "occurrence", \url{http://biocache.ala.org.au/ws/index/fields}.
-#'  For "general", \url{http://bie.ala.org.au/ws/admin/indexFields}
-#' @examples ala_fields("general")
-
+#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
+#' \email{jjvanderwal@@gmail.com}
+#' @references For "occurrence",
+#' \url{http://biocache.ala.org.au/ws/index/fields}.  For "general",
+#' \url{http://bie.ala.org.au/ws/admin/indexFields}
+#' @examples
+#' 
+#' ala_fields("general")
+#' 
+#' @export ala_fields
 ala_fields=function(fields_type="general") {
     fields_type=tolower(fields_type)
     match.arg(fields_type,c("general","occurrence"))

@@ -1,7 +1,26 @@
-## Get species list as CSV
-## e.g. http://biocache.ala.org.au/ws/webportal/species.csv?q=macropus&wkt=POLYGON((140 -37,151 -37,151 -26,140.1310 -26,140 -37))&pageSize=100
-## ala_specieslist("macropus",wkt="POLYGON((140 -37,151 -37,151 -26,140.1310 -26,140 -37))")
-
+#' Get list of taxa and occurrence counts
+#' 
+#' Get list of taxa and their occurrence counts, matching a taxonomic query
+#' and/or within a specified spatial area
+#' 
+#' 
+#' @param taxon Taxonomic query, e.g. "macropus" or "macropodidae"
+#' @param wkt A WKT (well-known text) string providing a spatial polygon within
+#' which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.1310 -26,140
+#' -37))"
+#' @param page_size Maximum number of records to return (may not be honoured by
+#' the ALA server). Default=NA, meaning that the server default value
+#' (currently 10) will be used.
+#' @return Data frame with (at least) the columns
+#' "Scientific.name","Common.name","Taxon.rank","LSID","N.occurrences"
+#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
+#' \email{jjvanderwal@@gmail.com}
+#' @references \url{http://spatial.ala.org.au/layers-service/}
+#' @examples
+#' 
+#' x=ala_specieslist(taxon="macropus",wkt="POLYGON((140:-37,151:-37,151:-26,140.1310:-26,140:-37))")
+#' 
+#' @export ala_specieslist
 ala_specieslist=function(taxon="",wkt="",page_size=NA) {
     ## TODO: add filtering functionality (fq parm passed in URL), assuming that it is relevant here
     ## TODO: check validity of wkt? (but it will require an additional library such as rgeos)
