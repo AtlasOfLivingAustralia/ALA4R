@@ -7,16 +7,10 @@
 \arguments{
   \item{taxa}{A list of names}
 }
-\details{
+%\details{
 %%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
+%}
+\value{A data frame of results}
 \references{\url{http://bie.ala.org.au/bie-service/}}
 \author{Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal \email{jjvanderwal@gmail.com}}
 %\note{
