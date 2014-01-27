@@ -2,8 +2,8 @@
 #' 
 #' Used to provide a list of all fields associated with the environmental and contextual layers provided through ALA.
 #' 
-#' @aliases fields field_info
-#' @param field_id field id; the field id value from the \code{field} command
+#' @aliases field_info
+#' @param field_id field id; the field id value from the field() command
 #' @return A data frame of results
 #' @author Jeremy VanDerWal \email{jjvanderwal@@gmail.com}, Ben Raymond \email{ben@@theraymonds.org}
 #' @references \url{http://spatial.ala.org.au/ws/}
