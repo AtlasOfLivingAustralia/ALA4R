@@ -1,20 +1,20 @@
-#' Check HTTP status code
-#' 
-#' Generic check function that checks HTTP status codes coming back from ALA requests.
-#' 
-#' @param x string: a status code, or an object of class "response" (from e.g. GET)
-#' @param on_redirect function: optional function to evaluate in the case of a redirect (3xx) code. By default a warning is issued.
-#' @param on_client_error function: optional function to evaluate in the case of a client error (4xx) code. By default an error is thrown.
-#' @param on_server_error function: optional function to evaluate in the case of a server error (5xx) code. By default an error is thrown.
-#' @return integer: simplified status code (0=success (2xx codes), 1=warning (3xx codes))
-#' @references \url{http://www.w3.org/Protocols/HTTP/HTRESP.html}
-#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal \email{jjvanderwal@@gmail.com}
-#' @examples
-#'
-#' out = GET(url="http://www.ala.org.au/")
-#' check_status_code(out)
-#' check_status_code(out$headers$status)
-#' 
+# Check HTTP status code
+# 
+# Generic check function that checks HTTP status codes coming back from ALA requests.
+# 
+# @param x string: a status code, or an object of class "response" (from e.g. GET)
+# @param on_redirect function: optional function to evaluate in the case of a redirect (3xx) code. By default a warning is issued.
+# @param on_client_error function: optional function to evaluate in the case of a client error (4xx) code. By default an error is thrown.
+# @param on_server_error function: optional function to evaluate in the case of a server error (5xx) code. By default an error is thrown.
+# @return integer: simplified status code (0=success (2xx codes), 1=warning (3xx codes))
+# @references \url{http://www.w3.org/Protocols/HTTP/HTRESP.html}
+# @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal \email{jjvanderwal@@gmail.com}
+# @examples
+#
+# out = GET(url="http://www.ala.org.au/")
+# check_status_code(out)
+# check_status_code(out$headers$status)
+# 
 
 check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL) {
     if (identical(class(x),"response")) {
