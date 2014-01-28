@@ -18,10 +18,10 @@
 #' @references \url{http://spatial.ala.org.au/layers-service/}
 #' @examples
 #' 
-#' x=ala_specieslist(taxon="macropus",wkt="POLYGON((140:-37,151:-37,151:-26,140.1310:-26,140:-37))")
+#' x=specieslist(taxon="macropus",wkt="POLYGON((140 -37,151 -37,151 -26,140.1310 -26,140 -37))")
 #' 
-#' @export ala_specieslist
-ala_specieslist=function(taxon="",wkt="",page_size=NA) {
+#' @export specieslist
+specieslist=function(taxon="",wkt="",page_size=NA) {
     ## TODO: add filtering functionality (fq parm passed in URL), assuming that it is relevant here
     ## TODO: check validity of wkt? (but it will require an additional library such as rgeos)
     ## check input parms are sensible
@@ -33,7 +33,7 @@ ala_specieslist=function(taxon="",wkt="",page_size=NA) {
     }
     
     taxon = clean_string(taxon) ## clean up the taxon name
-    base_url="http://biocache.ala.org.au/ws/webportal/species.csv"
+    base_url=paste(ala_config()$base_url_biocache,"webportal/species.csv",sep="")
     this_query=list()
     ## have we specified a taxon?
     if (str_length(taxon)>0) {
@@ -56,7 +56,7 @@ ala_specieslist=function(taxon="",wkt="",page_size=NA) {
     this_url$query=this_query
     
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
-    thisfile=download_to_file(url=build_url(this_url))
+    thisfile=cached_get(url=build_url(this_url),type="filename")
     x=read.table(thisfile,sep=",",header=TRUE,comment.char="")
     ## rename "X..Occurrences" (which was "# Occurrences" in the csv file)
     names(x)=str_replace(names(x),"X..Occurrences","N.occurrences")
