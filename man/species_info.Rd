@@ -1,8 +1,8 @@
-\name{ala_species_info}
-\alias{ala_species_info}
+\name{species_info}
+\alias{species_info}
 \title{Taxon or species info}
 \usage{
-ala_species_info(taxon)
+species_info(taxon)
 }
 \arguments{
   \item{taxon}{a character string for the taxon of
@@ -21,7 +21,7 @@ NEED
 }
 \examples{
 #find information ALA holds on red kangaroo
-	ala_species_info("red kangaroo")
+	species_info("red kangaroo")
 }
 \author{
 Jeremy VanDerWal \email{jjvanderwal@gmail.com}, Ben Raymond
