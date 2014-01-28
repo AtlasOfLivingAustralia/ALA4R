@@ -1,13 +1,18 @@
-Last-Modified: <2014-01-28 12:58:23>
+Last-Modified: <2014-01-28 15:45:02>
 
 
 ---
 Questions and issues
+
+ALA4R issues:
 - do we wish to guarantee that the ordering of fields within a returned dataset will match the ordering within the query. e.g. if the user asks for latitude,longitude,state does it matter if we return the results with a different order e.g state,longitude,latitude? If we can allow this mismatch in ordering, our caching will be slightly more efficient. At the moment, the ordering is not preserved (see ala_cache_filename)
-- in ala_specieslist, the returned data has a column named "LSID". Should this be "GUID"?
 - need to check whether the argument name "taxon" is appropriate to use in all functions. This is mapped to the web service parameter name "q", which for some functions may be more general than just taxa.
+
+Broader issues for ALA devs:
 - are there simplified field names? Many field names (e.g. "el783" etc) are pretty meaningless to the user, and the full field names (e.g. "WorldClim: Temperature - seasonality" or "Growth index C3 macrotherm plants - annual mean" are typically rather cumbersome. Simplified field names that can be used as column names in R would be handy.
 - in http://biocache.ala.org.au/ws/index/fields, the value of "name" actually seems to be the field "id".
+- in specieslist, the returned data has a column named "LSID". Should this be "GUID"?
+- the field information service (http://spatial.ala.org.au/ws/field/) gives a 500 error for some invalid field names, e.g. http://spatial.ala.org.au/ws/field/cl855. Other invalid field names just return an empty response e.g. http://spatial.ala.org.au/ws/field/bilbobaggins
 
 ---
 General considerations and notes:
@@ -28,10 +33,9 @@ Configuration
 ---
 Caching
 
-- a simple caching scheme has been implemented. ala_cache_filename() returns the name of the cached file associated with a particular URL. Note that the file may not yet actually be cached on the local computer. ala_download_to_file() takes a URL, and either downloads the file or retrieves it from the cache, and also stores it in the cache (depending on the caching settings).
+- a simple caching scheme has been implemented. ala_cache_filename() returns the name of the cached file associated with a particular URL. Note that the file may not yet actually be cached on the local computer. cached_get() is a wrapper function around httr's GET, but also takes care of caching, setting the user-agent string, and checking the http status response code.
 - the user can control the caching behaviour via the configuration options. caching can be "on","off", or "refresh". The user can also set the cache directory. By default this is a temporary directory that will be cleared automatically at the end of the R session. The user may wish to set this to a different location to allow results to be cached across R sessions. Needs documentation.
-- caching has so far been implemented for GET operations within ala_fields, ala_autocomplete, ala_species_info, and ala_specieslist. POST operations (ala_bulklookup) are not yet cached. (We may wish to consider providing caching for *everything*, so that the user can repeat previous analyses without needing an internet connection.)
-- update: cached_get() should act as a convenience wrapper function for GET operations, handling caching, user_agent setting, and basic checcking of results status codes. In progress.
+- POST operations (bulklookup) are not yet cached. (We may wish to consider providing caching for *everything*, so that the user can repeat previous analyses without needing an internet connection.)
 
 
 ---
@@ -39,15 +43,15 @@ Supported queries (from Lee's word document), with initial assignment to [Jeremy
 
 1. Species profile. Initially, interaction with the ALA is required to identify which taxa or group of taxa are of interest. 
    a. Auto-complete (partial matching) would be ideal. Support for scientific names (P1) and common names (p2) required.
-      - ala_autocomplete() initial version is working. Both scientific and common names will match.
+      - autocomplete() initial version is working. Both scientific and common names will match.
       - issues: the returned data has <b></b> tags marking the matches (either in scientificNameMatches or commonNameMatches). We can either remove these tags, or drop these columns entirely. There is also a matchedNames column with the same information (no tags), although it doesn't identify whether the match was on a scientific or common name.
       - data format is currently a data.frame, may need to be made more compatible with other packages (rgbif etc)
 
    b. Second: general information about a taxa or group (i.e. the existing species profile services)
-      - ala_species_info() initial version is working. Data format needs work.
+      - species_info() initial version is working. Data format needs work.
 
 2. [Ben] List of (unique) taxa in an area: Supply WKT?
-   - ala_specieslist() initial version is working. Data currently returned as a data.frame, need to check what the equivalent data structure is in e.g. rgbif so t hat we can be compatible if appropriate. WKT string not currently checked for validity.
+   - specieslist() initial version is working. Data currently returned as a data.frame, need to check what the equivalent data structure is in e.g. rgbif so t hat we can be compatible if appropriate. WKT string not currently checked for validity.
 
 3. [Jeremy] Search for Environmental/contextual layers of interest. Search names and tags - return list?
 
@@ -56,7 +60,7 @@ Supported queries (from Lee's word document), with initial assignment to [Jeremy
    b. Optionally with appended selected environmental/contextual data values
    c. Key ‘visualization’ = data quality flags. Some interaction or at least a summary of relevant flags, to allow the user to understand which records have been flagged and for what reasons.
 
-   - ala_occurrences() very preliminary version is working
+   - occurrences() very preliminary version is working
 
 
 5. Tabulations: 2x contextual classes table with entries being one of: 
