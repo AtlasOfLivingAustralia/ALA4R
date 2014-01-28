@@ -6,6 +6,7 @@
 #' @param fields_type text: either "general" (for searching taxa, datasets,
 #' layers, and collections metadata), "occurrence" (for searching species
 #' occurrence records), or "layers" (a list of all fields associated with the environmental and contextual layers)
+#' @param field_id text: id of field for which to look up information
 #' @return A data frame containing the field names and various attributes
 #' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
 #' \email{jjvanderwal@@gmail.com}
