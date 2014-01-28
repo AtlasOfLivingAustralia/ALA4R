@@ -1,4 +1,4 @@
-Last-Modified: <2014-01-26 12:49:54>
+Last-Modified: <2014-01-28 12:58:23>
 
 
 ---
@@ -6,11 +6,13 @@ Questions and issues
 - do we wish to guarantee that the ordering of fields within a returned dataset will match the ordering within the query. e.g. if the user asks for latitude,longitude,state does it matter if we return the results with a different order e.g state,longitude,latitude? If we can allow this mismatch in ordering, our caching will be slightly more efficient. At the moment, the ordering is not preserved (see ala_cache_filename)
 - in ala_specieslist, the returned data has a column named "LSID". Should this be "GUID"?
 - need to check whether the argument name "taxon" is appropriate to use in all functions. This is mapped to the web service parameter name "q", which for some functions may be more general than just taxa.
+- are there simplified field names? Many field names (e.g. "el783" etc) are pretty meaningless to the user, and the full field names (e.g. "WorldClim: Temperature - seasonality" or "Growth index C3 macrotherm plants - annual mean" are typically rather cumbersome. Simplified field names that can be used as column names in R would be handy.
+- in http://biocache.ala.org.au/ws/index/fields, the value of "name" actually seems to be the field "id".
 
 ---
 General considerations and notes:
 
-- functions are prefixed with "ala_", e.g. ala_bulklookup(). The latter part of the function name should generally follow the web service name (e.g. /ws/species/bulklookup.json)
+- use "ala_" as a function name prefix only where it the function is ambiguous or may clash with others (e.g. ala_config)
 - we will use CSV output from ALA rather than JSON where possible, since CSV is more efficient and easier to convert to sensible R data structures. R's read.table() can also handle compressed csv's without needing to explicitly uncompress them
 - need to put some checks on internet activity, e.g. identify when a connection could not be made to the ALA servers (either they are down, or the user has no connection)
 - should probably be reasonably rigorous in checking that input arguments are sensible and valid
@@ -29,6 +31,7 @@ Caching
 - a simple caching scheme has been implemented. ala_cache_filename() returns the name of the cached file associated with a particular URL. Note that the file may not yet actually be cached on the local computer. ala_download_to_file() takes a URL, and either downloads the file or retrieves it from the cache, and also stores it in the cache (depending on the caching settings).
 - the user can control the caching behaviour via the configuration options. caching can be "on","off", or "refresh". The user can also set the cache directory. By default this is a temporary directory that will be cleared automatically at the end of the R session. The user may wish to set this to a different location to allow results to be cached across R sessions. Needs documentation.
 - caching has so far been implemented for GET operations within ala_fields, ala_autocomplete, ala_species_info, and ala_specieslist. POST operations (ala_bulklookup) are not yet cached. (We may wish to consider providing caching for *everything*, so that the user can repeat previous analyses without needing an internet connection.)
+- update: cached_get() should act as a convenience wrapper function for GET operations, handling caching, user_agent setting, and basic checcking of results status codes. In progress.
 
 
 ---
@@ -41,7 +44,7 @@ Supported queries (from Lee's word document), with initial assignment to [Jeremy
       - data format is currently a data.frame, may need to be made more compatible with other packages (rgbif etc)
 
    b. Second: general information about a taxa or group (i.e. the existing species profile services)
-      - ala_speciesinfo() initial version is working. Data format needs work.
+      - ala_species_info() initial version is working. Data format needs work.
 
 2. [Ben] List of (unique) taxa in an area: Supply WKT?
    - ala_specieslist() initial version is working. Data currently returned as a data.frame, need to check what the equivalent data structure is in e.g. rgbif so t hat we can be compatible if appropriate. WKT string not currently checked for validity.
