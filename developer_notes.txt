@@ -1,4 +1,4 @@
-Last-Modified: <2014-01-28 18:19:22>
+Last-Modified: <2014-01-28 19:40:58>
 
 
 ---
@@ -7,6 +7,8 @@ Questions and issues
 ALA4R issues:
 - do we wish to guarantee that the ordering of fields within a returned dataset will match the ordering within the query. e.g. if the user asks for latitude,longitude,state does it matter if we return the results with a different order e.g state,longitude,latitude? If we can allow this mismatch in ordering, our caching will be slightly more efficient. At the moment, the ordering is not preserved (see ala_cache_filename)
 - need to check whether the argument name "taxon" is appropriate to use in all functions. This is mapped to the web service parameter name "q", which for some functions may be more general than just taxa.
+- for autocomplete(), the returned data has <b></b> tags marking the matches (either in scientificNameMatches or commonNameMatches). We can either remove these tags, or drop these columns entirely. There is also a matchedNames column with the same information (no tags), although it doesn't identify whether the match was on a scientific or common name.
+
 
 ---
 General considerations and notes:
@@ -27,7 +29,9 @@ Configuration
 ---
 Caching
 
-- a simple caching scheme has been implemented. ala_cache_filename() returns the name of the cached file associated with a particular URL. Note that the file may not yet actually be cached on the local computer. cached_get() is a wrapper function around httr's GET, but also takes care of caching, setting the user-agent string, and checking the http status response code.
+- a simple caching scheme has been implemented. 
+- cached_get() is the main function. This a wrapper function around httr's GET, but also takes care of caching, setting the user-agent string, and checking the http status response code.
+- ala_cache_filename() returns the name of the cached file associated with a particular URL. Note that the file may not yet actually be cached on the local computer. 
 - the user can control the caching behaviour via the configuration options. caching can be "on","off", or "refresh". The user can also set the cache directory. By default this is a temporary directory that will be cleared automatically at the end of the R session. The user may wish to set this to a different location to allow results to be cached across R sessions. Needs documentation.
 - POST operations (bulklookup) are not yet cached. (We may wish to consider providing caching for *everything*, so that the user can repeat previous analyses without needing an internet connection.)
 
@@ -38,23 +42,22 @@ Supported queries (from Lee's word document), with initial assignment to [Jeremy
 1. Species profile. Initially, interaction with the ALA is required to identify which taxa or group of taxa are of interest. 
    a. Auto-complete (partial matching) would be ideal. Support for scientific names (P1) and common names (p2) required.
       - autocomplete() initial version is working. Both scientific and common names will match.
-      - issues: the returned data has <b></b> tags marking the matches (either in scientificNameMatches or commonNameMatches). We can either remove these tags, or drop these columns entirely. There is also a matchedNames column with the same information (no tags), although it doesn't identify whether the match was on a scientific or common name.
       - data format is currently a data.frame, may need to be made more compatible with other packages (rgbif etc)
 
    b. Second: general information about a taxa or group (i.e. the existing species profile services)
       - species_info() initial version is working. Data format needs work.
 
 2. [Ben] List of (unique) taxa in an area: Supply WKT?
-   - specieslist() initial version is working. Data currently returned as a data.frame, need to check what the equivalent data structure is in e.g. rgbif so t hat we can be compatible if appropriate. WKT string not currently checked for validity.
+   - specieslist() initial version is working. Data currently returned as a data.frame, need to check what the equivalent data structure is in e.g. rgbif so that we can be compatible if appropriate. WKT string is now checked for validity.
 
 3. [Jeremy] Search for Environmental/contextual layers of interest. Search names and tags - return list?
 
 4. [Ben] Species occurrence records
    a. Optionally within area defined by WKT
    b. Optionally with appended selected environmental/contextual data values
-   c. Key ‘visualization’ = data quality flags. Some interaction or at least a summary of relevant flags, to allow the user to understand which records have been flagged and for what reasons.
+   - occurrences() initial version is working with WKT and taxon search facilities. Fields can be specified (by default, it seems that most but not all fields are returned --- 481 fields at the moment, out of a possible 577)
 
-   - occurrences() very preliminary version is working
+   c. Key ‘visualization’ = data quality flags. Some interaction or at least a summary of relevant flags, to allow the user to understand which records have been flagged and for what reasons.
 
 
 5. Tabulations: 2x contextual classes table with entries being one of: 
