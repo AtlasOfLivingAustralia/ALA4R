@@ -1,4 +1,4 @@
-Last-Modified: <2014-01-28 15:45:02>
+Last-Modified: <2014-01-28 18:19:22>
 
 
 ---
@@ -7,12 +7,6 @@ Questions and issues
 ALA4R issues:
 - do we wish to guarantee that the ordering of fields within a returned dataset will match the ordering within the query. e.g. if the user asks for latitude,longitude,state does it matter if we return the results with a different order e.g state,longitude,latitude? If we can allow this mismatch in ordering, our caching will be slightly more efficient. At the moment, the ordering is not preserved (see ala_cache_filename)
 - need to check whether the argument name "taxon" is appropriate to use in all functions. This is mapped to the web service parameter name "q", which for some functions may be more general than just taxa.
-
-Broader issues for ALA devs:
-- are there simplified field names? Many field names (e.g. "el783" etc) are pretty meaningless to the user, and the full field names (e.g. "WorldClim: Temperature - seasonality" or "Growth index C3 macrotherm plants - annual mean" are typically rather cumbersome. Simplified field names that can be used as column names in R would be handy.
-- in http://biocache.ala.org.au/ws/index/fields, the value of "name" actually seems to be the field "id".
-- in specieslist, the returned data has a column named "LSID". Should this be "GUID"?
-- the field information service (http://spatial.ala.org.au/ws/field/) gives a 500 error for some invalid field names, e.g. http://spatial.ala.org.au/ws/field/cl855. Other invalid field names just return an empty response e.g. http://spatial.ala.org.au/ws/field/bilbobaggins
 
 ---
 General considerations and notes:
