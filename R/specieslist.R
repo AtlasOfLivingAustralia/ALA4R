@@ -60,8 +60,8 @@ specieslist=function(taxon="",wkt="",page_size=NA) {
     x=read.table(thisfile,sep=",",header=TRUE,comment.char="")
     ## rename "X..Occurrences" (which was "# Occurrences" in the csv file)
     names(x)=str_replace(names(x),"X..Occurrences","N.occurrences")
-    ## we also have a column labelled "LSID" --- should this be "GUID"? (check before enabling the next line)
-    #names(x)=str_replace(names(x),"LSID","GUID")
+    ## we also have a column labelled "LSID" --- this should be "GUID" for consistency
+    names(x)=str_replace(names(x),"LSID","GUID")
     x
 }
 
