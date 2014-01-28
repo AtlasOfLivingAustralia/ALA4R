@@ -21,7 +21,7 @@
 #'
 #' @export
 
-intersect = function(pnts,fids) {
+intersect_points = function(pnts,fids) {
 	base_url=ala_config()$base_url_spatial #get the base url
 	bulk = FALSE #set the default to not bulk
 

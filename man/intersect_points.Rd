@@ -1,8 +1,8 @@
-\name{intersect}
-\alias{intersect}
+\name{intersect_points}
+\alias{intersect_points}
 \title{Intersect a layer(s) at a given set of coordinates}
 \usage{
-intersect(pnts, fids)
+intersect_points(pnts, fids)
 }
 \arguments{
   \item{pnts}{vector of lat & lons or 2 column data.frame
