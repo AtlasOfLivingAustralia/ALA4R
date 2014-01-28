@@ -13,6 +13,9 @@ field_info(field_id)
   "occurrence" (for searching species occurrence records),
   or "layers" (a list of all fields associated with the
   environmental and contextual layers)}
+
+  \item{field_id}{text: id of field for which to look up
+  information}
 }
 \value{
 A data frame containing the field names and various
