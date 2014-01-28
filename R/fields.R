@@ -38,6 +38,19 @@ fields=function(fields_type="general") {
             x[,col]=as.character(x[,col])
         }
     }
+
+    ## for "layers", shorter, more manageable names are provided from http://spatial.ala.org.au/layers.json
+    ## add these as an extra column: name_short
+    ## TODO are these applicable to our other fields_type as well?
+    if (identical(fields_type,"layers")) {
+        more_x=cached_get(url="http://spatial.ala.org.au/layers.json",type="json")
+        ##more_x=rbind.fill(lapply(more_x,as.data.frame)) ## this is slow
+        ## just pull out the bits that we want
+        ## and construct ids here that match the field names in x
+        more_x=ldply(more_x,function(z){c(z$name,paste(substr(tolower(z$type),1,1),"l",z$id,sep=""))})
+        names(more_x)=c("name_short","id")
+        x=merge(x,more_x,by="id")
+    }
     x
 }
 
