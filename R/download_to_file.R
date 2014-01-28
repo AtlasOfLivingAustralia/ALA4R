@@ -8,11 +8,17 @@ download_to_file=function(url,verbose=ala_config()$verbose,...) {
         if (verbose) { cat(sprintf("  ALA4R: caching %s to file %s\n",url,outfile)) }
         ## either we are not using caching, or we want to refresh the cache, or the file doesn't exist in the cache
         f = CFILE(outfile, mode="w")
-        curlPerform(url=url,writedata = f@ref,useragent=ala_config()$user_agent,verbose=verbose,...) ## can pass verbose=TRUE here for debug info if needed
+        h=basicHeaderGatherer()
+        curlPerform(url=url,writedata = f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,...) ## can pass verbose=TRUE here for debug info if needed
         close(f)
+        ## check http status here
+        ## if unsuccessful, delete the file from the cache first
+        if ((substr(h$value()[["status"]],1,1)=="5") || (substr(h$value()[["status"]],1,1)=="4")) {
+            unlink(outfile)
+        }
+        check_status_code(h$value()[["status"]])
     } else {
         if (verbose) { cat(sprintf("  ALA4R: using cached file %s for %s\n",outfile,url)) }
     }
-    ## TODO: check error status
     outfile
 }

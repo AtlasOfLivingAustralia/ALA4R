@@ -31,7 +31,12 @@ cached_get=function(url,type="text",...) {
         thisfile=download_to_file(url)
         switch(type,
                "json"={
-                   fromJSON(file=thisfile)
+                   if (!(file.info(thisfile)$size>0)) {
+                       ## empty file
+                       NULL
+                   } else {
+                       fromJSON(file=thisfile)
+                   }
                },
                "filename"={
                    thisfile
