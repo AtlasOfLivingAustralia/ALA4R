@@ -2,14 +2,14 @@
 \alias{intersect}
 \title{Intersect a layer(s) at a given set of coordinates}
 \usage{
-intersect(pnts, fid)
+intersect(pnts, fids)
 }
 \arguments{
   \item{pnts}{vector of lat & lons or 2 column data.frame
   or matrix of lat,lons. NOTE: the number of locations must
   be less than 1000.}
 
-  \item{field_ids}{text: id of field for which to look up
+  \item{fids}{text: id of field for which to look up
   information. list of possible fields available from
   fields().}
 }
