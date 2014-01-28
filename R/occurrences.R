@@ -13,17 +13,17 @@
 #' (currently 10) will be used.
 #' @param fields A vector of field names to return. Note that the columns of
 #' the returned data frame are not guaranteed to retain the ordering of the
-#' field names given here. See ala_fields("occurrence") for valid field names.
+#' field names given here. See fields("occurrence") for valid field names.
 #' @return Data frame
 #' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
 #' \email{jjvanderwal@@gmail.com}
 #' @references http://spatial.ala.org.au/layers-service/
 #' @examples
 #' 
-#' x=ala_occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name"),page_size=1000)
+#' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name"),page_size=1000)
 #' 
-#' @export ala_occurrences
-ala_occurrences=function(taxon="",wkt="",page_size=NA,fields=c()) {
+#' @export occurrences
+occurrences=function(taxon="",wkt="",page_size=NA,fields=c()) {
     ## TODO: add filtering functionality (fq parm passed in URL), assuming that it is relevant here
     ## TODO: check validity of wkt? (but it will require an additional library such as rgeos)
     ## check input parms are sensible
@@ -56,7 +56,7 @@ ala_occurrences=function(taxon="",wkt="",page_size=NA,fields=c()) {
 
     if (length(fields)>0) {
         ## user has specified some fields
-        valid_fields=ala_fields(fields_type="occurrence")
+        valid_fields=fields(fields_type="occurrence")
         unknown=setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
             stop("invalid fields requested: ", str_c(unknown,collapse=", "))
