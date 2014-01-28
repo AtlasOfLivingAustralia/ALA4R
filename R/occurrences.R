@@ -20,12 +20,11 @@
 #' @references http://spatial.ala.org.au/layers-service/
 #' @examples
 #' 
-#' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name"),page_size=1000)
+#' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),page_size=1000)
 #' 
 #' @export occurrences
 occurrences=function(taxon="",wkt="",page_size=NA,fields=c()) {
     ## TODO: add filtering functionality (fq parm passed in URL), assuming that it is relevant here
-    ## TODO: check validity of wkt? (but it will require an additional library such as rgeos)
     ## check input parms are sensible
     if (!is.na(page_size)) {
         if (!(page_size>0)) {
@@ -43,6 +42,9 @@ occurrences=function(taxon="",wkt="",page_size=NA,fields=c()) {
     }
     ## wkt string
     if (str_length(wkt)>0) {
+        if (! check_wkt(wkt)) {
+            stop("invalid WKT string ",wkt)
+        }
         this_query$wkt=wkt
     }
     if (length(this_query)==0) {
@@ -68,8 +70,12 @@ occurrences=function(taxon="",wkt="",page_size=NA,fields=c()) {
     this_url$query=this_query
     
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
-    thisfile=download_to_file(url=build_url(this_url))
-    x=read.table(thisfile,sep=",",header=TRUE,comment.char="")
-    ## currently this gives a somewhat obscure error if there are no results returned (file is empty)
+    thisfile=cached_get(url=build_url(this_url),type="filename")
+    if (!(file.info(thisfile)$size>0)) {
+        ## empty file
+        x=NULL
+    } else {
+        x=read.table(thisfile,sep=",",header=TRUE,comment.char="")
+    }
     x
 }
