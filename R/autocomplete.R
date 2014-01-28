@@ -21,10 +21,10 @@
 #' @examples
 #' 
 #' 	#find information ALA holds on red kangaroo
-#' 	ala_autocomplete("red kangaroo")
+#' 	autocomplete("red kangaroo")
 #' 
-#' @export ala_autocomplete
-ala_autocomplete=function(taxon,limit=10) {
+#' @export autocomplete
+autocomplete=function(taxon,limit=10) {
 	taxon = clean_string(taxon) #clean up the taxon name
         base_url="http://bie.ala.org.au/ws/search/auto.json"
         this_url=parse_url(base_url)
