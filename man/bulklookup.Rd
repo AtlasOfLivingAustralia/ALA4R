@@ -1,8 +1,8 @@
-\name{ala_bulklookup}
-\alias{ala_bulklookup}
+\name{bulklookup}
+\alias{bulklookup}
 \title{Bulk lookup of GUIDs}
 \usage{
-ala_bulklookup(taxa = list())
+bulklookup(taxa = list())
 }
 \arguments{
   \item{taxa}{A list of names}
@@ -14,7 +14,7 @@ A data frame of results
 Used to provide GUIDs for a list of names
 }
 \examples{
-ala_bulklookup(list("Grevillea humilis","Grevillea humilis subsp. maritima"))
+bulklookup(list("Grevillea humilis","Grevillea humilis subsp. maritima"))
 }
 \author{
 Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal
