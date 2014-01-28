@@ -56,7 +56,7 @@ ala_specieslist=function(taxon="",wkt="",page_size=NA) {
     this_url$query=this_query
     
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
-    thisfile=ala_download_to_file(url=build_url(this_url))
+    thisfile=download_to_file(url=build_url(this_url))
     x=read.table(thisfile,sep=",",header=TRUE,comment.char="")
     ## rename "X..Occurrences" (which was "# Occurrences" in the csv file)
     names(x)=str_replace(names(x),"X..Occurrences","N.occurrences")

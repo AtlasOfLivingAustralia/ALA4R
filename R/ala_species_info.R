@@ -29,7 +29,7 @@ ala_species_info <- function(taxon) {
             x=content(x)
         } else {
             ## use caching
-            thisfile=ala_download_to_file(this_url)
+            thisfile=download_to_file(this_url)
             x=fromJSON(file=thisfile)
         }
         x=x[[1]]

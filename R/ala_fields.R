@@ -32,7 +32,7 @@ ala_fields=function(fields_type="general") {
         x=content(x)
     } else {
         ## use caching
-        thisfile=ala_download_to_file(base_url)
+        thisfile=download_to_file(base_url)
         x=fromJSON(file=thisfile)
     }
     x=rbind.fill(lapply(x,as.data.frame)) ## convert each element of content(x)[[1]] into data frame, then combine

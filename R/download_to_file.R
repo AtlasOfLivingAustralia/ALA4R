@@ -1,4 +1,4 @@
-ala_download_to_file=function(url,verbose=ala_config()$verbose,...) {
+download_to_file=function(url,verbose=ala_config()$verbose,...) {
     ## download from a URL using RCurl to a file
     ## we do this directly using RCurl to file, rather than reading into R memory and then dumping to file
     outfile=ala_cache_filename(url)

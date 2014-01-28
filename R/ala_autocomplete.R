@@ -37,7 +37,7 @@ ala_autocomplete=function(taxon,limit=10) {
             x=content(x)[[1]]
         } else {
             ## use caching
-            thisfile=ala_download_to_file(this_url)
+            thisfile=download_to_file(this_url)
             x=fromJSON(file=thisfile)[[1]]
         }
         

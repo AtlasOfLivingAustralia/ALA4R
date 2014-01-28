@@ -68,7 +68,7 @@ ala_occurrences=function(taxon="",wkt="",page_size=NA,fields=c()) {
     this_url$query=this_query
     
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
-    thisfile=ala_download_to_file(url=build_url(this_url))
+    thisfile=download_to_file(url=build_url(this_url))
     x=read.table(thisfile,sep=",",header=TRUE,comment.char="")
     ## currently this gives a somewhat obscure error if there are no results returned (file is empty)
     x
