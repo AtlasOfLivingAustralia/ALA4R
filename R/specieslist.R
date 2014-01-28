@@ -23,7 +23,6 @@
 #' @export specieslist
 specieslist=function(taxon="",wkt="",page_size=NA) {
     ## TODO: add filtering functionality (fq parm passed in URL), assuming that it is relevant here
-    ## TODO: check validity of wkt? (but it will require an additional library such as rgeos)
     ## check input parms are sensible
     if (!is.na(page_size)) {
         if (!(page_size>0)) {
@@ -41,11 +40,14 @@ specieslist=function(taxon="",wkt="",page_size=NA) {
     }
     ## wkt string
     if (str_length(wkt)>0) {
+        if (! check_wkt(wkt)) {
+            stop("invalid WKT string ",wkt)
+        }
         this_query$wkt=wkt
     }
     if (length(this_query)==0) {
         ## not a valid request!
-        stop("invalid request: need at least taxon or wkt to be specified")
+        stop("invalid request: need at least taxon or WKT to be specified")
     }
     ## page_size
     if (!is.na(page_size)) {

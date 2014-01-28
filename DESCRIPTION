@@ -11,13 +11,14 @@ Description: The Atlas of Living Australia (ALA) provides tools to enable users
     Australian plants and animals; these have been made available from
     \url{http://www.ala.org.au/} . Here we provide a subset of the tools to be
     directly used within R.
-Depends:
+Imports:
     rjson,
     stringr,
     httr,
     plyr,
     digest,
-    RCurl
+    RCurl,
+    rgeos
 License: GPL (>= 3)
 URL: \url{http://rforge.net/ALA4R/}
 LazyLoad: yes
