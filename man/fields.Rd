@@ -1,8 +1,11 @@
 \name{fields}
+\alias{field_info}
 \alias{fields}
 \title{Retrieve a list of all fields}
 \usage{
 fields(fields_type = "general")
+
+field_info(field_id)
 }
 \arguments{
   \item{fields_type}{text: either "general" (for searching

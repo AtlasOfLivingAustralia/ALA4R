@@ -3,7 +3,6 @@
 #' Retrieves a list of field names that can be used with the data retrieval
 #' functions
 #' 
-#' 
 #' @param fields_type text: either "general" (for searching taxa, datasets,
 #' layers, and collections metadata), "occurrence" (for searching species
 #' occurrence records), or "layers" (a list of all fields associated with the environmental and contextual layers)
@@ -18,7 +17,7 @@
 #' fields("general")
 #' field_info('cl22')
 #' 
-#' @export fields field_info
+#' @export
 
 fields=function(fields_type="general") {
     fields_type=tolower(fields_type)
@@ -42,6 +41,8 @@ fields=function(fields_type="general") {
 }
 
 
+#' @rdname fields
+#' @export
 field_info = function(field_id) {
     base_url = paste(ala_config()$base_url_spatial,"field",sep="")
     out = cached_get(url=paste(base_url,field_id,sep='/'),type="json")
