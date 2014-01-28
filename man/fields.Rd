@@ -1,30 +1,37 @@
 \name{fields}
-\alias{field_info}
 \alias{fields}
-\title{List of fields of the environmental and contextual layers}
+\title{Retrieve a list of all fields}
 \usage{
-fields()
+fields(fields_type = "general")
 }
 \arguments{
-  \item{field_id}{field id; the field id value from the
-  field() command}
+  \item{fields_type}{text: either "general" (for searching
+  taxa, datasets, layers, and collections metadata),
+  "occurrence" (for searching species occurrence records),
+  or "layers" (a list of all fields associated with the
+  environmental and contextual layers)}
 }
 \value{
-A data frame of results
+A data frame containing the field names and various
+attributes
 }
 \description{
-Used to provide a list of all fields associated with the
-environmental and contextual layers provided through ALA.
+Retrieves a list of field names that can be used with the
+data retrieval functions
 }
 \examples{
-fields()
+fields("general")
 field_info('cl22')
 }
 \author{
-Jeremy VanDerWal \email{jjvanderwal@gmail.com}, Ben Raymond
-\email{ben@theraymonds.org}
+Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal
+\email{jjvanderwal@gmail.com}
 }
 \references{
-\url{http://spatial.ala.org.au/ws/}
+For "occurrence",
+\url{http://biocache.ala.org.au/ws/index/fields}.  For
+"general",
+\url{http://bie.ala.org.au/ws/admin/indexFields}. For
+"layers", \url{http://spatial.ala.org.au/ws/field}
 }
 

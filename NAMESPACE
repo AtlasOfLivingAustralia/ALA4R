@@ -1,6 +1,5 @@
 export(ala_cache_filename)
 export(ala_config)
-export(ala_fields)
 export(ala_occurrences)
 export(autocomplete)
 export(bulklookup)
