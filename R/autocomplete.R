@@ -26,22 +26,22 @@
 #' @export autocomplete
 autocomplete=function(taxon,limit=10) {
 	taxon = clean_string(taxon) #clean up the taxon name
-        base_url="http://bie.ala.org.au/ws/search/auto.json"
-        this_url=parse_url(base_url)
-        this_url$query=list(q=taxon,limit=limit)
-        this_url=build_url(this_url)
-
-        if (identical(ala_config()$caching,"off")) {
-            ## if we are not caching, get this directly without saving to file at all
-            x=GET(url=this_url,user_agent(ala_config()$user_agent))
-            x=content(x)[[1]]
-        } else {
-            ## use caching
-            thisfile=download_to_file(this_url)
-            x=fromJSON(file=thisfile)[[1]]
-        }
-        
-        ## data comes back as nested list structure, which is a direct and somewhat mindless conversion of the raw JSON data
-        ## some variables are returned as lists, and these may be empty (e.g. commonNameMatches, if there are no such matches) which causes problems when casting to data.frame
-        ldply(x,function(y){ as.data.frame(lapply(y,function(z){ ifelse(class(z)=="list" && length(z)==0,"",z) })) })
-    }
+	taxon = gsub(' ','+',taxon) #replace spaces with + to force both terms in the search
+	if (class(limit) != 'numeric' | length(limit) > 1) stop('limit must be a single numeric value') #check limit is numeric and single value
+	
+	base_url=ala_config()$base_url_bie #define the base URL string
+	url_str = paste(base_url,"search/auto.json?q=",taxon,"&limit=",limit,sep="") #define the URL string
+	
+	out = cached_get(url_str,type="json") #get the data
+	out = out[[1]] #looking at the data
+	
+	##need to collapse matchednames fields if there was more than a single matched name
+	for (ii in 1:length(out)) {
+		for (jj in 1:length(out[[ii]])) {
+			if (length(out[[ii]][[jj]]) > 1) {cat('here'); out[[ii]][[jj]] = paste(out[[ii]][[jj]],collapse=', ') }
+		}
+	}
+	
+	out = do.call('rbind.fill',lapply(out,function(x) {as.data.frame(rbind(x))})) #define the output as a data.frame
+	return(out)
+}
