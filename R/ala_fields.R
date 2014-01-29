@@ -15,12 +15,12 @@
 #' \url{http://bie.ala.org.au/ws/admin/indexFields}. For "layers", \url{http://spatial.ala.org.au/ws/field}
 #' @examples
 #' 
-#' fields("general")
+#' ala_fields("general")
 #' field_info('cl22')
 #' 
 #' @export
 
-fields=function(fields_type="general") {
+ala_fields=function(fields_type="general") {
     fields_type=tolower(fields_type)
     match.arg(fields_type,c("general","occurrence","layers"))
     switch(fields_type,
@@ -55,7 +55,7 @@ fields=function(fields_type="general") {
 }
 
 
-#' @rdname fields
+#' @rdname ala_fields
 #' @export
 field_info = function(field_id) {
     base_url = paste(ala_config()$base_url_spatial,"field",sep="")

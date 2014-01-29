@@ -1,9 +1,9 @@
-\name{fields}
+\name{ala_fields}
+\alias{ala_fields}
 \alias{field_info}
-\alias{fields}
 \title{Retrieve a list of all fields}
 \usage{
-fields(fields_type = "general")
+ala_fields(fields_type = "general")
 
 field_info(field_id)
 }
@@ -26,7 +26,7 @@ Retrieves a list of field names that can be used with the
 data retrieval functions
 }
 \examples{
-fields("general")
+ala_fields("general")
 field_info('cl22')
 }
 \author{

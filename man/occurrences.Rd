@@ -20,7 +20,7 @@ occurrences(taxon = "", wkt = "", page_size = NA, fields = c())
   \item{fields}{A vector of field names to return. Note
   that the columns of the returned data frame are not
   guaranteed to retain the ordering of the field names
-  given here. See fields("occurrence") for valid field
+  given here. See ala_fields("occurrence") for valid field
   names.}
 }
 \value{

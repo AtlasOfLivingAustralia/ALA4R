@@ -3,21 +3,21 @@
 #' Intersect environmental or contextual layers given a set of coordinates
 #' 
 #' @param pnts vector of lat & lons or 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 1000.
-#' @param fids text: id of field for which to look up information. list of possible fields available from fields().
+#' @param fids text: id of field for which to look up information. list of possible fields available from ala_fields().
 #' @return A data frame containing the intersecting data information. Missing data or incorrectly identified field id values will result in NA data
 #' @author Jeremy VanDerWal \email{jjvanderwal@@gmail.com}, Ben Raymond \email{ben@@theraymonds.org}
 #' @references \url{http://spatial.ala.org.au/ws/}
 #' @examples
 #' 
 #' #single point with multiple fields
-#' flds = c('cl22','cl23')
+#' fields = c('cl22','cl23')
 #' pnts = c(-29,132.999)
-#' intersect_points(pnts,flds)
+#' intersect_points(pnts,fields)
 #' 
 #' #multiple points with multiple fields
-#' flds = c('cl22','cl23')
+#' fields = c('cl22','cl23')
 #' pnts = data.frame(lat=seq(-29,-19,0.02),lon=132.769)
-#' intersect_points(pnts,flds)
+#' intersect_points(pnts,fields)
 #'
 #' @export
 

@@ -13,7 +13,7 @@
 #' (currently 10) will be used.
 #' @param fields A vector of field names to return. Note that the columns of
 #' the returned data frame are not guaranteed to retain the ordering of the
-#' field names given here. See fields("occurrence") for valid field names.
+#' field names given here. See ala_fields("occurrence") for valid field names.
 #' @return Data frame
 #' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
 #' \email{jjvanderwal@@gmail.com}
@@ -58,7 +58,7 @@ occurrences=function(taxon="",wkt="",page_size=NA,fields=c()) {
 
     if (length(fields)>0) {
         ## user has specified some fields
-        valid_fields=fields(fields_type="occurrence")
+        valid_fields=ala_fields(fields_type="occurrence")
         unknown=setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
             stop("invalid fields requested: ", str_c(unknown,collapse=", "))

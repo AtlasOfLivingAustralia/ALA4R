@@ -11,7 +11,7 @@ intersect_points(pnts, fids, verbose = ala_config()$verbose)
 
   \item{fids}{text: id of field for which to look up
   information. list of possible fields available from
-  fields().}
+  ala_fields().}
 }
 \value{
 A data frame containing the intersecting data information.
@@ -24,14 +24,14 @@ coordinates
 }
 \examples{
 #single point with multiple fields
-flds = c('cl22','cl23')
+fields = c('cl22','cl23')
 pnts = c(-29,132.999)
-intersect_points(pnts,flds)
+intersect_points(pnts,fields)
 
 #multiple points with multiple fields
-flds = c('cl22','cl23')
+fields = c('cl22','cl23')
 pnts = data.frame(lat=seq(-29,-19,0.02),lon=132.769)
-intersect_points(pnts,flds)
+intersect_points(pnts,fields)
 }
 \author{
 Jeremy VanDerWal \email{jjvanderwal@gmail.com}, Ben Raymond
