@@ -26,12 +26,12 @@ coordinates
 #single point with multiple fields
 fields = c('cl22','cl23')
 pnts = c(-29,132.999)
-intersect(pnts,fields)
+intersect_points(pnts,fields)
 
 #multiple points with multiple fields
 fields = c('cl22','cl23')
 pnts = data.frame(lat=seq(-29,-19,0.02),lon=132.769)
-intersect(pnts,fields)
+intersect_points(pnts,fields)
 }
 \author{
 Jeremy VanDerWal \email{jjvanderwal@gmail.com}, Ben Raymond
