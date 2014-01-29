@@ -2,7 +2,7 @@
 \alias{intersect_points}
 \title{Intersect a layer(s) at a given set of coordinates}
 \usage{
-intersect_points(pnts, fids)
+intersect_points(pnts, fids, verbose = ala_config()$verbose)
 }
 \arguments{
   \item{pnts}{vector of lat & lons or 2 column data.frame
@@ -24,14 +24,14 @@ coordinates
 }
 \examples{
 #single point with multiple fields
-fields = c('cl22','cl23')
+flds = c('cl22','cl23')
 pnts = c(-29,132.999)
-intersect_points(pnts,fields)
+intersect_points(pnts,flds)
 
 #multiple points with multiple fields
-fields = c('cl22','cl23')
+flds = c('cl22','cl23')
 pnts = data.frame(lat=seq(-29,-19,0.02),lon=132.769)
-intersect_points(pnts,fields)
+intersect_points(pnts,flds)
 }
 \author{
 Jeremy VanDerWal \email{jjvanderwal@gmail.com}, Ben Raymond

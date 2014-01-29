@@ -13,12 +13,13 @@
 # out = cached_get(url="http://biocache.ala.org.au/ws/index/fields",type="json")
 # 
 
-cached_get=function(url,type="text",caching=ala_config()$caching,...) {
+cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,...) {
     type=tolower(type)
     match.arg(type,c("text","json","filename"))
     
     if (identical(caching,"off") && !identical(type,"filename")) {
         ## if we are not caching, get this directly without saving to file at all
+        if (verbose) { cat(sprintf("  ALA4R: GETting URL %s",url)) }
         x=GET(url=url,user_agent(ala_config()$user_agent))
         check_status_code(x)
         if (identical(type,"json")) {

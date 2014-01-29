@@ -10,14 +10,14 @@
 #' @examples
 #' 
 #' #single point with multiple fields
-#' fields = c('cl22','cl23')
+#' flds = c('cl22','cl23')
 #' pnts = c(-29,132.999)
-#' intersect_points(pnts,fields)
+#' intersect_points(pnts,flds)
 #' 
 #' #multiple points with multiple fields
-#' fields = c('cl22','cl23')
+#' flds = c('cl22','cl23')
 #' pnts = data.frame(lat=seq(-29,-19,0.02),lon=132.769)
-#' intersect_points(pnts,fields)
+#' intersect_points(pnts,flds)
 #'
 #' @export
 
@@ -61,17 +61,17 @@ intersect_points = function(pnts,fids,verbose=ala_config()$verbose) {
 	###download the data
 	if (bulk) { #get the results if it is a bulk request
 		url_str = paste(base_url,'intersect/batch?fids=',fids_str,'&points=',pnts_str,sep='') #define the url string
-                this_cache_file=ala_cache_filename(url_str) ## the cache file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
+                this_cache_file=ala_cache_filename(url_str) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
                 if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(this_cache_file))) {
-                    if (verbose && (ala_config()$caching != "off")) { cat(sprintf("  ALA4R: caching to file %s\n",this_cache_file)) }
                     ## fetch the data from the server
-                    status_url = fromJSON(file=url_str)$statusUrl #submit the url and get the url of the status
-                    data_url = fromJSON(file=status_url) #get the data url
+                    ## we use cached_get operations here even though we're not caching, just because it keeps the user-agent etc string consistent
+                    status_url=cached_get(url_str,type="json",caching="off")$statusUrl #submit the url and get the url of the status
+                    data_url=cached_get(status_url,type="json",caching="off") #get the data url                    
                     while (data_url$status != 'finished') { #keep checking the status until finished
 			Sys.sleep(5)
-			data_url = fromJSON(file=status_url) #get the data url
+                        data_url=cached_get(status_url,type="json",caching="off") #get the data url
                     }
-                    download.file(data_url$downloadUrl,this_cache_file,mode='wb') #download the file
+                    download_to_file(data_url$downloadUrl,outfile=this_cache_file)
                 } else {
                     ## we are using the existing cached file
                     if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
