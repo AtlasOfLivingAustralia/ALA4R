@@ -38,7 +38,9 @@ autocomplete=function(taxon,limit=10) {
 	##need to collapse matchednames fields if there was more than a single matched name
 	for (ii in 1:length(out)) {
 		for (jj in 1:length(out[[ii]])) {
-			if (length(out[[ii]][[jj]]) > 1) {cat('here'); out[[ii]][[jj]] = paste(out[[ii]][[jj]],collapse=', ') }
+			if (length(out[[ii]][[jj]]) > 1) {
+                            out[[ii]][[jj]] = paste(out[[ii]][[jj]],collapse=', ')
+                        }
 		}
 	}
 	
