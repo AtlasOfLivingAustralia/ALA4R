@@ -26,7 +26,7 @@
 #
 ####
 
-intersect_points = function(pnts,fids) {
+intersect_points = function(pnts,fids,verbose=ala_config()$verbose) {
 	base_url=ala_config()$base_url_spatial #get the base url
 	bulk = FALSE #set the default to not bulk
 
@@ -61,18 +61,24 @@ intersect_points = function(pnts,fids) {
 	###download the data
 	if (bulk) { #get the results if it is a bulk request
 		url_str = paste(base_url,'intersect/batch?fids=',fids_str,'&points=',pnts_str,sep='') #define the url string
-		status_url = fromJSON(file=url_str)$statusUrl #submit the url and get the url of the status
-		data_url = fromJSON(file=status_url) #get the data url
-		while (data_url$status != 'finished') { #keep checking the status until finished
+                this_cache_file=ala_cache_filename(url_str) ## the cache file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
+                if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(this_cache_file))) {
+                    if (verbose && (ala_config()$caching != "off")) { cat(sprintf("  ALA4R: caching to file %s\n",this_cache_file)) }
+                    ## fetch the data from the server
+                    status_url = fromJSON(file=url_str)$statusUrl #submit the url and get the url of the status
+                    data_url = fromJSON(file=status_url) #get the data url
+                    while (data_url$status != 'finished') { #keep checking the status until finished
 			Sys.sleep(5)
 			data_url = fromJSON(file=status_url) #get the data url
-		}
-		###not using caching because each query to this system will provide unique id & unique URL
-		tmpfile = tempfile() #define a temporary file
-		download.file(data_url$downloadUrl,tmpfile,mode='wb') #download the file
-		out = read.csv(unz(tmpfile,'sample.csv'),as.is=TRUE) #read in the csv data from the zip file
-		checks = NULL; for (ii in colnames(out)) { if (all(is.na(out[,ii]))) checks = c(checks,ii) } #identify bad field IDs
-		if (!is.null(checks)) warning(paste(paste(checks,collapse=', '),'are invalid field ids')) #warn user of bad field ids
+                    }
+                    download.file(data_url$downloadUrl,this_cache_file,mode='wb') #download the file
+                } else {
+                    ## we are using the existing cached file
+                    if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
+                }
+                out = read.csv(unz(this_cache_file,'sample.csv'),as.is=TRUE) #read in the csv data from the zip file
+                checks = NULL; for (ii in colnames(out)) { if (all(is.na(out[,ii]))) checks = c(checks,ii) } #identify bad field IDs
+                if (!is.null(checks)) warning(paste(paste(checks,collapse=', '),'are invalid field ids')) #warn user of bad field ids
 		return(out)
 	} else { #get results if just a single location
 		url_str = paste(base_url,'intersect/',fids_str,'/',pnts_str,sep='') #define the url string
