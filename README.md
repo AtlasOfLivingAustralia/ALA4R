@@ -8,8 +8,14 @@ Currently in a very preliminary state: everything is liable to change.
 
 Binaries will be available from RForge for easy installation in R: 
 
-```s
+```{r}
 install.packages(c("httr","rjson","stringr","plyr","digest","RCurl","rgeos")) ## install dependencies
 install.packages("ALA4R",repos="http://rforge.net/")
 ```
+
+Under windows, you may need to replace the second command with:
+```{r}
+install.packages("ALA4R",repos="http://rforge.net/",type="source")
+```
+
 
