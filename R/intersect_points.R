@@ -65,7 +65,8 @@ intersect_points = function(pnts,fids,verbose=ala_config()$verbose) {
                 if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(this_cache_file))) {
                     ## fetch the data from the server
                     ## we use cached_get operations here even though we're not caching, just because it keeps the user-agent etc string consistent
-                    status_url=cached_get(url_str,type="json",caching="off")$statusUrl #submit the url and get the url of the status
+                    #status_url=cached_get(url_str,type="json",caching="off")$statusUrl #submit the url and get the url of the status
+                    status_url=fromJSON(file=url_str)$statusUrl ## using GET (in cached_get) for this can give 414 errors ("url too long") which do not seem to happen with fromJSON, so use that until we figure out why
                     data_url=cached_get(status_url,type="json",caching="off") #get the data url                    
                     while (data_url$status != 'finished') { #keep checking the status until finished
 			Sys.sleep(5)
