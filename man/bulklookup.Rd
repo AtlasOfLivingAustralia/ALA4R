@@ -1,20 +1,24 @@
 \name{bulklookup}
 \alias{bulklookup}
-\title{Bulk lookup of GUIDs}
+\title{Bulk lookup of taxonomic names}
 \usage{
-bulklookup(taxa = list())
+bulklookup(taxa = c())
 }
 \arguments{
-  \item{taxa}{A list of names}
+  \item{taxa}{string: a single name (string) or vector of
+  names}
 }
 \value{
 A data frame of results
 }
 \description{
-Used to provide GUIDs for a list of names
+Provides GUID, taxonomic classification, and other
+information for a list of names. Fuzzy matching is used to
+find the best match for each supplied name, which may be a
+partial or incorrectly spelled name
 }
 \examples{
-bulklookup(list("Grevillea humilis","Grevillea humilis subsp. maritima"))
+bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima"))
 }
 \author{
 Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal

@@ -1,22 +1,35 @@
-#' Bulk lookup of GUIDs
+#' Bulk lookup of taxonomic names
 #' 
-#' Used to provide GUIDs for a list of names
+#' Provides GUID, taxonomic classification, and other information for a list of names. Fuzzy matching is used to find the best match for each supplied name, which may be a partial or incorrectly spelled name
 #' 
 #' 
-#' @param taxa A list of names
+#' @param taxa string: a single name (string) or vector of names
 #' @return A data frame of results
 #' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
 #' \email{jjvanderwal@@gmail.com}
 #' @references \url{http://bie.ala.org.au/bie-service/}
 #' @examples
 #' 
-#' bulklookup(list("Grevillea humilis","Grevillea humilis subsp. maritima"))
+#' bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima"))
 #' 
 #' @export bulklookup
-bulklookup=function(taxa=list()) {
-    if (is.character(taxa)) {
-        ## single name provided as a string, we were expecting a list of names
-        taxa=list(taxa)
+
+# TODO: provide a clear explanation of how the underlying service chooses the returned result for each name. Currently, results seem to be very upredictable. e.g. bulklookup("Grevillea humilis") returns the record for Grevillea humilis subsp. humilis rather than the species itself; bulklookup("Grevillea humili") returns the same record, and bulklookup("Grevillea humil") returns the record for Anthotium humile
+## TODO: work out what is going on with non-matched records. It seems that they simply aren't returned, and the returned record list may contain less items than the number of submitted names
+
+bulklookup=function(taxa=c()) {
+    ## input argument checks
+    if (identical(class(taxa),"list")) {
+        taxa=unlist(taxa)
+    }
+    if (! identical(class(taxa),"character")) {
+        stop("expecting string or vector of strings as input")
+    }
+    if (any(nchar(taxa)<1)) {
+        stop("input contains empty string")
+    }
+    if (length(taxa)<1) {
+        stop("empty input")
     }
     taxa = lapply(taxa,clean_string) ## clean up the taxon name
     base_url=paste(ala_config()$base_url_bie,"species/bulklookup.json",sep="")

@@ -15,6 +15,9 @@
 #' species_info(guid="urn:lsid:biodiversity.org.au:apni.taxon:248651")
 #' 
 #' @export species_info
+
+# TODO: support multiple names or guids passed as a vector?
+
 species_info=function(scientificname=NULL,guid=NULL,verbose=ala_config()$verbose) {
     if (is.null(scientificname) && is.null(guid)) {
         stop("either the scientific name or the guid must be provided")
