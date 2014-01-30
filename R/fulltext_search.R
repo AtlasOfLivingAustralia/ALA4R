@@ -1,8 +1,6 @@
-#' Taxon or species info
+#' Full text search
 #' 
-#' Returns the profile information for a given taxon. more needed!!!
-#' 
-#' NEED
+#' Performs a search across all objects, and selects the closest matches
 #' 
 #' @param taxon a character string for the taxon of interest
 #' @return a dataframe of information with columns being: \item{comp1
@@ -14,10 +12,10 @@
 #' @examples
 #' 
 #' 	#find information ALA holds on red kangaroo
-#' 	species_info("red kangaroo")
+#' 	fulltext_search("red kangaroo")
 #' 
-#' @export species_info
-species_info <- function(taxon) {
+#' @export fulltext_search
+fulltext_search <- function(taxon) {
 	taxon = clean_string(taxon) #clean up the taxon name
         base_url="http://bie.ala.org.au/ws/search.json"
         this_url=parse_url(base_url)

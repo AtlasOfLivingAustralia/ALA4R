@@ -1,8 +1,8 @@
-\name{species_info}
-\alias{species_info}
-\title{Taxon or species info}
+\name{fulltext_search}
+\alias{fulltext_search}
+\title{Full text search}
 \usage{
-species_info(taxon)
+fulltext_search(taxon)
 }
 \arguments{
   \item{taxon}{a character string for the taxon of
@@ -13,15 +13,12 @@ a dataframe of information with columns being: \item{comp1
 }{Description of 'comp1'}
 }
 \description{
-Returns the profile information for a given taxon. more
-needed!!!
-}
-\details{
-NEED
+Performs a search across all objects, and selects the
+closest matches
 }
 \examples{
 #find information ALA holds on red kangaroo
-	species_info("red kangaroo")
+	fulltext_search("red kangaroo")
 }
 \author{
 Jeremy VanDerWal \email{jjvanderwal@gmail.com}, Ben Raymond
