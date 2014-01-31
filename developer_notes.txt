@@ -1,4 +1,4 @@
-Last-Modified: <2014-01-30 17:30:31>
+Last-Modified: <2014-01-31 18:30:02>
 
 
 ---
@@ -45,7 +45,8 @@ Supported queries (from Lee's word document), with initial assignment to [Jeremy
       - data format is currently a data.frame, may need to be made more compatible with other packages (rgbif etc)
 
    b. Second: general information about a taxa or group (i.e. the existing species profile services)
-      - species_info() initial version is working. Data format needs work. UPDATE - this isn't actually a species profile. Renamed to fulltext_search.
+      - species_info() initial version is working. Data format needs work. UPDATE - this isn't actually a species profile. Renamed to fulltext_search. Replacement species_info() function now has an initial version.
+
 
 2. [Ben] List of (unique) taxa in an area: Supply WKT?
    - specieslist() initial version is working. Data currently returned as a data.frame, need to check what the equivalent data structure is in e.g. rgbif so that we can be compatible if appropriate. WKT string is now checked for validity.
