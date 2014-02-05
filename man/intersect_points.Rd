@@ -12,6 +12,9 @@ intersect_points(pnts, fids, verbose = ala_config()$verbose)
   \item{fids}{text: id of field for which to look up
   information. list of possible fields available from
   ala_fields().}
+
+  \item{verbose}{boolean value defining how much progress
+  information to display; default is set by ala_config().}
 }
 \value{
 A data frame containing the intersecting data information.

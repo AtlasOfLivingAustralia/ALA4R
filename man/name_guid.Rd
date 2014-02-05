@@ -11,6 +11,9 @@ name_guid(taxon, guids_only = TRUE, verbose = ala_config()$verbose)
   \item{guids_only}{logical: if TRUE, only the GUID for
   each name is returned (or an empty string if no match).
   Otherwise, additional information is also returned}
+
+  \item{verbose}{boolean value defining how much progress
+  information to display; default is set by ala_config().}
 }
 \value{
 list: If guids_only is TRUE, a named list of character

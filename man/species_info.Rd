@@ -10,6 +10,9 @@ species_info(scientificname = NULL, guid = NULL,
   species of interest}
 
   \item{guid}{string: GUID of species of interest}
+
+  \item{verbose}{boolean value defining how much progress
+  information to display; default is set by ala_config().}
 }
 \value{
 species profile in the form of a named list
