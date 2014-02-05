@@ -4,6 +4,7 @@
 #' 
 #' @param pnts vector of lat & lons or 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 1000.
 #' @param fids text: id of field for which to look up information. list of possible fields available from ala_fields().
+#' @param verbose boolean value defining how much progress information to display; default is set by ala_config().
 #' @return A data frame containing the intersecting data information. Missing data or incorrectly identified field id values will result in NA data
 #' @author Jeremy VanDerWal \email{jjvanderwal@@gmail.com}, Ben Raymond \email{ben@@theraymonds.org}
 #' @references \url{http://spatial.ala.org.au/ws/}

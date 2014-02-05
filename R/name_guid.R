@@ -4,6 +4,7 @@
 #' 
 #' @param taxon string: the scientific name of interest, or a vector of names, i.e. c("name1","name2")
 #' @param guids_only logical: if TRUE, only the GUID for each name is returned (or an empty string if no match). Otherwise, additional information is also returned
+#' @param verbose boolean value defining how much progress information to display; default is set by ala_config().
 #' @return list: If guids_only is TRUE, a named list of character GUIDs. Otherwise, a named list in which each element is a list giving additional information. The accepted GUID is the acceptedIdentifier list component
 #' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal \email{jjvanderwal@@gmail.com}
 #' @references

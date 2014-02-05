@@ -5,6 +5,7 @@
 #' 
 #' @param scientificname string: scientific name of the species of interest
 #' @param guid string: GUID of species of interest
+#' @param verbose boolean value defining how much progress information to display; default is set by ala_config().
 #' @return species profile in the form of a named list
 #' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
 #' \email{jjvanderwal@@gmail.com}
