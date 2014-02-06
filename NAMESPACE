@@ -1,6 +1,7 @@
 export(ala_cache_filename)
 export(ala_config)
 export(ala_fields)
+export(ala_reasons)
 export(autocomplete)
 export(bulklookup)
 export(enviro_layers)

@@ -20,10 +20,13 @@
 #' assist debugging?  (logical, default=FALSE)
 #' \item user_agent: the user-agent
 #' string used with all web requests to the ALA servers.
+#' \item download_reason_id: the ID code of the "download reason" required by some ALA services. By default this is NA. Some ALA services require a valid download_reason_id code, either specified here or directly to the associated R function. See ala_reasons() for a list of valid ID codes.
 #' \item base_url_spatial: the base url for spatial web services (default="http://spatial.ala.org.au/ws/")
 #' \item base_url_bie: the base url for BIE web services (default="http://bie.ala.org.au/ws/")
 #' \item base_url_biocache: the base url for biocache web services (default="http://biocache.ala.org.au/ws/")
 #' }
+#'
+#' ala_reasons() returns a data frame with information describing the valid options for "download_reason"
 #' 
 #' @param \dots Options can be defined using name=value. Valid option names are
 #' listed above
@@ -35,6 +38,7 @@
 #' 
 #' ala_config()
 #' ala_config(caching="off")
+#' ala_reasons()
 #' 
 #' @export ala_config
 ala_config=function(...) {
@@ -50,12 +54,12 @@ ala_config=function(...) {
         )
     user_agent_string=paste("ALA4R ",version_string," (",R.Version()$version.string,"/",R.Version()$platform,")",sep="")
 
-    default_options=list(caching="on",cache_directory=tempdir(),user_agent=user_agent_string,verbose=FALSE,base_url_spatial="http://spatial.ala.org.au/ws/",base_url_bie="http://bie.ala.org.au/ws/",base_url_biocache="http://biocache.ala.org.au/ws/")
+    default_options=list(caching="on",cache_directory=tempdir(),user_agent=user_agent_string,download_reason_id=NA,verbose=FALSE,base_url_spatial="http://spatial.ala.org.au/ws/",base_url_bie="http://bie.ala.org.au/ws/",base_url_biocache="http://biocache.ala.org.au/ws/")
     ## caching can be "on" (results will be cached, and any cached results will be re-used), "refresh" (cached results will be refreshed and the new results stored in the cache), or "off"
     ## cache_directory is the directory to use for the cache. By default this is a temporary directory, which means that results will only be cached within an R session. The user may wish to set this to a non-temporary directory for caching across sessions
 
     ## define allowed options, for those that have restricted values
-    allowed_options=list(caching=c("on","off","refresh"))
+    allowed_options=list(caching=c("on","off","refresh"),download_reason_id=c(1:10)) ## ideally, the valid download_reason_id values should be populated dynamically from the ala_reasons() function. However if that is called (from here) before the AL4R_config option has been set, then we get infinite recursion. To be addressed later ...
 
     ## has the user asked to reset options to defaults?
     if (identical(user_options,list("reset"))) {
@@ -123,4 +127,26 @@ ala_config=function(...) {
             current_options
         }
     }
+}
+
+
+#' @rdname ala_config
+#' @export
+ala_reasons=function() {
+    ## return list of valid "reasons for use" codes
+    
+    ## Values at 6-Feb-2014:
+    ##[{"id":0,"name":"conservation management/planning","rkey":"logger.download.reason.conservation"},
+    ##{"id":1,"name":"biosecurity management, planning","rkey":"logger.download.reason.biosecurity"},
+    ##{"id":2,"name":"environmental impact, site assessment","rkey":"logger.download.reason.environmental"},
+    ##{"id":3,"name":"education","rkey":"logger.download.reason.education"},
+    ##{"id":4,"name":"scientific research","rkey":"logger.download.reason.research"},
+    ##{"id":5,"name":"collection management","rkey":"logger.download.reason.collection.mgmt"},
+    ##{"id":6,"name":"other","rkey":"logger.download.reason.other"},
+    ##{"id":7,"name":"ecological research","rkey":"logger.download.reason.ecological.research"},
+    ##{"id":8,"name":"systematic research","rkey":"logger.download.reason.systematic.research"},
+    ##{"id":9,"name":"other scientific research","rkey":"logger.download.reason.other.scientific.research"},
+    ##{"id":10,"name":"testing","rkey":"logger.download.reason.testing"}]
+    out=cached_get("http://logger.ala.org.au/service/logger/reasons",type="json")
+    ldply(out,as.data.frame)
 }

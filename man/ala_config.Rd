@@ -1,8 +1,11 @@
 \name{ala_config}
 \alias{ala_config}
+\alias{ala_reasons}
 \title{Get or set ALA4R configuration options}
 \usage{
 ala_config(...)
+
+ala_reasons()
 }
 \arguments{
   \item{\dots}{Options can be defined using name=value.
@@ -36,16 +39,25 @@ directory must exist on the file system. \item verbose:
 should ALA4R give verbose output to assist debugging?
 (logical, default=FALSE) \item user_agent: the user-agent
 string used with all web requests to the ALA servers. \item
-base_url_spatial: the base url for spatial web services
-(default="http://spatial.ala.org.au/ws/") \item
+download_reason_id: the ID code of the "download reason"
+required by some ALA services. By default this is NA. Some
+ALA services require a valid download_reason_id code,
+either specified here or directly to the associated R
+function. See ala_reasons() for a list of valid ID codes.
+\item base_url_spatial: the base url for spatial web
+services (default="http://spatial.ala.org.au/ws/") \item
 base_url_bie: the base url for BIE web services
 (default="http://bie.ala.org.au/ws/") \item
 base_url_biocache: the base url for biocache web services
 (default="http://biocache.ala.org.au/ws/") }
+
+ala_reasons() returns a data frame with information
+describing the valid options for "download_reason"
 }
 \examples{
 ala_config()
 ala_config(caching="off")
+ala_reasons()
 }
 \author{
 Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal
