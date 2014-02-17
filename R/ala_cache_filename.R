@@ -5,12 +5,11 @@
 #' from URL to filename
 #' 
 #' 
-#' @param url The URL, as a string
-#' @return the file path and name, as a string
-#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
-#' \email{jjvanderwal@@gmail.com}
-#' @seealso \code{ala_config} for cache settings, particularly the cache
-#' directory
+#' @param url string: the URL
+#' @return string: the file path and name
+#' @author Atlasof LivingAustralia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au}
+#' @seealso \code{ala_config} for cache settings, particularly the cache directory
 #' @examples
 #' ala_cache_filename("http://biocache.ala.org.au/ws/index/fields")
 #' 
