@@ -14,7 +14,7 @@
 #' 
 #' @export bulklookup
 
-# TODO: provide a clear explanation of how the underlying service chooses the returned result for each name. Currently, results seem to be very upredictable. e.g. bulklookup("Grevillea humilis") returns the record for Grevillea humilis subsp. humilis rather than the species itself; bulklookup("Grevillea humili") returns the same record, and bulklookup("Grevillea humil") returns the record for Anthotium humile
+# TODO: provide a clear explanation of how the underlying service chooses the returned result for each name. Currently, results seem to be very upredictable. Using the single-name lookup http://bie.ala.org.au/ws/guid/Grevillea%20humilis, we get the GUID for Grevillea humilis. bulklookup("Grevillea humilis") returns the record for Grevillea humilis subsp. humilis rather than the species itself; bulklookup("Grevillea humili") returns the same record, and bulklookup("Grevillea humil") returns the record for Anthotium humile
 ## TODO: work out what is going on with non-matched records. It seems that they simply aren't returned, and the returned record list may contain less items than the number of submitted names
 
 bulklookup=function(taxa=c()) {

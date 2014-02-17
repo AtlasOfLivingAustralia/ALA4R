@@ -25,6 +25,6 @@ Jeremy VanDerWal \email{jjvanderwal@gmail.com}, Ben Raymond
 \email{ben@theraymonds.org}
 }
 \references{
-\url{http://www.ala.org.au/about-the-atlas/downloadable-tools/web-services/}
+\url{http://api.ala.org.au/}
 }
 

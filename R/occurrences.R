@@ -23,8 +23,11 @@
 #' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),page_size=1000)
 #' 
 #' @export occurrences
+
+## TODO: may need to change base URL to match new API (http://biocache.ala.org.au/ws/occurrences/download, but this is not zipped)
+## TODO: support extra params fq, startindex, etc (see API page) 
+
 occurrences=function(taxon="",wkt="",page_size=NA,fields=c()) {
-    ## TODO: add filtering functionality (fq parm passed in URL), assuming that it is relevant here
     ## check input parms are sensible
     if (!is.na(page_size)) {
         if (!(page_size>0)) {
