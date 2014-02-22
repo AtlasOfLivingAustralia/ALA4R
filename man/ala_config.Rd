@@ -60,7 +60,9 @@ ala_config(caching="off")
 ala_reasons()
 }
 \author{
-Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal
-\email{jjvanderwal@gmail.com}
+Atlas of Living Australia \email{support@ala.org.au}
+}
+\references{
+\url{http://api.ala.org.au/}
 }
 

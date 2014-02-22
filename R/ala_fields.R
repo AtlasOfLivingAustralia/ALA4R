@@ -8,11 +8,8 @@
 #' occurrence records), or "layers" (a list of all fields associated with the environmental and contextual layers)
 #' @param field_id text: id of field for which to look up information
 #' @return A data frame containing the field names and various attributes
-#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
-#' \email{jjvanderwal@@gmail.com}
-#' @references For "occurrence",
-#' \url{http://biocache.ala.org.au/ws/index/fields}.  For "general",
-#' \url{http://bie.ala.org.au/ws/admin/indexFields}. For "layers", \url{http://spatial.ala.org.au/ws/field}
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
 #' @examples
 #' 
 #' ala_fields("general")

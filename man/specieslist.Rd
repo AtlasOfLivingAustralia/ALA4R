@@ -30,10 +30,9 @@ taxonomic query and/or within a specified spatial area
 x=specieslist(taxon="macropus",wkt="POLYGON((140 -37,151 -37,151 -26,140.1310 -26,140 -37))")
 }
 \author{
-Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal
-\email{jjvanderwal@gmail.com}
+Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://spatial.ala.org.au/layers-service/}
+\url{http://api.ala.org.au/}
 }
 

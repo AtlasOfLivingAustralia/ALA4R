@@ -8,7 +8,7 @@
 # @param on_server_error function: optional function to evaluate in the case of a server error (5xx) code. By default an error is thrown.
 # @return integer: simplified status code (0=success (2xx codes), 1=warning (3xx codes))
 # @references \url{http://www.w3.org/Protocols/HTTP/HTRESP.html}
-# @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal \email{jjvanderwal@@gmail.com}
+# @author Atlas of Living Australia \email{support@@ala.org.au}
 # @examples
 #
 # out = GET(url="http://www.ala.org.au/")

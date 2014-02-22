@@ -26,10 +26,9 @@ species_info("Grevillea humilis subsp. maritima")
 species_info(guid="urn:lsid:biodiversity.org.au:apni.taxon:248651")
 }
 \author{
-Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal
-\email{jjvanderwal@gmail.com}
+Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://bie.ala.org.au/bie-service/}
+\url{http://api.ala.org.au/}
 }
 

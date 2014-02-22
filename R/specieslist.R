@@ -13,9 +13,8 @@
 #' (currently 10) will be used.
 #' @return Data frame with (at least) the columns
 #' "Scientific.name","Common.name","Taxon.rank","LSID","N.occurrences"
-#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
-#' \email{jjvanderwal@@gmail.com}
-#' @references \url{http://spatial.ala.org.au/layers-service/}
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
 #' @examples
 #' 
 #' x=specieslist(taxon="macropus",wkt="POLYGON((140 -37,151 -37,151 -26,140.1310 -26,140 -37))")

@@ -6,8 +6,8 @@
 #' @param fids text: id of field for which to look up information. list of possible fields available from ala_fields().
 #' @param verbose boolean value defining how much progress information to display; default is set by ala_config().
 #' @return A data frame containing the intersecting data information. Missing data or incorrectly identified field id values will result in NA data
-#' @author Jeremy VanDerWal \email{jjvanderwal@@gmail.com}, Ben Raymond \email{ben@@theraymonds.org}
-#' @references \url{http://spatial.ala.org.au/ws/}
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
 #' @examples
 #' 
 #' #single point with multiple fields

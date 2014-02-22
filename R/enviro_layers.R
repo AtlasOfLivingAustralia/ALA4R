@@ -5,8 +5,8 @@
 #' 
 #' @param type a selection of "all", "grids" or "shapes" associated with all possible layers, only environmental grids or contextual shapefiles
 #' @return A data frame of results
-#' @author Jeremy VanDerWal \email{jjvanderwal@@gmail.com}, Ben Raymond \email{ben@@theraymonds.org}
-#' @references \url{http://spatial.ala.org.au/ws/}
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
 #' @examples
 #' 
 #' enviro_layers(type="all")

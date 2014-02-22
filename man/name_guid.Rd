@@ -30,10 +30,9 @@ name_guid("Macropus greyi")
 	name_guid(c("Macropus greyi","Pachyptila turtur","thisisnotavalidname"))
 }
 \author{
-Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal
-\email{jjvanderwal@gmail.com}
+Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://bie.ala.org.au/bie-service/}
+\url{http://api.ala.org.au/}
 }
 

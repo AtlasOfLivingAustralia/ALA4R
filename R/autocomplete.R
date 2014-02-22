@@ -14,10 +14,8 @@
 #' \item{georeferencedCount}{} \item{scientificNameMatches}{}
 #' \item{commonNameMatches}{} \item{commonName}{} \item{matchedNames}{}
 #' \item{ankId}{} \item{rankString}{} \item{left}{} \item{right}{}
-#' @author Jeremy VanDerWal \email{jjvanderwal@@gmail.com}, Ben Raymond
-#' \email{ben@@theraymonds.org}
-#' @references
-#' \url{http://www.ala.org.au/about-the-atlas/downloadable-tools/web-services/}
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
 #' @examples
 #' 
 #' 	#find information ALA holds on red kangaroo

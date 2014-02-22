@@ -21,8 +21,7 @@ closest matches
 	fulltext_search("red kangaroo")
 }
 \author{
-Jeremy VanDerWal \email{jjvanderwal@gmail.com}, Ben Raymond
-\email{ben@theraymonds.org}
+Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
 \url{http://api.ala.org.au/}

@@ -37,10 +37,9 @@ pnts = data.frame(lat=seq(-29,-19,0.02),lon=132.769)
 intersect_points(pnts,fields)
 }
 \author{
-Jeremy VanDerWal \email{jjvanderwal@gmail.com}, Ben Raymond
-\email{ben@theraymonds.org}
+Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://spatial.ala.org.au/ws/}
+\url{http://api.ala.org.au/}
 }
 

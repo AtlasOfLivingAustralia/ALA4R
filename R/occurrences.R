@@ -15,9 +15,8 @@
 #' the returned data frame are not guaranteed to retain the ordering of the
 #' field names given here. See ala_fields("occurrence") for valid field names.
 #' @return Data frame
-#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
-#' \email{jjvanderwal@@gmail.com}
-#' @references http://spatial.ala.org.au/layers-service/
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
 #' @examples
 #' 
 #' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),page_size=1000)

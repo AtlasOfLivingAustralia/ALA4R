@@ -7,9 +7,8 @@
 #' @param guid string: GUID of species of interest
 #' @param verbose boolean value defining how much progress information to display; default is set by ala_config().
 #' @return species profile in the form of a named list
-#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
-#' \email{jjvanderwal@@gmail.com}
-#' @references \url{http://bie.ala.org.au/bie-service/}
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
 #' @examples
 #' 
 #' species_info("Grevillea humilis subsp. maritima")

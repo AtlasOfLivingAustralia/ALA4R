@@ -7,8 +7,8 @@
 #' 
 #' @param url string: the URL
 #' @return string: the file path and name
-#' @author Atlasof LivingAustralia \email{support@@ala.org.au}
-#' @references \url{http://api.ala.org.au}
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
 #' @seealso \code{ala_config} for cache settings, particularly the cache directory
 #' @examples
 #' ala_cache_filename("http://biocache.ala.org.au/ws/index/fields")

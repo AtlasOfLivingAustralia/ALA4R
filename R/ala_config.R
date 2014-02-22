@@ -32,8 +32,8 @@
 #' listed above
 #' @return For ala_config(), a list of all options. When ala_config(...) is
 #' called with arguments, nothing is returned but the configuration is set.
-#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
-#' \email{jjvanderwal@@gmail.com}
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
 #' @examples
 #' 
 #' ala_config()

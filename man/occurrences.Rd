@@ -34,10 +34,9 @@ gzipped CSV" web service
 x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),page_size=1000)
 }
 \author{
-Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal
-\email{jjvanderwal@gmail.com}
+Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-http://spatial.ala.org.au/layers-service/
+\url{http://api.ala.org.au/}
 }
 

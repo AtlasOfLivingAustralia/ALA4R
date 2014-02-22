@@ -30,14 +30,9 @@ ala_fields("general")
 field_info('cl22')
 }
 \author{
-Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal
-\email{jjvanderwal@gmail.com}
+Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-For "occurrence",
-\url{http://biocache.ala.org.au/ws/index/fields}.  For
-"general",
-\url{http://bie.ala.org.au/ws/admin/indexFields}. For
-"layers", \url{http://spatial.ala.org.au/ws/field}
+\url{http://api.ala.org.au/}
 }
 

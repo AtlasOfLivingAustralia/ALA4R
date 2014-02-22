@@ -22,10 +22,9 @@ enviro_layers(type="grids")
 enviro_layers(type="shapes")
 }
 \author{
-Jeremy VanDerWal \email{jjvanderwal@gmail.com}, Ben Raymond
-\email{ben@theraymonds.org}
+Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://spatial.ala.org.au/ws/}
+\url{http://api.ala.org.au/}
 }
 

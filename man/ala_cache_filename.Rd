@@ -5,10 +5,10 @@
 ala_cache_filename(url)
 }
 \arguments{
-  \item{url}{The URL, as a string}
+  \item{url}{string: the URL}
 }
 \value{
-the file path and name, as a string
+string: the file path and name
 }
 \description{
 Returns the name of the cache file associated with the
@@ -19,8 +19,10 @@ function just provides the mapping from URL to filename
 ala_cache_filename("http://biocache.ala.org.au/ws/index/fields")
 }
 \author{
-Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal
-\email{jjvanderwal@gmail.com}
+Atlas of Living Australia \email{support@ala.org.au}
+}
+\references{
+\url{http://api.ala.org.au/}
 }
 \seealso{
 \code{ala_config} for cache settings, particularly the

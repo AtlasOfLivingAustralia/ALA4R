@@ -5,9 +5,8 @@
 #' 
 #' @param taxa string: a single name (string) or vector of names
 #' @return A data frame of results
-#' @author Ben Raymond \email{ben@@theraymonds.org}, Jeremy VanDerWal
-#' \email{jjvanderwal@@gmail.com}
-#' @references \url{http://bie.ala.org.au/bie-service/}
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
 #' @examples
 #' 
 #' bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima"))

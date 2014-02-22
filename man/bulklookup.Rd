@@ -21,10 +21,9 @@ partial or incorrectly spelled name
 bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima"))
 }
 \author{
-Ben Raymond \email{ben@theraymonds.org}, Jeremy VanDerWal
-\email{jjvanderwal@gmail.com}
+Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://bie.ala.org.au/bie-service/}
+\url{http://api.ala.org.au/}
 }
 

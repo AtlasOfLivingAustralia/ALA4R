@@ -29,10 +29,9 @@ analysis that is a match from a supplied partial name.
 	autocomplete("red kangaroo")
 }
 \author{
-Jeremy VanDerWal \email{jjvanderwal@gmail.com}, Ben Raymond
-\email{ben@theraymonds.org}
+Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://www.ala.org.au/about-the-atlas/downloadable-tools/web-services/}
+\url{http://api.ala.org.au/}
 }
 
