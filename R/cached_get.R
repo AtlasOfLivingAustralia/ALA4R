@@ -3,7 +3,7 @@
 # Convenience wrapper for web GET operations. Caching, setting the user-agent string, and basic checking of the result are handled.
 # 
 # @param url string: the url of the page to retrieve
-# @param type string: the expected content type. Either "text" (default), "json", or "filename"
+# @param type string: the expected content type. Either "text" (default), "json", or "filename" (this caches the content directly to a file and returns the filename without attempting to read it in)
 # @param caching string: caching behaviour, by default from ala_config()$caching
 # @return for type=="text" the content is returned as text. For type=="json", the content is parsed using fromJSON. For "filename", the name of the stored file is returned.
 # @details Depending on the value of caching, the page is either retrieved from the cache or from the url, and stored in the cache if appropriate. The user-agent string is set according to ala_config()$user_agent. The returned response (if not from cached file) is also passed to check_status_code().
@@ -13,6 +13,8 @@
 #
 # out = cached_get(url="http://biocache.ala.org.au/ws/index/fields",type="json")
 # 
+
+## TODO: change to using jsonlite for conversions, which generally gives more appropriate R data structures
 
 cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,...) {
     type=tolower(type)
@@ -32,25 +34,26 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
     } else {
         ## use caching
         thisfile=download_to_file(url)
-        switch(type,
-               "json"={
-                   if (!(file.info(thisfile)$size>0)) {
-                       ## empty file
-                       NULL
-                   } else {
-                       fromJSON(file=thisfile)
-                   }
-               },
-               "filename"={
-                   thisfile
-               },
-               "text"={
-                   fid=file(thisfile, "rt")
-                   out=readLines(fid,warn=FALSE)
-                   close(fid)
-                   out
-               }
-           )
+        if (type %in% c("json","text")) {
+            ## for json, read directly as string first, then pass this to fromJSON. This is compatible with either RJSON's or rjsonlite's version of fromJSON (only RJSON's version can take a filename directly)
+            if (!(file.info(thisfile)$size>0)) {
+                NULL
+            } else {
+                fid=file(thisfile, "rt")
+                out=readLines(fid,warn=FALSE)
+                close(fid)
+                if (identical(type,"json")) {
+                    fromJSON(out)
+                } else {
+                    out
+                }
+            }
+        } else if (identical(type,"filename")) {
+            thisfile
+        } else {
+            ## should not be here! did we add an allowed type to the arguments without adding handler code down here?
+            stop(sprintf("unrecognized type %s in cached_post",type))
         }
+        
     }
-
+}
