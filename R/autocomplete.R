@@ -26,7 +26,11 @@
 #' @export autocomplete
 autocomplete=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {
     is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
-    if (!is.null(limit) & (class(limit) != 'numeric' | length(limit) > 1 | limit<1 | !is.wholenumber(limit))) stop('limit must be a single integer value greater than 0') #check limit is integer >0 and single value
+    if (!is.null(limit)) {
+        if (class(limit) != 'numeric' | length(limit) > 1 | limit<1 | !is.wholenumber(limit)) {
+            stop('limit must be a single integer value greater than 0') #check limit is integer >0 and single value
+        }
+    }
     if (!is.null(idxType)) {
         idxType=toupper(idxType)
         match.arg(idxType,c("TAXON","REGION","COLLECTION","INSTITUTION","DATASET"))
