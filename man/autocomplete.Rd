@@ -2,13 +2,21 @@
 \alias{autocomplete}
 \title{Auto Complete Search}
 \usage{
-autocomplete(taxon, limit = 10)
+autocomplete(taxon, geoOnly = FALSE, idxType = NULL, limit = NULL)
 }
 \arguments{
   \item{taxon}{a character string that defines part of the
   scientific or common name of the taxa of interest}
 
-  \item{limit}{the maximum number of matches returned}
+  \item{geoOnly}{logical: if TRUE, only results that have
+  some geospatial occurrence records will be included}
+
+  \item{idxType}{string: The index type to limit. Values
+  include: TAXON REGION COLLECTION INSTITUTION DATASET}
+
+  \item{limit}{the maximum number of matches returned
+  (defaults to the server-side value, which is currently
+  10)}
 }
 \value{
 A dataframe of taxa given the partial matches where columns

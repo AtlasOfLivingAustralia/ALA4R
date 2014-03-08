@@ -8,7 +8,9 @@
 #' 
 #' @param taxon a character string that defines part of the scientific or
 #' common name of the taxa of interest
-#' @param limit the maximum number of matches returned
+#' @param geoOnly logical: if TRUE, only results that have some geospatial occurrence records will be included
+#' @param idxType string: The index type to limit. Values include: TAXON REGION COLLECTION INSTITUTION DATASET
+#' @param limit the maximum number of matches returned (defaults to the server-side value, which is currently 10)
 #' @return A dataframe of taxa given the partial matches where columns are
 #' identified as: \item{guid}{} \item{name}{} \item{occurrenceCount}{}
 #' \item{georeferencedCount}{} \item{scientificNameMatches}{}
@@ -22,26 +24,46 @@
 #' 	autocomplete("red kangaroo")
 #' 
 #' @export autocomplete
-autocomplete=function(taxon,limit=10) {
-	taxon = clean_string(taxon) #clean up the taxon name
-	taxon = gsub(' ','+',taxon) #replace spaces with + to force both terms in the search
-	if (class(limit) != 'numeric' | length(limit) > 1) stop('limit must be a single numeric value') #check limit is numeric and single value
+autocomplete=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {
+    is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
+    if (!is.null(limit) & (class(limit) != 'numeric' | length(limit) > 1 | limit<1 | !is.wholenumber(limit))) stop('limit must be a single integer value greater than 0') #check limit is integer >0 and single value
+    if (!is.null(idxType)) {
+        idxType=toupper(idxType)
+        match.arg(idxType,c("TAXON","REGION","COLLECTION","INSTITUTION","DATASET"))
+    }
+    taxon = clean_string(taxon) #clean up the taxon name
+    taxon = gsub(' ','+',taxon) #replace spaces with + to force both terms in the search
 	
-	base_url=ala_config()$base_url_bie #define the base URL string
-	url_str = paste(base_url,"search/auto.json?q=",taxon,"&limit=",limit,sep="") #define the URL string
+    base_url=paste(ala_config()$base_url_bie,"search/auto.json",sep="") #define the base URL string
+    this_query=list(q=taxon)
+    if (!is.null(limit)) {
+        this_query$limit=limit
+    }
+    if (geoOnly) {
+        this_query$geoOnly="true"
+    }
+    if (!is.null(idxType)) {
+        this_query$idxType=idxType
+    }
+    this_url=parse_url(base_url)
+    this_url$query=this_query
+        	
+    out = cached_get(url=build_url(this_url),type="json") #get the data
+    out = out[[1]] #looking at the data
+    if (length(out)<1) {
+        ## no results
+        data.frame()
+    } else {
+        ##need to collapse matchednames fields if there was more than a single matched name
+        for (ii in 1:length(out)) {
+            for (jj in 1:length(out[[ii]])) {
+                if (length(out[[ii]][[jj]]) > 1) {
+                    out[[ii]][[jj]] = paste(out[[ii]][[jj]],collapse=', ')
+                }
+            }
+        }
 	
-	out = cached_get(url_str,type="json") #get the data
-	out = out[[1]] #looking at the data
-	
-	##need to collapse matchednames fields if there was more than a single matched name
-	for (ii in 1:length(out)) {
-		for (jj in 1:length(out[[ii]])) {
-			if (length(out[[ii]][[jj]]) > 1) {
-                            out[[ii]][[jj]] = paste(out[[ii]][[jj]],collapse=', ')
-                        }
-		}
-	}
-	
-	out = do.call('rbind.fill',lapply(out,function(x) {as.data.frame(rbind(x))})) #define the output as a data.frame
-	return(out)
+        out = do.call('rbind.fill',lapply(out,function(x) {as.data.frame(rbind(x))})) #define the output as a data.frame
+        out
+    }
 }
