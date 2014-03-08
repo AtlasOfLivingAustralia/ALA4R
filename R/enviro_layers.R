@@ -15,16 +15,17 @@
 #' 
 #' @export enviro_layers
 enviro_layers = function(type="all") {
+    type=tolower(type)
+    match.arg(type,c("all","grids","shapes"))
     base_url = 'http://spatial.ala.org.au/ws/layers' #define the base url
 	if (type == 'all') { 
-		out = GET(url=base_url,user_agent(ala_config()$user_agent)) #download all data
+            out = cached_get(url=base_url,type="json") #download all data
 	} else if (type == 'grids') {
-		out = GET(url=paste(base_url,type,sep='/'),user_agent(ala_config()$user_agent)) #download only grids
+            out = cached_get(url=paste(base_url,type,sep='/'),type="json") #download only grids
 	} else if (type == 'shapes') {
-		out = GET(url=paste(base_url,type,sep='/'),user_agent(ala_config()$user_agent)) #download only shapefile info
+            out = cached_get(url=paste(base_url,type,sep='/'),type="json") #download only shapefile info
 	} else {
-		stop('type must be either all, grids or shape') #incorrect type so stop
+            stop('type must be either all, grids or shape') #incorrect type so stop
 	}
-	out = content(out) #keep only the content
 	do.call('rbind.fill',lapply(out,as.data.frame)) #bind the data as a dataframe
 }
