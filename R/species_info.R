@@ -1,14 +1,13 @@
-#' Fetch species profile
+#' Fetch a taxon profile given a scientific name or LSID
 #' 
-#' Retrieve species profile given either the scientific name or GUID
-#' 
-#' 
-#' @param scientificname string: scientific name of the species of interest
-#' @param guid string: GUID of species of interest
-#' @param verbose boolean value defining how much progress information to display; default is set by ala_config().
-#' @return species profile in the form of a named list
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
+#' 
+#' @param scientificname string: scientific name of the taxon of interest (species, genus, family etc) 
+#' @param LSID string: The Life Science Identifier of the taxon of interest
+#' @param verbose boolean value: How much progress information to display; default is set by ala_config().
+#' @return species profile in the form of a named list
+
 #' @examples
 #' 
 #' species_info("Grevillea humilis subsp. maritima")
@@ -16,7 +15,7 @@
 #' 
 #' @export species_info
 
-# TODO: support multiple names or guids passed as a vector?
+# TODO: support multiple names or guids passed as a vector? (LB:low priority)
 
 species_info=function(scientificname=NULL,guid=NULL,verbose=ala_config()$verbose) {
     if (is.null(scientificname) && is.null(guid)) {
