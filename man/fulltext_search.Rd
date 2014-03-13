@@ -10,9 +10,9 @@ fulltext_search(taxon)
 }
 \value{
 a named list, including the results component which is a
-dataframe of information with columns being: \item{guid}
-\item{name} \item{idxtype} \item{score} \item{parentGuid}
-\item{commonName} \item{nameComplete}
+dataframe of information with columns being: \itemize{
+\item{guid} \item{name} \item{idxtype} \item{score}
+\item{parentGuid} \item{commonName} \item{nameComplete}
 \item{commonNameSingle} \item{hasChildren} \item{rank}
 \item{rankId} \item{rawRank} \item{conservationStatus}
 \item{conservationStatusAUS} \item{isAustralian}
@@ -24,7 +24,7 @@ dataframe of information with columns being: \item{guid}
 \item{isEcluded} \item{imageUrl} \item{largeImageUrl}
 \item{smallImageUrl} \item{thumbnailUrl}
 \item{imageMetadataUrl} \item{acceptedConceptName}
-\item{synonomyRelationship} \item{synonomyDescription}
+\item{synonomyRelationship} \item{synonomyDescription} }
 }
 \description{
 Performs a search across all objects, and selects the

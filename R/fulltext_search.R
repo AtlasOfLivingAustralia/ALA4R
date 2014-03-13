@@ -6,7 +6,8 @@
 #' @references \url{http://api.ala.org.au/}
 #'  
 #' @param taxon: a character string for the taxon of interest
-#' @return a named list, including the results component which is a dataframe of information with columns being: 
+#' @return a named list, including the results component which is a dataframe of information with columns being:
+#' \itemize{
 #' \item{guid}  \item{name}  \item{idxtype}
 #' \item{score} \item{parentGuid}
 #' \item{commonName}  \item{nameComplete}
@@ -18,6 +19,7 @@
 #' \item{linkIdentifier} \item{occCount} \item{imageSource} \item{imageCount} \item{isEcluded}
 #' \item{imageUrl} \item{largeImageUrl} \item{smallImageUrl} \item{thumbnailUrl} \item{imageMetadataUrl} 
 #' \item{acceptedConceptName} \item{synonomyRelationship} \item{synonomyDescription}
+#' }
 #' 
 #' @examples
 #' 

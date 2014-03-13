@@ -20,9 +20,9 @@ specieslist(taxon = "", wkt = "", page_size = NA)
   used.}
 }
 \value{
-Data frame with (at least) the columns \item{family}
-\item{Scientific.name} \item{Common.name} \item{Taxon.rank}
-\item{GUID} \item{N.occurrences}
+Data frame with (at least) the columns \itemize{
+\item{family} \item{Scientific.name} \item{Common.name}
+\item{Taxon.rank} \item{GUID} \item{N.occurrences} }
 }
 \description{
 Get list of taxa and their occurrence counts, with/without
