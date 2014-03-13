@@ -6,9 +6,7 @@
 #' @references \url{http://api.ala.org.au/}
 #'  
 #' @param taxon: a character string for the taxon of interest
-#' @return a dataframe of information with columns being: 
-#' \item{comp1}{Description of 'comp1'} 
-#' $Results
+#' @return a named list, including the results component which is a dataframe of information with columns being: 
 #' \item{guid}  \item{name}  \item{idxtype}
 #' \item{score} \item{parentGuid}
 #' \item{commonName}  \item{nameComplete}
@@ -23,8 +21,8 @@
 #' 
 #' @examples
 #' 
-#' 	#find information ALA holds on red kangaroo
-#' 	fulltext_search("red kangaroo")
+#'  #find information ALA holds on red kangaroo
+#'  fulltext_search("red kangaroo")
 #'  fulltext_search("Macropus rufus")
 #'  fulltext_search("urn:lsid:biodiversity.org.au:afd.taxon:31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae")
 #' 
