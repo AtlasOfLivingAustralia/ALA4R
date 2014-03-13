@@ -11,7 +11,7 @@
 #' @param page_size Maximum number of records to return (may not be honoured by
 #' the ALA server). Default=NA, meaning that the server default value (currently 10) will be used.
 #' @return Data frame with (at least) the columns
-#' \item {family} \item{Scientific.name} \item{Common.name} \item{Taxon.rank}
+#' \item{family} \item{Scientific.name} \item{Common.name} \item{Taxon.rank}
 #' \item{GUID} \item{N.occurrences}
 #' @examples
 #' 

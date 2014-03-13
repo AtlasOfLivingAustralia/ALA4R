@@ -20,7 +20,7 @@ specieslist(taxon = "", wkt = "", page_size = NA)
   used.}
 }
 \value{
-Data frame with (at least) the columns \item {family}
+Data frame with (at least) the columns \item{family}
 \item{Scientific.name} \item{Common.name} \item{Taxon.rank}
 \item{GUID} \item{N.occurrences}
 }
