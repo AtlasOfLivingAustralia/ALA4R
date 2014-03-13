@@ -3,16 +3,15 @@
 \alias{field_info}
 \title{Retrieve a list of all fields}
 \usage{
-ala_fields(fields_type = "general")
+ala_fields(fields_type = "occurrence")
 
 field_info(field_id)
 }
 \arguments{
-  \item{fields_type}{text: either "general" (for searching
-  taxa, datasets, layers, and collections metadata),
-  "occurrence" (for searching species occurrence records),
-  or "layers" (a list of all fields associated with the
-  environmental and contextual layers)}
+  \item{fields_type}{text: either "occurrence" (for
+  searching species occurrence records), or "layers" (a
+  list of all fields associated with the environmental and
+  contextual layers)}
 
   \item{field_id}{text: id of field for which to look up
   information}
@@ -26,7 +25,7 @@ Retrieves a list of field names that can be used with the
 data retrieval functions
 }
 \examples{
-ala_fields("general")
+ala_fields("occurrence")
 field_info('cl22')
 }
 \author{
