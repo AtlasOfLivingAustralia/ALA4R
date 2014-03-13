@@ -27,6 +27,7 @@ data retrieval functions
 \examples{
 ala_fields("occurrence")
 field_info('cl22')
+field_info('el773')
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

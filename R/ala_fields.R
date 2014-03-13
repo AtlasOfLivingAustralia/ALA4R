@@ -13,6 +13,7 @@
 #' 
 #' ala_fields("occurrence")
 #' field_info('cl22')
+#' field_info('el773')
 #' 
 #' @export
 
@@ -37,11 +38,11 @@ ala_fields=function(fields_type="occurrence") {
         }
     }
 
-    ## for "layers", shorter, more manageable names are provided from http://spatial.ala.org.au/layers.json
+    ## for "layers", shorter, more manageable names are provided from http://spatial.ala.org.au/layers.json (this is now http://spatial.ala.org.au/ws/layers in API)
     ## add these as an extra column: name_short
     ## TODO are these applicable to our other fields_type as well?
     if (identical(fields_type,"layers")) {
-        more_x=cached_get(url="http://spatial.ala.org.au/layers.json",type="json")
+        more_x=cached_get(url=paste(ala_config()$base_url_spatial,"layers",sep=""),type="json")
         ##more_x=rbind.fill(lapply(more_x,as.data.frame)) ## this is slow
         ## just pull out the bits that we want
         ## and construct ids here that match the field names in x
@@ -57,15 +58,21 @@ ala_fields=function(fields_type="occurrence") {
 #' @export
 field_info = function(field_id) {
     base_url = paste(ala_config()$base_url_spatial,"field",sep="")
-    out = cached_get(url=paste(base_url,field_id,sep='/'),type="json")
-    ## the http status code is checked as part of cached_get
-    ## however, we might wish to issue a warning for empty responses
-    if (substr(field_id,1,2) == 'cl') {
-        out = out$objects #keep only the content
-        do.call('rbind.fill',lapply(out,as.data.frame)) #bind the data as a dataframe
-    } else if (substr(field_id,1,2) == 'el') {
-        out = as.data.frame(rbind(out)) #bind the data as a dataframe	
-        rownames(out) = NULL #reset the row names
-        out
+    ## if we supply an unknown field_id, we get 500 error from the server. But this doesn't make sense, so we mask the server error and simply return an empty data frame in this case
+    this_server_error=function(z) NULL
+    out = cached_get(url=paste(base_url,field_id,sep='/'),type="json",on_server_error=this_server_error)
+    ## if we got a 500 error, it was from an un-matched field name, so just return an empty data frame with no warning
+    if (is.null(out)) {
+        data.frame()
+    } else {
+        ## we might wish to issue a warning for empty responses
+        if (substr(field_id,1,2) == 'cl') {
+            out = out$objects #keep only the content
+            do.call('rbind.fill',lapply(out,as.data.frame)) #bind the data as a dataframe
+        } else if (substr(field_id,1,2) == 'el') {
+            out = as.data.frame(rbind(out)) #bind the data as a dataframe	
+            rownames(out) = NULL #reset the row names
+            out
+        }
     }
 }	
