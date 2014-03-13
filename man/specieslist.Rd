@@ -6,13 +6,12 @@ taxonomic query within an optionally-defined WKT-defined polygon}
 specieslist(taxon = "", wkt = "", page_size = NA)
 }
 \arguments{
-  \item{taxon:}{Text of taxon, e.g. "Macropus rufus" or
-  "macropodidae"}
+  \item{taxon}{string: Text of taxon, e.g. "Macropus rufus"
+  or "macropodidae"}
 
-  \item{wkt:}{Numeric vector string of WKT (well-known
-  text) defining a polygon within which to limit taxon
-  search, e.g. "POLYGON((140 -37,151 -37,151 -26,140
-  -26,140 -37))"}
+  \item{wkt}{string: WKT (well-known text) defining a
+  polygon within which to limit taxon search, e.g.
+  "POLYGON((140 -37,151 -37,151 -26,140 -26,140 -37))"}
 
   \item{page_size}{Maximum number of records to return (may
   not be honoured by the ALA server). Default=NA, meaning

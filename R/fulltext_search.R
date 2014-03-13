@@ -5,7 +5,7 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #'  
-#' @param taxon: a character string for the taxon of interest
+#' @param taxon string: a character string for the taxon of interest
 #' @return a named list, including the results component which is a dataframe of information with columns being:
 #' \itemize{
 #' \item{guid}  \item{name}  \item{idxtype}

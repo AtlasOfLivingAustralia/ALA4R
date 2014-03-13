@@ -9,7 +9,7 @@ species_info(scientificname = NULL, guid = NULL,
   \item{scientificname}{string: scientific name of the
   taxon of interest (species, genus, family etc)}
 
-  \item{LSID}{string: The Life Science Identifier of the
+  \item{guid}{string: The Life Science Identifier of the
   taxon of interest}
 
   \item{verbose}{boolean value: How much progress

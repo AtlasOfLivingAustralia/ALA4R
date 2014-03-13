@@ -5,7 +5,7 @@
 fulltext_search(taxon)
 }
 \arguments{
-  \item{taxon:}{a character string for the taxon of
+  \item{taxon}{string: a character string for the taxon of
   interest}
 }
 \value{

@@ -5,8 +5,8 @@
 #' @references \url{http://api.ala.org.au/} 
 #' \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' 
-#' @param taxon: Text of taxon, e.g. "Macropus rufus" or "macropodidae"
-#' @param wkt: Numeric vector string of WKT (well-known text) defining a polygon within
+#' @param taxon string: Text of taxon, e.g. "Macropus rufus" or "macropodidae"
+#' @param wkt string: WKT (well-known text) defining a polygon within
 #' which to limit taxon search, e.g. "POLYGON((140 -37,151 -37,151 -26,140 -26,140 -37))"
 #' @param page_size Maximum number of records to return (may not be honoured by
 #' the ALA server). Default=NA, meaning that the server default value (currently 10) will be used.

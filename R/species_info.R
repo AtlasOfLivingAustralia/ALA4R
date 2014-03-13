@@ -4,7 +4,7 @@
 #' @references \url{http://api.ala.org.au/}
 #' 
 #' @param scientificname string: scientific name of the taxon of interest (species, genus, family etc) 
-#' @param LSID string: The Life Science Identifier of the taxon of interest
+#' @param guid string: The Life Science Identifier of the taxon of interest
 #' @param verbose boolean value: How much progress information to display; default is set by ala_config().
 #' @return species profile in the form of a named list
 
