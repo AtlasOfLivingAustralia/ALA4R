@@ -25,7 +25,7 @@
 #' 
 #' 	#find information ALA holds on red kangaroo
 #' 	fulltext_search("red kangaroo")
-#'  fulltext_search("Macropus Rufus")
+#'  fulltext_search("Macropus rufus")
 #'  fulltext_search("urn:lsid:biodiversity.org.au:afd.taxon:31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae")
 #' 
 #' @export
@@ -43,3 +43,6 @@ fulltext_search <- function(taxon) {
 }
 
 ## TODO: add support for fq, start, pageSize, sort, dir params
+#GET(url="http://bie.ala.org.au/ws/search.json?q=Grevillea&fq=kingdom:Plantae") # works
+#GET(url="http://bie.ala.org.au/ws/search.json?q=Grevillea&fq=genus:Grevillea") # works
+#GET(url="http://bie.ala.org.au/ws/search.json?q=Grevillea&fq=species%3Abanksii") # 500 error
