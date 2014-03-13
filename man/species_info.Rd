@@ -1,25 +1,25 @@
 \name{species_info}
 \alias{species_info}
-\title{Fetch species profile}
+\title{Fetch a taxon profile given a scientific name or LSID}
 \usage{
 species_info(scientificname = NULL, guid = NULL,
   verbose = ala_config()$verbose)
 }
 \arguments{
   \item{scientificname}{string: scientific name of the
-  species of interest}
+  taxon of interest (species, genus, family etc)}
 
-  \item{guid}{string: GUID of species of interest}
+  \item{LSID}{string: The Life Science Identifier of the
+  taxon of interest}
 
-  \item{verbose}{boolean value defining how much progress
+  \item{verbose}{boolean value: How much progress
   information to display; default is set by ala_config().}
 }
 \value{
 species profile in the form of a named list
 }
 \description{
-Retrieve species profile given either the scientific name
-or GUID
+Fetch a taxon profile given a scientific name or LSID
 }
 \examples{
 species_info("Grevillea humilis subsp. maritima")
