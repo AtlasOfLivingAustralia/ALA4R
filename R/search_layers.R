@@ -3,9 +3,12 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/} \url{http://spatial.ala.org.au/layers}
 #'
-#' @param type a selection of "all", "grids" or "shapes" associated with all possible layers, 
+#' @param type string: a selection of "all", "grids" or "shapes" associated with all possible layers, 
 #' only environmental grids or contextual shapefiles
+#' @param query string: optional search term. Only results with this term in the name or description will be returned
+#' 
 #' @return A data frame of results
+#' \itemize{
 #' \item{name} \item{id} \item{type} \item{path} \item{description} \item{source}
 #' \item{displayname} \item{enabled} \item{uid} \item{metadatapath} \item{classification1}
 #' \item{classification2} \item{notes} \item{source_link} \item{licence_link} \item{licence_notes} 
@@ -14,16 +17,17 @@
 #' \item{environmentalvaluemax} \item{environmentalvaluemin} \item{lookuptablepath}
 #' \item{citation_date} \item{datalang} \item{licence_level} \item{mddataset}
 #' \item{mdhrlv} \item{respparty_role} \item{keywords} \item{domain}
+#' }
 #' 
 #' @examples
 #' 
-#' enviro_layers(type="all")
-#' enviro_layers(type="grids")
-#' enviro_layers(type="shapes")
+#' search_layers(type="all")
+#' search_layers(type="grids",query="coral")
+#' search_layers(type="shapes")
 #' 
-#' @export enviro_layers'
+#' @export search_layers'
 #' 
-enviro_layers = function(type="all") {
+search_layers = function(type="all",query=NULL) {
     type=tolower(type)
     match.arg(type,c("all","grids","shapes"))
     base_url = 'http://spatial.ala.org.au/ws/layers' #define the base url
@@ -36,5 +40,9 @@ enviro_layers = function(type="all") {
 	} else {
             stop('type must be either all, grids or shape') #incorrect type so stop
 	}
-	do.call('rbind.fill',lapply(out,as.data.frame)) #bind the data as a dataframe
+    el=do.call('rbind.fill',lapply(out,as.data.frame)) #bind the data as a dataframe
+    if (!is.null(query)) {
+        el=el[grepl(query,el$name,ignore.case=TRUE) | grepl(query,el$description,ignore.case=TRUE),]
+    }
+    el
 }
