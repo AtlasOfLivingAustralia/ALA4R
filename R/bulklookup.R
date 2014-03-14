@@ -9,7 +9,7 @@
 #' @references \url{http://api.ala.org.au/}
 #' @examples
 #' 
-#' bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima"))
+#' # not run bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima"))
 #' 
 #' @export bulklookup
 
