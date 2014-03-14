@@ -36,13 +36,20 @@ fulltext_search <- function(taxon) {
         this_url$query=list(q=taxon)
         this_url=build_url(this_url)
         x=cached_get(url=this_url,type="json")
-        x=x[[1]]
-        ## reformat results to data frame
-        x$results=rbind.fill(lapply(x$results,as.data.frame)) ## convert each element of results into data frame, then combine
+        if (identical(find("fromJSON"),"package:jsonlite")) {
+            ## reformatting not needed with jsonlite
+            x=as.list(x)
+        } else {
+            ## using e.g. rjson for fromJSON conversion
+            x=x[[1]]
+            ## reformat results to data frame
+            x$results=rbind.fill(lapply(x$results,as.data.frame)) ## convert each element of results into data frame, then combine
+        }
         x
 }
 
 ## TODO: add support for fq, start, pageSize, sort, dir params
+## TODO: reformat data structure
 #GET(url="http://bie.ala.org.au/ws/search.json?q=Grevillea&fq=kingdom:Plantae") # works
 #GET(url="http://bie.ala.org.au/ws/search.json?q=Grevillea&fq=genus:Grevillea") # works
 #GET(url="http://bie.ala.org.au/ws/search.json?q=Grevillea&fq=species%3Abanksii") # 500 error

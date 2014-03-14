@@ -11,12 +11,12 @@
 #' @examples
 #' 
 #' #single point with multiple fields
-#' fields = c('cl22','cl23')
+#' fields = c('cl22','cl23','el773')
 #' pnts = c(-29,132.999)
 #' intersect_points(pnts,fields)
 #' 
 #' #multiple points with multiple fields
-#' fields = c('cl22','cl23')
+#' fields = c('cl22','cl23','el773')
 #' pnts = data.frame(lat=seq(-29,-19,0.02),lon=132.769)
 #' intersect_points(pnts,fields)
 #'
@@ -51,7 +51,6 @@ intersect_points = function(pnts,fids,verbose=ala_config()$verbose) {
 			bulk = TRUE #this is a bulk set of points
 		}
 	}
-
 	###format the fields string
 	if (length(fids)>1) {
 		fids_str = paste(fids,collapse=',',sep='')
@@ -67,8 +66,8 @@ intersect_points = function(pnts,fids,verbose=ala_config()$verbose) {
                     ## fetch the data from the server
                     ## we use cached_get operations here even though we're not caching, just because it keeps the user-agent etc string consistent
                     #status_url=cached_get(url_str,type="json",caching="off")$statusUrl #submit the url and get the url of the status
-                    status_url=fromJSON(file=url_str)$statusUrl ## using GET (in cached_get) for this can give 414 errors ("url too long") which do not seem to happen with fromJSON, so use that until we figure out why
-                    data_url=cached_get(status_url,type="json",caching="off") #get the data url                    
+                    status_url=jsonlite::fromJSON(paste(readLines(url_str,warn=FALSE),collapse = ""))$statusUrl ## using GET (in cached_get) for this can give 414 errors ("url too long") which do not seem to happen with readLines, so use that until we figure out why
+                    data_url=cached_get(status_url,type="json",caching="off") #get the data url
                     while (data_url$status != 'finished') { #keep checking the status until finished
 			Sys.sleep(5)
                         data_url=cached_get(status_url,type="json",caching="off") #get the data url
@@ -78,16 +77,19 @@ intersect_points = function(pnts,fids,verbose=ala_config()$verbose) {
                     ## we are using the existing cached file
                     if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
                 }
+
                 out = read.csv(unz(this_cache_file,'sample.csv'),as.is=TRUE) #read in the csv data from the zip file
                 checks = NULL; for (ii in colnames(out)) { if (all(is.na(out[,ii]))) checks = c(checks,ii) } #identify bad field IDs
                 if (!is.null(checks)) warning(paste(paste(checks,collapse=', '),'are invalid field ids')) #warn user of bad field ids
-		return(out)
+		out
 	} else { #get results if just a single location
 		url_str = paste(base_url,'intersect/',fids_str,'/',pnts_str,sep='') #define the url string
 		out = cached_get(url_str,type="json") #get the data
 		if (length(out)==0) stop('all field ids provided were invalid') #nothing returned if no valid IDs provided
-		out = do.call('rbind.fill',lapply(out,as.data.frame,stringsAsFactors=FALSE)) #define the output
+                if (!identical(find("fromJSON"),"package:jsonlite")) {
+                    out = do.call('rbind.fill',lapply(out,as.data.frame,stringsAsFactors=FALSE)) #define the output
+                }
 		checks = setdiff(fids,out$field); if (length(checks)>0) warning(paste(paste(checks,collapse=', '),'are invalid field ids')) #warn user of bad field ids
-		return(out)
+		out
 	}
 }

@@ -6,5 +6,5 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @docType package
 #' @references \url{http://api.ala.org.au/}
-#' @import httr stringr rjson digest plyr RCurl rgeos
+#' @import stringr httr plyr digest RCurl rgeos jsonlite
 NULL

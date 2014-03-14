@@ -12,8 +12,8 @@
 # @examples
 #
 # out = GET(url="http://www.ala.org.au/")
-# check_status_code(out)
-# check_status_code(out$headers$status)
+# check_status_code(out) ## pass the whole response object
+# check_status_code(out$headers$status) ## or pass the status code explicitly
 # 
 
 check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL) {

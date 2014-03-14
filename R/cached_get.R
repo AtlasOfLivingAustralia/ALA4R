@@ -6,7 +6,7 @@
 # @param type string: the expected content type. Either "text" (default), "json", or "filename" (this caches the content directly to a file and returns the filename without attempting to read it in)
 # @param caching string: caching behaviour, by default from ala_config()$caching
 # @param on_redirect, on_server_error, on_client_error function: passed to check_status_code()
-# @return for type=="text" the content is returned as text. For type=="json", the content is parsed using fromJSON. For "filename", the name of the stored file is returned.
+# @return for type=="text" the content is returned as text. For type=="json", the content is parsed using jsonlite::fromJSON. For "filename", the name of the stored file is returned.
 # @details Depending on the value of caching, the page is either retrieved from the cache or from the url, and stored in the cache if appropriate. The user-agent string is set according to ala_config()$user_agent. The returned response (if not from cached file) is also passed to check_status_code().
 # @author Atlas of Living Australia \email{support@@ala.org.au}
 # @references \url{http://api.ala.org.au/}
@@ -26,10 +26,9 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
         if (verbose) { cat(sprintf("  ALA4R: GETting URL %s",url)) }
         x=GET(url=url,user_agent(ala_config()$user_agent))
         check_status_code(x,on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error)
+        x=content(x,as="text")
         if (identical(type,"json")) {
-            x=content(x,as="parsed")
-        } else {
-            x=content(x,as="text")
+            x=jsonlite::fromJSON(x) ## do text-then-conversion, rather than content(as="parsed") to avoid httr's default use of RJSONIO::fromJSON
         }
         x
     } else {
@@ -48,7 +47,7 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
                     out=readLines(fid,warn=FALSE)
                     close(fid)
                     if (identical(type,"json")) {
-                        fromJSON(out)
+                        jsonlite::fromJSON(out)
                     } else {
                         out
                     }

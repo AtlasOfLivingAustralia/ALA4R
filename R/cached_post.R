@@ -6,16 +6,16 @@
 # @param body string: the body to POST
 # @param type string: the expected content type. Either "text" (default), "json", or "filename" (this caches the content directly to a file and returns the filename without attempting to read it in)
 # @param caching string: caching behaviour, by default from ala_config()$caching
-# @return for type=="text" the content is returned as text. For type=="json", the content is parsed using fromJSON. For "filename", the name of the stored file is returned.
+# @return for type=="text" the content is returned as text. For type=="json", the content is parsed using jsonlite::fromJSON. For "filename", the name of the stored file is returned.
 # @details Depending on the value of caching, the page is either retrieved from the cache or from the url, and stored in the cache if appropriate. The user-agent string is set according to ala_config()$user_agent. The returned response (if not from cached file) is also passed to check_status_code().
 # @author Atlas of Living Australia \email{support@@ala.org.au}
 # @references \url{http://api.ala.org.au/}
 # @examples
 #
 # # production server (this service not running at the time of writing - see test server example below)
-# # out = cached_post(url="http://biocache.ala.org.au/ws/species/lookup/bulk",body=toJSON(list(names=c("Macropus rufus","Grevillea"))),type="json")
+# # out = cached_post(url="http://biocache.ala.org.au/ws/species/lookup/bulk",body=jsonlite::toJSON(list(names=c("Macropus rufus","Grevillea"))),type="json")
 # # test server
-# out = cached_post(url="http://118.138.243.151/bie-service/ws/species/lookup/bulk",body=toJSON(list(names=c("Macropus rufus","Bilbo baggins"))),type="json")
+# out = cached_post(url="http://118.138.243.151/bie-service/ws/species/lookup/bulk",body=jsonlite::toJSON(list(names=c("Macropus rufus","Bilbo baggins"))),type="json")
 
 
 ## TODO: change to using jsonlite for conversions, which gives more appropriate R data structures
@@ -29,10 +29,9 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
         if (verbose) { cat(sprintf("  ALA4R: POSTing URL %s",url)) }
         x=POST(url=url,body=body,user_agent(ala_config()$user_agent))
         check_status_code(x)
+        x=content(x,as="text")
         if (identical(type,"json")) {
-            x=content(x,as="parsed")
-        } else {
-            x=content(x,as="text")
+            x=jsonlite::fromJSON(x) ## do text-then-conversion, rather than content(as="parsed") to avoid httr's default use of RJSONIO::fromJSON
         }
         x
     } else {
@@ -65,7 +64,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
                 out=readLines(fid,warn=FALSE)
                 close(fid)
                 if (identical(type,"json")) {
-                    fromJSON(out)
+                    jsonlite::fromJSON(out)
                 } else {
                     out
                 }

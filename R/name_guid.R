@@ -40,10 +40,19 @@ name_guid=function(taxon,guids_only=TRUE,verbose=ala_config()$verbose) {
         if (verbose) { cat(sprintf("  ALA4R: requesting GUID for name \"%s\"\n",taxon)) }
         base_url=paste(ala_config()$base_url_bie,"guid/",safe_taxon,sep="")
         out=cached_get(base_url,verbose=verbose,type="json")
-        if (length(out)>0) {
-            out=setNames(out,taxon) ## create named list
-            if (guids_only) {
-                out=lapply(out,function(z){z$acceptedIdentifier})
+        if (identical(find("fromJSON"),"package:jsonlite")) {
+            if (!is.null(out)) {
+                if (guids_only) {
+                    out=list(out$acceptedIdentifier)
+                    names(out)=taxon
+                }
+            }
+        } else {
+            if (length(out)>0) {
+                out=setNames(out,taxon) ## create named list
+                if (guids_only) {
+                    out=lapply(out,function(z){z$acceptedIdentifier})
+                }
             }
         }
         ## note: it's not clear whether we should ever expect out to be a list of more than one element. Presumably this is possible if we get two matches on the same scientific name
@@ -65,7 +74,11 @@ name_guid=function(taxon,guids_only=TRUE,verbose=ala_config()$verbose) {
         ## each list entry is either an empty list (for un-matched names) or a list of 1 list for matched names
         ## again, not clear if this latter can ever be a list of length >1
         if (guids_only) {
-            out=lapply(out,function(z){ ifelse(length(z)>0,z[[1]]$acceptedIdentifier,"") })
+            if (identical(find("fromJSON"),"package:jsonlite")) {
+                out=lapply(out,function(z){ ifelse(length(z)>0,z$acceptedIdentifier,"") })
+            } else {
+                out=lapply(out,function(z){ ifelse(length(z)>0,z[[1]]$acceptedIdentifier,"") })
+            }
         }
         out
     }

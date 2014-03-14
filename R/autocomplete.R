@@ -22,9 +22,9 @@
 #'
 #' @examples
 #' 
-#' 	#find information ALA holds on red kangaroo (Macropus Rufus)
+#' 	#find information ALA holds on red kangaroo (Macropus rufus)
 #' 	autocomplete("red kangaroo")
-#'  autocomplete("Macropus Rufus",geoOnly=TRUE)
+#'  autocomplete("Macropus rufus",geoOnly=TRUE)
 #' 
 #' @export autocomplete
 autocomplete=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {
@@ -69,8 +69,9 @@ autocomplete=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {
                 }
             }
         }
-	
-        out = do.call('rbind.fill',lapply(out,function(x) {as.data.frame(rbind(x))})) #define the output as a data.frame
+        if (!identical(find("fromJSON"),"package:jsonlite")) {
+            out = do.call('rbind.fill',lapply(out,function(x) {as.data.frame(rbind(x))})) #define the output as a data.frame
+        }
         out
     }
 }

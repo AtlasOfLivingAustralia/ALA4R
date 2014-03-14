@@ -13,6 +13,7 @@
 #' 
 #' @export bulklookup
 
+## **NOTE** this function will be replaced by one using the new service, once it is deployed
 # TODO: provide a clear explanation of how the underlying service chooses the returned result for each name. Currently, results seem to be very upredictable. Using the single-name lookup http://bie.ala.org.au/ws/guid/Grevillea%20humilis, we get the GUID for Grevillea humilis. bulklookup("Grevillea humilis") returns the record for Grevillea humilis subsp. humilis rather than the species itself; bulklookup("Grevillea humili") returns the same record, and bulklookup("Grevillea humil") returns the record for Anthotium humile
 ## TODO: work out what is going on with non-matched records. It seems that they simply aren't returned, and the returned record list may contain less items than the number of submitted names
 
@@ -32,6 +33,13 @@ bulklookup=function(taxa=c()) {
     }
     taxa = lapply(taxa,clean_string) ## clean up the taxon name
     base_url=paste(ala_config()$base_url_bie,"species/bulklookup.json",sep="")
-    x=POST(url=base_url,body=toJSON(taxa),user_agent(ala_config()$user_agent)) ## no caching on POST operations yet
-    rbind.fill(lapply(content(x)[[1]],as.data.frame)) ## convert each element of content(x)[[1]] into data frame, then combine
+    ##x=POST(url=base_url,body=jsonlite::toJSON(taxa),user_agent(ala_config()$user_agent)) ## no caching on POST operations yet
+    x=cached_post(url=base_url,body=jsonlite::toJSON(taxa),type="json")
+    if (identical(find("fromJSON"),"package:jsonlite")) {
+        x=x[[1]]
+    } else {
+        x=rbind.fill(lapply(content(x)[[1]],as.data.frame)) ## convert each element of content(x)[[1]] into data frame, then combine
+    }
+    x
 }
+

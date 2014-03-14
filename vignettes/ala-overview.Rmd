@@ -7,7 +7,7 @@ This project enables the R community to directly access data and resources hoste
 First, install some packages from CRAN that are required by our package (CRAN is a network of ftp and web servers around the world that store identical, up-to-date, versions of code and documentation for R):
 
 ```{r eval=FALSE}
-install.packages(c("httr","rjson","stringr","plyr","digest","RCurl","rgeos"))
+install.packages(c("httr","stringr","plyr","digest","RCurl","rgeos","jsonlite"))
 ```
 
 Then install the ALA4R package itself from the precompiled binaries provided on RForge:
