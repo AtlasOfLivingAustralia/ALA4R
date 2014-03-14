@@ -25,7 +25,7 @@
 #' search_layers(type="grids",query="coral")
 #' search_layers(type="shapes")
 #' 
-#' @export search_layers'
+#' @export
 #' 
 search_layers = function(type="all",query=NULL) {
     type=tolower(type)
