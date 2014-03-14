@@ -7,9 +7,6 @@
 #' @return A data frame of results
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
-#' @examples
-#' 
-#' # not run bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima"))
 #' 
 #' @export bulklookup
 
