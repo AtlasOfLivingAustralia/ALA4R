@@ -7,6 +7,11 @@
 #'  
 #' @param taxon string: a character string for the taxon of interest
 #' @param fq string: filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi" See ala_fields("occurrence") for all the fields that are queryable
+#' @param start numeric: (positive integer) start offset for the results
+#' @param pageSize numeric: maximum number of records to return
+#' @param sort_by string: field to sort on
+#' @param sort_dir string: sort direction, either "asc" or "dec"
+#' 
 #' @return a named list, including the results component which is a dataframe of information with columns being:
 #' \itemize{
 #' \item{guid}  \item{name}  \item{idxtype}
@@ -29,13 +34,27 @@
 #'  fulltext_search("urn:lsid:biodiversity.org.au:afd.taxon:31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae")
 #' 
 #' @export
-fulltext_search <- function(taxon,fq=NULL) {
+fulltext_search <- function(taxon,fq=NULL,start=NULL,pageSize=NULL,sort_by=null,sort_dir=NULL) {
 	taxon = clean_string(taxon) #clean up the taxon name
         base_url="http://bie.ala.org.au/ws/search.json"
         this_url=parse_url(base_url)
         this_query=list(q=taxon)
         if (!is.null(fq)) {
             this_query$fq=fq
+        }
+        if (!is.null(start)) {
+            this_query$start=start
+        }
+        if (!is.null(pageSize)) {
+            this_query$pageSize=pageSize
+        }
+        if (!is.null(sort_by)) {
+            this_query$sort_by=sort_by
+        }
+        if (!is.null(sort_dir)) {
+            sort_dir=lower(sort_dir)
+            match.arg(sort_dir,c("asc","dec"))
+            this_query$sort_dir=sort_dir
         }
         this_url$query=this_query
         this_url=build_url(this_url)
@@ -47,13 +66,21 @@ fulltext_search <- function(taxon,fq=NULL) {
         #    ## reformat results to data frame
         #    x$results=rbind.fill(lapply(x$results,as.data.frame)) ## convert each element of results into data frame, then combine
         #}
-        x
+
+        ## reformat data into a more concise structure
+        ## x is a named list. Each component of that list is itself a named list with a single element "searchResults".
+        ## first collate the metadata, which is everything except "results" and "facetResults" elements
+        out=list(meta=x[!names(x) %in% c("results","facetResults")])
+        ## collapse the singleton "searchResults" structures
+        out$meta=lapply(out$meta,function(z)z$searchResults)
+        out$data=x$results$searchResults
+        out$facets=x$facetResults$searchResults
+        out
 }
 
-## TODO: add support for start, pageSize, sort, dir params
+## TODO: add arg checking for params
 
-## TODO: reformat data structure, probably similar to rgbif
-
+## see issue #611
 ## which fields can we actually query for fq? API doc says: "Filters to be applied to the original query. These are additional params of the form fq=INDEXEDFIELD:VALUE e.g. fq=kingdom:Fungi. See http://biocache.ala.org.au/ws/index/fields for all the fields that a queryable." BUT "species" appears in this list of fields, and yet
 ##GET(url="http://bie.ala.org.au/ws/search.json?q=Grevillea&fq=kingdom:Plantae") # works
 ##GET(url="http://bie.ala.org.au/ws/search.json?q=Grevillea&fq=genus:Grevillea") # works
