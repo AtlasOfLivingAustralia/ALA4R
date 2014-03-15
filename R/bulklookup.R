@@ -8,9 +8,7 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' @examples
-#' \dontrun{
 #' bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima"))
-#' }
 #' @export bulklookup
 
 ## **NOTE** this function will be replaced by one using the new service, once it is deployed
@@ -35,11 +33,11 @@ bulklookup=function(taxa=c()) {
     base_url=paste(ala_config()$base_url_bie,"species/bulklookup.json",sep="")
     ##x=POST(url=base_url,body=jsonlite::toJSON(taxa),user_agent(ala_config()$user_agent)) ## no caching on POST operations yet
     x=cached_post(url=base_url,body=jsonlite::toJSON(taxa),type="json")
-    if (identical(find("fromJSON"),"package:jsonlite")) {
+    #if (identical(find("fromJSON"),"package:jsonlite")) {
         x=x[[1]]
-    } else {
-        x=rbind.fill(lapply(content(x)[[1]],as.data.frame)) ## convert each element of content(x)[[1]] into data frame, then combine
-    }
+    #} else {
+    #    x=rbind.fill(lapply(content(x)[[1]],as.data.frame)) ## convert each element of content(x)[[1]] into data frame, then combine
+    #}
     x
 }
 

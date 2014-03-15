@@ -69,9 +69,9 @@ autocomplete=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {
                 }
             }
         }
-        if (!identical(find("fromJSON"),"package:jsonlite")) {
-            out = do.call('rbind.fill',lapply(out,function(x) {as.data.frame(rbind(x))})) #define the output as a data.frame
-        }
+        #if (!identical(find("fromJSON"),"package:jsonlite")) {
+        #    out = do.call('rbind.fill',lapply(out,function(x) {as.data.frame(rbind(x))})) #define the output as a data.frame
+        #}
         out
     }
 }

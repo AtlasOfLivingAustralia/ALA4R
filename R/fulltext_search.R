@@ -36,15 +36,15 @@ fulltext_search <- function(taxon) {
         this_url$query=list(q=taxon)
         this_url=build_url(this_url)
         x=cached_get(url=this_url,type="json")
-        if (identical(find("fromJSON"),"package:jsonlite")) {
+        #if (identical(find("fromJSON"),"package:jsonlite")) {
             ## reformatting not needed with jsonlite
             x=as.list(x)
-        } else {
-            ## using e.g. rjson for fromJSON conversion
-            x=x[[1]]
-            ## reformat results to data frame
-            x$results=rbind.fill(lapply(x$results,as.data.frame)) ## convert each element of results into data frame, then combine
-        }
+        #} else {
+        #    ## using e.g. rjson for fromJSON conversion
+        #    x=x[[1]]
+        #    ## reformat results to data frame
+        #    x$results=rbind.fill(lapply(x$results,as.data.frame)) ## convert each element of results into data frame, then combine
+        #}
         x
 }
 

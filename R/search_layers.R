@@ -40,12 +40,12 @@ search_layers = function(type="all",query=NULL) {
 	} else {
             stop('type must be either all, grids or shape') #incorrect type so stop
 	}
-    if (identical(find("fromJSON"),"package:jsonlite")) {
+    #if (identical(find("fromJSON"),"package:jsonlite")) {
         ## no reformatting needed
-    } else {
-        out=do.call('rbind.fill',lapply(out,as.data.frame)) #bind the data as a dataframe
-        ## note that this gives strange format details (e.g. some dataframe elements are lists)
-    }
+    #} else {
+    #    out=do.call('rbind.fill',lapply(out,as.data.frame)) #bind the data as a dataframe
+    #    ## note that this gives strange format details (e.g. some dataframe elements are lists)
+    #}
     if (!is.null(query)) {
         out=out[grepl(query,out$name,ignore.case=TRUE) | grepl(query,out$description,ignore.case=TRUE),]
     }

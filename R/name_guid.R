@@ -9,11 +9,9 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' @examples
-#' \dontrun{
 #' 	name_guid("Macropus greyi")
 #' 	name_guid("Macropus greyi",guids_only=FALSE)
 #' 	name_guid(c("Macropus greyi","Pachyptila turtur","thisisnotavalidname"))
-#' }
 #' @export name_guid
 #'
 
@@ -74,11 +72,11 @@ name_guid=function(taxon,guids_only=TRUE,verbose=ala_config()$verbose) {
         ## each list entry is either an empty list (for un-matched names) or a list of 1 list for matched names
         ## again, not clear if this latter can ever be a list of length >1
         if (guids_only) {
-            if (identical(find("fromJSON"),"package:jsonlite")) {
+            ##if (identical(find("fromJSON"),"package:jsonlite")) {
                 out=lapply(out,function(z){ ifelse(length(z)>0,z$acceptedIdentifier,"") })
-            } else {
-                out=lapply(out,function(z){ ifelse(length(z)>0,z[[1]]$acceptedIdentifier,"") })
-            }
+            ##} else {
+            ##    out=lapply(out,function(z){ ifelse(length(z)>0,z[[1]]$acceptedIdentifier,"") })
+            ##}
         }
         out
     }

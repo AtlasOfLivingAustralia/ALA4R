@@ -29,15 +29,15 @@ ala_fields=function(fields_type="occurrence") {
            )
 
     x=cached_get(base_url,type="json")
-    if (!identical(find("fromJSON"),"package:jsonlite")) {
-        x=rbind.fill(lapply(x,as.data.frame)) ## convert each element of content(x)[[1]] into data frame, then combine
-        ## convert factors to strings
-        for (col in 1:ncol(x)) {
-            if (identical(class(x[,col]),"factor")) {
-                x[,col]=as.character(x[,col])
-            }
-        }
-    }
+    #if (!identical(find("fromJSON"),"package:jsonlite")) {
+    #    x=rbind.fill(lapply(x,as.data.frame)) ## convert each element of content(x)[[1]] into data frame, then combine
+    #    ## convert factors to strings
+    #    for (col in 1:ncol(x)) {
+    #        if (identical(class(x[,col]),"factor")) {
+    #            x[,col]=as.character(x[,col])
+    #        }
+    #    }
+    #}
 
     ## for "layers", shorter, more manageable names are provided from http://spatial.ala.org.au/ws/layers in API. Add these as an extra column: name_short
     if (identical(fields_type,"layers")) {
@@ -45,12 +45,12 @@ ala_fields=function(fields_type="occurrence") {
         ##more_x=rbind.fill(lapply(more_x,as.data.frame)) ## this is slow
         ## just pull out the bits that we want
         ## and construct ids here that match the field names in x
-        if (identical(find("fromJSON"),"package:jsonlite")) {
+        #if (identical(find("fromJSON"),"package:jsonlite")) {
             more_x$id=paste(substr(tolower(more_x$type),1,1),"l",more_x$id,sep="")
             more_x=more_x[,c("name","id")]
-        } else {
-            more_x=ldply(more_x,function(z){c(z$name,paste(substr(tolower(z$type),1,1),"l",z$id,sep=""))})
-        }
+        #} else {
+        #    more_x=ldply(more_x,function(z){c(z$name,paste(substr(tolower(z$type),1,1),"l",z$id,sep=""))})
+        #}
         names(more_x)=c("name_short","id")            
         x=merge(x,more_x,by="id")
     }
@@ -72,9 +72,9 @@ field_info = function(field_id) {
         ## we might wish to issue a warning for empty responses
         if (substr(field_id,1,2) == 'cl') {
             out = out$objects #keep only the content
-            if (!identical(find("fromJSON"),"package:jsonlite")) {
-                out=do.call('rbind.fill',lapply(out,as.data.frame)) #bind the data as a dataframe
-            }
+            #if (!identical(find("fromJSON"),"package:jsonlite")) {
+            #    out=do.call('rbind.fill',lapply(out,as.data.frame)) #bind the data as a dataframe
+            #}
             out
         } else if (substr(field_id,1,2) == 'el') {
             out = as.data.frame(rbind(out)) #bind the data as a dataframe	
