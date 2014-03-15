@@ -29,7 +29,7 @@ bulklookup=function(taxa=c()) {
     if (length(taxa)<1) {
         stop("empty input")
     }
-    taxa = lapply(taxa,clean_string) ## clean up the taxon name
+    taxa = sapply(taxa,clean_string,USE.NAMES=FALSE) ## clean up the taxon name
     base_url=paste(ala_config()$base_url_bie,"species/bulklookup.json",sep="")
     x=cached_post(url=base_url,body=jsonlite::toJSON(taxa),type="json")
     #if using jsonlite {
