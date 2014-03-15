@@ -18,9 +18,9 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' @examples
-#' 
+#' \dontrun{ 
 #' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),page_size=1000)
-#' 
+#' }
 #' @export occurrences
 
 ## TODO: may need to change base URL to match new API (http://biocache.ala.org.au/ws/occurrences/download, but this is not zipped)

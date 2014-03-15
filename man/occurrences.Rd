@@ -31,7 +31,9 @@ Retrieve occurrence data via the "Get occurrences as
 gzipped CSV" web service
 }
 \examples{
+\dontrun{
 x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),page_size=1000)
+}
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
