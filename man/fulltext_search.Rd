@@ -2,11 +2,16 @@
 \alias{fulltext_search}
 \title{Full text search}
 \usage{
-fulltext_search(taxon)
+fulltext_search(taxon, fq = NULL)
 }
 \arguments{
   \item{taxon}{string: a character string for the taxon of
   interest}
+
+  \item{fq}{string: filters to be applied to the original
+  query. These are of the form "INDEXEDFIELD:VALUE" e.g.
+  "kingdom:Fungi" See ala_fields("occurrence") for all the
+  fields that are queryable}
 }
 \value{
 a named list, including the results component which is a
