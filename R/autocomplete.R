@@ -34,8 +34,8 @@ autocomplete=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {
         }
     }
     if (!is.null(idxType)) {
-        idxType=toupper(idxType)
-        match.arg(idxType,c("TAXON","REGION","COLLECTION","INSTITUTION","DATASET"))
+        assert_that(is.character(idxType))
+        idxType=match.arg(toupper(idxType),c("TAXON","REGION","COLLECTION","INSTITUTION","DATASET"))
     }
     taxon = clean_string(taxon) #clean up the taxon name
     taxon = gsub(' ','+',taxon) #replace spaces with + to force both terms in the search

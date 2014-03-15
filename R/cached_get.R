@@ -16,8 +16,7 @@
 # 
 
 cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL) {
-    type=tolower(type)
-    match.arg(type,c("text","json","filename"))
+    type=match.arg(tolower(type),c("text","json","filename"))
     
     if (identical(caching,"off") && !identical(type,"filename")) {
         ## if we are not caching, get this directly without saving to file at all

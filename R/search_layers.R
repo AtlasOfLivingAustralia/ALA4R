@@ -28,8 +28,7 @@
 #' @export
 #' 
 search_layers = function(type="all",query=NULL) {
-    type=tolower(type)
-    match.arg(type,c("all","grids","shapes"))
+    type=match.arg(tolower(type),c("all","grids","shapes"))
     base_url = 'http://spatial.ala.org.au/ws/layers' #define the base url
 	if (type == 'all') { 
             out = cached_get(url=base_url,type="json") #download all data

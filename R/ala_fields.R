@@ -21,8 +21,8 @@
 ##  the service for "general" was  "general"={base_url=paste(ala_config()$base_url_bie,"admin/indexFields",sep="")},
 
 ala_fields=function(fields_type="occurrence") {
-    fields_type=tolower(fields_type)
-    match.arg(fields_type,c("occurrence","layers"))
+    assert_that(is.character(fields_type))
+    fields_type=match.arg(tolower(fields_type),c("occurrence","layers"))
     switch(fields_type,
            "occurrence"={base_url=paste(ala_config()$base_url_biocache,"index/fields",sep="")},
            "layers"={base_url=paste(ala_config()$base_url_spatial,"fields",sep="")}

@@ -19,8 +19,7 @@
 
 
 cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,...) {
-    type=tolower(type)
-    match.arg(type,c("text","json","filename"))
+    type=match.arg(tolower(type),c("text","json","filename"))
 
     if (identical(caching,"off") && !identical(type,"filename")) {
         ## if we are not caching, retrieve our page directly without saving to file at all
