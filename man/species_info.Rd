@@ -12,8 +12,8 @@ species_info(scientificname = NULL, guid = NULL,
   \item{guid}{string: The Life Science Identifier of the
   taxon of interest}
 
-  \item{verbose}{boolean value: How much progress
-  information to display; default is set by ala_config().}
+  \item{verbose}{logical: how much progress information to
+  display; default is set by ala_config().}
 }
 \value{
 species profile in the form of a named list
@@ -22,10 +22,8 @@ species profile in the form of a named list
 Fetch a taxon profile given a scientific name or LSID
 }
 \examples{
-\dontrun{
 species_info("Grevillea humilis subsp. maritima")
 species_info(guid="urn:lsid:biodiversity.org.au:apni.taxon:248651")
-}
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

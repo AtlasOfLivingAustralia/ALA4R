@@ -40,7 +40,7 @@ name_guid=function(taxon,guids_only=TRUE,verbose=ala_config()$verbose) {
         if (verbose) { cat(sprintf("  ALA4R: requesting GUID for name \"%s\"\n",taxon)) }
         base_url=paste(ala_config()$base_url_bie,"guid/",safe_taxon,sep="")
         out=cached_get(base_url,verbose=verbose,type="json")
-        #if (identical(find("fromJSON"),"package:jsonlite")) {
+        #if using jsonlite {
             if (!is.null(out)) {
                 if (guids_only) {
                     out=list(out$acceptedIdentifier)
@@ -58,7 +58,7 @@ name_guid=function(taxon,guids_only=TRUE,verbose=ala_config()$verbose) {
         ## note: it's not clear whether we should ever expect out to be a list of more than one element. Presumably this is possible if we get two matches on the same scientific name
         out
     } else {
-        ## use bulk lookup
+        ## use batch lookup
 	taxon = str_trim(taxon) ## remove leading and trailing whitespaces
 	taxon_safe = gsub('\\s+','%20',taxon) ## replace multiple whitespaces with single url-encoded one
         base_url=paste(ala_config()$base_url_bie,"guid/batch",sep="")
@@ -74,7 +74,7 @@ name_guid=function(taxon,guids_only=TRUE,verbose=ala_config()$verbose) {
         ## each list entry is either an empty list (for un-matched names) or a list of 1 list for matched names
         ## again, not clear if this latter can ever be a list of length >1
         if (guids_only) {
-            ##if (identical(find("fromJSON"),"package:jsonlite")) {
+            ##if using jsonlite {
                 out=lapply(out,function(z){ ifelse(length(z)>0,z$acceptedIdentifier,"") })
             ##} else {
             ##    out=lapply(out,function(z){ ifelse(length(z)>0,z[[1]]$acceptedIdentifier,"") })

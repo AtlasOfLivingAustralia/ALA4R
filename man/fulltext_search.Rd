@@ -31,12 +31,10 @@ Performs a search across all objects, and selects the
 closest matches
 }
 \examples{
-\dontrun{
- # find information ALA holds on red kangaroo
+# find information ALA holds on red kangaroo
  fulltext_search("red kangaroo")
  fulltext_search("Macropus rufus")
  fulltext_search("urn:lsid:biodiversity.org.au:afd.taxon:31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae")
-}
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

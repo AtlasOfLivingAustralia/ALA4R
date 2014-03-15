@@ -18,8 +18,6 @@
 # out = cached_post(url="http://118.138.243.151/bie-service/ws/species/lookup/bulk",body=jsonlite::toJSON(list(names=c("Macropus rufus","Bilbo baggins"))),type="json")
 
 
-## TODO: change to using jsonlite for conversions, which gives more appropriate R data structures
-
 cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,...) {
     type=tolower(type)
     match.arg(type,c("text","json","filename"))

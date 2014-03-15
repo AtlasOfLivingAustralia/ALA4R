@@ -5,18 +5,18 @@
 #' 
 #' @param scientificname string: scientific name of the taxon of interest (species, genus, family etc) 
 #' @param guid string: The Life Science Identifier of the taxon of interest
-#' @param verbose boolean value: How much progress information to display; default is set by ala_config().
+#' @param verbose logical: how much progress information to display; default is set by ala_config().
 #' @return species profile in the form of a named list
 
 #' @examples
-#' \dontrun{
+#' 
 #' species_info("Grevillea humilis subsp. maritima")
 #' species_info(guid="urn:lsid:biodiversity.org.au:apni.taxon:248651")
-#' }
+#' 
 #' @export species_info
 
 # TODO: support multiple names or guids passed as a vector? (LB:low priority)
-# change use of name_guid to bulklookup?
+# change use of name_guid to bulklookup once new bulklookup service is deployed
 
 species_info=function(scientificname=NULL,guid=NULL,verbose=ala_config()$verbose) {
     if (is.null(scientificname) && is.null(guid)) {

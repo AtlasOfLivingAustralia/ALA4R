@@ -15,8 +15,6 @@
 # out = cached_get(url="http://biocache.ala.org.au/ws/index/fields",type="json")
 # 
 
-## TODO: change to using jsonlite for conversions, which generally gives more appropriate R data structures
-
 cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL) {
     type=tolower(type)
     match.arg(type,c("text","json","filename"))

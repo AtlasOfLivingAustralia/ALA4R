@@ -22,12 +22,11 @@
 #' }
 #' 
 #' @examples
-#' \dontrun{
 #'  # find information ALA holds on red kangaroo
 #'  fulltext_search("red kangaroo")
 #'  fulltext_search("Macropus rufus")
 #'  fulltext_search("urn:lsid:biodiversity.org.au:afd.taxon:31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae")
-#' }
+#' 
 #' @export
 fulltext_search <- function(taxon) {
 	taxon = clean_string(taxon) #clean up the taxon name
@@ -36,11 +35,9 @@ fulltext_search <- function(taxon) {
         this_url$query=list(q=taxon)
         this_url=build_url(this_url)
         x=cached_get(url=this_url,type="json")
-        #if (identical(find("fromJSON"),"package:jsonlite")) {
-            ## reformatting not needed with jsonlite
+        #if using jsonlite {
             x=as.list(x)
         #} else {
-        #    ## using e.g. rjson for fromJSON conversion
         #    x=x[[1]]
         #    ## reformat results to data frame
         #    x$results=rbind.fill(lapply(x$results,as.data.frame)) ## convert each element of results into data frame, then combine

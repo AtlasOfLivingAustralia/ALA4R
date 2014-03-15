@@ -86,7 +86,7 @@ intersect_points = function(pnts,fids,verbose=ala_config()$verbose) {
 		url_str = paste(base_url,'intersect/',fids_str,'/',pnts_str,sep='') #define the url string
 		out = cached_get(url_str,type="json") #get the data
 		if (length(out)==0) stop('all field ids provided were invalid') #nothing returned if no valid IDs provided
-                #if (!identical(find("fromJSON"),"package:jsonlite")) {
+                #if NOT using jsonlite
                 #    out = do.call('rbind.fill',lapply(out,as.data.frame,stringsAsFactors=FALSE)) #define the output
                 #}
 		checks = setdiff(fids,out$field); if (length(checks)>0) warning(paste(paste(checks,collapse=', '),'are invalid field ids')) #warn user of bad field ids

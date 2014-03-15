@@ -29,7 +29,7 @@ ala_fields=function(fields_type="occurrence") {
            )
 
     x=cached_get(base_url,type="json")
-    #if (!identical(find("fromJSON"),"package:jsonlite")) {
+    #if NOT using jsonlite {
     #    x=rbind.fill(lapply(x,as.data.frame)) ## convert each element of content(x)[[1]] into data frame, then combine
     #    ## convert factors to strings
     #    for (col in 1:ncol(x)) {
@@ -42,10 +42,8 @@ ala_fields=function(fields_type="occurrence") {
     ## for "layers", shorter, more manageable names are provided from http://spatial.ala.org.au/ws/layers in API. Add these as an extra column: name_short
     if (identical(fields_type,"layers")) {
         more_x=cached_get(url=paste(ala_config()$base_url_spatial,"layers",sep=""),type="json")
-        ##more_x=rbind.fill(lapply(more_x,as.data.frame)) ## this is slow
-        ## just pull out the bits that we want
-        ## and construct ids here that match the field names in x
-        #if (identical(find("fromJSON"),"package:jsonlite")) {
+        ## just pull out the bits that we want and construct ids here that match the field names in x
+        #if using jsonlite {
             more_x$id=paste(substr(tolower(more_x$type),1,1),"l",more_x$id,sep="")
             more_x=more_x[,c("name","id")]
         #} else {
@@ -72,7 +70,7 @@ field_info = function(field_id) {
         ## we might wish to issue a warning for empty responses
         if (substr(field_id,1,2) == 'cl') {
             out = out$objects #keep only the content
-            #if (!identical(find("fromJSON"),"package:jsonlite")) {
+            #if NOT using jsonlite
             #    out=do.call('rbind.fill',lapply(out,as.data.frame)) #bind the data as a dataframe
             #}
             out

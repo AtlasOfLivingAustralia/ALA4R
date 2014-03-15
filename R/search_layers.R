@@ -40,9 +40,7 @@ search_layers = function(type="all",query=NULL) {
 	} else {
             stop('type must be either all, grids or shape') #incorrect type so stop
 	}
-    #if (identical(find("fromJSON"),"package:jsonlite")) {
-        ## no reformatting needed
-    #} else {
+    #if NOT using jsonlite
     #    out=do.call('rbind.fill',lapply(out,as.data.frame)) #bind the data as a dataframe
     #    ## note that this gives strange format details (e.g. some dataframe elements are lists)
     #}
