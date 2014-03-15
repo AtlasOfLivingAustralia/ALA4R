@@ -8,7 +8,9 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' @examples
+#' \dontrun{
 #' bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima"))
+#' }
 #' @export bulklookup
 
 ## **NOTE** this function will be replaced by one using the new service, once it is deployed

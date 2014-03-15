@@ -10,11 +10,11 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' @examples
-#' 
+#' \dontrun{ 
 #' ala_fields("occurrence")
 #' field_info("cl22")
 #' field_info("el773")
-#' 
+#' }
 #' @export
 
 ## option "general" removed 13-Mar-2014 BR; it uses a deprecated service and I don't think we need it anyway

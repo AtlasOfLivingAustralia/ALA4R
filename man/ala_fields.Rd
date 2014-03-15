@@ -25,9 +25,11 @@ Retrieves a list of field names that can be used with the
 data retrieval functions
 }
 \examples{
+\dontrun{
 ala_fields("occurrence")
 field_info("cl22")
 field_info("el773")
+}
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

@@ -22,8 +22,10 @@ species profile in the form of a named list
 Fetch a taxon profile given a scientific name or LSID
 }
 \examples{
+\dontrun{
 species_info("Grevillea humilis subsp. maritima")
 species_info(guid="urn:lsid:biodiversity.org.au:apni.taxon:248651")
+}
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

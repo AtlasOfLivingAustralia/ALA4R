@@ -21,10 +21,11 @@
 #' \item{matchedNames}{} \item{ankId}{} \item{rankString}{} \item{left}{} \item{right}{}
 #'
 #' @examples
-#' 
-#' 	#find information ALA holds on red kangaroo (Macropus rufus)
-#' 	autocomplete("red kangaroo")
-#'  autocomplete("Macropus rufus",geoOnly=TRUE)
+#' \dontrun{
+#' # find information ALA holds on red kangaroo (Macropus rufus)
+#' autocomplete("red kangaroo")
+#' autocomplete("Macropus rufus",geoOnly=TRUE)
+#' }
 #' 
 #' @export autocomplete
 autocomplete=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {

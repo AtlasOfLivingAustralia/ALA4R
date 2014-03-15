@@ -25,9 +25,11 @@ the acceptedIdentifier list component
 Returns the GUID for a scientific name
 }
 \examples{
-name_guid("Macropus greyi")
+\dontrun{
+	name_guid("Macropus greyi")
 	name_guid("Macropus greyi",guids_only=FALSE)
 	name_guid(c("Macropus greyi","Pachyptila turtur","thisisnotavalidname"))
+}
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

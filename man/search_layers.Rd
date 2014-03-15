@@ -33,9 +33,11 @@ Provides a list of all environmental and contextual layers
 in ALA
 }
 \examples{
+\dontrun{
 search_layers(type="all")
 search_layers(type="grids",query="coral")
 search_layers(type="shapes")
+}
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

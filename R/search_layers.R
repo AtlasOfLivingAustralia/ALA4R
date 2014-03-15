@@ -20,11 +20,11 @@
 #' }
 #' 
 #' @examples
-#' 
+#' \dontrun{
 #' search_layers(type="all")
 #' search_layers(type="grids",query="coral")
 #' search_layers(type="shapes")
-#' 
+#' }
 #' @export
 #' 
 search_layers = function(type="all",query=NULL) {

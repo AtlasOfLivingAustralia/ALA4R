@@ -9,10 +9,10 @@
 #' @return species profile in the form of a named list
 
 #' @examples
-#' 
+#' \dontrun{
 #' species_info("Grevillea humilis subsp. maritima")
 #' species_info(guid="urn:lsid:biodiversity.org.au:apni.taxon:248651")
-#' 
+#' }
 #' @export species_info
 
 # TODO: support multiple names or guids passed as a vector? (LB:low priority)

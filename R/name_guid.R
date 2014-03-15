@@ -9,9 +9,11 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' @examples
+#' \dontrun{
 #' 	name_guid("Macropus greyi")
 #' 	name_guid("Macropus greyi",guids_only=FALSE)
 #' 	name_guid(c("Macropus greyi","Pachyptila turtur","thisisnotavalidname"))
+#' }
 #' @export name_guid
 #'
 

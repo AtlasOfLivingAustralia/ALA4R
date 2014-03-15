@@ -37,9 +37,11 @@ If the scientific name, common name or LSID are known, use
 fulltext_search
 }
 \examples{
-#find information ALA holds on red kangaroo (Macropus rufus)
-	autocomplete("red kangaroo")
- autocomplete("Macropus rufus",geoOnly=TRUE)
+\dontrun{
+# find information ALA holds on red kangaroo (Macropus rufus)
+autocomplete("red kangaroo")
+autocomplete("Macropus rufus",geoOnly=TRUE)
+}
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
