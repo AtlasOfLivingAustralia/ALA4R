@@ -3,7 +3,7 @@
 \title{Full text search}
 \usage{
 fulltext_search(taxon, fq = NULL, start = NULL, pageSize = NULL,
-  sort_by = null, sort_dir = NULL)
+  sort_by = NULL, sort_dir = NULL)
 }
 \arguments{
   \item{taxon}{string: a character string for the taxon of
@@ -17,13 +17,13 @@ fulltext_search(taxon, fq = NULL, start = NULL, pageSize = NULL,
   \item{start}{numeric: (positive integer) start offset for
   the results}
 
-  \item{pageSize}{numeric: maximum number of records to
-  return}
+  \item{pageSize}{numeric: (positive integer) maximum
+  number of records to return}
 
   \item{sort_by}{string: field to sort on}
 
   \item{sort_dir}{string: sort direction, either "asc" or
-  "dec"}
+  "desc"}
 }
 \value{
 a named list, including the results component which is a
