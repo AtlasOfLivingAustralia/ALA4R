@@ -2,7 +2,8 @@
 \alias{fulltext_search}
 \title{Full text search}
 \usage{
-fulltext_search(taxon, fq = NULL)
+fulltext_search(taxon, fq = NULL, start = NULL, pageSize = NULL,
+  sort_by = null, sort_dir = NULL)
 }
 \arguments{
   \item{taxon}{string: a character string for the taxon of
@@ -12,6 +13,17 @@ fulltext_search(taxon, fq = NULL)
   query. These are of the form "INDEXEDFIELD:VALUE" e.g.
   "kingdom:Fungi" See ala_fields("occurrence") for all the
   fields that are queryable}
+
+  \item{start}{numeric: (positive integer) start offset for
+  the results}
+
+  \item{pageSize}{numeric: maximum number of records to
+  return}
+
+  \item{sort_by}{string: field to sort on}
+
+  \item{sort_dir}{string: sort direction, either "asc" or
+  "dec"}
 }
 \value{
 a named list, including the results component which is a
