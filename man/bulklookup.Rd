@@ -18,7 +18,9 @@ find the best match for each supplied name, which may be a
 partial or incorrectly spelled name
 }
 \examples{
-# not run bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima"))
+\dontrun{
+bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima"))
+}
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

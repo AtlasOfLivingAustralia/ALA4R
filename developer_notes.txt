@@ -1,4 +1,4 @@
-Last-Modified: <2014-01-31 18:30:02>
+Last-Modified: <2014-03-15 10:57:22>
 
 
 ---
@@ -30,10 +30,9 @@ Configuration
 Caching
 
 - a simple caching scheme has been implemented. 
-- cached_get() is the main function. This a wrapper function around httr's GET, but also takes care of caching, setting the user-agent string, and checking the http status response code.
+- cached_get() and cached_post() are the main functions. These are wrappers around httr's GET and POST, but also take care of caching, setting the user-agent string, and checking the http status response code.
 - ala_cache_filename() returns the name of the cached file associated with a particular URL. Note that the file may not yet actually be cached on the local computer. 
 - the user can control the caching behaviour via the configuration options. caching can be "on","off", or "refresh". The user can also set the cache directory. By default this is a temporary directory that will be cleared automatically at the end of the R session. The user may wish to set this to a different location to allow results to be cached across R sessions. Needs documentation.
-- POST operations (bulklookup) are not yet cached. (We may wish to consider providing caching for *everything*, so that the user can repeat previous analyses without needing an internet connection.)
 
 
 ---
