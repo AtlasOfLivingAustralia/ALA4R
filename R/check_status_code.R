@@ -17,21 +17,26 @@
 # 
 
 check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL) {
+    was_full_response=FALSE
     if (identical(class(x),"response")) {
         ## if this is a response object, extract the status code
-        x=x$headers$status
+        ## we may also be able to get meaningful diagnostic info out of the message body in some cases
+        was_full_response=TRUE
+        xstatus=x$headers$status
+    } else {
+        xstatus=x
     }
-    switch (substr(x,1,1),
+    switch (substr(xstatus,1,1),
             "2"={ ## 2xx are all success codes
                 return(0) },
             "3"={ ## 3xx are redirection codes
                 ## probably indicates that we are using the wrong URL for a service
                 ## the code may or may not work depending on whether e.g. a redirect was followed
                 if (! is.null(on_redirect)) {
-                    return(on_redirect(x))
+                    return(on_redirect(xstatus))
                 } else {
                     ## just issue a warning for now
-                    warning("ALA4R: HTTP status code ",x," received. If there are problems, please notify the package maintainers.")
+                    warning("ALA4R: HTTP status code ",xstatus," received. If there are problems, please notify the package maintainers.")
                     return(1)
                 }
             },
@@ -39,16 +44,23 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
                 ## an error here probably indicates a problem in the ALA4R code
                 ## ? should this be an error or a warning?
                 if (! is.null(on_client_error)) {
-                    return(on_client_error(x))
+                    return(on_client_error(xstatus))
                 } else {
-                    stop("ALA4R: HTTP status code ",x," received. This may indicate an error in the ALA4R package.")
+                    stop("ALA4R: HTTP status code ",xstatus," received. This may indicate an error in the ALA4R package.")
                 }
             },
             "5"={ ## 5xx are server errors
                 if (! is.null(on_server_error)) {
-                    return(on_server_error(x))
+                    return(on_server_error(xstatus))
                 } else {
-                    stop("ALA4R: HTTP status code ",x," received. The ALA service may be down, try again later.")
+                    diag_msg="Either there was an error with the request, or the ALA service may be down (try again later)."
+                    if (was_full_response) {
+                        x=jsonlite::fromJSON(content(x,type="text"))
+                        if (!is.null(x$message)) {
+                            diag_msg=paste(diag_msg,"The error message was: ",x$message,sep=" ")
+                        }
+                    }
+                    stop("ALA4R: HTTP status code ",xstatus," received. ",diag_msg)
                 }
             }
         )
