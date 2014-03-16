@@ -21,7 +21,7 @@
 ##  the service for "general" was  "general"={base_url=paste(ala_config()$base_url_bie,"admin/indexFields",sep="")},
 
 ala_fields=function(fields_type="occurrence") {
-    assert_that(is.character(fields_type))
+    assert_that(is.string(fields_type))
     fields_type=match.arg(tolower(fields_type),c("occurrence","layers"))
     switch(fields_type,
            "occurrence"={base_url=paste(ala_config()$base_url_biocache,"index/fields",sep="")},
@@ -59,6 +59,7 @@ ala_fields=function(fields_type="occurrence") {
 #' @rdname ala_fields
 #' @export
 field_info = function(field_id) {
+    assert_that(is.string(field_id))
     base_url = paste(ala_config()$base_url_spatial,"field",sep="")
     ## if we supply an unknown field_id, we get 500 error from the server. But this doesn't make sense, so we mask the server error and simply return an empty data frame in this case
     this_server_error=function(z) NULL

@@ -17,6 +17,15 @@
 # 
 
 check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL) {
+    if (!is.null(on_redirect)) {
+        assert_that(is.function(on_redirect))
+    }
+    if (!is.null(on_server_error)) {
+        assert_that(is.function(on_server_error))
+    }
+    if (!is.null(on_client_error)) {
+        assert_that(is.function(on_client_error))
+    }
     was_full_response=FALSE
     if (identical(class(x),"response")) {
         ## if this is a response object, extract the status code
@@ -24,6 +33,15 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
         was_full_response=TRUE
         xstatus=x$headers$status
     } else {
+        ## expect either string (e.g. "500") or integer
+        if (!see_if(is.string(x))) {
+            if (!see_if(is.count(x))) {
+                stop("expecting either http response object, or status code as string or numeric")
+            } else {
+                ## is integer - convert to string
+                x=as.character(x)
+            }
+        }
         xstatus=x
     }
     switch (substr(xstatus,1,1),

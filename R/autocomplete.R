@@ -27,28 +27,25 @@
 #' 
 #' @export autocomplete
 autocomplete=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {
-    is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
-    if (!is.null(limit)) {
-        if (class(limit) != 'numeric' | length(limit) > 1 | limit<1 | !is.wholenumber(limit)) {
-            stop('limit must be a single integer value greater than 0') #check limit is integer >0 and single value
-        }
-    }
-    if (!is.null(idxType)) {
-        assert_that(is.character(idxType))
-        idxType=match.arg(toupper(idxType),c("TAXON","REGION","COLLECTION","INSTITUTION","DATASET"))
-    }
+    assert_that(is.string(taxon))
     taxon = clean_string(taxon) #clean up the taxon name
     taxon = gsub(' ','+',taxon) #replace spaces with + to force both terms in the search
 	
     base_url=paste(ala_config()$base_url_bie,"search/auto.json",sep="") #define the base URL string
     this_query=list(q=taxon)
     if (!is.null(limit)) {
+        assert_that(is.count(limit))  #check limit is integer >0 and single value
         this_query$limit=limit
     }
-    if (geoOnly) {
-        this_query$geoOnly="true" #Check for taxa that have locations (some have no location)
+    if (!is.null(geoOnly)) {
+        assert_that(is.flag(geoOnly),noNA(geoOnly))
+        if (geoOnly) {
+            this_query$geoOnly="true" #Check for taxa that have locations (some have no location)
+        }
     }
     if (!is.null(idxType)) {
+        assert_that(is.string(idxType))
+        idxType=match.arg(toupper(idxType),c("TAXON","REGION","COLLECTION","INSTITUTION","DATASET"))
         this_query$idxType=idxType
     }
     this_url=parse_url(base_url)

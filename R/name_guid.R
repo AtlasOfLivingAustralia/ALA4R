@@ -24,15 +24,15 @@
 
 
 name_guid=function(taxon,guids_only=TRUE,verbose=ala_config()$verbose) {
-    if (! identical(class(taxon),"character")) {
-        stop("expecting string or vector of strings as input")
-    }
+    assert_that(is.character(taxon))
     if (any(nchar(taxon)<1)) {
         stop("input contains empty string")
     }
     if (length(taxon)<1) {
         stop("empty input")
     }
+    assert_that(is.flag(guids_only))
+    assert_that(is.flag(verbose))
     if (length(nchar(taxon))==1) {
         ## a single name has been provided
 	taxon = str_trim(taxon) ## remove leading and trailing whitespaces

@@ -100,19 +100,22 @@ ala_config=function(...) {
                 }
                 ## any other specific checks ...
                 if (identical(this_option_name,"cache_directory")) {
-                    if (! file.exists(user_options[[i]])) {
+                    if (!see_if(is.string(user_options[[i]]))) {
+                        stop("cache_directory should be a string")
+                    }
+                    if (! (file.exists(user_options[[i]]) && file.info(user_options[[i]])$isdir)) {
                         ## cache directory does not exist. We could create it, but this is probably better left to the user to manage
                         stop("cache directory ",user_options[[i]]," does not exist");
                     }
                 }
                 if (identical(this_option_name,"user_agent")) {
-                    if (! is.character(user_options[[i]])) {
-                        stop("user_agent should be a string");
+                    if (!see_if(is.string(user_options[[i]]))) {
+                        stop("user_agent should be a string")
                     }
                 }
                 if (identical(this_option_name,"verbose")) {
-                    if (! is.logical(user_options[[i]])) {
-                        stop("verbose should be logical");
+                    if (!see_if(is.flag(user_options[[i]]))) {
+                        stop("verbose should be TRUE or FALSE")
                     }
                 }
                 

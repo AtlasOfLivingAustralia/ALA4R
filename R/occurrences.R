@@ -28,12 +28,13 @@
 
 occurrences=function(taxon="",wkt="",page_size=NA,fields=c()) {
     ## check input parms are sensible
+    assert_that(is.string(taxon))
+    assert_that(is.string(wkt))
     if (!is.na(page_size)) {
-        if (!(page_size>0)) {
-            warning("page_size should a positive integer, ignoring")
-            page_size=NA
-        }
+        assert_that(is.count(page_size))
     }
+    assert_that(is.character(fields))
+    
     taxon = clean_string(taxon) ## clean up the taxon name
     base_url="http://biocache.ala.org.au/ws/webportal/occurrences.gz"
 

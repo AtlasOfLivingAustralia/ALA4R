@@ -24,12 +24,10 @@
 #' @export specieslist
 specieslist=function(taxon="",wkt="",page_size=NA) {
     ## TODO: add filtering functionality (fq parm passed in URL), assuming that it is relevant here
-    ## check input parms are sensible
+    assert_that(is.string(taxon))
+    assert_that(is.string(wkt))
     if (!is.na(page_size)) {
-        if (!(page_size>0)) {
-            warning("page_size should a positive integer, ignoring")
-            page_size=NA
-        }
+        assert_that(is.count(page_size))
     }
     
     taxon = clean_string(taxon) ## clean up the taxon name

@@ -19,6 +19,13 @@
 # change use of name_guid to bulklookup once new bulklookup service is deployed
 
 species_info=function(scientificname=NULL,guid=NULL,verbose=ala_config()$verbose) {
+    if (!is.null(scientificname)) {
+        assert_that(is.string(scientificname))
+    }
+    if (!is.null(guid)) {
+        assert_that(is.string(guid))
+    }
+    assert_that(is.flag(verbose))
     if (is.null(scientificname) && is.null(guid)) {
         stop("either the scientific name or the guid must be provided")
     }

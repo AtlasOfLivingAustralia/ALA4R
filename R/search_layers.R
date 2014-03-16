@@ -28,6 +28,10 @@
 #' @export
 #' 
 search_layers = function(type="all",query=NULL) {
+    assert_that(is.string(type))
+    if (!is.null(query)) {
+        assert_that(is.string(query))
+    }
     type=match.arg(tolower(type),c("all","grids","shapes"))
     base_url = 'http://spatial.ala.org.au/ws/layers' #define the base url
 	if (type == 'all') { 

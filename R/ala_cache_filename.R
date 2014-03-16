@@ -15,6 +15,7 @@
 #' 
 #' @export ala_cache_filename
 ala_cache_filename=function(url) {
+    assert_that(is.string(url))
     ## returns the cache filename associated with the given url
     ## note that this file may not actually exist, this function just provides the mapping from URL to filename
     

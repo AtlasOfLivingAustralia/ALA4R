@@ -15,14 +15,12 @@
 
 ## **NOTE** this function will be replaced by one using the new service, once it is deployed
 
-bulklookup=function(taxa=c()) {
+bulklookup=function(taxa) {
     ## input argument checks
     if (identical(class(taxa),"list")) {
         taxa=unlist(taxa)
     }
-    if (! identical(class(taxa),"character")) {
-        stop("expecting string or vector of strings as input")
-    }
+    assert_that(is.character(taxa))
     if (any(nchar(taxa)<1)) {
         stop("input contains empty string")
     }

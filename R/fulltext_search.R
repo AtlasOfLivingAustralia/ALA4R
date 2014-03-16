@@ -40,7 +40,7 @@ fulltext_search <- function(taxon,fq=NULL,start=NULL,pageSize=NULL,sort_by=NULL,
         this_url=parse_url(base_url)
         this_query=list(q=taxon)
         if (!is.null(fq)) {
-            assert_that(is.character(fq))
+            assert_that(is.string(fq))
             this_query$fq=fq
         }
         if (!is.null(start)) {
@@ -52,11 +52,11 @@ fulltext_search <- function(taxon,fq=NULL,start=NULL,pageSize=NULL,sort_by=NULL,
             this_query$pageSize=pageSize
         }
         if (!is.null(sort_by)) {
-            assert_that(is.character(sort_by))
+            assert_that(is.string(sort_by))
             this_query$sort=sort_by
         }
         if (!is.null(sort_dir)) {
-            assert_that(is.character(sort_dir))
+            assert_that(is.string(sort_dir))
             sort_dir=match.arg(tolower(sort_dir),c("asc","desc"))
             this_query$dir=sort_dir
         }

@@ -2,7 +2,7 @@
 \alias{bulklookup}
 \title{Bulk lookup of taxonomic names}
 \usage{
-bulklookup(taxa = c())
+bulklookup(taxa)
 }
 \arguments{
   \item{taxa}{string: a single name (string) or vector of

@@ -6,6 +6,7 @@
 # @param body string: the body to POST
 # @param type string: the expected content type. Either "text" (default), "json", or "filename" (this caches the content directly to a file and returns the filename without attempting to read it in)
 # @param caching string: caching behaviour, by default from ala_config()$caching
+# @param ... additional arguments passed to curlPerform
 # @return for type=="text" the content is returned as text. For type=="json", the content is parsed using jsonlite::fromJSON. For "filename", the name of the stored file is returned.
 # @details Depending on the value of caching, the page is either retrieved from the cache or from the url, and stored in the cache if appropriate. The user-agent string is set according to ala_config()$user_agent. The returned response (if not from cached file) is also passed to check_status_code().
 # @author Atlas of Living Australia \email{support@@ala.org.au}
@@ -19,7 +20,13 @@
 
 
 cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,...) {
+    assert_that(is.string(url))
+    assert_that(is.string(body))
+    assert_that(is.string(type))
     type=match.arg(tolower(type),c("text","json","filename"))
+    assert_that(is.string(caching))
+    caching=match.arg(tolower(caching),c("on","off"))
+    assert_that(is.flag(verbose))
 
     if (identical(caching,"off") && !identical(type,"filename")) {
         ## if we are not caching, retrieve our page directly without saving to file at all
