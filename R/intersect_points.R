@@ -5,7 +5,7 @@
 #' @param pnts vector of lat & lons or 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 1000.
 #' @param fids text: id of field for which to look up information. list of possible fields available from ala_fields().
 #' @param verbose boolean value defining how much progress information to display; default is set by ala_config().
-#' @return A data frame containing the intersecting data information. Missing data or incorrectly identified field id values will result in NA data
+#' @return A SpatialPointsDataFrame containing the intersecting data information. Missing data or incorrectly identified field id values will result in NA data
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' @examples
@@ -22,9 +22,8 @@
 #' }
 #' @export
 
-####STILL to ADD
-# - functionality to provide points as a spatial points format from sp package
-#
+####STILL to do
+# - test SpatialPointsDataFrame functionality
 ####
 
 intersect_points = function(pnts,fids,verbose=ala_config()$verbose) {
@@ -81,7 +80,6 @@ intersect_points = function(pnts,fids,verbose=ala_config()$verbose) {
                 out = read.csv(unz(this_cache_file,'sample.csv'),as.is=TRUE) #read in the csv data from the zip file
                 checks = NULL; for (ii in colnames(out)) { if (all(is.na(out[,ii]))) checks = c(checks,ii) } #identify bad field IDs
                 if (!is.null(checks)) warning(paste(paste(checks,collapse=', '),'are invalid field ids')) #warn user of bad field ids
-		out
 	} else { #get results if just a single location
 		url_str = paste(base_url,'intersect/',fids_str,'/',pnts_str,sep='') #define the url string
 		out = cached_get(url_str,type="json") #get the data
@@ -90,6 +88,12 @@ intersect_points = function(pnts,fids,verbose=ala_config()$verbose) {
                 #    out = do.call('rbind.fill',lapply(out,as.data.frame,stringsAsFactors=FALSE)) #define the output
                 #}
 		checks = setdiff(fids,out$field); if (length(checks)>0) warning(paste(paste(checks,collapse=', '),'are invalid field ids')) #warn user of bad field ids
-		out
 	}
+
+        ## coerce to SpatialPointsDataFrame class
+        if (nrow(out)>0) {
+            out=SpatialPointsDataFrame(coords=out[,c("longitude","latitude")],proj4string=CRS("+proj=longlat +ellps=WGS84"),data=out)
+        }
+        out
+
 }

@@ -17,9 +17,9 @@ intersect_points(pnts, fids, verbose = ala_config()$verbose)
   information to display; default is set by ala_config().}
 }
 \value{
-A data frame containing the intersecting data information.
-Missing data or incorrectly identified field id values will
-result in NA data
+A SpatialPointsDataFrame containing the intersecting data
+information. Missing data or incorrectly identified field
+id values will result in NA data
 }
 \description{
 Intersect environmental or contextual layers given a set of
