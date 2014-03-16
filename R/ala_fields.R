@@ -63,8 +63,10 @@ field_info = function(field_id) {
     ## if we supply an unknown field_id, we get 500 error from the server. But this doesn't make sense, so we mask the server error and simply return an empty data frame in this case
     this_server_error=function(z) NULL
     out = cached_get(url=paste(base_url,field_id,sep='/'),type="json",on_server_error=this_server_error)
-    ## if we got a 500 error, it was from an un-matched field name, so just return an empty data frame with no warning
     if (is.null(out)) {
+        ## if we got a 500 error, the response will be NULL
+        ## it was most likely from an un-matched field name (but we do not get any sort of informative error message from the server)
+        ## just return an empty data frame with no warning
         data.frame()
     } else {
         ## we might wish to issue a warning for empty responses
