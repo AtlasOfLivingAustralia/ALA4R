@@ -3,7 +3,7 @@
 \title{Get list of taxa and their occurrence counts, with/without a matching
 taxonomic query within an optionally-defined WKT-defined polygon}
 \usage{
-specieslist(taxon = "", wkt = "", page_size = NA)
+specieslist(taxon = "", wkt = "", fq = NULL, page_size = NA)
 }
 \arguments{
   \item{taxon}{string: Text of taxon, e.g. "Macropus rufus"
@@ -12,6 +12,11 @@ specieslist(taxon = "", wkt = "", page_size = NA)
   \item{wkt}{string: WKT (well-known text) defining a
   polygon within which to limit taxon search, e.g.
   "POLYGON((140 -37,151 -37,151 -26,140 -26,140 -37))"}
+
+  \item{fq}{string: filters to be applied to the original
+  query. These are of the form "INDEXEDFIELD:VALUE" e.g.
+  "kingdom:Fungi" See ala_fields("occurrence") for all the
+  fields that are queryable}
 
   \item{page_size}{Maximum number of records to return (may
   not be honoured by the ALA server). Default=NA, meaning

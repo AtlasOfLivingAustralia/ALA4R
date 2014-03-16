@@ -8,6 +8,7 @@
 #' @param taxon string: Text of taxon, e.g. "Macropus rufus" or "macropodidae"
 #' @param wkt string: WKT (well-known text) defining a polygon within
 #' which to limit taxon search, e.g. "POLYGON((140 -37,151 -37,151 -26,140 -26,140 -37))"
+#' @param fq string: filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi" See ala_fields("occurrence") for all the fields that are queryable
 #' @param page_size Maximum number of records to return (may not be honoured by
 #' the ALA server). Default=NA, meaning that the server default value (currently 10) will be used.
 #' @return Data frame with (at least) the columns
@@ -22,8 +23,8 @@
 #' x=specieslist(wkt="POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,147.62 -42.83))",page_size=30)
 #' }
 #' @export specieslist
-specieslist=function(taxon="",wkt="",page_size=NA) {
-    ## TODO: add filtering functionality (fq parm passed in URL), assuming that it is relevant here
+specieslist=function(taxon="",wkt="",fq=NULL,page_size=NA) {
+    ## TODO: add filtering functionality (fq parm passed in URL)
     assert_that(is.string(taxon))
     assert_that(is.string(wkt))
     if (!is.na(page_size)) {
@@ -47,6 +48,10 @@ specieslist=function(taxon="",wkt="",page_size=NA) {
     if (length(this_query)==0) {
         ## not a valid request!
         stop("invalid request: need at least taxon or WKT to be specified")
+    }
+    if (!is.null(fq)) {
+        assert_that(is.string(fq))
+        this_query$fq=fq
     }
     ## page_size
     if (!is.na(page_size)) {
