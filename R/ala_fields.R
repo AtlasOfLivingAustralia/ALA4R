@@ -18,6 +18,8 @@
 #' }
 #' @export
 
+## "general" is needed for e.g. full-text species searching, but note that this service is not currently part of the API
+
 ala_fields=function(fields_type="occurrence") {
     assert_that(is.string(fields_type))
     fields_type=match.arg(tolower(fields_type),c("occurrence","general","layers"))
