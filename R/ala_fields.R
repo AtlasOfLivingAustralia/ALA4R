@@ -3,7 +3,8 @@
 #' Retrieves a list of field names that can be used with the data retrieval
 #' functions
 #' 
-#' @param fields_type text: either "occurrence" (for searching species
+#' @param fields_type text: either either "general" (for searching taxa, datasets,
+#' layers, and collections metadata), "occurrence" (for searching species
 #' occurrence records), or "layers" (a list of all fields associated with the environmental and contextual layers)
 #' @param field_id text: id of field for which to look up information
 #' @return A data frame containing the field names and various attributes
@@ -17,13 +18,11 @@
 #' }
 #' @export
 
-## option "general" removed 13-Mar-2014 BR; it uses a deprecated service and I don't think we need it anyway
-##  the service for "general" was  "general"={base_url=paste(ala_config()$base_url_bie,"admin/indexFields",sep="")},
-
 ala_fields=function(fields_type="occurrence") {
     assert_that(is.string(fields_type))
-    fields_type=match.arg(tolower(fields_type),c("occurrence","layers"))
+    fields_type=match.arg(tolower(fields_type),c("occurrence","general","layers"))
     switch(fields_type,
+           "general"={base_url=paste(ala_config()$base_url_bie,"admin/indexFields",sep="")},
            "occurrence"={base_url=paste(ala_config()$base_url_biocache,"index/fields",sep="")},
            "layers"={base_url=paste(ala_config()$base_url_spatial,"fields",sep="")}
            )
