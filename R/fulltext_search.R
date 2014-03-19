@@ -6,7 +6,7 @@
 #' @references \url{http://api.ala.org.au/}
 #'  
 #' @param taxon string: a character string for the taxon of interest
-#' @param fq string: filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi" See ala_fields("occurrence") for all the fields that are queryable
+#' @param fq string: a character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See ala_fields("general") for all the fields that are queryable. Note that fq matches are case-sensitive, but sometimes the entries in the fields are not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA")
 #' @param start numeric: (positive integer) start offset for the results
 #' @param pageSize numeric: (positive integer) maximum number of records to return
 #' @param sort_by string: field to sort on
@@ -40,8 +40,11 @@ fulltext_search <- function(taxon,fq=NULL,start=NULL,pageSize=NULL,sort_by=NULL,
         this_url=parse_url(base_url)
         this_query=list(q=taxon)
         if (!is.null(fq)) {
-            assert_that(is.string(fq))
-            this_query$fq=fq
+            assert_that(is.character(fq))
+            ## can have multiple fq parameters, need to specify in url as fq=a:b&fq=c:d&fq=...
+            fq=as.list(fq)
+            names(fq)=rep("fq",length(fq))
+            this_query=c(this_query,fq)
         }
         if (!is.null(start)) {
             assert_that(is.count(start))
@@ -82,17 +85,3 @@ fulltext_search <- function(taxon,fq=NULL,start=NULL,pageSize=NULL,sort_by=NULL,
         out
 }
 
-## see issue #611
-## which fields can we actually query for fq? API doc says: "Filters to be applied to the original query. These are additional params of the form fq=INDEXEDFIELD:VALUE e.g. fq=kingdom:Fungi. See http://biocache.ala.org.au/ws/index/fields for all the fields that a queryable." BUT "species" appears in this list of fields, and yet
-##GET(url="http://bie.ala.org.au/ws/search.json?q=Grevillea&fq=kingdom:Plantae") # works
-##GET(url="http://bie.ala.org.au/ws/search.json?q=Grevillea&fq=genus:Grevillea") # works
-##GET(url="http://bie.ala.org.au/ws/search.json?q=Grevillea&fq=species:banksii") # 500 error, with message "undefined field species"
-## should we instead be using the "general" fields (http://bie.ala.org.au/ws/admin/indexFields), but note that this service is not currently part of the API
-
-## fq matches are case-sensitive, but casing of names is not consistent (e.g. kingdoms "Fungi" and "Plantae" but "ANIMALIA")
-##fulltext_search("Oenanthe") # returns a mix of birds and plants, because Oenanthe is a genus name in both kingdoms
-##fulltext_search("Oenanthe",fq="kingdom:Plantae") ## OK
-##fulltext_search("Oenanthe",fq="kingdom:plantae") ## no results
-##fulltext_search("Oenanthe",fq="kingdom:PLANTAE") ## no results
-##fulltext_search("Oenanthe",fq="kingdom:Animalia") ## no results
-##fulltext_search("Oenanthe",fq="kingdom:ANIMALIA") ## OK
