@@ -6,7 +6,7 @@
 #' @references \url{http://api.ala.org.au/}
 #'  
 #' @param taxon string: a character string for the taxon of interest
-#' @param fq string: a character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See ala_fields("general") for all the fields that are queryable. Note that fq matches are case-sensitive, but sometimes the entries in the fields are not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA")
+#' @param fq string: a character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See ala_fields("general") for all the fields that are queryable. See details below.
 #' @param start numeric: (positive integer) start offset for the results
 #' @param pageSize numeric: (positive integer) maximum number of records to return
 #' @param sort_by string: field to sort on
@@ -26,6 +26,8 @@
 #' \item{imageUrl} \item{largeImageUrl} \item{smallImageUrl} \item{thumbnailUrl} \item{imageMetadataUrl} 
 #' \item{acceptedConceptName} \item{synonomyRelationship} \item{synonomyDescription}
 #' }
+#' 
+#' @details Note that fq matches are case-sensitive, but sometimes the entries in the fields are not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA"). fq matches are ANDed by default (e.g. c("field1:abc","field2:def") will match records that have field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form c("field1:abc OR field2:def")
 #' 
 #' @examples
 #'  # find information ALA holds on red kangaroo
