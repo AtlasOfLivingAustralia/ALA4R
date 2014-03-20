@@ -5,7 +5,8 @@
 #'
 #' @param type string: a selection of "all", "grids" or "shapes" associated with all possible layers, 
 #' only environmental grids or contextual shapefiles
-#' @param query string: optional search term. Only results with this term in the name or description will be returned
+#' @param query text string: optional search term against layer metadata. 
+#' Only layers that include this term in their metadata will be returned.
 #' 
 #' @return A data frame of results
 #' \itemize{
@@ -22,8 +23,8 @@
 #' @examples
 #' \dontrun{
 #' search_layers(type="all")
-#' search_layers(type="grids",query="coral")
-#' search_layers(type="shapes")
+#' search_layers(type="grids",query="income")
+#' search_layers(type="shapes",query="coral")
 #' }
 #' @export
 #' 
