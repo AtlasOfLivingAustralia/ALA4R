@@ -44,7 +44,7 @@ tt
 #show all information stored in the object
 str(tt)
 as.matrix(tt)
-retrieve only species with geolocations
+#retrieve only species with geolocations
 autocomplete("Macropus rufus",geoOnly=TRUE)
 }
 \author{
