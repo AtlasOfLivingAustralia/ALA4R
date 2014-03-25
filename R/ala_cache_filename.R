@@ -1,15 +1,13 @@
-#' Get the name of the cache file associated with the given URL
+#' Returns the name of the cache file associated with the given URL. Note that this file 
+#' may not actually exist, this function just provides the mapping from URL to filename
 #' 
-#' Returns the name of the cache file associated with the given URL. Note that
-#' this file may not actually exist, this function just provides the mapping
-#' from URL to filename
-#' 
-#' 
-#' @param url string: the URL
-#' @return string: the file path and name
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' @seealso \code{ala_config} for cache settings, particularly the cache directory
+#'  
+#' @param url string: the URL
+#' @return string: the file path and name
+#' 
 #' @examples
 #' ala_cache_filename("http://biocache.ala.org.au/ws/index/fields")
 #' 
