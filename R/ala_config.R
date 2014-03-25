@@ -1,10 +1,10 @@
-#' Get or set ALA4R configuration options
-#' 
 #' Get or set configuration options that control ALA4R behaviour
+#'
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
 #' 
-#' Invoking ala_config() with no arguments returns a list with the current
-#' values of the options. Invoking ala_config("reset") will reset all options
-#' to their default values.
+#' Invoking ala_config() with no arguments returns a list with the current values of the options. 
+#' Invoking ala_config("reset") will reset all options to their default values.
 #' 
 #' Valid options are: \itemize{
 #' \item caching: caching can be "on" (results will
@@ -32,13 +32,13 @@
 #' listed above
 #' @return For ala_config(), a list of all options. When ala_config(...) is
 #' called with arguments, nothing is returned but the configuration is set.
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
-#' @references \url{http://api.ala.org.au/}
+#' 
 #' @examples
 #' 
 #' ala_config()
 #' ala_config(caching="off")
 #' ala_reasons()
+#' ala_config(download_reason_id="9")
 #' 
 #' @export ala_config
 ala_config=function(...) {
