@@ -13,10 +13,7 @@ fulltext_search(taxon, fq = NULL, start = NULL, pageSize = NULL,
   strings, specifying filters to be applied to the original
   query. These are of the form "INDEXEDFIELD:VALUE" e.g.
   "kingdom:Fungi". See ala_fields("general") for all the
-  fields that are queryable. Note that fq matches are
-  case-sensitive, but sometimes the entries in the fields
-  are not consistent in terms of case (e.g. kingdom names
-  "Fungi" and "Plantae" but "ANIMALIA")}
+  fields that are queryable. See details below.}
 
   \item{start}{numeric: (positive integer) start offset for
   the results}
@@ -50,6 +47,15 @@ dataframe of information with columns being: \itemize{
 \description{
 Performs a search across all objects, and selects the
 closest matches
+}
+\details{
+Note that fq matches are case-sensitive, but sometimes the
+entries in the fields are not consistent in terms of case
+(e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA").
+fq matches are ANDed by default (e.g.
+c("field1:abc","field2:def") will match records that have
+field1 value "abc" and field2 value "def"). To obtain OR
+behaviour, use the form c("field1:abc OR field2:def")
 }
 \examples{
 # find information ALA holds on red kangaroo
