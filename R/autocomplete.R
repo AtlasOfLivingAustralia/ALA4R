@@ -22,7 +22,12 @@
 #'
 #' @examples
 #' # find information ALA holds on red kangaroo (Macropus rufus)
-#' autocomplete("red kangaroo")
+#' tt = autocomplete("red kangaroo")
+#' tt
+#' #show all information stored in the object
+#' str(tt)
+#' as.matrix(tt)
+#' #retrieve only species with geolocations
 #' autocomplete("Macropus rufus",geoOnly=TRUE)
 #' 
 #' @export autocomplete
@@ -53,9 +58,11 @@ autocomplete=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {
         	
     out = cached_get(url=build_url(this_url),type="json") #get the data
     out = out[[1]] #looking at the data
+	
     if (length(out)<1) {
         ## no results
-        data.frame()
+        warning('no matched taxa')
+		return(NULL)
     } else {
         ##need to collapse matchednames fields if there was more than a single matched name
         for (ii in 1:length(out)) {
@@ -68,6 +75,21 @@ autocomplete=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {
         #if NOT using jsonlite
         #    out = do.call('rbind.fill',lapply(out,function(x) {as.data.frame(rbind(x))})) #define the output as a data.frame
         #}
-        out
     }
+	class(out) <- c('autocomplete',class(out)) #add the autocomplete class
+	return(out)
 }
+
+#' @export
+"print.autocomplete" <- function(x, ...)
+{
+	if (empty(as.data.frame(x$scientificNameMatches))) {
+		m <- as.matrix(format.data.frame(x[,c('matchedNames','name','rankString')], na.encode = FALSE))
+	} else {
+		m <- as.matrix(format.data.frame(x[,c('name','commonName','rankString')], na.encode = FALSE))
+	}
+	print(m)
+    invisible(x)
+}
+
+

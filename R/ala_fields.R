@@ -1,15 +1,14 @@
-#' Retrieve a list of all fields
+#' Retrieves a list of all field names that can be used with data retrieval functions
 #' 
-#' Retrieves a list of field names that can be used with the data retrieval
-#' functions
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
 #' 
 #' @param fields_type text: either either "general" (for searching taxa, datasets,
 #' layers, and collections metadata), "occurrence" (for searching species
 #' occurrence records), or "layers" (a list of all fields associated with the environmental and contextual layers)
 #' @param field_id text: id of field for which to look up information
 #' @return A data frame containing the field names and various attributes
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
-#' @references \url{http://api.ala.org.au/}
+
 #' @examples
 #' \dontrun{ 
 #' ala_fields("occurrence")

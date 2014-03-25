@@ -1,3 +1,4 @@
+S3method(print,autocomplete)
 export(ala_cache_filename)
 export(ala_config)
 export(ala_fields)

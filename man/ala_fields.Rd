@@ -1,7 +1,7 @@
 \name{ala_fields}
 \alias{ala_fields}
 \alias{field_info}
-\title{Retrieve a list of all fields}
+\title{Retrieves a list of all field names that can be used with data retrieval functions}
 \usage{
 ala_fields(fields_type = "occurrence")
 
@@ -22,7 +22,7 @@ A data frame containing the field names and various
 attributes
 }
 \description{
-Retrieves a list of field names that can be used with the
+Retrieves a list of all field names that can be used with
 data retrieval functions
 }
 \examples{
