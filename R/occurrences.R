@@ -14,7 +14,9 @@
 #' the returned data frame are not guaranteed to retain the ordering of the
 #' field names given here. See ala_fields("occurrence") for valid field names.
 #' @return Data frame
-
+#' 
+#' TODO: Better error message for unfound taxon.
+#' 
 #' @examples
 #' \dontrun{ 
 #' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),page_size=1000)
