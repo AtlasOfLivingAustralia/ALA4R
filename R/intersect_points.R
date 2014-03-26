@@ -11,7 +11,6 @@
 #' @return A SpatialPointsDataFrame containing the intersecting data information. Missing data or incorrectly identified field id values will result in NA data
 #'
 #'TODO: Pity that "fields" rather than "layers" are used. Confusing.
-#'TODO: NOT WORKING as at 1300 25/3/2014: WS not returning latitude and longitude
 #'
 #' @examples
 #' \dontrun{
@@ -29,10 +28,6 @@
 #' 
 #' }
 #' @export
-
-####STILL to do
-# - test SpatialPointsDataFrame functionality
-####
 
 intersect_points = function(pnts,fids,SPdata.frame=FALSE,verbose=ala_config()$verbose) {
 	base_url=ala_config()$base_url_spatial #get the base url
