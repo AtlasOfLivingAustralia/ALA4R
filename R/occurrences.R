@@ -10,9 +10,10 @@
 #' which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.1310 -26,140 -37))"
 #' @param page_size Maximum number of records to return (may not be honoured by
 #' the ALA server). Default=NA, meaning that the server default value (currently 10) will be used.
-#' @param fields A vector of field names to return. Note that the columns of
-#' the returned data frame are not guaranteed to retain the ordering of the
-#' field names given here. See ala_fields("occurrence") for valid field names.
+#' @param fields A vector of field names to return. Note that the columns of the returned data frame 
+#' are not guaranteed to retain the ordering of the field names given here. 
+#' See ALA4R funtion ala_fields("occurrence") for valid field names.
+#' 
 #' @return Data frame
 #' 
 #' TODO: Better error message for unfound taxon.
@@ -26,8 +27,9 @@
 #' }
 #' @export occurrences
 
-## TODO: may need to change base URL to match new API (http://biocache.ala.org.au/ws/occurrences/download, but this is not zipped)
-## TODO: support extra params fq, startindex, etc (see API page) 
+## TODO: may need to change base URL to match new API (http://biocache.ala.org.au/ws/occurrences/download, 
+##       but this is not zipped)
+##    Support extra params fq, startindex, etc (see http://api.ala.org.au) 
 
 occurrences=function(taxon="",wkt="",page_size=NA,fields=c()) {
     ## check input parms are sensible
