@@ -4,7 +4,7 @@
 #' @references \url{http://api.ala.org.au/}
 #' @references \url{http://spatial.ala.org.au/layers/}
 #' 
-#' @param points vector of lat & lons or 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 1000.
+#' @param pnts vector of lat & lons or 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 1000.
 #' @param fids text: ids of layers to be intersected. list of possible layers is available from ala_fields().
 #' @param SPdata.frame boolean value defining if the output should be returned as a SpatialPointsDataFrame of the sp package.
 #' @param verbose boolean value defining how much progress information to display; default is set by ala_config().

@@ -6,7 +6,7 @@ intersect_points(pnts, fids, SPdata.frame = FALSE,
   verbose = ala_config()$verbose)
 }
 \arguments{
-  \item{points}{vector of lat & lons or 2 column data.frame
+  \item{pnts}{vector of lat & lons or 2 column data.frame
   or matrix of lat,lons. NOTE: the number of locations must
   be less than 1000.}
 
