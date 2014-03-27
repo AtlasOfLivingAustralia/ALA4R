@@ -1,15 +1,21 @@
-#' Bulk lookup of taxonomic names
+#' Bulk lookup of taxonomic names: Provides GUID, taxonomic classification, and other information 
+#' for a list of species names. Fuzzy matching is used to find the best match for each supplied name, 
+#' which may be a partial or incorrectly spelled name
 #' 
-#' Provides GUID, taxonomic classification, and other information for a list of names. Fuzzy matching is used to find the best match for each supplied name, which may be a partial or incorrectly spelled name
-#' 
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
 #' 
 #' @param taxa string: a single name (string) or vector of names
 #' @return A data frame of results
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
-#' @references \url{http://api.ala.org.au/}
+#' 
+#' TODO: This is another one where some formatting of the return would be appreciated.
+#' 
 #' @examples
 #' \dontrun{
 #' bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima"))
+#' bulklookup(c("Alaba","Eucalyptus gunnnii"))
+#' bulklookup("cider")
+#' bulklookup("fred")
 #' }
 #' @export bulklookup
 
