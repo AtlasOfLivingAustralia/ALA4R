@@ -51,7 +51,7 @@ occurrences=function(taxon="",wkt="",page_size=NA,fields=c()) {
     ## wkt string supplied and valid?
     if (str_length(wkt)>0) {
         if (! check_wkt(wkt)) {
-            stop("invalid WKT string ",wkt)
+            warning("WKT string appears to be invalid: ",wkt)
         }
         this_query$wkt=wkt
     }

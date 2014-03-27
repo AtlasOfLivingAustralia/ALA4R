@@ -41,7 +41,7 @@ specieslist=function(taxon="",wkt="",fq=NULL,page_size=NA) {
     ## wkt string
     if (str_length(wkt)>0) {
         if (! check_wkt(wkt)) {
-            stop("invalid WKT string ",wkt)
+            warning("WKT string appears to be invalid: ",wkt)
         }
         this_query$wkt=wkt
     }
