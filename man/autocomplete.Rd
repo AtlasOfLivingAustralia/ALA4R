@@ -1,6 +1,8 @@
 \name{autocomplete}
 \alias{autocomplete}
-\title{Auto Complete Search}
+\title{An autocomplete search for identifying species names & identifiers used at the ALA is based
+on matches from a PARTIAL NAME. autocomplete can generate a dataframe of scientific and
+common names that can be used for further analysis in R.}
 \usage{
 autocomplete(taxon, geoOnly = FALSE, idxType = NULL, limit = NULL)
 }
@@ -25,17 +27,12 @@ are identified as: \item{guid}{} \item{name}{}
 \item{scientificNameMatches}{} \item{commonNameMatches}{}
 \item{commonName}{} \item{matchedNames}{} \item{ankId}{}
 \item{rankString}{} \item{left}{} \item{right}{}
+
+TODO: Suggest "search_species_autocomplete".
 }
 \description{
-An autocomplete search for identifying species names &
-identifiers used at the ALA based on matches from a PARTIAL
-NAME. autocomplete can generate a dataframe of scientific
-and common names that can be used for further analysis in
-R.
-}
-\details{
-If the scientific name, common name or LSID are known, use
-fulltext_search
+If the scientific name, common name or LSID of the taxon
+are known, use fulltext_search
 }
 \examples{
 # find information ALA holds on red kangaroo (Macropus rufus)
@@ -44,6 +41,7 @@ tt
 #show all information stored in the object
 str(tt)
 as.matrix(tt)
+
 #retrieve only species with geolocations
 autocomplete("Macropus rufus",geoOnly=TRUE)
 }

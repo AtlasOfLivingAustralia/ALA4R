@@ -1,7 +1,7 @@
 \name{ala_config}
 \alias{ala_config}
 \alias{ala_reasons}
-\title{Get or set ALA4R configuration options}
+\title{Get or set configuration options that control ALA4R behaviour}
 \usage{
 ala_config(...)
 
@@ -20,7 +20,18 @@ returned but the configuration is set.
 Get or set configuration options that control ALA4R
 behaviour
 }
-\details{
+\examples{
+ala_config()
+ala_config(caching="off")
+ala_reasons()
+ala_config(download_reason_id="9")
+}
+\author{
+Atlas of Living Australia \email{support@ala.org.au}
+}
+\references{
+\url{http://api.ala.org.au/}
+
 Invoking ala_config() with no arguments returns a list with
 the current values of the options. Invoking
 ala_config("reset") will reset all options to their default
@@ -53,16 +64,5 @@ base_url_biocache: the base url for biocache web services
 
 ala_reasons() returns a data frame with information
 describing the valid options for "download_reason"
-}
-\examples{
-ala_config()
-ala_config(caching="off")
-ala_reasons()
-}
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
-\references{
-\url{http://api.ala.org.au/}
 }
 

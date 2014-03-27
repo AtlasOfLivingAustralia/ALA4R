@@ -5,26 +5,29 @@
 occurrences(taxon = "", wkt = "", page_size = NA, fields = c())
 }
 \arguments{
-  \item{taxon}{Taxonomic query, e.g. "macropus rufus"}
+  \item{taxon}{string: taxonomic query, e.g. "macropus
+  rufus"}
 
-  \item{wkt:}{A WKT (well-known text) string providing a
-  spatial polygon within which to search, e.g.
+  \item{wkt}{string: a WKT (well-known text) string
+  providing a spatial polygon within which to search, e.g.
   "POLYGON((140 -37,151 -37,151 -26,140.1310 -26,140
   -37))"}
 
-  \item{page_size}{Maximum number of records to return (may
-  not be honoured by the ALA server). Default=NA, meaning
-  that the server default value (currently 10) will be
-  used.}
+  \item{page_size}{integer: maximum number of records to
+  return (may not be honoured by the ALA server).
+  Default=NA, meaning that the server default value
+  (currently 10) will be used.}
 
-  \item{fields}{A vector of field names to return. Note
-  that the columns of the returned data frame are not
-  guaranteed to retain the ordering of the field names
-  given here. See ala_fields("occurrence") for valid field
-  names.}
+  \item{fields}{string vector: a vector of field names to
+  return. Note that the columns of the returned data frame
+  are not guaranteed to retain the ordering of the field
+  names given here. See ALA4R funtion
+  ala_fields("occurrence") for valid field names.}
 }
 \value{
 Data frame
+
+TODO: Better error message for unfound taxon.
 }
 \description{
 Retrieve point occurrence records via the "Get occurrences

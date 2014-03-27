@@ -6,7 +6,7 @@
 #' 
 #' @param points vector of lat & lons or 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 1000.
 #' @param fids text: ids of layers to be intersected. list of possible layers is available from ala_fields().
-#' @param SPdataframe boolean value defining if the output should be returned as a SpatialPointsDataFrame of the sp package.
+#' @param SPdata.frame boolean value defining if the output should be returned as a SpatialPointsDataFrame of the sp package.
 #' @param verbose boolean value defining how much progress information to display; default is set by ala_config().
 #' @return A SpatialPointsDataFrame containing the intersecting data information. Missing data or incorrectly identified field id values will result in NA data
 #'
