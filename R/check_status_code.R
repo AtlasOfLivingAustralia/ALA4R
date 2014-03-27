@@ -6,6 +6,7 @@
 # @param on_redirect function: optional function to evaluate in the case of a redirect (3xx) code. By default a warning is issued.
 # @param on_client_error function: optional function to evaluate in the case of a client error (4xx) code. By default an error is thrown.
 # @param on_server_error function: optional function to evaluate in the case of a server error (5xx) code. By default an error is thrown.
+# @param extra_info string: additional diagnostic info that will be shown to the user for 4xx or 5xx codes, where x is not a full response object
 # @return integer: simplified status code (0=success (2xx codes), 1=warning (3xx codes))
 # @references \url{http://www.w3.org/Protocols/HTTP/HTRESP.html}
 # @author Atlas of Living Australia \email{support@@ala.org.au}
@@ -16,7 +17,7 @@
 # check_status_code(out$headers$status) ## or pass the status code explicitly
 # 
 
-check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL) {
+check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL,extra_info="") {
     if (!is.null(on_redirect)) {
         assert_that(is.function(on_redirect))
     }
@@ -26,6 +27,7 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
     if (!is.null(on_client_error)) {
         assert_that(is.function(on_client_error))
     }
+    assert_that(is.string(extra_info))
     was_full_response=FALSE
     if (identical(class(x),"response")) {
         ## if this is a response object, extract the status code
@@ -54,7 +56,7 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
                     return(on_redirect(xstatus))
                 } else {
                     ## just issue a warning for now
-                    warning("ALA4R: HTTP status code ",xstatus," received. If there are problems, please notify the package maintainers.")
+                    warning("ALA4R: HTTP status code ",xstatus," received.\nIf there are problems, please notify the package maintainers.")
                     return(1)
                 }
             },
@@ -64,23 +66,39 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
                 if (! is.null(on_client_error)) {
                     return(on_client_error(xstatus))
                 } else {
-                    stop("ALA4R: HTTP status code ",xstatus," received. This may indicate an error in the ALA4R package.")
+                    diag_msg="  Either there was an error with your request, an error in the ALA4R package."
+                    if (was_full_response) {
+                        x=jsonlite::fromJSON(content(x,type="text"))
+                cat(x$message)
+                        if (!is.null(x$message)) {
+                            diag_msg=paste(diag_msg,"\nThe error message was:",x$message,sep=" ")
+                        }
+                    } else {
+                        if (nchar(extra_info)>0) {
+                            diag_msg=paste(diag_msg,"\n  Some additional diagnostic information that might help:",extra_info,sep=" ")
+                        }
+                    }
+                    stop("ALA4R: HTTP status code ",xstatus," received.\n",diag_msg)
                 }
             },
             "5"={ ## 5xx are server errors
                 if (! is.null(on_server_error)) {
                     return(on_server_error(xstatus))
                 } else {
-                    diag_msg="Either there was an error with the request, or the ALA service may be down (try again later)."
+                    diag_msg="  Either there was an error with the request, or the ALA service may be down (try again later)."
                     if (was_full_response) {
                         x=jsonlite::fromJSON(content(x,type="text"))
                         if (!is.null(x$message)) {
-                            diag_msg=paste(diag_msg,"The error message was: ",x$message,sep=" ")
+                            diag_msg=paste(diag_msg,"\nThe error message was:",x$message,sep=" ")
                         }
-                    }
-                    stop("ALA4R: HTTP status code ",xstatus," received. ",diag_msg)
+                    } else {
+                        if (nchar(extra_info)>0) {
+                            diag_msg=paste(diag_msg,"\n  Some additional diagnostic information that might help:",extra_info,sep=" ")
+                        }
+                    }                        
+                    stop("ALA4R: HTTP status code ",xstatus," received.\n",diag_msg)
                 }
             }
         )
-    warning("ALA4R: unexpected HTTP status code ",x," received. If there are problems, please notify the package maintainers.")
+    warning("ALA4R: unexpected HTTP status code ",x," received.\n  If there are problems, please notify the package maintainers.")
 }
