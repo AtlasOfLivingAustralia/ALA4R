@@ -9,7 +9,7 @@ Currently in a very preliminary state: everything is liable to change.
 Binaries are available from RForge for easy installation in R. Install the dependencies first:
 
 ```{r}
-install.packages(c("httr","stringr","plyr","digest","RCurl","rgeos","jsonlite","assertthat"))
+install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat"))
 ```
 
 Then the ALA4R package itself:
