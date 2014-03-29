@@ -4,21 +4,44 @@ This project enables the R community to directly access data and resources hoste
 
 ## Installing
 
-First, install some packages from CRAN that are required by our package (CRAN is a network of ftp and web servers around the world that store identical, up-to-date, versions of code and documentation for R):
+### Windows
 
+First, install some packages from CRAN that are required by our package (CRAN is a network of ftp and web servers around the world that store identical, up-to-date, versions of code and documentation for R):
 ```{r eval=FALSE}
-install.packages(c("httr","stringr","plyr","digest","RCurl","rgeos","jsonlite"))
+install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat"))
 ```
 
-Then install the ALA4R package itself from the precompiled binaries provided on RForge:
+If you wish to use the `sp` package for spatial data (optional), also do:
+```{r eval=FALSE}
+install.packages(c("sp"))
+```
+
+Then install the ALA4R package itself from RForge:
+```{r eval=FALSE}
+install.packages("ALA4R",repos="http://rforge.net/",type="source")
+```
+
+### Linux
+
+First, ensure that `libcurl` is installed on your system --- e.g. on Ubuntu, open a terminal and do:
+```
+sudo apt-get install libcurl4-openssl-dev
+```
+
+or install `libcurl4-openssl-dev` via the Software Centre.
+
+Then, fire up R and install the dependencies that we need:
+```{r eval=FALSE}
+install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat"))
+```
+
+Then the ALA4R package itself:
 ```{r eval=FALSE}
 install.packages("ALA4R",repos="http://rforge.net/")
 ```
 
-Windows users may need to install from source, if binary packages are not available:
-```{r eval=FALSE}
-install.packages("ALA4R",repos="http://rforge.net/",type="source")
-```
+
+## Using
 
 The ALA4R package must be loaded for each new R session:
 
