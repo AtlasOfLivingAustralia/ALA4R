@@ -54,7 +54,7 @@ ala_config=function(...) {
         )
     user_agent_string=paste("ALA4R ",version_string," (",R.Version()$version.string,"/",R.Version()$platform,")",sep="")
 
-    default_options=list(caching="on",cache_directory=tempdir(),user_agent=user_agent_string,download_reason_id=NA,verbose=FALSE,base_url_spatial="http://spatial.ala.org.au/ws/",base_url_bie="http://bie.ala.org.au/ws/",base_url_biocache="http://biocache.ala.org.au/ws/")
+    default_options=list(caching="on",cache_directory=tempdir(),user_agent=user_agent_string,download_reason_id=NA,verbose=FALSE,base_url_spatial="http://spatial.ala.org.au/ws/",base_url_bie="http://bie.ala.org.au/ws/",base_url_biocache="http://biocache.ala.org.au/ws/",base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/")
     ## caching can be "on" (results will be cached, and any cached results will be re-used), "refresh" (cached results will be refreshed and the new results stored in the cache), or "off"
     ## cache_directory is the directory to use for the cache. By default this is a temporary directory, which means that results will only be cached within an R session. The user may wish to set this to a non-temporary directory for caching across sessions
 
