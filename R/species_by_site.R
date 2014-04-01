@@ -1,16 +1,13 @@
-#' species by site
-#' 
+#' Species by site
+#'
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' 
-#' @param taxon text: the identifier to get the species data from the ala biocache. E.g. “genus:Macropus”.
-#' @param wkt text: Bounding area in Well Known Text (WKT) format. E.g. “POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))”.
+#' @param taxon text: the identifier to get the species data from the ala biocache. E.g. "genus:Macropus".
+#' @param wkt text: Bounding area in Well Known Text (WKT) format. E.g. "POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))".
 #' @param gridsize numeric: size of output grid cells in decimal degrees. E.g. "0.1"
 #' @param SPdata.frame boolean value defining if the output should be returned as a SpatialPointsDataFrame of the sp package.
 #' @param verbose boolean value defining how much progress information to display; default is set by ala_config().
 #' @return A dataframe or a SpatialPointsDataFrame containing the species by sites data.... 
-#' 
-#' TODO Lee to add dataframe output specifications
-#' TODO need way to better check input species query
 #'
 #' @examples
 #' \dontrun{
@@ -18,6 +15,10 @@
 #' tt = species_by_site(taxon='genus:Macropus',wkt = 'POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))',gridsize=0.1,verbose=TRUE)
 #' head(tt)
 #' }
+
+# TODO Lee to add dataframe output specifications
+# TODO need way to better check input species query
+#TODO precheck of taxon 
 
 #' @export
 species_by_site = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala_config()$verbose) {
@@ -41,7 +42,7 @@ species_by_site = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala
 	###setup the key query
 	base_url = ala_config()$base_url_alaspatial #get the base url
 	url_str = paste(base_url,'sitesbyspecies?speciesq=',taxon,'&qname=data',sep='') #setup the base url string 
-	url_str = paste(url_str,'&area=',WKT,sep='') #append the area info
+	url_str = paste(url_str,'&area=',wkt,sep='') #append the area info
 	url_str = paste(url_str,'&bs=',ala_config()$base_url_biocache,sep='') # append hte biocache URL string
 	url_str = paste(url_str,'&movingaveragesize=1',sep='') #append hte moving window average value
 	url_str = paste(url_str,'&gridsize=',gridsize,sep='') #append hte grid size

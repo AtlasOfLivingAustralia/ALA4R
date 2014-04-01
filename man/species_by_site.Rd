@@ -1,11 +1,18 @@
 \name{species_by_site}
 \alias{species_by_site}
-\title{species by site}
+\title{Species by site}
 \usage{
 species_by_site(taxon, wkt, gridsize = 0.1, SPdata.frame = FALSE,
   verbose = ala_config()$verbose)
 }
 \arguments{
+  \item{taxon}{text: the identifier to get the species data
+  from the ala biocache. E.g. "genus:Macropus".}
+
+  \item{wkt}{text: Bounding area in Well Known Text (WKT)
+  format. E.g. "POLYGON((118 -30,146 -30,146 -11,118
+  -11,118 -30))".}
+
   \item{gridsize}{numeric: size of output grid cells in
   decimal degrees. E.g. "0.1"}
 
@@ -19,12 +26,9 @@ species_by_site(taxon, wkt, gridsize = 0.1, SPdata.frame = FALSE,
 \value{
 A dataframe or a SpatialPointsDataFrame containing the
 species by sites data....
-
-TODO Lee to add dataframe output specifications TODO need
-way to better check input species query
 }
 \description{
-species by site
+Species by site
 }
 \examples{
 \dontrun{
