@@ -13,8 +13,11 @@ species_by_site(taxon, wkt, gridsize = 0.1, SPdata.frame = FALSE,
   format. E.g. "POLYGON((118 -30,146 -30,146 -11,118
   -11,118 -30))".}
 
-  \item{gridsize}{numeric: size of output grid cells in
-  decimal degrees. E.g. "0.1"}
+  \item{gridsize}{numeric: size of outputtt =
+  species_by_site(taxon='genus:Macropus',wkt =
+  'POLYGON((118 -30,146 -30,146 -11,118 -11,118
+  -30))',gridsize=0.1,verbose=TRUE) grid cells in decimal
+  degrees. E.g. "0.1" (=~10km)}
 
   \item{SPdata.frame}{boolean value defining if the output
   should be returned as a SpatialPointsDataFrame of the sp
@@ -39,5 +42,12 @@ head(tt)
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
+}
+\references{
+\url{http://api.ala.org.au/ws}
+
+\url{http://spatial.ala.org.au/ws}
+
+\url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 }
 

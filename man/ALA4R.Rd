@@ -17,6 +17,15 @@ Atlas of Living Australia \email{support@ala.org.au}, Ben
 Raymond, Jeremy VanDerWal, Lee Belbin
 }
 \references{
-\url{http://api.ala.org.au/}
+\url{http://api.ala.org.au/ws} Currently, not all services
+of the following pages had been moved to api.ala.org.au The
+following web service reference pages are therefore added
+for completeness.
+
+\url{http://bie.ala.org.au/ws}
+
+\url{http://biocache.la.org.au/ws}
+
+\url{http://spatial.ala.org.au/ws}
 }
 

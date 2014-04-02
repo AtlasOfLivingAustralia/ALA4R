@@ -4,7 +4,7 @@
 #' 
 #' @references \url{http://api.ala.org.au/ws}
 #' @references \url{http://spatial.ala.org.au/ws}
-#' @referencec \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
+#' @references \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' 
 #' @param taxon text: the identifier to get the species data from the ala biocache. E.g. "genus:Macropus".
 #' @param wkt text: Bounding area in Well Known Text (WKT) format. E.g. "POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))".
