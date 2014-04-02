@@ -69,7 +69,6 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
                     diag_msg="  Either there was an error with your request, or an error in the ALA4R package."
                     if (was_full_response) {
                         x=jsonlite::fromJSON(content(x,type="text"))
-                cat(x$message)
                         if (!is.null(x$message)) {
                             diag_msg=paste(diag_msg,"\nThe error message was:",x$message,sep=" ")
                         }
