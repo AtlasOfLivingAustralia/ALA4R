@@ -24,7 +24,7 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
     assert_that(is.flag(verbose))
 
     ## strip newlines or multiple spaces from url: these seem to cause unexpected behaviour
-    url=str_replace_all(url_str,"[\r\n ]+"," ")
+    url=str_replace_all(url,"[\r\n ]+"," ")
     
     if (identical(caching,"off") && !identical(type,"filename")) {
         ## if we are not caching, get this directly without saving to file at all
