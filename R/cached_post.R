@@ -63,7 +63,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
                     try(diag_message <- jsonlite::fromJSON(temp)$message, silent=TRUE)
                     if (is.null(diag_message)) { diag_message="" }
                 }
-             #   unlink(thisfile)
+                unlink(thisfile)
             }            
             check_status_code(h$value()[["status"]])
         } else {
