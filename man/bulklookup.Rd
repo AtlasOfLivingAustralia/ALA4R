@@ -9,7 +9,7 @@ bulklookup(taxa = c(), vernacular = FALSE)
 
   \item{vernacular}{logical: if TRUE, match on common names
   as well as scientific names, otherwise match only on
-  scientific names [NOT CURRENTLY IMPLEMENTED]}
+  scientific names}
 }
 \value{
 A data frame of results

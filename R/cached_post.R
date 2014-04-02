@@ -28,6 +28,9 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
     caching=match.arg(tolower(caching),c("on","off","refresh"))
     assert_that(is.flag(verbose))
 
+    ## strip newlines or multiple spaces from url: these seem to cause unexpected behaviour
+    url=str_replace_all(url,"[\r\n ]+"," ")
+    
     if (identical(caching,"off") && !identical(type,"filename")) {
         ## if we are not caching, retrieve our page directly without saving to file at all
         if (verbose) { cat(sprintf("  ALA4R: POSTing URL %s",url)) }
@@ -60,7 +63,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
                     try(diag_message <- jsonlite::fromJSON(temp)$message, silent=TRUE)
                     if (is.null(diag_message)) { diag_message="" }
                 }
-             #   unlink(thisfile)
+                unlink(thisfile)
             }            
             check_status_code(h$value()[["status"]])
         } else {
