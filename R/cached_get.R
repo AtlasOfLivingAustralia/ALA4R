@@ -20,7 +20,7 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
     assert_that(is.string(type))
     type=match.arg(tolower(type),c("text","json","filename"))
     assert_that(is.string(caching))
-    caching=match.arg(tolower(caching),c("on","off"))
+    caching=match.arg(tolower(caching),c("on","off","refresh"))
     assert_that(is.flag(verbose))
     
     if (identical(caching,"off") && !identical(type,"filename")) {
