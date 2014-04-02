@@ -25,7 +25,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
     assert_that(is.string(type))
     type=match.arg(tolower(type),c("text","json","filename"))
     assert_that(is.string(caching))
-    caching=match.arg(tolower(caching),c("on","off"))
+    caching=match.arg(tolower(caching),c("on","off","refresh"))
     assert_that(is.flag(verbose))
 
     if (identical(caching,"off") && !identical(type,"filename")) {
@@ -51,10 +51,17 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
             curlPerform(url=url,postfields=body,post=1L,writedata=f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,httpheader=c("Content-Type" = "application/json"),...)
             close(f)
             ## check http status here
-            ## if unsuccessful, delete the file from the cache first
+            ## if unsuccessful, delete the file from the cache first, after checking if there's any useful info in the file body
+            diag_message=""
             if ((substr(h$value()[["status"]],1,1)=="5") || (substr(h$value()[["status"]],1,1)=="4")) {
-                unlink(thisfile)
-            }
+                if (as.numeric(h$value()["Content-Length"])<10000) {
+                    ## if the file body is not too big, check to see if there's any useful diagnostic info in it
+                    temp=readLines(thisfile)
+                    try(diag_message <- jsonlite::fromJSON(temp)$message, silent=TRUE)
+                    if (is.null(diag_message)) { diag_message="" }
+                }
+             #   unlink(thisfile)
+            }            
             check_status_code(h$value()[["status"]])
         } else {
             if (verbose) { cat(sprintf("  ALA4R: using cached file %s for POST to %s\n",thisfile,url)) }
