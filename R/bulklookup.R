@@ -1,27 +1,22 @@
-#' Bulk lookup of taxonomic names: Provides GUID, taxonomic classification, and other information 
-#' for a list of species names. Fuzzy matching is used to find the best match for each supplied name, 
-#' which may be a partial or incorrectly spelled name
+#' Bulk lookup of taxonomic names
 #' 
+#' Provides GUID, taxonomic classification, and other information for a list of names. Case-insensitive but otherwise exact matches are used.
+#' 
+#' 
+#' @param taxa string: a single name or vector of names
+#' @param vernacular logical: if TRUE, match on common names as well as scientific names, otherwise match only on scientific names [NOT CURRENTLY IMPLEMENTED]
+#' @return A data frame of results
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
-#' 
-#' @param taxa string: a single name (string) or vector of names
-#' @return A data frame of results
-#' 
-#' TODO: This is another one where some formatting of the return would be appreciated.
-#' 
 #' @examples
-#' \dontrun{
-#' bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima"))
-#' bulklookup(c("Alaba","Eucalyptus gunnnii"))
-#' bulklookup("cider")
-#' bulklookup("fred")
-#' }
+#' 
+#' bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"))
+#' bulklookup("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
+#' bulklookup("Grevillea",vernacular=TRUE) ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
+#' 
 #' @export bulklookup
 
-## **NOTE** this function will be replaced by one using the new service, once it is deployed
-
-bulklookup=function(taxa) {
+bulklookup=function(taxa=c(),vernacular=FALSE) {
     ## input argument checks
     if (identical(class(taxa),"list")) {
         taxa=unlist(taxa)
@@ -33,14 +28,13 @@ bulklookup=function(taxa) {
     if (length(taxa)<1) {
         stop("empty input")
     }
+    assert_that(is.flag(vernacular))
     taxa = sapply(taxa,clean_string,USE.NAMES=FALSE) ## clean up the taxon name
-    base_url=paste(ala_config()$base_url_bie,"species/bulklookup.json",sep="")
-    x=cached_post(url=base_url,body=jsonlite::toJSON(taxa),type="json")
-    #if using jsonlite {
-        x=x[[1]]
-    #} else {
-    #    x=rbind.fill(lapply(content(x)[[1]],as.data.frame)) ## convert each element of content(x)[[1]] into data frame, then combine
-    #}
+    base_url=paste(ala_config()$base_url_bie,"species/lookup/bulk",sep="")
+    ##base_url="http://118.138.243.151/bie-service/ws/species/lookup/bulk" ## test server
+    temp=jsonlite::toJSON(list(names=taxa))##,vernacular=vernacular)) ## vernacular currently causing errors, wait til service fixed
+    ##temp=str_replace(temp,"[ false ]","false")
+    ##temp=str_replace(temp,"[ true ]","true")
+    x=cached_post(url=base_url,body=temp,type="json")
     x
 }
-
