@@ -2,9 +2,8 @@
 #' 
 #' Provides GUID, taxonomic classification, and other information for a list of names. Case-insensitive but otherwise exact matches are used.
 #' 
-#' 
 #' @param taxa string: a single name or vector of names
-#' @param vernacular logical: if TRUE, match on common names as well as scientific names, otherwise match only on scientific names [NOT CURRENTLY IMPLEMENTED]
+#' @param vernacular logical: if TRUE, match on common names as well as scientific names, otherwise match only on scientific names
 #' @return A data frame of results
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
@@ -31,10 +30,10 @@ bulklookup=function(taxa=c(),vernacular=FALSE) {
     assert_that(is.flag(vernacular))
     taxa = sapply(taxa,clean_string,USE.NAMES=FALSE) ## clean up the taxon name
     base_url=paste(ala_config()$base_url_bie,"species/lookup/bulk",sep="")
-    ##base_url="http://118.138.243.151/bie-service/ws/species/lookup/bulk" ## test server
-    temp=jsonlite::toJSON(list(names=taxa))##,vernacular=vernacular)) ## vernacular currently causing errors, wait til service fixed
-    ##temp=str_replace(temp,"[ false ]","false")
-    ##temp=str_replace(temp,"[ true ]","true")
+    temp=jsonlite::toJSON(list(names=taxa,vernacular=vernacular))
+    ## toJSON puts vernacular as a single-element array, which causes failures.
+    temp=str_replace(temp,"\\[[ ]*false[ ]*\\]","false")
+    temp=str_replace(temp,"\\[[ ]*true[ ]*\\]","true")
     x=cached_post(url=base_url,body=temp,type="json")
     x
 }
