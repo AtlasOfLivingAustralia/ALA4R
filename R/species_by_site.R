@@ -2,9 +2,14 @@
 #'
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' 
+#' @references \url{http://api.ala.org.au/ws}
+#' @references \url{http://spatial.ala.org.au/ws}
+#' @referencec \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
+#' 
 #' @param taxon text: the identifier to get the species data from the ala biocache. E.g. "genus:Macropus".
 #' @param wkt text: Bounding area in Well Known Text (WKT) format. E.g. "POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))".
-#' @param gridsize numeric: size of output grid cells in decimal degrees. E.g. "0.1"
+#' @param gridsize numeric: size of outputtt = species_by_site(taxon='genus:Macropus',wkt = 'POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))',gridsize=0.1,verbose=TRUE)
+#' grid cells in decimal degrees. E.g. "0.1" (=~10km)
 #' @param SPdata.frame boolean value defining if the output should be returned as a SpatialPointsDataFrame of the sp package.
 #' @param verbose boolean value defining how much progress information to display; default is set by ala_config().
 #' @return A dataframe or a SpatialPointsDataFrame containing the species by sites data.... 
@@ -18,11 +23,11 @@
 
 # TODO Lee to add dataframe output specifications
 # TODO need way to better check input species query
-#TODO precheck of taxon 
+# TODO precheck of taxon 
 
 #' @export
 species_by_site = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala_config()$verbose) {
-	###TODO data checks & add density? richness?
+	###TODO data checks
 	###todo setup output structure and class
 	###todo api movingaveragesize is unnecessary... consider removing...
 	## check input parms are sensible
