@@ -150,6 +150,5 @@ ala_reasons=function() {
     ##{"id":8,"name":"systematic research","rkey":"logger.download.reason.systematic.research"},
     ##{"id":9,"name":"other scientific research","rkey":"logger.download.reason.other.scientific.research"},
     ##{"id":10,"name":"testing","rkey":"logger.download.reason.testing"}]
-    out=cached_get("http://logger.ala.org.au/service/logger/reasons",type="json")
-    ldply(out,as.data.frame)
+    cached_get("http://logger.ala.org.au/service/logger/reasons",type="json")
 }
