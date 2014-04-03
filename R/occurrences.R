@@ -22,8 +22,8 @@
 #' \dontrun{ 
 #' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),page_size=1000)
 #' 
-#' y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude"))
-#' qv: http://biocache.ala.org.au/ws/occurrences/search?q=%22Alaba%20vibex%22&fl=latitude,longitude&facet=false&pageSize=20
+#' y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude"),page_size=20)
+#' qv: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Alaba%20vibex&pageSize=20&fields=latitude,longitude&qa=none
 #' }
 #' @export occurrences
 ## TODO: support extra params fq, startindex, etc (see API page)
