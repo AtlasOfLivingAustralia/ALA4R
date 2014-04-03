@@ -66,7 +66,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
                 }
                 unlink(thisfile)
             }            
-            check_status_code(h$value()[["status"]])
+            check_status_code(h$value()[["status"]],extra_info=diag_message)
         } else {
             if (verbose) { cat(sprintf("  ALA4R: using cached file %s for POST to %s\n",thisfile,url)) }
         }            
