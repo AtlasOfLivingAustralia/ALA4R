@@ -57,7 +57,8 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
             ## if unsuccessful, delete the file from the cache first, after checking if there's any useful info in the file body
             diag_message=""
             if ((substr(h$value()[["status"]],1,1)=="5") || (substr(h$value()[["status"]],1,1)=="4")) {
-                if (as.numeric(h$value()["Content-Length"])<10000) {
+                content_length=as.numeric(h$value()["Content-Length"])
+                if (!is.na(content_length) && content_length<10000) {
                     ## if the file body is not too big, check to see if there's any useful diagnostic info in it
                     temp=readLines(thisfile)
                     try(diag_message <- jsonlite::fromJSON(temp)$message, silent=TRUE)
