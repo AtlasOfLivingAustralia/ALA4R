@@ -1,9 +1,10 @@
 #' Retrieves a list of all field names that can be used with data retrieval functions
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
-#' @references \url{http://api.ala.org.au/}
-#' @references \url{http://spatial.ala.org.au/layers/}
-#' @references \url{http://spatial.ala.org.au/ws/layers}
+#' @references \itemize{
+#' \item ALA web service API: \url{http://api.ala.org.au/}
+#' \item Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/}
+#' }
 #' 
 #' @param fields_type text: either 
 #' "general" (for searching taxa, datasets, layers, and collections metadata), 

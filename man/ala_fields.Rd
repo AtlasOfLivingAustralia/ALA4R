@@ -46,10 +46,8 @@ field_info("el773")
 Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://api.ala.org.au/}
-
-\url{http://spatial.ala.org.au/layers/}
-
-\url{http://spatial.ala.org.au/ws/layers}
+\itemize{ \item ALA web service API:
+\url{http://api.ala.org.au/} \item Descriptions of the
+spatial layers: \url{http://spatial.ala.org.au/layers/} }
 }
 
