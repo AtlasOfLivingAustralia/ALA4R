@@ -1,3 +1,10 @@
+#'Download results to a file 
+#' 
+#' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' 
+#' @references \itemize{ \item ALA web service API: \url{http://api.ala.org.au/}
+#' TODO: Example of use?
+#' 
 download_to_file=function(url,outfile=NULL,caching=ala_config()$caching,verbose=ala_config()$verbose,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL,...) {
     assert_that(is.string(url))
     ## download from a URL using RCurl to a file
