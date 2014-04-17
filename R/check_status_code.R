@@ -2,7 +2,7 @@
 # 
 # Generic check function that checks HTTP status codes coming back from ALA requests.
 # 
-# @param x string: a status code, or an object of class "response" (from e.g. GET)
+# @param x string: a status code, or an object of class "response" (from e.g. httr's GET)
 # @param on_redirect function: optional function to evaluate in the case of a redirect (3xx) code. By default a warning is issued.
 # @param on_client_error function: optional function to evaluate in the case of a client error (4xx) code. By default an error is thrown.
 # @param on_server_error function: optional function to evaluate in the case of a server error (5xx) code. By default an error is thrown.
@@ -11,11 +11,12 @@
 # @references \url{http://www.w3.org/Protocols/HTTP/HTRESP.html}
 # @author Atlas of Living Australia \email{support@@ala.org.au}
 # @examples
-#
+# \dontrun{
+# require(httr)
 # out = GET(url="http://www.ala.org.au/")
 # check_status_code(out) ## pass the whole response object
 # check_status_code(out$headers$status) ## or pass the status code explicitly
-# 
+# }
 
 check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL,extra_info="") {
     if (!is.null(on_redirect)) {
