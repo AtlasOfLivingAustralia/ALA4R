@@ -13,10 +13,8 @@
 # @references \url{http://api.ala.org.au/}
 # @examples
 #
-# # production server (this service not running at the time of writing - see test server example below)
-# # out = cached_post(url="http://biocache.ala.org.au/ws/species/lookup/bulk",body=jsonlite::toJSON(list(names=c("Macropus rufus","Grevillea"))),type="json")
-# # test server
-# out = cached_post(url="http://118.138.243.151/bie-service/ws/species/lookup/bulk",body=jsonlite::toJSON(list(names=c("Macropus rufus","Bilbo baggins"))),type="json")
+# out = cached_post(url="http://bie.ala.org.au/ws/species/lookup/bulk",body=jsonlite::toJSON(list(names=c("Macropus rufus","Grevillea"))),type="json")
+# out = cached_post(url="http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Macropus&qname=Macropus&area=POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))&bs=http://biocache.ala.org.au/ws&gridsize=0.1&movingaveragesize=9&sitesbyspecies=1",body="")
 
 
 cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,...) {
@@ -34,7 +32,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
     if (identical(caching,"off") && !identical(type,"filename")) {
         ## if we are not caching, retrieve our page directly without saving to file at all
         if (verbose) { cat(sprintf("  ALA4R: POSTing URL %s",url)) }
-        x=POST(url=url,body=body,user_agent(ala_config()$user_agent))
+        x=POST(url=URLencode(url),body=body,user_agent(ala_config()$user_agent))
         check_status_code(x)
         x=content(x,as="text")
         if (identical(type,"json")) {
@@ -51,7 +49,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
             if (verbose) { cat(sprintf("  ALA4R: caching %s POST to file %s\n",url,thisfile)) }
             f = CFILE(thisfile, mode="w")
             h=basicHeaderGatherer()
-            curlPerform(url=url,postfields=body,post=1L,writedata=f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,httpheader=c("Content-Type" = "application/json"),...)
+            curlPerform(url=URLencode(url),postfields=body,post=1L,writedata=f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,httpheader=c("Content-Type" = "application/json"),...)
             close(f)
             ## check http status here
             ## if unsuccessful, delete the file from the cache first, after checking if there's any useful info in the file body
