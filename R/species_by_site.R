@@ -56,7 +56,7 @@ species_by_site = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala
 	
 	this_cache_file=ala_cache_filename(url_str) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
 	if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(this_cache_file))) {
-		pid = cached_post(url_str,'',caching='off') #should simply return a pid
+		pid = cached_post(URLencode(url_str),'',caching='off') #should simply return a pid
 		if (pid=="") { stop("there has been an issue with this service. Please try again but if the issue persists, contact support@@ala.org.au") } #catch for these missing pid issues
 		status_url = paste('http://spatial.ala.org.au/alaspatial/ws/job?pid=',pid,sep='')
 		status=cached_get(status_url,type="json",caching="off")#get the data url
