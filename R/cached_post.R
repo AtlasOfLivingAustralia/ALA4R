@@ -32,7 +32,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
     if (identical(caching,"off") && !identical(type,"filename")) {
         ## if we are not caching, retrieve our page directly without saving to file at all
         if (verbose) { cat(sprintf("  ALA4R: POSTing URL %s",url)) }
-        x=POST(url=URLencode(url),body=body,user_agent(ala_config()$user_agent))
+        x=POST(url=url,body=body,user_agent(ala_config()$user_agent))
         check_status_code(x)
         x=content(x,as="text")
         if (identical(type,"json")) {
@@ -49,7 +49,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
             if (verbose) { cat(sprintf("  ALA4R: caching %s POST to file %s\n",url,thisfile)) }
             f = CFILE(thisfile, mode="w")
             h=basicHeaderGatherer()
-            curlPerform(url=URLencode(url),postfields=body,post=1L,writedata=f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,httpheader=c("Content-Type" = "application/json"),...)
+            curlPerform(url=url,postfields=body,post=1L,writedata=f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,httpheader=c("Content-Type" = "application/json"),...)
             close(f)
             ## check http status here
             ## if unsuccessful, delete the file from the cache first, after checking if there's any useful info in the file body

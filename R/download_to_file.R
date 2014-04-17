@@ -28,7 +28,7 @@ download_to_file=function(url,outfile=NULL,caching=ala_config()$caching,verbose=
         ## either we are not using caching, or we want to refresh the cache, or the file doesn't exist in the cache
         f = CFILE(outfile, mode="w")
         h=basicHeaderGatherer()
-        curlPerform(url=URLencode(url),writedata = f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,...) ## can pass verbose=TRUE here for debug info if needed
+        curlPerform(url=url,writedata = f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,...) ## can pass verbose=TRUE here for debug info if needed
         close(f)
         ## check http status here
         ## if unsuccessful, delete the file from the cache first, after checking if there's any useful info in the file body
@@ -37,7 +37,7 @@ download_to_file=function(url,outfile=NULL,caching=ala_config()$caching,verbose=
             content_length=as.numeric(h$value()["Content-Length"])
             if (!is.na(content_length) && content_length<10000) {
                 ## if the file body is not too big, check to see if there's any useful diagnostic info in it
-                diag_message=get_diag_message(readLines(thisfile))
+                diag_message=get_diag_message(readLines(outfile))
             }
             unlink(outfile)
         }
