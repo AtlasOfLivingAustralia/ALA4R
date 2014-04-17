@@ -1,10 +1,10 @@
-#'Download results to a file 
-#' 
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
-#' 
-#' @references \itemize{ \item ALA web service API: \url{http://api.ala.org.au/}
-#' TODO: Example of use?
-#' 
+# Internal function used to download results to a file 
+# 
+# @author Atlas of Living Australia \email{support@@ala.org.au}
+# 
+# @references \itemize{ \item ALA web service API: \url{http://api.ala.org.au/}
+
+
 download_to_file=function(url,outfile=NULL,caching=ala_config()$caching,verbose=ala_config()$verbose,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL,...) {
     assert_that(is.string(url))
     ## download from a URL using RCurl to a file
@@ -37,9 +37,7 @@ download_to_file=function(url,outfile=NULL,caching=ala_config()$caching,verbose=
             content_length=as.numeric(h$value()["Content-Length"])
             if (!is.na(content_length) && content_length<10000) {
                 ## if the file body is not too big, check to see if there's any useful diagnostic info in it
-                temp=readLines(outfile)
-                try(diag_message <- jsonlite::fromJSON(temp)$message, silent=TRUE)
-                if (is.null(diag_message)) { diag_message="" }
+                diag_message=get_diag_message(readLines(thisfile))
             }
             unlink(outfile)
         }
@@ -49,4 +47,12 @@ download_to_file=function(url,outfile=NULL,caching=ala_config()$caching,verbose=
         if (verbose) { cat(sprintf("  ALA4R: using cached file %s for %s\n",outfile,url)) }
     }
     outfile
+}
+
+get_diag_message=function(thing) {
+    ## attempt to extract message field from JSON-encoded thing
+    diag_message=""
+    try(diag_message <- jsonlite::fromJSON(thing)$message, silent=TRUE)
+    if (is.null(diag_message)) { diag_message="" }
+    diag_message
 }
