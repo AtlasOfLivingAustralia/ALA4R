@@ -26,7 +26,7 @@ TODO: Summary of #fields returned. We are using "layers"
 here but "fields" in intersect. ids from
 http://spatial.ala.org.au/ws/layers are NUMERIC but lookup
 prepends "el" and "cl"! Improve error return on invalid ids
-(eg "cl680")
+(eg "field_info("cl680"))
 }
 \description{
 Retrieves a list of all field names that can be used with
@@ -35,9 +35,9 @@ data retrieval functions
 \examples{
 \dontrun{
 o=ala_fields("occurrence")
-    o[1:2]
+o[1:2]
 l=ala_fields("layers")
-    l[1,]
+l[1,]
 field_info("cl22")
 field_info("el773")
 }

@@ -35,11 +35,12 @@ web service
 }
 \examples{
 \dontrun{
-x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"))
-x=occurrences(taxon="data_resource_uid:dr356")
+x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),download_reason_id=10)
+x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10)
 
-y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude"))
+y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude"),download_reason_id=10)
 qv: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Alaba\%20vibex&fields=latitude,longitude&qa=none
+qv: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Eucalyptus\%20gunnii&fields=latitude,longitude&qa=none&fq=basis_of_record:LivingSpecimen
 }
 }
 \author{
