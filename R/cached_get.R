@@ -18,7 +18,7 @@
 cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL) {
     assert_that(is.string(url))
     assert_that(is.string(type))
-    type=match.arg(tolower(type),c("text","json","filename"))
+    type=match.arg(tolower(type),c("text","json","filename","binary_filename"))
     assert_that(is.string(caching))
     caching=match.arg(tolower(caching),c("on","off","refresh"))
     assert_that(is.flag(verbose))
@@ -26,9 +26,9 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
     ## strip newlines or multiple spaces from url: these seem to cause unexpected behaviour
     url=str_replace_all(url,"[\r\n ]+"," ")
     
-    if (identical(caching,"off") && !identical(type,"filename")) {
+    if (identical(caching,"off") && !(type %in% c("filename","binary_filename"))) {
         ## if we are not caching, get this directly without saving to file at all
-        if (verbose) { cat(sprintf("  ALA4R: GETting URL %s",url)) }
+        if (verbose) { cat(sprintf("  ALA4R: GETting URL %s\n",url)) }
         x=GET(url=url,user_agent(ala_config()$user_agent))
         check_status_code(x,on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error)
         x=content(x,as="text")
@@ -38,7 +38,7 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
         x
     } else {
         ## use caching
-        thisfile=download_to_file(url,on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error)
+        thisfile=download_to_file(url,binary_file=identical(type,"binary_filename"),on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error)
         if (!file.exists(thisfile)) {
             ## file does not exist
             NULL
@@ -57,7 +57,7 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
                         out
                     }
                 }
-            } else if (identical(type,"filename")) {
+            } else if (type %in% c("filename","binary_filename")) {
                 thisfile
             } else {
                 ## should not be here! did we add an allowed type to the arguments without adding handler code down here?

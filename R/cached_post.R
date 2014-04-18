@@ -21,7 +21,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
     assert_that(is.string(url))
     assert_that(is.string(body))
     assert_that(is.string(type))
-    type=match.arg(tolower(type),c("text","json","filename"))
+    type=match.arg(tolower(type),c("text","json","filename","binary_filename"))
     assert_that(is.string(caching))
     caching=match.arg(tolower(caching),c("on","off","refresh"))
     assert_that(is.flag(verbose))
@@ -29,9 +29,9 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
     ## strip newlines or multiple spaces from url: these seem to cause unexpected behaviour
     url=str_replace_all(url,"[\r\n ]+"," ")
     
-    if (identical(caching,"off") && !identical(type,"filename")) {
+    if (identical(caching,"off") && !(type %in% c("filename","binary_filename"))) {
         ## if we are not caching, retrieve our page directly without saving to file at all
-        if (verbose) { cat(sprintf("  ALA4R: POSTing URL %s",url)) }
+        if (verbose) { cat(sprintf("  ALA4R: POSTing URL %s\n",url)) }
         x=POST(url=url,body=body,user_agent(ala_config()$user_agent))
         check_status_code(x)
         x=content(x,as="text")
@@ -47,7 +47,11 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
         if ((caching %in% c("refresh")) || (! file.exists(thisfile))) {
             ## file does not exist, or we want to refresh it, so go ahead and get it and save to thisfile
             if (verbose) { cat(sprintf("  ALA4R: caching %s POST to file %s\n",url,thisfile)) }
-            f = CFILE(thisfile, mode="w")
+            file_mode="w" ## text mode
+            if (identical(type,"binary_filename")) {
+                file_mode="wb" ## if we try and download binary files without this, it will fail (but only on Windows)
+            }
+            f=CFILE(thisfile, mode=file_mode)
             h=basicHeaderGatherer()
             curlPerform(url=url,postfields=body,post=1L,writedata=f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,httpheader=c("Content-Type" = "application/json"),...)
             close(f)
@@ -56,7 +60,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
             diag_message=""
             if ((substr(h$value()[["status"]],1,1)=="5") || (substr(h$value()[["status"]],1,1)=="4")) {
                 content_length=as.numeric(h$value()["Content-Length"])
-                if (!is.na(content_length) && content_length<10000) {
+                if (!is.na(content_length) && content_length<10000 && !identical(type,"binary_filename")) {
                     ## if the file body is not too big, check to see if there's any useful diagnostic info in it
                     temp=readLines(thisfile)
                     try(diag_message <- jsonlite::fromJSON(temp)$message, silent=TRUE)
@@ -82,7 +86,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
                     out
                 }
             }
-        } else if (identical(type,"filename")) {
+        } else if (type %in% c("filename","binary_filename")) {
             thisfile
         } else {
             ## should not be here! did we add an allowed type to the arguments without adding handler code down here?

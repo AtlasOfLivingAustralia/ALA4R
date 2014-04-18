@@ -138,7 +138,7 @@ occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$
     this_url$query=this_query
   
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
-    thisfile=cached_get(url=build_url(this_url),type="filename")
+    thisfile=cached_get(url=build_url(this_url),type="binary_filename")
     if (!(file.info(thisfile)$size>0)) {
         ## empty file
         x=NULL

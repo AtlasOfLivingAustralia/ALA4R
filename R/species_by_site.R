@@ -65,7 +65,7 @@ species_by_site = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala
 			if (status$state=='FAILED') { stop(status$message) } #stop if there was an error
 			Sys.sleep(2)
 		}; cat('\n')
-		download_to_file(paste('http://spatial.ala.org.au/alaspatial/ws/download/',pid,sep=''),outfile=this_cache_file)
+		download_to_file(paste('http://spatial.ala.org.au/alaspatial/ws/download/',pid,sep=''),outfile=this_cache_file,binary_file=TRUE)
 	} else {
 		## we are using the existing cached file
 		if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }

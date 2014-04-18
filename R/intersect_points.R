@@ -77,7 +77,7 @@ intersect_points = function(pnts,fids,SPdata.frame=FALSE,verbose=ala_config()$ve
 				Sys.sleep(5)
 				data_url=cached_get(status_url,type="json",caching="off") #get the data url
 			}
-			download_to_file(data_url$downloadUrl,outfile=this_cache_file)
+			download_to_file(data_url$downloadUrl,outfile=this_cache_file,binary_file=TRUE)
 		} else {
 			## we are using the existing cached file
 			if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
