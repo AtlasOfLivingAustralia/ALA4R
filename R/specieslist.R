@@ -23,6 +23,9 @@
 #' x=specieslist(wkt="POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,147.62 -42.83))",page_size=30)
 #' }
 #' @export specieslist
+
+## TODO: (As per advice from Adam): move away from webportal/species.csv to http://biocache.ala.org.au/ws/occurrences/facets/download?q=data_resource_uid:dr364&facets=species_guid&lookup=true&count=true
+
 specieslist=function(taxon="",wkt="",fq=NULL,page_size=NA) {
     ## TODO: add filtering functionality (fq parm passed in URL)
     assert_that(is.string(taxon))
