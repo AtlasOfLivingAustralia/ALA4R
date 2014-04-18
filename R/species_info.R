@@ -40,5 +40,5 @@ species_info=function(scientificname=NULL,guid=NULL,verbose=ala_config()$verbose
         guid=guid[[1]]
     }
     url=paste(ala_config()$base_url_bie,"species/",guid,".json",sep="")
-    cached_get(url,type="json",verbose=verbose)
+    cached_get(URLencode(url),type="json",verbose=verbose)
 }

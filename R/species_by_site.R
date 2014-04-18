@@ -59,7 +59,7 @@ species_by_site = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala
 		pid = cached_post(URLencode(url_str),'',caching='off') #should simply return a pid
 		if (pid=="") { stop("there has been an issue with this service. Please try again but if the issue persists, contact support@@ala.org.au") } #catch for these missing pid issues
 		status_url = paste('http://spatial.ala.org.au/alaspatial/ws/job?pid=',pid,sep='')
-		status=cached_get(status_url,type="json",caching="off")#get the data url
+		status=cached_get(URLencode(status_url),type="json",caching="off")#get the data url
 		while (status$state != "SUCCESSFUL") { if(verbose) { cat('.') } #keep checking the status until finished
 			status=cached_get(status_url,type="json",caching="off") #get the status
 			if (status$state=='FAILED') { stop(status$message) } #stop if there was an error
