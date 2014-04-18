@@ -72,17 +72,16 @@ autocomplete=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {
         warning('no matched taxa')
 		return(NULL)
     } else {
-        ##need to collapse matchednames fields if there was more than a single matched name
-        for (ii in 1:length(out)) {
-            for (jj in 1:length(out[[ii]])) {
-                if (length(out[[ii]][[jj]]) > 1) {
-                    out[[ii]][[jj]] = paste(out[[ii]][[jj]],collapse=', ')
-                }
-            }
+        ## matchedNames, commonNameMatches, and scientificNameMatches are all lists of strings
+        ## convert each list to single string
+        for (ii in 1:nrow(out)) {
+            out$matchedNames[ii]=paste(out$matchedNames[[ii]],collapse=", ")
+            out$scientificNameMatches[ii]=paste(out$scientificNameMatches[[ii]],collapse=", ")
+            out$commonNameMatches[ii]=paste(out$commonNameMatches[[ii]],collapse=", ")
         }
-        #if NOT using jsonlite
-        #    out = do.call('rbind.fill',lapply(out,function(x) {as.data.frame(rbind(x))})) #define the output as a data.frame
-        #}
+        out$matchedNames=unlist(out$matchedNames)
+        out$scientificNameMatches=unlist(out$scientificNameMatches)
+        out$commonNameMatches=unlist(out$commonNameMatches)
     }
 	class(out) <- c('autocomplete',class(out)) #add the autocomplete class
 	return(out)
