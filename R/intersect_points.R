@@ -29,6 +29,8 @@
 #' }
 #' @export
 
+#TODO: check that the URL strings here are guaranteed to be appropriately URL-encoded
+
 intersect_points = function(pnts,fids,SPdata.frame=FALSE,verbose=ala_config()$verbose) {
 	base_url=ala_config()$base_url_spatial #get the base url
 	bulk = FALSE #set the default to not bulk
@@ -63,6 +65,7 @@ intersect_points = function(pnts,fids,SPdata.frame=FALSE,verbose=ala_config()$ve
 	###download the data
 	if (bulk) { #get the results if it is a bulk request
 		url_str = paste(base_url,'intersect/batch?fids=',fids_str,'&points=',pnts_str,sep='') #define the url string
+                url_str=URLencode(url_str) ## should not be needed, but do it anyway
 		this_cache_file=ala_cache_filename(url_str) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
 		if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(this_cache_file))) {
 			## fetch the data from the server
@@ -84,6 +87,7 @@ intersect_points = function(pnts,fids,SPdata.frame=FALSE,verbose=ala_config()$ve
 		if (!is.null(checks)) warning(paste(paste(checks,collapse=', '),'are invalid field ids')) #warn user of bad field ids
 	} else { #get results if just a single location
 		url_str = paste(base_url,'intersect/',fids_str,'/',pnts_str,sep='') #define the url string
+                url_str=URLencode(url_str) ## should not be needed, but do it anyway
 		out = cached_get(url_str,type="json") #get the data
 		if (length(out)==0) stop('all field ids provided were invalid') #nothing returned if no valid IDs provided
 		tt = t(out$value); colnames(tt) = out$field 
