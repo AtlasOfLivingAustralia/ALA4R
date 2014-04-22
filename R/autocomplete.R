@@ -12,6 +12,7 @@
 #' @param idxType string: the index type to limit. Values include: TAXON REGION COLLECTION INSTITUTION DATASET
 #' @param limit numeric: the maximum number of matches returned (defaults to the server-side value - currently 10)
 #' @return A dataframe of taxa given the partial matches where columns are identified as: 
+#' \itemize{
 #' \item{guid}{} 
 #' \item{name}{} 
 #' \item{occurrenceCount}{}
@@ -20,12 +21,13 @@
 #' \item{commonNameMatches}{} 
 #' \item{commonName}{} 
 #' \item{matchedNames}{} 
-#' \item{ankId}{} 
+#' \item{rankId}{} 
 #' \item{rankString}{} 
 #' \item{left}{} 
 #' \item{right}{}
-#' 
-#' TODO: Suggest "search_species_autocomplete". 
+#' } 
+#' TODO: Suggest "search_species_autocomplete".
+#' TODO: Definitions of left,right? Are rankId, left and right needed?
 #'
 #' @examples
 #' # find information ALA holds on red kangaroo (Macropus rufus)
