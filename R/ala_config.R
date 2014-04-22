@@ -16,7 +16,8 @@
 #' within an R session. The user may wish to set this to a non-temporary directory for 
 #' caching across sessions. The directory must exist on the file system.
 #' \item verbose: should ALA4R give verbose output to assist debugging?  (logical, default=FALSE)
-#' \item user_agent: the user-agent string used with all web requests to the ALA servers.??
+#' \item user_agent: the user-agent string used with all web requests to the ALA servers.
+#' Default = "ALA4R" with version number, R version and date and user platform
 #' \item download_reason_id: the ID code of the "download reason" required by some ALA services. 
 #' By default this is NA. Some ALA services require a valid download_reason_id code, either 
 #' specified here or directly to the associated R function. 
