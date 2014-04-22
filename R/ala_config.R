@@ -7,20 +7,20 @@
 #' Invoking ala_config("reset") will reset all options to their default values.
 #' 
 #' Valid options are: \itemize{
-#' \item caching: caching can be "on" (results will
-#' be cached, and any cached results will be re-used), "refresh" (cached
-#' results will be refreshed and the new results stored in the cache), or "off"
-#' (no caching, default).
-#' \item cache_directory: the directory to use for the
-#' cache. By default this is a temporary directory, which means that results
-#' will only be cached within an R session. The user may wish to set this to a
-#' non-temporary directory for caching across sessions. The directory must
-#' exist on the file system.
-#' \item verbose: should ALA4R give verbose output to
-#' assist debugging?  (logical, default=FALSE)
-#' \item user_agent: the user-agent
-#' string used with all web requests to the ALA servers.
-#' \item download_reason_id: the ID code of the "download reason" required by some ALA services. By default this is NA. Some ALA services require a valid download_reason_id code, either specified here or directly to the associated R function. See ala_reasons() for a list of valid ID codes.
+#' \item caching: caching can be 
+#' "on" (results will be cached, and any cached results will be re-used), 
+#' "refresh" (cached results will be refreshed and the new results stored in the cache), or 
+#' "off" (no caching, default).
+#' \item cache_directory: the directory to use for the cache. 
+#' By default this is a temporary directory, which means that results will only be cached 
+#' within an R session. The user may wish to set this to a non-temporary directory for 
+#' caching across sessions. The directory must exist on the file system.
+#' \item verbose: should ALA4R give verbose output to assist debugging?  (logical, default=FALSE)
+#' \item user_agent: the user-agent string used with all web requests to the ALA servers.??
+#' \item download_reason_id: the ID code of the "download reason" required by some ALA services. 
+#' By default this is NA. Some ALA services require a valid download_reason_id code, either 
+#' specified here or directly to the associated R function. 
+#' See ala_reasons() for a list of valid ID codes.
 #' \item base_url_spatial: the base url for spatial web services (default="http://spatial.ala.org.au/ws/")
 #' \item base_url_bie: the base url for BIE web services (default="http://bie.ala.org.au/ws/")
 #' \item base_url_biocache: the base url for biocache web services (default="http://biocache.ala.org.au/ws/")
@@ -39,8 +39,11 @@
 #' ala_config(caching="off")
 #' ala_reasons()
 #' ala_config(download_reason_id="9")
+#' ala_config(verbose=TRUE)
+#' ala_config(base_url_biocache="http://biocache.ala.org.au/ws/")
 #' 
 #' @export ala_config
+#' 
 ala_config=function(...) {
     ## get or set options that control ALA4R behaviour
     ## options are stored as a global option with the name defined in ala_option_name
