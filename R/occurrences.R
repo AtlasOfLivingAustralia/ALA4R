@@ -14,6 +14,7 @@
 #' are not guaranteed to retain the ordering of the field names given here. 
 #' See ALA4R funtion ala_fields("occurrence") for valid field names.
 #' @param download_reason_id integer: a reason code for the download. See ala_reasons() for valid values. The download_reason_id can be passed directly to this function, or alternatively set using ala_config(download_reason_id=...)
+#' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails, or use_data_table is FALSE, then read.table will be used (which may be slow)
 #' 
 #' @return Data frame
 #' 
@@ -29,12 +30,10 @@
 #' }
 #' @export occurrences
 
-## note: this is a very sketchy first implementation of the new download API
-## currently using the TEST SERVER
-
+## TODO: more extensive testing, particularly of the csv-conversion process
 ## TODO: support extra params fq, startindex, etc (see API page)
 ## fq can query any field from http://biocache.ala.org.au/ws/index/fields, i.e. ala_fields("occurrence")
-## TODO: better error message for unfound taxon.
+## TODO: better error message for unfound taxon - now issues the warning "no matching records were returned"
 ## TODO: Parsing csv remains an issue on Windows
 
 
@@ -83,7 +82,7 @@
 ##qa	String	
 ##A CSV list of record issues to include in the download. See assertions for possible values to include. When no value is supplied all the record issues are included. To include NO record issues set this value to none.
 
-occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$download_reason_id) {
+occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$download_reason_id,use_data_table=TRUE) {
     ## check input parms are sensible
     reason_ok=!is.na(download_reason_id)
     if (reason_ok) {
@@ -99,8 +98,8 @@ occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$
     assert_that(is.string(wkt))
   
     #taxon = clean_string(taxon) ## clean up the taxon name # no - because this can be an indexed query like field1:value1
-    #base_url=paste(ala_config()$base_url_biocache,"occurrences/index/download",sep="")
-    base_url="http://biocache-test.ala.org.au/ws/occurrences/index/download" ## until new changes get propagated to live server
+    base_url=paste(ala_config()$base_url_biocache,"occurrences/index/download",sep="")
+    #base_url="http://biocache-test.ala.org.au/ws/occurrences/index/download" ## until new changes get propagated to live server
     
   
     this_query=list()
@@ -134,6 +133,7 @@ occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$
     }
     this_query$reasonTypeId=download_reason_id
     this_query$esc="\\" ## force backslash-escaping of quotes rather than double-quote escaping
+    this_query$sep="\t" ## tab-delimited
     
     this_url=parse_url(base_url)
     this_url$query=this_query
@@ -144,31 +144,42 @@ occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$
         ## empty file
         x=NULL
     } else {
-        x=read.table(unz(thisfile,filename="data.csv"),sep=",",header=TRUE,comment.char="",as.is=TRUE)
-        ## this is very slow. I'd like to use e.g. data.table with the line below, but the embedded quotes are double-quote escaped rather than backslash-escaped
-        ##xdt=fread("../../temp/data.csv",sep=",",stringsAsFactors=FALSE,header=TRUE,verbose=ala_config()$verbose)
-        ## use read.table for now, until those issues are resolved
-        
-        ##Taxon.identification.issue has embedded quotes, e.g. "[""noIssue""]"
-        
-        ## also read the citation info
-        ##xc=read.table(unz(thisfile,"citation.csv"),sep=",",header=TRUE,comment.char="",as.is=TRUE)
-        ## nope, that doesn't work because there are line breaks WITHIN text field values
-        ##fid=unz(thisfile,filename="citation.csv",open="rt")
-        ##suppressWarnings(xc<-scan(fid,what="character",sep=NULL,quiet=TRUE,allowEscapes=TRUE)) ## suppress warnings here, otherwise we get warnings about newlines being embedded within quoted string. Would be better to be more selective about the warnings we are suppressing, or use a method that does not throw such a warning
-        ## nope, that gets confused by newline chars
-        ## note that citation.csv won't exist if there was no data in the download: need to check that it exists or wrap this in e.g. tryCatch
-        fid=unz(thisfile,filename="citation.csv",open="rt")
-        xc=readChar(fid,nchars=1e6)        
-        close(fid)
+        ## if data.table is available, first try using this
+        read_ok=FALSE
+        if (is.element('data.table', installed.packages()[,1])) { ## if data.table package is available
+            require(data.table) ## load it
+            tryCatch({
+                ## first need to extract data.csv from the zip file
+                tempsubdir=tempfile(pattern="dir")
+                dir.create(tempsubdir)
+                unzip(thisfile,files=c("data.csv"),junkpaths=TRUE,exdir=tempsubdir)
+                x=fread(file.path(tempsubdir,"data.csv"),stringsAsFactors=FALSE,header=TRUE,verbose=ala_config()$verbose)
+                ## make sure names of x are valid, as per data.table
+                setnames(x,make.names(names(x)))
+                ## now coerce it back to data.frame (for now at least, unless we decide to not do this!)
+                x=as.data.frame(x)
+                read_ok=TRUE
+            }, error=function(e) {
+                warning("ALA4R: reading of csv as data.table failed, will fall back to read.table (may be slow). The error message was: ",e)
+                read_ok=FALSE
+            })
+        }
+        if (!read_ok) {
+            x=read.table(unz(thisfile,filename="data.csv"),header=TRUE,comment.char="",as.is=TRUE)
+        }
 
-        #fid=unz(thisfile,filename="citation.csv",open="rt")
-        #suppressWarnings(xc<-scan(fid,what="character",sep=",",quiet=TRUE,allowEscapes=TRUE))
-        # embedded quotes 
-        
-        ## read the header line separately
-        xc_hdr=read.table(unz(thisfile,filename="citation.csv"),sep=",",header=FALSE,comment.char="",as.is=TRUE,nrows=1)
-        xc=as.data.frame(xc)
+        if (nrow(x)>0) {
+            ## make sure logical columns are actually of type logical
+            logicals=unique(which(x=="true" | x=="false",arr.ind=TRUE)[,2]) ## get the logical columns
+            x[,logicals]=apply(x[,logicals],2,function(x) as.logical(x)) ## convert columns to logical
+            
+            ## also read the citation info
+            ## this file won't exist if there are no rows in the data.csv file, so only do it if nrow(x)>0
+            xc=read.table(unz(thisfile,"citation.csv"),header=TRUE,comment.char="",as.is=TRUE)
+        } else {
+            warning("no matching records were returned")
+            xc=NULL
+        }
         x=list(data=x,meta=xc)
     }
     x
