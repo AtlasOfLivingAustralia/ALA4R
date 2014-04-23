@@ -22,13 +22,13 @@ autocomplete(taxon, geoOnly = FALSE, idxType = NULL, limit = NULL)
 }
 \value{
 A dataframe of taxa given the partial matches where columns
-are identified as: \item{guid}{} \item{name}{}
+are identified as: \itemize{ \item{guid}{} \item{name}{}
 \item{occurrenceCount}{} \item{georeferencedCount}{}
 \item{scientificNameMatches}{} \item{commonNameMatches}{}
-\item{commonName}{} \item{matchedNames}{} \item{ankId}{}
-\item{rankString}{} \item{left}{} \item{right}{}
-
-TODO: Suggest "search_species_autocomplete".
+\item{commonName}{} \item{matchedNames}{} \item{rankId}{}
+\item{rankString}{} \item{left}{} \item{right}{} } TODO:
+Suggest "search_species_autocomplete". TODO: Definitions of
+left,right? Are rankId, left and right needed?
 }
 \description{
 If the scientific name, common name or LSID of the taxon

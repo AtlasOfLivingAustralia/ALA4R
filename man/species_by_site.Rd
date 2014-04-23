@@ -31,13 +31,18 @@ A dataframe or a SpatialPointsDataFrame containing the
 species by sites data....
 }
 \description{
-Species by site
+A data.frame is returned as grid cells by species with
+values in each cell being the number of occurrences of each
+species. No null (all zero) species should be returned. The
+coordinates returned are the TOP-LEFT corner of the grid
+cell.
 }
 \examples{
 \dontrun{
-#download Macropus species information
-tt = species_by_site(taxon='genus:Macropus',wkt = 'POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))',gridsize=0.1,verbose=TRUE)
-head(tt)
+#download the matrix (data.frame) of Eucalyptus in Tasmania based on a 0.1 degree grid
+tt=species_by_site(taxon='genus:Eucalyptus',wkt='POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))',gridsize=0.1,verbose=TRUE)
+str(tt)
+qv: post http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Eucalyptus&qname=data&area=POLYGON((144\%20-43,148\%20-43,148\%20-40,144\%20-40,144\%20-43))&bs=http://biocache.ala.org.au/ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1
 }
 }
 \author{

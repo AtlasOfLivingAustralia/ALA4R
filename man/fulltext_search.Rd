@@ -13,7 +13,14 @@ fulltext_search(taxon, fq = NULL, start = NULL, pageSize = NULL,
   strings, specifying filters to be applied to the original
   query. These are of the form "INDEXEDFIELD:VALUE" e.g.
   "kingdom:Fungi". See ala_fields("general") for all the
-  fields that are queryable. See details below.}
+  fields that are queryable. NOTE that fq matches are
+  case-sensitive, but sometimes the entries in the fields
+  are not consistent in terms of case (e.g. kingdom names
+  "Fungi" and "Plantae" but "ANIMALIA"). fq matches are
+  ANDed by default (e.g. c("field1:abc","field2:def") will
+  match records that have field1 value "abc" and field2
+  value "def"). To obtain OR behaviour, use the form
+  c("field1:abc OR field2:def")}
 
   \item{start}{numeric: (positive integer) start offset for
   the results}
@@ -43,19 +50,12 @@ dataframe of information with columns being: \itemize{
 \item{smallImageUrl} \item{thumbnailUrl}
 \item{imageMetadataUrl} \item{acceptedConceptName}
 \item{synonomyRelationship} \item{synonomyDescription} }
+
+TODO: Need a realistic fq example (and I can't generate it)
 }
 \description{
 Performs a search across all objects, and selects the
 closest matches
-}
-\details{
-Note that fq matches are case-sensitive, but sometimes the
-entries in the fields are not consistent in terms of case
-(e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA").
-fq matches are ANDed by default (e.g.
-c("field1:abc","field2:def") will match records that have
-field1 value "abc" and field2 value "def"). To obtain OR
-behaviour, use the form c("field1:abc OR field2:def")
 }
 \examples{
 # find information ALA holds on red kangaroo

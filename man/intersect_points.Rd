@@ -26,7 +26,9 @@ information. Missing data or incorrectly identified field
 id values will result in NA data
 
 TODO: Pity that "fields" rather than "layers" are used.
-Confusing.
+Confusing. TODO: check that the URL strings here are
+guaranteed to be appropriately URL-encoded TODO: Limit of
+1000 points is a nuisance, surely?
 }
 \description{
 Intersect environmental or contextual layers at a given a
@@ -38,12 +40,11 @@ set of points (coordinates)
 fields = c('cl22','cl23','el773')
 pnts = c(-23.1,149.1)
 intersect_points(pnts,fields)
+#Web Service equivalent: http://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1
 
-#Web Service: http://spatial.ala.org.au/ws/intersect/cl22,cl23/-23.1/149.1
-
-#multiple points with multiple fields
+#multiple points as a grid sampling multiple fields
 fields = c('cl22','cl23','el773')
-pnts = data.frame(lat=seq(-29,-19,0.02),lon=132.769)
+pnts = data.frame(expand.grid(lat=seq(-29,-19,1.0),lon=seq(130.0,140.0,1.0)))
 intersect_points(pnts,fields)
 
 }
@@ -55,5 +56,11 @@ Atlas of Living Australia \email{support@ala.org.au}
 \url{http://api.ala.org.au/}
 
 \url{http://spatial.ala.org.au/layers/}
+
+The key related function is occurrences() where species
+records can be interesected with any number of
+environmental (el) and contextual (cl) layers but
+intersect_points could be used to sample background (non
+species-site) values of layers.
 }
 

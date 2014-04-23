@@ -36,7 +36,8 @@ in ALA
 \dontrun{
 search_layers(type="all")
 search_layers(type="grids",query="income")
-search_layers(type="shapes",query="coral")
+l=search_layers(type="shapes",query="coral")
+str(l)
 }
 }
 \author{
