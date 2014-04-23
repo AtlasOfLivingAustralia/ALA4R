@@ -7,6 +7,7 @@
 #' Invoking ala_config("reset") will reset all options to their default values.
 #' 
 #' Valid options are: \itemize{
+#' \item reset: "reset" will reset the options to their default values
 #' \item caching: caching can be 
 #' "on" (results will be cached, and any cached results will be re-used), 
 #' "refresh" (cached results will be refreshed and the new results stored in the cache), or 
@@ -41,6 +42,7 @@
 #' ala_reasons()
 #' ala_config(download_reason_id="9")
 #' ala_config(verbose=TRUE)
+#' ala_config("reset")
 #' ala_config(base_url_biocache="http://biocache.ala.org.au/ws/")
 #' 
 #' @export ala_config
