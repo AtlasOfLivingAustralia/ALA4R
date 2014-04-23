@@ -34,7 +34,6 @@
 ## TODO: support extra params fq, startindex, etc (see API page)
 ## fq can query any field from http://biocache.ala.org.au/ws/index/fields, i.e. ala_fields("occurrence")
 ## TODO: better error message for unfound taxon - now issues the warning "no matching records were returned"
-## TODO: Parsing csv remains an issue on Windows
 
 
 ##q *  String	
@@ -150,6 +149,7 @@ occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$
             require(data.table) ## load it
             tryCatch({
                 ## first need to extract data.csv from the zip file
+                ## this may end up making fread() slower than direct read.table() ... needs testing
                 tempsubdir=tempfile(pattern="dir")
                 dir.create(tempsubdir)
                 unzip(thisfile,files=c("data.csv"),junkpaths=TRUE,exdir=tempsubdir)
@@ -170,7 +170,7 @@ occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$
 
         if (nrow(x)>0) {
             ## make sure logical columns are actually of type logical
-            logicals=unique(which(x=="true" | x=="false",arr.ind=TRUE)[,2]) ## get the logical columns
+            logicals=which(as.vector(colSums(x=="true"|x=="false")==nrow(x))) ## get the logical columns
             x[,logicals]=apply(x[,logicals],2,function(x) as.logical(x)) ## convert columns to logical
             
             ## also read the citation info
