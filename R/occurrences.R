@@ -7,9 +7,9 @@
 #' \url{https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc}
 #' \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' 
-#' @param taxon string: taxonomic query, e.g. "macropus rufus"
+#' @param taxon string: taxonomic query, e.g. "Alaba vibex"
 #' @param wkt string: a WKT (well-known text) string providing a spatial polygon within
-#' which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.1310 -26,140 -37))"
+#' which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.131 -26,140 -37))"
 #' @param fields string vector: a vector of field names to return. Note that the columns of the returned data frame 
 #' are not guaranteed to retain the ordering of the field names given here. 
 #' See ALA4R funtion ala_fields("occurrence") for valid field names.
@@ -22,8 +22,9 @@
 #' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),download_reason_id=10)
 #' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10)
 #' 
-#' y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude"),download_reason_id=10)
-#' qv: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Alaba%20vibex&fields=latitude,longitude&qa=none
+#' y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10)
+#' str(y)
+#' qv: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Alaba%20vibex&fields=latitude,longitude,el874&qa=none
 #' qv: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Eucalyptus%20gunnii&fields=latitude,longitude&qa=none&fq=basis_of_record:LivingSpecimen
 #' }
 #' @export occurrences

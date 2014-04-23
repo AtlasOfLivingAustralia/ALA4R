@@ -4,6 +4,10 @@
 #' @references \url{http://api.ala.org.au/}
 #' @references \url{http://spatial.ala.org.au/layers/}
 #' 
+#' The key related function is occurrences() where species records can be interesected with any
+#' number of environmental (el) and contextual (cl) layers but intersect_points could be used
+#' to sample background (non species-site) values of layers.
+#' 
 #' @param pnts vector of lat & lons or 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 1000.
 #' @param fids text: ids of layers to be intersected. list of possible layers is available from ala_fields().
 #' @param SPdata.frame boolean value defining if the output should be returned as a SpatialPointsDataFrame of the sp package.
@@ -11,6 +15,8 @@
 #' @return A SpatialPointsDataFrame containing the intersecting data information. Missing data or incorrectly identified field id values will result in NA data
 #'
 #'TODO: Pity that "fields" rather than "layers" are used. Confusing.
+#'TODO: check that the URL strings here are guaranteed to be appropriately URL-encoded
+#'TODO: Limit of 1000 points is a nuisance, surely?
 #'
 #' @examples
 #' \dontrun{
@@ -18,19 +24,16 @@
 #' fields = c('cl22','cl23','el773')
 #' pnts = c(-23.1,149.1)
 #' intersect_points(pnts,fields)
-#'
-#' #Web Service: http://spatial.ala.org.au/ws/intersect/cl22,cl23/-23.1/149.1  
+#' #Web Service equivalent: http://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  
 #' 
-#' #multiple points with multiple fields
+#' #multiple points as a grid sampling multiple fields
 #' fields = c('cl22','cl23','el773')
-#' pnts = data.frame(lat=seq(-29,-19,0.02),lon=132.769)
+#' pnts = data.frame(expand.grid(lat=seq(-29,-19,1.0),lon=seq(130.0,140.0,1.0)))
 #' intersect_points(pnts,fields)
 #' 
 #' }
 #' @export
-
-#TODO: check that the URL strings here are guaranteed to be appropriately URL-encoded
-
+#'
 intersect_points = function(pnts,fids,SPdata.frame=FALSE,verbose=ala_config()$verbose) {
 	base_url=ala_config()$base_url_spatial #get the base url
 	bulk = FALSE #set the default to not bulk
