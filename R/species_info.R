@@ -12,6 +12,8 @@
 #' 
 #' species_info("Grevillea humilis subsp. maritima")
 #' species_info(guid="urn:lsid:biodiversity.org.au:apni.taxon:248651")
+#' s=species_info("Alaba vibex")
+#' str(s)
 #' 
 #' @export species_info
 
