@@ -24,10 +24,8 @@ behaviour
 ala_config()
 ala_config(caching="off")
 ala_reasons()
-ala_config(download_reason_id="9")
-ala_config(verbose=TRUE)
+ala_config(download_reason_id="9",verbose=TRUE)
 ala_config("reset")
-ala_config(base_url_biocache="http://biocache.ala.org.au/ws/")
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

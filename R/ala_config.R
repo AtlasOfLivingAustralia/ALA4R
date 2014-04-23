@@ -40,10 +40,8 @@
 #' ala_config()
 #' ala_config(caching="off")
 #' ala_reasons()
-#' ala_config(download_reason_id="9")
-#' ala_config(verbose=TRUE)
+#' ala_config(download_reason_id="9",verbose=TRUE)
 #' ala_config("reset")
-#' ala_config(base_url_biocache="http://biocache.ala.org.au/ws/")
 #' 
 #' @export ala_config
 #' 
@@ -55,17 +53,15 @@ ala_config=function(...) {
 
     ## default user-agent string
     version_string="version unknown"
-    suppressWarnings(
-        try( version_string<-utils::packageDescription('ALA4R')[["Version"]],silent=TRUE) ## get the ALA4R version, if we can
-        )
+    suppressWarnings(try(version_string<-utils::packageDescription('ALA4R')[["Version"]],silent=TRUE)) ## get the ALA4R version, if we can
     user_agent_string=paste("ALA4R ",version_string," (",R.Version()$version.string,"/",R.Version()$platform,")",sep="")
 
+    ## set default options
     default_options=list(caching="on",cache_directory=tempdir(),user_agent=user_agent_string,download_reason_id=NA,verbose=FALSE,base_url_spatial="http://spatial.ala.org.au/ws/",base_url_bie="http://bie.ala.org.au/ws/",base_url_biocache="http://biocache.ala.org.au/ws/",base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/")
-    ## caching can be "on" (results will be cached, and any cached results will be re-used), "refresh" (cached results will be refreshed and the new results stored in the cache), or "off"
-    ## cache_directory is the directory to use for the cache. By default this is a temporary directory, which means that results will only be cached within an R session. The user may wish to set this to a non-temporary directory for caching across sessions
 
     ## define allowed options, for those that have restricted values
-    allowed_options=list(caching=c("on","off","refresh"),download_reason_id=c(1:10)) ## ideally, the valid download_reason_id values should be populated dynamically from the ala_reasons() function. However if that is called (from here) before the AL4R_config option has been set, then we get infinite recursion. To be addressed later ...
+    allowed_options=list(caching=c("on","off","refresh"),download_reason_id=c(1:10))
+    ## ideally, the valid download_reason_id values should be populated dynamically from the ala_reasons() function. However if that is called (from here) before the AL4R_config option has been set, then we get infinite recursion. To be addressed later ...
 
     ## has the user asked to reset options to defaults?
     if (identical(user_options,list("reset"))) {
@@ -73,9 +69,7 @@ ala_config=function(...) {
         names(temp)=ala_option_name
         options(temp)        
     } else {
-    
         names(user_options)=tolower(names(user_options))
-    
         ## has the user specified something we don't recognize?
         known_options=names(default_options)
         unknown=setdiff(names(user_options),known_options)
