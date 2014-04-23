@@ -25,8 +25,6 @@ bulklookup("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
 bulklookup("Grevillea",vernacular=TRUE) ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
 x=bulklookup("Alaba",vernacular=FALSE) ## should return info on the genus "Alaba"
 str(x) ## tidy list of Alaba details
-
-TODO: Should #occurrences be returned to help identification?
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

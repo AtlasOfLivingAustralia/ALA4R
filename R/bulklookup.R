@@ -18,9 +18,10 @@
 #' x=bulklookup("Alaba",vernacular=FALSE) ## should return info on the genus "Alaba"
 #' str(x) ## tidy list of Alaba details
 #' 
-#' TODO: Should #occurrences be returned to help identification?
 #' 
 #' @export bulklookup
+
+# TODO: Should #occurrences be returned to help identification?
 
 bulklookup=function(taxa=c(),vernacular=FALSE) {
     ## input argument checks
