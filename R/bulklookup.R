@@ -8,7 +8,8 @@
 #' 
 #' @param taxa string: a single name or vector of names
 #' @param vernacular logical: if TRUE, match on common names as well as scientific names, otherwise match only on scientific names
-#' @return A data frame of results
+#' @param guids_only logical: if TRUE, only return a vector of GUIDs
+#' @return A data frame of results, or vector of GUIDs if guid_only is TRUE
 
 #' @examples
 #' 
@@ -23,7 +24,9 @@
 
 # TODO: Should #occurrences be returned to help identification?
 
-bulklookup=function(taxa=c(),vernacular=FALSE) {
+# service currently gives an error for single-word all-lower-case names (issue #649)
+
+bulklookup=function(taxa=c(),vernacular=FALSE,guids_only=FALSE) {
     ## input argument checks
     if (identical(class(taxa),"list")) {
         taxa=unlist(taxa)
@@ -37,11 +40,23 @@ bulklookup=function(taxa=c(),vernacular=FALSE) {
     }
     assert_that(is.flag(vernacular))
     taxa = sapply(taxa,clean_string,USE.NAMES=FALSE) ## clean up the taxon name
+    taxa=toupper(taxa) ## to avoid errors with all-lower-case single-word names
+    ## re-check names, since clean_string may have changed them
+    if (any(nchar(taxa)<1)) {
+        stop("input contains empty string after cleaning (did the input name contain only non-alphabetic characters?)")
+    }    
     base_url=paste(ala_config()$base_url_bie,"species/lookup/bulk",sep="")
     temp=jsonlite::toJSON(list(names=taxa,vernacular=vernacular))
     ## toJSON puts vernacular as a single-element array, which causes failures.
     temp=str_replace(temp,"\\[[ ]*false[ ]*\\]","false")
     temp=str_replace(temp,"\\[[ ]*true[ ]*\\]","true")
     x=cached_post(url=base_url,body=temp,type="json")
+    if (guids_only) {
+        if (nrow(x)>0) {
+            x=x$guid
+        } else {
+            x=c()
+        }
+    }
     x
 }

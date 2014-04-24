@@ -2,7 +2,7 @@
 \alias{bulklookup}
 \title{Bulk lookup of taxonomic names}
 \usage{
-bulklookup(taxa = c(), vernacular = FALSE)
+bulklookup(taxa = c(), vernacular = FALSE, guids_only = FALSE)
 }
 \arguments{
   \item{taxa}{string: a single name or vector of names}
@@ -10,9 +10,13 @@ bulklookup(taxa = c(), vernacular = FALSE)
   \item{vernacular}{logical: if TRUE, match on common names
   as well as scientific names, otherwise match only on
   scientific names}
+
+  \item{guids_only}{logical: if TRUE, only return a vector
+  of GUIDs}
 }
 \value{
-A data frame of results
+A data frame of results, or vector of GUIDs if guid_only is
+TRUE
 }
 \description{
 Provides GUID, taxonomic classification, and other
