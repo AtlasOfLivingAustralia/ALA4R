@@ -1,3 +1,4 @@
+S3method(print,search_names)
 S3method(print,search_partial_name)
 export(ala_cache_filename)
 export(ala_config)
