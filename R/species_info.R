@@ -18,7 +18,6 @@
 #' @export species_info
 
 # TODO: support multiple names or guids passed as a vector? (LB:low priority)
-# change use of name_guid to bulklookup once new bulklookup service is deployed
 
 species_info=function(scientificname=NULL,guid=NULL,verbose=ala_config()$verbose) {
     if (!is.null(scientificname)) {
@@ -35,7 +34,7 @@ species_info=function(scientificname=NULL,guid=NULL,verbose=ala_config()$verbose
         stop("either the scientific name or the guid must be provided, but not both")
     }
     if (! is.null(scientificname)) {
-        guid=name_guid(scientificname,guids_only=TRUE)
+        guid=bulklookup(scientificname,guids_only=TRUE)
         if (length(guid)<1) {
             return(NULL)
         }
