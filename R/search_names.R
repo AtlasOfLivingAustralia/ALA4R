@@ -1,4 +1,4 @@
-#' Bulk lookup of taxonomic names
+#' Lookup of taxonomic names
 #' 
 #' Provides GUID, taxonomic classification, and other information for a list of names. 
 #' Case-insensitive but otherwise exact matches are used.
@@ -13,21 +13,21 @@
 
 #' @examples
 #' 
-#' bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"))
-#' bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"),guids_only=TRUE)
-#' bulklookup("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
-#' bulklookup("Grevillea",vernacular=TRUE) ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
-#' x=bulklookup("Alaba",vernacular=FALSE) ## should return info on the genus "Alaba"
+#' search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"))
+#' search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"),guids_only=TRUE)
+#' search_names("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
+#' search_names("Grevillea",vernacular=TRUE) ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
+#' x=search_names("Alaba",vernacular=FALSE) ## should return info on the genus "Alaba"
 #' str(x) ## tidy list of Alaba details
 #' 
 #' 
-#' @export bulklookup
+#' @export search_names
 
 # TODO: Should #occurrences be returned to help identification?
 
 # service currently gives an error for single-word all-lower-case names (issue #649)
 
-bulklookup=function(taxa=c(),vernacular=FALSE,guids_only=FALSE) {
+search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE) {
     ## input argument checks
     if (identical(class(taxa),"list")) {
         taxa=unlist(taxa)

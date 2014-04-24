@@ -34,7 +34,7 @@ species_info=function(scientificname=NULL,guid=NULL,verbose=ala_config()$verbose
         stop("either the scientific name or the guid must be provided, but not both")
     }
     if (! is.null(scientificname)) {
-        guid=bulklookup(scientificname,guids_only=TRUE)
+        guid=search_names(scientificname,vernacular=FALSE,guids_only=TRUE)
         if (length(guid)<1) {
             return(NULL)
         }
