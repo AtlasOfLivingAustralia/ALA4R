@@ -1,8 +1,8 @@
-\name{fulltext_search}
-\alias{fulltext_search}
+\name{search_fulltext}
+\alias{search_fulltext}
 \title{Full text search}
 \usage{
-fulltext_search(taxon, fq = NULL, start = NULL, pageSize = NULL,
+search_fulltext(taxon, fq = NULL, start = NULL, pageSize = NULL,
   sort_by = NULL, sort_dir = NULL)
 }
 \arguments{
@@ -59,9 +59,9 @@ closest matches
 }
 \examples{
 # find information ALA holds on red kangaroo
- fulltext_search("red kangaroo")
- fulltext_search("Macropus rufus")
- fulltext_search("urn:lsid:biodiversity.org.au:afd.taxon:31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae")
+ search_fulltext("red kangaroo")
+ search_fulltext("Macropus rufus")
+ search_fulltext("urn:lsid:biodiversity.org.au:afd.taxon:31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae")
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

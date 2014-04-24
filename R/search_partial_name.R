@@ -2,7 +2,7 @@
 #' on matches from a PARTIAL NAME. search_partial_name can generate a dataframe of scientific and 
 #' common names that can be used for further analysis in R.
 #' 
-#' If the scientific name, common name or LSID of the taxon are known, use fulltext_search
+#' If the scientific name, common name or LSID of the taxon are known, use search_names
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}

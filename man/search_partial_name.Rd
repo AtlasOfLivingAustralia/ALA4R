@@ -30,7 +30,7 @@ are identified as: \itemize{ \item{guid}{} \item{name}{}
 }
 \description{
 If the scientific name, common name or LSID of the taxon
-are known, use fulltext_search
+are known, use search_names
 }
 \examples{
 # find information ALA holds on red kangaroo (Macropus rufus)
