@@ -41,7 +41,7 @@ download_to_file=function(url,outfile,binary_file=FALSE,caching=ala_config()$cac
             content_length=as.numeric(h$value()["Content-Length"])
             if (!is.na(content_length) && content_length<10000) {
                 ## if the file body is not too big, check to see if there's any useful diagnostic info in it
-                diag_message=get_diag_message(readLines(outfile))
+                diag_message=get_diag_message(outfile)
             }
             unlink(outfile)
         }
@@ -53,8 +53,9 @@ download_to_file=function(url,outfile,binary_file=FALSE,caching=ala_config()$cac
     outfile
 }
 
-get_diag_message=function(thing) {
-    ## attempt to extract message field from JSON-encoded thing
+get_diag_message=function(jsonfile) {
+    ## attempt to extract message field from JSON-encoded file
+    suppressWarnings(thing<-readLines(jsonfile))
     diag_message=""
     try(diag_message <- jsonlite::fromJSON(thing)$message, silent=TRUE)
     if (is.null(diag_message)) { diag_message="" }

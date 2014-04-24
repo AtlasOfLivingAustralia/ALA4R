@@ -62,7 +62,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
                 content_length=as.numeric(h$value()["Content-Length"])
                 if (!is.na(content_length) && content_length<10000 && !identical(type,"binary_filename")) {
                     ## if the file body is not too big, check to see if there's any useful diagnostic info in it
-                    temp=readLines(thisfile)
+                    suppressWarnings(temp<-readLines(thisfile))
                     try(diag_message <- jsonlite::fromJSON(temp)$message, silent=TRUE)
                     if (is.null(diag_message)) { diag_message="" }
                 }
