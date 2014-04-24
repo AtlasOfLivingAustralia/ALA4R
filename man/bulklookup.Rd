@@ -11,12 +11,12 @@ bulklookup(taxa = c(), vernacular = FALSE, guids_only = FALSE)
   as well as scientific names, otherwise match only on
   scientific names}
 
-  \item{guids_only}{logical: if TRUE, only return a vector
-  of GUIDs}
+  \item{guids_only}{logical: if TRUE, only return a named
+  list of GUIDs}
 }
 \value{
-A data frame of results, or vector of GUIDs if guid_only is
-TRUE
+A data frame of results, or named list of GUIDs if
+guid_only is TRUE
 }
 \description{
 Provides GUID, taxonomic classification, and other
@@ -25,6 +25,7 @@ otherwise exact matches are used.
 }
 \examples{
 bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"))
+bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"),guids_only=TRUE)
 bulklookup("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
 bulklookup("Grevillea",vernacular=TRUE) ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
 x=bulklookup("Alaba",vernacular=FALSE) ## should return info on the genus "Alaba"

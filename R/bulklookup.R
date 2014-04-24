@@ -8,12 +8,13 @@
 #' 
 #' @param taxa string: a single name or vector of names
 #' @param vernacular logical: if TRUE, match on common names as well as scientific names, otherwise match only on scientific names
-#' @param guids_only logical: if TRUE, only return a vector of GUIDs
-#' @return A data frame of results, or vector of GUIDs if guid_only is TRUE
+#' @param guids_only logical: if TRUE, only return a named list of GUIDs
+#' @return A data frame of results, or named list of GUIDs if guid_only is TRUE
 
 #' @examples
 #' 
 #' bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"))
+#' bulklookup(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"),guids_only=TRUE)
 #' bulklookup("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
 #' bulklookup("Grevillea",vernacular=TRUE) ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
 #' x=bulklookup("Alaba",vernacular=FALSE) ## should return info on the genus "Alaba"
@@ -39,6 +40,7 @@ bulklookup=function(taxa=c(),vernacular=FALSE,guids_only=FALSE) {
         stop("empty input")
     }
     assert_that(is.flag(vernacular))
+    taxa_original=taxa
     taxa = sapply(taxa,clean_string,USE.NAMES=FALSE) ## clean up the taxon name
     taxa=toupper(taxa) ## to avoid errors with all-lower-case single-word names
     ## re-check names, since clean_string may have changed them
@@ -53,9 +55,10 @@ bulklookup=function(taxa=c(),vernacular=FALSE,guids_only=FALSE) {
     x=cached_post(url=base_url,body=temp,type="json")
     if (guids_only) {
         if (nrow(x)>0) {
-            x=x$guid
+            x=as.list(x$guid)
+            names(x)=make.names(taxa_original)
         } else {
-            x=c()
+            x=list()
         }
     }
     x
