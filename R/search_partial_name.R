@@ -1,5 +1,5 @@
-#' An autocomplete search for identifying species names & identifiers used at the ALA is based
-#' on matches from a PARTIAL NAME. autocomplete can generate a dataframe of scientific and 
+#' A partial-name search for identifying species names & identifiers used at the ALA is based
+#' on matches from a PARTIAL NAME. search_partial_name can generate a dataframe of scientific and 
 #' common names that can be used for further analysis in R.
 #' 
 #' If the scientific name, common name or LSID of the taxon are known, use fulltext_search
@@ -26,22 +26,23 @@
 #' \item{left}{} 
 #' \item{right}{}
 #' } 
-#' TODO: Suggest "search_species_autocomplete".
-#' TODO: Definitions of left,right? Are rankId, left and right needed?
 #'
 #' @examples
 #' # find information ALA holds on red kangaroo (Macropus rufus)
-#' tt = autocomplete("red kangaroo")
+#' tt = search_partial_name("red kangaroo")
 #' tt
 #' #show all information stored in the object
 #' str(tt)
 #' as.matrix(tt)
 #' 
 #' #retrieve only species with geolocations
-#' autocomplete("Macropus rufus",geoOnly=TRUE)
+#' search_partial_name("Macropus rufus",geoOnly=TRUE)
 #' 
-#' @export autocomplete
-autocomplete=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {
+#' @export search_partial_name
+
+# TODO: Definitions of left,right? Are rankId, left and right needed? - remove from print.* method
+
+search_partial_name=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {
     assert_that(is.string(taxon))
     taxon = clean_string(taxon) #clean up the taxon name
     taxon = gsub(' ','+',taxon) #replace spaces with + to force both terms in the search
@@ -85,12 +86,12 @@ autocomplete=function(taxon,geoOnly=FALSE,idxType=NULL,limit=NULL) {
         out$scientificNameMatches=unlist(out$scientificNameMatches)
         out$commonNameMatches=unlist(out$commonNameMatches)
     }
-	class(out) <- c('autocomplete',class(out)) #add the autocomplete class
+	class(out) <- c('search_partial_name',class(out)) #add the search_partial_name class
 	return(out)
 }
 
 #' @export
-"print.autocomplete" <- function(x, ...)
+"print.search_partial_name" <- function(x, ...)
 {
 	if (empty(as.data.frame(x$scientificNameMatches))) {
 		m <- as.matrix(format.data.frame(x[,c('matchedNames','name','rankString')], na.encode = FALSE))

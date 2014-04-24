@@ -1,10 +1,10 @@
-\name{autocomplete}
-\alias{autocomplete}
-\title{An autocomplete search for identifying species names & identifiers used at the ALA is based
-on matches from a PARTIAL NAME. autocomplete can generate a dataframe of scientific and
+\name{search_partial_name}
+\alias{search_partial_name}
+\title{A partial-name search for identifying species names & identifiers used at the ALA is based
+on matches from a PARTIAL NAME. search_partial_name can generate a dataframe of scientific and
 common names that can be used for further analysis in R.}
 \usage{
-autocomplete(taxon, geoOnly = FALSE, idxType = NULL, limit = NULL)
+search_partial_name(taxon, geoOnly = FALSE, idxType = NULL, limit = NULL)
 }
 \arguments{
   \item{taxon}{a character string of part of the
@@ -26,9 +26,7 @@ are identified as: \itemize{ \item{guid}{} \item{name}{}
 \item{occurrenceCount}{} \item{georeferencedCount}{}
 \item{scientificNameMatches}{} \item{commonNameMatches}{}
 \item{commonName}{} \item{matchedNames}{} \item{rankId}{}
-\item{rankString}{} \item{left}{} \item{right}{} } TODO:
-Suggest "search_species_autocomplete". TODO: Definitions of
-left,right? Are rankId, left and right needed?
+\item{rankString}{} \item{left}{} \item{right}{} }
 }
 \description{
 If the scientific name, common name or LSID of the taxon
@@ -36,14 +34,14 @@ are known, use fulltext_search
 }
 \examples{
 # find information ALA holds on red kangaroo (Macropus rufus)
-tt = autocomplete("red kangaroo")
+tt = search_partial_name("red kangaroo")
 tt
 #show all information stored in the object
 str(tt)
 as.matrix(tt)
 
 #retrieve only species with geolocations
-autocomplete("Macropus rufus",geoOnly=TRUE)
+search_partial_name("Macropus rufus",geoOnly=TRUE)
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
