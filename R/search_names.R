@@ -25,7 +25,7 @@
 
 # TODO: Should #occurrences be returned to help identification?
 
-# service currently gives an error for single-word all-lower-case names (issue #649)
+# service currently gives an error for single-word all-lower-case names (see issue #649)
 
 search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE) {
     ## input argument checks
@@ -42,7 +42,6 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE) {
     assert_that(is.flag(vernacular))
     taxa_original=taxa
     taxa = sapply(taxa,clean_string,USE.NAMES=FALSE) ## clean up the taxon name
-    taxa=toupper(taxa) ## to avoid errors with all-lower-case single-word names
     ## re-check names, since clean_string may have changed them
     if (any(nchar(taxa)<1)) {
         stop("input contains empty string after cleaning (did the input name contain only non-alphabetic characters?)")
@@ -54,12 +53,35 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE) {
     temp=str_replace(temp,"\\[[ ]*true[ ]*\\]","true")
     x=cached_post(url=base_url,body=temp,type="json")
     if (guids_only) {
-        if (nrow(x)>0) {
+        if (empty(x)) {
+            x=list()
+        } else {
             x=as.list(x$guid)
             names(x)=make.names(taxa_original)
-        } else {
-            x=list()
+        }
+    } else {
+        if (! empty(x)) {
+            x$search_term=taxa_original
         }
     }
+    class(x) <- c("search_names",class(x)) ## add the search_names class
     x
+}
+
+#' @export
+"print.search_names" <- function(x, ...)
+{
+    if (any(class(x)=="list")) {
+        ## from guids_only seach
+        print(format(x))
+    } else {
+        if ("commonName" %in% names(x)) {
+            cols=c("search_term","name","commonName","rank","guid")
+        } else {
+            cols=c("search_term","name","rank","guid")
+        }
+        m=as.matrix(format.data.frame(x[,cols],na.encode=FALSE))
+        print(m)
+    }
+    invisible(x)
 }
