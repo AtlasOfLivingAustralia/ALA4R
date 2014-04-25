@@ -71,9 +71,11 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
             ## column names within the data matrix are returned as camelCase
             ## add searchTerm, so user can more easily see what each original query was
             x$searchTerm=taxa_original
-            ## leave all columns intact but reorder columns, for minor convenience
-            xcols=intersect(c("searchTerm","name","commonName","guid","rank"),names(x))
-            xcols=c(xcols,setdiff(names(x),xcols))
+            ## remove some columns that are unlikely to be of value here
+            xcols=setdiff(names(x),c("rankId","left","right","idxType","nameComplete","hasChildren","highlight","linkIdentifier","isExcluded"))
+            ## reorder columns, for minor convenience
+            firstcols=intersect(c("searchTerm","name","commonName","guid","rank"),xcols)
+            xcols=c(firstcols,setdiff(xcols,firstcols))
             x=x[,xcols]
             attr(x,"output_format")=output_format
             
