@@ -3,31 +3,31 @@
 #' Provides GUID, taxonomic classification, and other information for a list of names. 
 #' Case-insensitive but otherwise exact matches are used.
 #' 
+#' Note that there are currently issues with single-word all-lower-case names or other variants of unexpected lower/upper-case (see issue #649)
+#'
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' 
 #' @param taxa string: a single name or vector of names
 #' @param vernacular logical: if TRUE, match on common names as well as scientific names, otherwise match only on scientific names
-#' @param guids_only logical: if TRUE, only return a named list of GUIDs
-#' @return A data frame of results, or named list of GUIDs if guid_only is TRUE
-
+#' @param guids_only logical: if TRUE, a named list of GUIDs will be returned. Otherwise, a data frame with more comprehensive information for each name will be returned.
+#' @param output_format string: controls the print method for the returned object (only applicable when guids_only is FALSE). Either "complete" (the complete data structure is displayed), or "simple" (a simplified version is displayed). Note that the complete data structure exists in both cases: this option only controls what is displayed when the object is printed to the console. The default output format is "simple"
+#' @return A data frame of results, or named list of GUIDs if guids_only is TRUE
+#' 
 #' @examples
 #' 
 #' search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"))
 #' search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"),guids_only=TRUE)
 #' search_names("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
-#' search_names("Grevillea",vernacular=TRUE) ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
-#' x=search_names("Alaba",vernacular=FALSE) ## should return info on the genus "Alaba"
-#' str(x) ## tidy list of Alaba details
-#' 
+#' x=search_names("Grevillea",vernacular=TRUE) ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
+#' str(x) ## see the complete data structure
 #' 
 #' @export search_names
 
 # TODO: Should #occurrences be returned to help identification?
+# errors with lower/upper case sensitivity: e.g. "Gallirallus australis" matches this species, "Gallirallus australi" matches nothing, yet "Gallirallus Australi" matches Gallirallus
 
-# service currently gives an error for single-word all-lower-case names (see issue #649)
-
-search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE) {
+search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="simple") {
     ## input argument checks
     if (identical(class(taxa),"list")) {
         taxa=unlist(taxa)
@@ -40,6 +40,9 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE) {
         stop("empty input")
     }
     assert_that(is.flag(vernacular))
+    assert_that(is.flag(guids_only))
+    assert_that(is.character(output_format))
+    output_format=match.arg(tolower(output_format),c("simple","complete"))
     taxa_original=taxa
     taxa = sapply(taxa,clean_string,USE.NAMES=FALSE) ## clean up the taxon name
     ## re-check names, since clean_string may have changed them
@@ -48,10 +51,14 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE) {
     }    
     base_url=paste(ala_config()$base_url_bie,"species/lookup/bulk",sep="")
     temp=jsonlite::toJSON(list(names=taxa,vernacular=vernacular))
-    ## toJSON puts vernacular as a single-element array, which causes failures.
+    ## toJSON puts vernacular as a single-element array, which causes failures. Need to convert to scalar logical
     temp=str_replace(temp,"\\[[ ]*false[ ]*\\]","false")
     temp=str_replace(temp,"\\[[ ]*true[ ]*\\]","true")
     x=cached_post(url=base_url,body=temp,type="json")
+    if (identical(x,NA)) {
+        ## if a single non-matched name is supplied, we get NA back
+        x=NULL
+    }
     if (guids_only) {
         if (empty(x)) {
             x=list()
@@ -61,7 +68,17 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE) {
         }
     } else {
         if (! empty(x)) {
-            x$search_term=taxa_original
+            ## column names within the data matrix are returned as camelCase
+            ## add searchTerm, so user can more easily see what each original query was
+            x$searchTerm=taxa_original
+            ## leave all columns intact but reorder columns, for minor convenience
+            xcols=intersect(c("searchTerm","name","commonName","guid","rank"),names(x))
+            xcols=c(xcols,setdiff(names(x),xcols))
+            x=x[,xcols]
+            attr(x,"output_format")=output_format
+            
+            ## rename some columns
+            names(x)[names(x)=="classs"]="class"
         }
     }
     class(x) <- c("search_names",class(x)) ## add the search_names class
@@ -75,10 +92,9 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE) {
         ## from guids_only seach
         print(format(x))
     } else {
-        if ("commonName" %in% names(x)) {
-            cols=c("search_term","name","commonName","rank","guid")
-        } else {
-            cols=c("search_term","name","rank","guid")
+        cols=names(x)
+        if (attr(x,"output_format")=="simple") {
+            cols=intersect(c("searchTerm","name","commonName","rank","guid"),cols)
         }
         m=as.matrix(format.data.frame(x[,cols],na.encode=FALSE))
         print(m)
