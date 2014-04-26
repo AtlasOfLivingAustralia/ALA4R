@@ -71,16 +71,16 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
             ## column names within the data matrix are returned as camelCase
             ## add searchTerm, so user can more easily see what each original query was
             x$searchTerm=taxa_original
+            ## rename some columns
+            names(x)[names(x)=="classs"]="class"
             ## remove some columns that are unlikely to be of value here
-            xcols=setdiff(names(x),c("rankId","left","right","idxType","nameComplete","hasChildren","highlight","linkIdentifier","isExcluded"))
+            xcols=setdiff(names(x),unwanted_columns("general"))
             ## reorder columns, for minor convenience
             firstcols=intersect(c("searchTerm","name","commonName","guid","rank"),xcols)
             xcols=c(firstcols,setdiff(xcols,firstcols))
             x=x[,xcols]
             attr(x,"output_format")=output_format
             
-            ## rename some columns
-            names(x)[names(x)=="classs"]="class"
         }
     }
     class(x) <- c("search_names",class(x)) ## add the search_names class
