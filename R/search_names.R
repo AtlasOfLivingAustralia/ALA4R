@@ -81,9 +81,11 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
             x=x[,xcols]
             attr(x,"output_format")=output_format
             
+        } else {
+            x=data.frame()
         }
     }
-    class(x) <- c("search_names",class(x)) ## add the search_names class
+    class(x)=c("search_names",class(x)) ## add the search_names class
     x
 }
 
