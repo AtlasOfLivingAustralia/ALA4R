@@ -2,8 +2,6 @@
 #' 
 #' Provides GUID, taxonomic classification, and other information for a list of names. 
 #' Case-insensitive but otherwise exact matches are used.
-#' 
-#' Note that there are currently issues with single-word all-lower-case names or other variants of unexpected lower/upper-case (see issue #649)
 #'
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
@@ -24,8 +22,11 @@
 #' 
 #' @export search_names
 
-# TODO: Should #occurrences be returned to help identification?
-# errors with lower/upper case sensitivity: e.g. "Gallirallus australis" matches this species, "Gallirallus australi" matches nothing, yet "Gallirallus Australi" matches Gallirallus
+# TODO: Should #occurrences be returned to help identification? (low priority)
+# Note that there were issues with single-word all-lower-case names or other variants of unexpected lower/upper-case (see issue #649)
+# This is now resolved, although some other odd case-related behaviour still seems to occur, for example:
+# "Gallirallus australis" matches this species, "Gallirallus australi" matches nothing, yet "Gallirallus Australi" matches Gallirallus
+
 
 search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="simple") {
     ## input argument checks
@@ -83,6 +84,7 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
             
         } else {
             x=data.frame()
+            attr(x,"output_format")=output_format
         }
     }
     class(x)=c("search_names",class(x)) ## add the search_names class

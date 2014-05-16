@@ -35,11 +35,6 @@ Provides GUID, taxonomic classification, and other
 information for a list of names. Case-insensitive but
 otherwise exact matches are used.
 }
-\details{
-Note that there are currently issues with single-word
-all-lower-case names or other variants of unexpected
-lower/upper-case (see issue #649)
-}
 \examples{
 search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"))
 search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"),guids_only=TRUE)
