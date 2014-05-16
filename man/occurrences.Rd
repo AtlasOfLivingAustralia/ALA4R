@@ -2,16 +2,32 @@
 \alias{occurrences}
 \title{Get occurrence data}
 \usage{
-occurrences(taxon = "", wkt = "", fields = c(),
+occurrences(taxon, wkt, fq, fields = c(),
   download_reason_id = ala_config()$download_reason_id,
   use_data_table = TRUE)
 }
 \arguments{
-  \item{taxon}{string: taxonomic query, e.g. "Alaba vibex"}
+  \item{taxon}{string: (optional) taxonomic query of the
+  form field:value (e.g. "genus:Macropus") or a free text
+  search ("Alaba vibex")}
 
-  \item{wkt}{string: a WKT (well-known text) string
-  providing a spatial polygon within which to search, e.g.
-  "POLYGON((140 -37,151 -37,151 -26,140.131 -26,140 -37))"}
+  \item{wkt}{string: (optional) a WKT (well-known text)
+  string providing a spatial polygon within which to
+  search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.131
+  -26,140 -37))"}
+
+  \item{fq}{string: (optional) character string or vector
+  of strings, specifying filters to be applied to the
+  original query. These are of the form
+  "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See
+  ala_fields("occurrence") for all the fields that are
+  queryable. NOTE that fq matches are case-sensitive, but
+  sometimes the entries in the fields are not consistent in
+  terms of case (e.g. kingdom names "Fungi" and "Plantae"
+  but "ANIMALIA"). fq matches are ANDed by default (e.g.
+  c("field1:abc","field2:def") will match records that have
+  field1 value "abc" and field2 value "def"). To obtain OR
+  behaviour, use the form c("field1:abc OR field2:def")}
 
   \item{fields}{string vector: a vector of field names to
   return. Note that the columns of the returned data frame

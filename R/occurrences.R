@@ -7,9 +7,15 @@
 #' \url{https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc}
 #' \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' 
-#' @param taxon string: taxonomic query, e.g. "Alaba vibex"
-#' @param wkt string: a WKT (well-known text) string providing a spatial polygon within
-#' which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.131 -26,140 -37))"
+#' @param taxon string: (optional) taxonomic query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")
+#' @param wkt string: (optional) a WKT (well-known text) string providing a spatial polygon within which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.131 -26,140 -37))"
+#' @param fq string: (optional) character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". 
+#' See ala_fields("occurrence") for all the fields that are queryable. 
+#' NOTE that fq matches are case-sensitive, but sometimes the entries in the fields are 
+#' not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA"). 
+#' fq matches are ANDed by default (e.g. c("field1:abc","field2:def") will match records that have 
+#' field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form c("field1:abc 
+#' OR field2:def")
 #' @param fields string vector: a vector of field names to return. Note that the columns of the returned data frame 
 #' are not guaranteed to retain the ordering of the field names given here. 
 #' See ALA4R funtion ala_fields("occurrence") for valid field names.
@@ -31,57 +37,10 @@
 #' @export occurrences
 
 ## TODO: more extensive testing, particularly of the csv-conversion process
-## TODO: support extra params fq, startindex, etc (see API page)
-## fq can query any field from http://biocache.ala.org.au/ws/index/fields, i.e. ala_fields("occurrence")
-## TODO: better error message for unfound taxon - now issues the warning "no matching records were returned"
+## TODO: support extra params perhaps: lat, lon, radius (for specifying a search circle); extra; qa (to specify a subset of assertions to return)
 
 
-##q *  String	
-##Query of the form field:value e.g. q=genus:Macropus or a free text search e.g. q=Macropus
-##
-##fq	String	
-##Filters to be applied to the original query. These are additional params of the form fq=INDEXEDFIELD:VALUE e.g. fq=kingdom:Fungi. See http://biocache.ala.org.au/ws/index/fields for all the fields that a queryable.
-##
-##lat	Double	
-##The decimal latitude to limit records to. Use with lon and radius to specify a "search" circle
-##
-##lon	Double	
-##The decimal latitude to limit records to. Use with lon and radius to specify a "search" circle
-##
-##radius	Double	
-##The radius in which to limit records (relative to the lat, lon point). Use with lat and lon to specify a "search" circle.
-##
-##wkt	Integer	
-##The polygon area in which to limit records. For information on Well known text
-##
-##file	String	
-##The name of the file to produce. This will default to data.
-##
-##email	String	
-##The email address of the user performing the download.
-##
-##reason	String	
-##A user supplied description of the reason for the download
-##
-##fields	String	
-##A CSV list of fields to include in the download. This can be an index field name OR a Darwin Core Field name. There is a default list that is included if no value is supplied.
-##
-##extra	String	
-##a CSV list of fields in include in addition to the "fields". This is useful if you would like to make use of the default fields and include extra fields.
-##
-##reasonTypeId	Integer	
-##A reason code for the download. See reasons for valid values.
-##
-##fileType	String	
-##The file format for the download. Either csv or shp. When no value is supplied csv is assumed.
-##
-##sourceTypeId	Integer	
-##A source type code for the download. This indicates which system requested the download. See sources for valid values.
-##
-##qa	String	
-##A CSV list of record issues to include in the download. See assertions for possible values to include. When no value is supplied all the record issues are included. To include NO record issues set this value to none.
-
-occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$download_reason_id,use_data_table=TRUE) {
+occurrences=function(taxon,wkt,fq,fields=c(),download_reason_id=ala_config()$download_reason_id,use_data_table=TRUE) {
     ## check input parms are sensible
     reason_ok=!is.na(download_reason_id)
     if (reason_ok) {
@@ -91,23 +50,18 @@ occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$
     if (! reason_ok) {
         stop("download_reason_id must be a valid reason_id. See ala_reasons(). Set this value directly here or through ala_config(download_reason_id=...)")
     }
-    
-    
-    assert_that(is.string(taxon))
-    assert_that(is.string(wkt))
-  
     #taxon = clean_string(taxon) ## clean up the taxon name # no - because this can be an indexed query like field1:value1
     base_url=paste(ala_config()$base_url_biocache,"occurrences/index/download",sep="")
-    #base_url="http://biocache-test.ala.org.au/ws/occurrences/index/download" ## until new changes get propagated to live server
-    
   
     this_query=list()
     ## have we specified a taxon?
-    if (str_length(taxon)>0) {
+    if (!missing(taxon)) {
+        assert_that(is.string(taxon))
         this_query$q=taxon
     }
     ## wkt string
-    if (str_length(wkt)>0) {
+    if (!missing(wkt)) {
+        assert_that(is.string(wkt))
         if (! check_wkt(wkt)) {
             stop("invalid WKT string ",wkt)
         }
@@ -116,6 +70,14 @@ occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$
     if (length(this_query)==0) {
         ## not a valid request!
         stop("invalid request: need at least taxon or wkt to be specified")
+    }
+    if (!missing(fq)) {
+        assert_that(is.character(fq))
+        ## can have multiple fq parameters, need to specify in url as fq=a:b&fq=c:d&fq=...
+        check_fq(fq,type="occurrence") ## check that fq fields are valid
+        fq=as.list(fq)
+        names(fq)=rep("fq",length(fq))
+        this_query=c(this_query,fq)
     }
   
     ## may wish to specify file=data or data.csv to make sure the file within the zip is consistently named
@@ -142,6 +104,7 @@ occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$
     if (!(file.info(thisfile)$size>0)) {
         ## empty file
         x=NULL
+        ## actually this isn't an exhaustive check, since even with empty data.csv file inside, the outer zip file will be > 0 bytes. Check again below on the actual data.csv file
     } else {
         ## if data.table is available, first try using this
         read_ok=FALSE
@@ -151,14 +114,23 @@ occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$
                 ## first need to extract data.csv from the zip file
                 ## this may end up making fread() slower than direct read.table() ... needs testing
                 tempsubdir=tempfile(pattern="dir")
+                if (ala_config()$verbose) {
+                    cat(sprintf(" ALA4R: unzipping downloaded occurrences data.csv file into %s\n",tempsubdir))
+                }
                 dir.create(tempsubdir)
                 unzip(thisfile,files=c("data.csv"),junkpaths=TRUE,exdir=tempsubdir)
-                x=fread(file.path(tempsubdir,"data.csv"),stringsAsFactors=FALSE,header=TRUE,verbose=ala_config()$verbose)
-                ## make sure names of x are valid, as per data.table
-                setnames(x,make.names(names(x)))
-                ## now coerce it back to data.frame (for now at least, unless we decide to not do this!)
-                x=as.data.frame(x)
-                read_ok=TRUE
+                ## first check if file is empty
+                if (file.info(file.path(tempsubdir,"data.csv"))$size>0) {
+                    x=fread(file.path(tempsubdir,"data.csv"),stringsAsFactors=FALSE,header=TRUE,verbose=ala_config()$verbose)
+                    ## make sure names of x are valid, as per data.table
+                    setnames(x,make.names(names(x)))
+                    ## now coerce it back to data.frame (for now at least, unless we decide to not do this!)
+                    x=as.data.frame(x)
+                    read_ok=TRUE
+                } else {
+                    x=NULL
+                    read_ok=TRUE
+                }
             }, error=function(e) {
                 warning("ALA4R: reading of csv as data.table failed, will fall back to read.table (may be slow). The error message was: ",e)
                 read_ok=FALSE
@@ -168,7 +140,7 @@ occurrences=function(taxon="",wkt="",fields=c(),download_reason_id=ala_config()$
             x=read.table(unz(thisfile,filename="data.csv"),header=TRUE,comment.char="",as.is=TRUE)
         }
 
-        if (nrow(x)>0) {
+        if (!empty(x)) {
             ## make sure logical columns are actually of type logical
             logicals=which(as.vector(colSums(x=="true"|x=="false")==nrow(x))) ## get the logical columns
             x[,logicals]=apply(x[,logicals],2,function(x) as.logical(x)) ## convert columns to logical
