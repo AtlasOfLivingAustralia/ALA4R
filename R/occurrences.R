@@ -41,6 +41,9 @@
 #' }
 #' @export occurrences
 
+
+## NOTE - the column names that are returned for assertions are the full names/descriptions, do not match the requested (short) names, e.g.: y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10,qa=c("unknownCountry","homonymIssue")) gives qa columns "Supplied.country.not.recognised" and "Homonym.issues.with.supplied.name"
+
 ## undocumented: field names in "fields" and "extra" can be passed as full names e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). I haven't documented this (yet) because it probably ought to be implemented similarly in other functions - BR
 
 ## TODO document fq alone as a query
@@ -95,7 +98,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         valid_fields=ala_fields(fields_type="occurrence")
         unknown=setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
-            stop("invalid fields requested: ", str_c(unknown,collapse=", "))
+            stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"occurrence\")")
         }
         this_query$fields=str_c(fields,collapse=",")
     }
@@ -105,7 +108,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         valid_fields=ala_fields(fields_type="occurrence")
         unknown=setdiff(extra,valid_fields$name)
         if (length(unknown)>0) {
-            stop("invalid extra fields requested: ", str_c(unknown,collapse=", "))
+            stop("invalid extra fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"occurrence\")")
         }
         this_query$extra=str_c(extra,collapse=",")
     }
@@ -114,7 +117,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         valid_fields=c("none",ala_fields(fields_type="assertions")$name) ## valid entries for qa
         unknown=setdiff(qa,valid_fields)
         if (length(unknown)>0) {
-            stop("invalid qa fields requested: ", str_c(unknown,collapse=", "))
+            stop("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"assertions\")")
         }
         this_query$qa=str_c(qa,collapse=",")
     }
