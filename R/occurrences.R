@@ -94,7 +94,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     if (!missing(fields)) {
         assert_that(is.character(fields))
         ## user has specified some fields
-        fields=field_longname_to_short(fields) ## replace long names with ids
+        fields=fields_description_to_id(fields=fields,fields_type="occurrence") ## replace long names with ids
         valid_fields=ala_fields(fields_type="occurrence")
         unknown=setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
@@ -104,7 +104,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     }
     if (!missing(extra)) {
         assert_that(is.character(extra))
-        extra=field_longname_to_short(extra) ## replace long names with ids
+        extra=fields_description_to_id(fields=extra,fields_type="occurrence") ## replace long names with ids
         valid_fields=ala_fields(fields_type="occurrence")
         unknown=setdiff(extra,valid_fields$name)
         if (length(unknown)>0) {
@@ -188,9 +188,12 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
 }
 
 ## private function to change full field names to their id values (e.g. "Radiation - lowest period (Bio22)" to id "el871")
-field_longname_to_short=function(fields) {
-    assert_that(is.character(fields))
-    valid_fields=ala_fields(fields_type="occurrence")
-    laply(fields,function(z)ifelse(z %in% valid_fields$description & ! z %in% valid_fields$name,valid_fields$name[which(valid_fields$description==z)],z))
-}    
+#
+# replaced by fields_description_to_id in ala_fields
+#
+#field_longname_to_short=function(fields) {
+#    assert_that(is.character(fields))
+#    valid_fields=ala_fields(fields_type="occurrence")
+#    laply(fields,function(z)ifelse(z %in% valid_fields$description & ! z %in% valid_fields$name,valid_fields$name[which(valid_fields$description==z)],z))
+#}    
     

@@ -13,7 +13,7 @@
 #' \item "layers" - fields associated with the environmental and contextual layers
 #' \item "assertions" - record issues associated with occurrences
 #' }
-#' @param field_id text: id of field for which to look up information
+#' @param field_id text: id of environmental/contextual layer field for which to look up information
 #' Prepend "el" for "environmental" (gridded) layers and "cl" for "contextual" (polygonal) layers
 #' @return A data frame containing the field names and various attributes
 #'
@@ -40,7 +40,7 @@ ala_fields=function(fields_type="occurrence") {
            "general"={base_url=paste(ala_config()$base_url_bie,"admin/indexFields",sep="")},
            "occurrence"={base_url=paste(ala_config()$base_url_biocache,"index/fields",sep="")},
            "layers"={base_url=paste(ala_config()$base_url_spatial,"fields",sep="")},
-           "assertions"={base_url=URLencode(paste(ala_config()$base_url_biocache,'/assertions/codes',sep=''))}
+           "assertions"={base_url=paste(ala_config()$base_url_biocache,"assertions/codes",sep="")}
            )
 
     x=cached_get(base_url,type="json")
@@ -49,12 +49,8 @@ ala_fields=function(fields_type="occurrence") {
     if (identical(fields_type,"layers")) {
         more_x=cached_get(url=paste(ala_config()$base_url_spatial,"layers",sep=""),type="json")
         ## just pull out the bits that we want and construct ids here that match the field names in x
-        #if using jsonlite {
-            more_x$id=paste(substr(tolower(more_x$type),1,1),"l",more_x$id,sep="")
-            more_x=more_x[,c("name","id")]
-        #} else {
-        #    more_x=ldply(more_x,function(z){c(z$name,paste(substr(tolower(z$type),1,1),"l",z$id,sep=""))})
-        #}
+        more_x$id=paste(substr(tolower(more_x$type),1,1),"l",more_x$id,sep="")
+        more_x=more_x[,c("name","id")]
         names(more_x)=c("name_short","id")            
         x=merge(x,more_x,by="id")
     }        
@@ -66,6 +62,7 @@ ala_fields=function(fields_type="occurrence") {
 #' @export
 field_info = function(field_id) {
     assert_that(is.string(field_id))
+    field_id=fields_description_to_id(fields=field_id,fields_type="layers")
     base_url = paste(ala_config()$base_url_spatial,"field",sep="")
     ## if we supply an unknown field_id, we get 500 error from the server. But this doesn't make sense, so we mask the server error and simply return an empty data frame in this case
     this_server_error=function(z) NULL
@@ -90,3 +87,24 @@ field_info = function(field_id) {
         }
     }
 }	
+
+
+
+## private function to replace any full field names (descriptions) with their id values
+## e.g. "Radiation - lowest period (Bio22)" to id "el871"
+fields_description_to_id=function(fields,fields_type) {
+    assert_that(is.character(fields))
+    assert_that(is.string(fields_type))
+    fields_type=match.arg(tolower(fields_type),c("occurrence","general","layers","assertions"))
+    valid_fields=ala_fields(fields_type=fields_type)
+    ## merge differently for "layers" fields, because those column names differ from other fields_type
+    ## for layers, the long name is in "desc", with the id in "id" (and "name" is something different)
+    ## for "occurrence" and "assertions", long name is in "description" and id is in "name"
+    ## for general, there is no long name (description)
+    switch(fields_type,
+           "layers"=laply(fields,function(z)ifelse(z %in% valid_fields$desc & ! z %in% valid_fields$id,valid_fields$id[which(valid_fields$desc==z)],z)),
+           "occurrence"=,
+           "assertions"=laply(fields,function(z)ifelse(z %in% valid_fields$description & ! z %in% valid_fields$name,valid_fields$name[which(valid_fields$description==z)],z)),
+           fields ## default to just returning the fields as supplied 
+       )
+}

@@ -16,9 +16,10 @@ field_info(field_id)
   "assertions" - record issues associated with occurrences
   }}
 
-  \item{field_id}{text: id of field for which to look up
-  information Prepend "el" for "environmental" (gridded)
-  layers and "cl" for "contextual" (polygonal) layers}
+  \item{field_id}{text: id of environmental/contextual
+  layer field for which to look up information Prepend "el"
+  for "environmental" (gridded) layers and "cl" for
+  "contextual" (polygonal) layers}
 }
 \value{
 A data frame containing the field names and various
