@@ -1,12 +1,15 @@
 #' Get occurrence data
 #' 
-#' Retrieve ALA occurrence data via the "occurrence download" web service
+#' Retrieve ALA occurrence data via the "occurrence download" web service. At least one of `taxon`, `wkt`, or `fq` must be supplied for a valid query.
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
-#' @references \url{http://api.ala.org.au/} 
-#' \url{https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc}
-#' \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
+#' @references \itemize{
+#' \item \url{http://api.ala.org.au/} 
+#' \item Field definitions: \url{https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc}
+#' \item WKT reference: \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
+#' }
 #' 
+#' @param download_reason_id integer: (required) a reason code for the download. See ala_reasons() for valid values. The download_reason_id can be passed directly to this function, or alternatively set using ala_config(download_reason_id=...)
 #' @param taxon string: (optional) taxonomic query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")
 #' @param wkt string: (optional) a WKT (well-known text) string providing a spatial polygon within which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.131 -26,140 -37))"
 #' @param fq string: (optional) character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". 
@@ -16,10 +19,10 @@
 #' fq matches are ANDed by default (e.g. c("field1:abc","field2:def") will match records that have 
 #' field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form c("field1:abc 
 #' OR field2:def")
-#' @param fields string vector: a vector of field names to return. Note that the columns of the returned data frame 
-#' are not guaranteed to retain the ordering of the field names given here. 
-#' See ALA4R funtion ala_fields("occurrence") for valid field names.
-#' @param download_reason_id integer: a reason code for the download. See ala_reasons() for valid values. The download_reason_id can be passed directly to this function, or alternatively set using ala_config(download_reason_id=...)
+#' @param fields string vector: (optional) a vector of field names to return. Note that the columns of the returned data frame 
+#' are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See `ala_fields("occurrence")` for valid field names.
+#' @param extra string vector: (optional) a vector of field names to include in addition to those specified in `fields`. This is useful if you would like the default list of fields (i.e. when "fields" parameter is not specified) plus some additional extras. See `ala_fields("occurrence")` for valid field names.
+#' @param qa string vector: (optional) list of record issues to include in the download. See `ala_fields("assertions")` for valid values, or use "none" to include no record issues
 #' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails, or use_data_table is FALSE, then read.table will be used (which may be slow)
 #' 
 #' @return Data frame
@@ -31,16 +34,21 @@
 #' 
 #' y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10)
 #' str(y)
-#' qv: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Alaba%20vibex&fields=latitude,longitude,el874&qa=none
-#' qv: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Eucalyptus%20gunnii&fields=latitude,longitude&qa=none&fq=basis_of_record:LivingSpecimen
+#' # equivalent direct webservice call: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Alaba%20vibex&fields=latitude,longitude,el874&qa=none
+#'
+#' occurrences(taxon="Eucalyptus gunnii",fields=c("latitude","longitude"),qa="none",fq="basis_of_record:LivingSpecimen",download_reason_id=10)
+#' # equivalent direct webservice call: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Eucalyptus%20gunnii&fields=latitude,longitude&qa=none&fq=basis_of_record:LivingSpecimen
 #' }
 #' @export occurrences
 
+## undocumented: field names in "fields" and "extra" can be passed as full names e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). I haven't documented this (yet) because it probably ought to be implemented similarly in other functions - BR
+
+## TODO document fq alone as a query
 ## TODO: more extensive testing, particularly of the csv-conversion process
-## TODO: support extra params perhaps: lat, lon, radius (for specifying a search circle); extra; qa (to specify a subset of assertions to return)
+## TODO LATER: add params: lat, lon, radius (for specifying a search circle)
 
 
-occurrences=function(taxon,wkt,fq,fields=c(),download_reason_id=ala_config()$download_reason_id,use_data_table=TRUE) {
+occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,use_data_table=TRUE) {
     ## check input parms are sensible
     reason_ok=!is.na(download_reason_id)
     if (reason_ok) {
@@ -79,12 +87,11 @@ occurrences=function(taxon,wkt,fq,fields=c(),download_reason_id=ala_config()$dow
         names(fq)=rep("fq",length(fq))
         this_query=c(this_query,fq)
     }
-  
-    ## may wish to specify file=data or data.csv to make sure the file within the zip is consistently named
-    
-    if (length(fields)>0) {
+      
+    if (!missing(fields)) {
         assert_that(is.character(fields))
         ## user has specified some fields
+        fields=field_longname_to_short(fields) ## replace long names with ids
         valid_fields=ala_fields(fields_type="occurrence")
         unknown=setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
@@ -92,9 +99,29 @@ occurrences=function(taxon,wkt,fq,fields=c(),download_reason_id=ala_config()$dow
         }
         this_query$fields=str_c(fields,collapse=",")
     }
+    if (!missing(extra)) {
+        assert_that(is.character(extra))
+        extra=field_longname_to_short(extra) ## replace long names with ids
+        valid_fields=ala_fields(fields_type="occurrence")
+        unknown=setdiff(extra,valid_fields$name)
+        if (length(unknown)>0) {
+            stop("invalid extra fields requested: ", str_c(unknown,collapse=", "))
+        }
+        this_query$extra=str_c(extra,collapse=",")
+    }
+    if (!missing(qa)) {
+        assert_that(is.character(qa))
+        valid_fields=c("none",ala_fields(fields_type="assertions")$name) ## valid entries for qa
+        unknown=setdiff(qa,valid_fields)
+        if (length(unknown)>0) {
+            stop("invalid qa fields requested: ", str_c(unknown,collapse=", "))
+        }
+        this_query$qa=str_c(qa,collapse=",")
+    }
     this_query$reasonTypeId=download_reason_id
     this_query$esc="\\" ## force backslash-escaping of quotes rather than double-quote escaping
     this_query$sep="\t" ## tab-delimited
+    this_query$file="data" ## to ensure that file is named "data.csv" within the zip file
     
     this_url=parse_url(base_url)
     this_url$query=this_query
@@ -104,7 +131,7 @@ occurrences=function(taxon,wkt,fq,fields=c(),download_reason_id=ala_config()$dow
     if (!(file.info(thisfile)$size>0)) {
         ## empty file
         x=NULL
-        ## actually this isn't an exhaustive check, since even with empty data.csv file inside, the outer zip file will be > 0 bytes. Check again below on the actual data.csv file
+        ## actually this isn't a sufficient check, since even with empty data.csv file inside, the outer zip file will be > 0 bytes. Check again below on the actual data.csv file
     } else {
         ## if data.table is available, first try using this
         read_ok=FALSE
@@ -156,3 +183,11 @@ occurrences=function(taxon,wkt,fq,fields=c(),download_reason_id=ala_config()$dow
     }
     x
 }
+
+## private function to change full field names to their id values (e.g. "Radiation - lowest period (Bio22)" to id "el871")
+field_longname_to_short=function(fields) {
+    assert_that(is.character(fields))
+    valid_fields=ala_fields(fields_type="occurrence")
+    laply(fields,function(z)ifelse(z %in% valid_fields$description & ! z %in% valid_fields$name,valid_fields$name[which(valid_fields$description==z)],z))
+}    
+    

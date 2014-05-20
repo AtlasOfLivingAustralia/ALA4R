@@ -2,11 +2,17 @@
 \alias{occurrences}
 \title{Get occurrence data}
 \usage{
-occurrences(taxon, wkt, fq, fields = c(),
+occurrences(taxon, wkt, fq, fields, extra, qa,
   download_reason_id = ala_config()$download_reason_id,
   use_data_table = TRUE)
 }
 \arguments{
+  \item{download_reason_id}{integer: (required) a reason
+  code for the download. See ala_reasons() for valid
+  values. The download_reason_id can be passed directly to
+  this function, or alternatively set using
+  ala_config(download_reason_id=...)}
+
   \item{taxon}{string: (optional) taxonomic query of the
   form field:value (e.g. "genus:Macropus") or a free text
   search ("Alaba vibex")}
@@ -29,17 +35,24 @@ occurrences(taxon, wkt, fq, fields = c(),
   field1 value "abc" and field2 value "def"). To obtain OR
   behaviour, use the form c("field1:abc OR field2:def")}
 
-  \item{fields}{string vector: a vector of field names to
-  return. Note that the columns of the returned data frame
-  are not guaranteed to retain the ordering of the field
-  names given here. See ALA4R funtion
-  ala_fields("occurrence") for valid field names.}
+  \item{fields}{string vector: (optional) a vector of field
+  names to return. Note that the columns of the returned
+  data frame are not guaranteed to retain the ordering of
+  the field names given here. If not specified, a default
+  list of fields will be returned. See
+  `ala_fields("occurrence")` for valid field names.}
 
-  \item{download_reason_id}{integer: a reason code for the
-  download. See ala_reasons() for valid values. The
-  download_reason_id can be passed directly to this
-  function, or alternatively set using
-  ala_config(download_reason_id=...)}
+  \item{extra}{string vector: (optional) a vector of field
+  names to include in addition to those specified in
+  `fields`. This is useful if you would like the default
+  list of fields (i.e. when "fields" parameter is not
+  specified) plus some additional extras. See
+  `ala_fields("occurrence")` for valid field names.}
+
+  \item{qa}{string vector: (optional) list of record issues
+  to include in the download. See
+  `ala_fields("assertions")` for valid values, or use
+  "none" to include no record issues}
 
   \item{use_data_table}{logical: if TRUE, attempt to read
   the data.csv file using the fread function from the
@@ -52,7 +65,8 @@ Data frame
 }
 \description{
 Retrieve ALA occurrence data via the "occurrence download"
-web service
+web service. At least one of `taxon`, `wkt`, or `fq` must
+be supplied for a valid query.
 }
 \examples{
 \dontrun{
@@ -61,16 +75,21 @@ x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10)
 
 y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10)
 str(y)
-qv: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Alaba\%20vibex&fields=latitude,longitude,el874&qa=none
-qv: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Eucalyptus\%20gunnii&fields=latitude,longitude&qa=none&fq=basis_of_record:LivingSpecimen
+# equivalent direct webservice call: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Alaba\%20vibex&fields=latitude,longitude,el874&qa=none
+
+occurrences(taxon="Eucalyptus gunnii",fields=c("latitude","longitude"),qa="none",fq="basis_of_record:LivingSpecimen",download_reason_id=10)
+# equivalent direct webservice call: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Eucalyptus\%20gunnii&fields=latitude,longitude&qa=none&fq=basis_of_record:LivingSpecimen
 }
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://api.ala.org.au/}
+\itemize{ \item \url{http://api.ala.org.au/} \item Field
+definitions:
 \url{https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc}
+\item WKT reference:
 \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
+}
 }
 
