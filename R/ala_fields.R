@@ -40,7 +40,7 @@ ala_fields=function(fields_type="occurrence") {
            "general"={base_url=paste(ala_config()$base_url_bie,"admin/indexFields",sep="")},
            "occurrence"={base_url=paste(ala_config()$base_url_biocache,"index/fields",sep="")},
            "layers"={base_url=paste(ala_config()$base_url_spatial,"fields",sep="")},
-           "assertions"={base_url="http://biocache.ala.org.au/ws/occurrences/search?q=*:*&facets=assertions&pageSize=0&flimit=500"}
+           "assertions"={base_url=URLencode(paste(ala_config()$base_url_biocache,'/assertions/codes',sep=''))}
            )
 
     x=cached_get(base_url,type="json")
@@ -57,9 +57,6 @@ ala_fields=function(fields_type="occurrence") {
         #}
         names(more_x)=c("name_short","id")            
         x=merge(x,more_x,by="id")
-    } else if (identical(fields_type,"assertions")) {
-        x=x$facetResults$fieldResult[[1]]
-        names(x)[names(x)=="label"]="name"
     }        
     x
 }
