@@ -6,11 +6,14 @@
 #' \item Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/}
 #' }
 #' 
-#' @param fields_type text: either 
-#' "general" (for searching taxa, datasets, layers, and collections metadata), 
-#' "occurrence" (for searching species occurrence records), or 
-#' "layers" (a list of all fields associated with the environmental and contextual layers)
-#' @param field_id text: id of field for which to look up information. 
+#' @param fields_type text: either
+#' \itemize{
+#' \item "general" - for searching taxa, datasets, layers, and collections metadata
+#' \item "occurrence" - for searching species occurrence records
+#' \item "layers" - fields associated with the environmental and contextual layers
+#' \item "assertions" - record issues associated with occurrences
+#' }
+#' @param field_id text: id of field for which to look up information
 #' Prepend "el" for "environmental" (gridded) layers and "cl" for "contextual" (polygonal) layers
 #' @return A data frame containing the field names and various attributes
 #'
@@ -29,27 +32,18 @@
 #' }
 #' @export
 
-## "general" is needed for e.g. full-text species searching, but note that this service is not currently part of the API
 
 ala_fields=function(fields_type="occurrence") {
     assert_that(is.string(fields_type))
-    fields_type=match.arg(tolower(fields_type),c("occurrence","general","layers"))
+    fields_type=match.arg(tolower(fields_type),c("occurrence","general","layers","assertions"))
     switch(fields_type,
            "general"={base_url=paste(ala_config()$base_url_bie,"admin/indexFields",sep="")},
            "occurrence"={base_url=paste(ala_config()$base_url_biocache,"index/fields",sep="")},
-           "layers"={base_url=paste(ala_config()$base_url_spatial,"fields",sep="")}
+           "layers"={base_url=paste(ala_config()$base_url_spatial,"fields",sep="")},
+           "assertions"={base_url="http://biocache.ala.org.au/ws/occurrences/search?q=*:*&facets=assertions&pageSize=0&flimit=500"}
            )
 
     x=cached_get(base_url,type="json")
-    #if NOT using jsonlite {
-    #    x=rbind.fill(lapply(x,as.data.frame)) ## convert each element of content(x)[[1]] into data frame, then combine
-    #    ## convert factors to strings
-    #    for (col in 1:ncol(x)) {
-    #        if (identical(class(x[,col]),"factor")) {
-    #            x[,col]=as.character(x[,col])
-    #        }
-    #    }
-    #}
 
     ## for "layers", shorter, more manageable names are provided from http://spatial.ala.org.au/ws/layers in API. Add these as an extra column: name_short
     if (identical(fields_type,"layers")) {
@@ -63,7 +57,10 @@ ala_fields=function(fields_type="occurrence") {
         #}
         names(more_x)=c("name_short","id")            
         x=merge(x,more_x,by="id")
-    }
+    } else if (identical(fields_type,"assertions")) {
+        x=x$facetResults$fieldResult[[1]]
+        names(x)[names(x)=="label"]="name"
+    }        
     x
 }
 

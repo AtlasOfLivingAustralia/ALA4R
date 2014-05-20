@@ -8,14 +8,16 @@ ala_fields(fields_type = "occurrence")
 field_info(field_id)
 }
 \arguments{
-  \item{fields_type}{text: either "general" (for searching
-  taxa, datasets, layers, and collections metadata),
-  "occurrence" (for searching species occurrence records),
-  or "layers" (a list of all fields associated with the
-  environmental and contextual layers)}
+  \item{fields_type}{text: either \itemize{ \item "general"
+  - for searching taxa, datasets, layers, and collections
+  metadata \item "occurrence" - for searching species
+  occurrence records \item "layers" - fields associated
+  with the environmental and contextual layers \item
+  "assertions" - record issues associated with occurrences
+  }}
 
   \item{field_id}{text: id of field for which to look up
-  information. Prepend "el" for "environmental" (gridded)
+  information Prepend "el" for "environmental" (gridded)
   layers and "cl" for "contextual" (polygonal) layers}
 }
 \value{
