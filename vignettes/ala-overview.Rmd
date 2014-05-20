@@ -11,9 +11,9 @@ First, install some packages from CRAN that are required by our package (CRAN is
 install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat"))
 ```
 
-If you wish to use the `sp` package for spatial data (optional), also do:
-```{r eval=FALSE}
-install.packages(c("sp"))
+If you wish to use the `sp` package for spatial data and `data.table` package for potentially faster loading of data matrices (both optional), also do:
+```{r}
+install.packages(c("sp","data.table"))
 ```
 
 Then install the ALA4R package itself from RForge:
@@ -31,14 +31,20 @@ sudo apt-get install libcurl4-openssl-dev
 or install `libcurl4-openssl-dev` via the Software Centre.
 
 Then, fire up R and install the dependencies that we need:
-```{r eval=FALSE}
+```{r}
 install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat"))
 ```
 
+If you wish to use the `sp` package for spatial data and `data.table` package for potentially faster loading of data matrices (both optional), also do:
+```{r}
+install.packages(c("sp","data.table"))
+```
+
 Then the ALA4R package itself:
-```{r eval=FALSE}
+```{r}
 install.packages("ALA4R",repos="http://rforge.net/")
 ```
+
 
 
 ## Using

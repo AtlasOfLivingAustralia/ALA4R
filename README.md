@@ -13,9 +13,9 @@ Install the dependencies first:
 install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat"))
 ```
 
-If you wish to use the `sp` package for spatial data (optional), also do:
+If you wish to use the `sp` package for spatial data and `data.table` package for potentially faster loading of data matrices (both optional), also do:
 ```{r}
-install.packages(c("sp"))
+install.packages(c("sp","data.table"))
 ```
 
 Then the ALA4R package itself:
@@ -37,9 +37,9 @@ Then, fire up R and install the dependencies that we need:
 install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat"))
 ```
 
-If you wish to use the `sp` package for spatial data (optional), also do:
+If you wish to use the `sp` package for spatial data and `data.table` package for potentially faster loading of data matrices (both optional), also do:
 ```{r}
-install.packages(c("sp"))
+install.packages(c("sp","data.table"))
 ```
 
 Then the ALA4R package itself:
