@@ -62,7 +62,7 @@ ala_config=function(...) {
     ## ideally, the valid download_reason_id values should be populated dynamically from the ala_reasons() function. However if that is called (from here) before the AL4R_config option has been set, then we get infinite recursion. To be addressed later ...
 
     ## has the user asked to reset options to defaults?
-    if (identical(tolower(user_options),list("reset"))) {
+    if (identical(tolower(user_options),"reset")) {
         temp=list(default_options)
         names(temp)=ala_option_name
         options(temp)        
