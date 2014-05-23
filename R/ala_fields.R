@@ -5,7 +5,7 @@
 #' \item ALA web service API: \url{http://api.ala.org.au/}
 #' \item Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/}
 #' }
-#' 
+#' @seealso \code{\link{search_layers}} to search for spatial layers
 #' @param fields_type text: either
 #' \itemize{
 #' \item "general" - for searching taxa, datasets, layers, and collections metadata

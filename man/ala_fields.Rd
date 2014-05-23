@@ -45,4 +45,7 @@ Atlas of Living Australia \email{support@ala.org.au}
 \url{http://api.ala.org.au/} \item Descriptions of the
 spatial layers: \url{http://spatial.ala.org.au/layers/} }
 }
+\seealso{
+\code{\link{search_layers}} to search for spatial layers
+}
 
