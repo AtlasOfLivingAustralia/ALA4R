@@ -18,14 +18,14 @@
 # check_status_code(out$headers$status) ## or pass the status code explicitly
 # }
 
-check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL,extra_info="") {
-    if (!is.null(on_redirect)) {
+check_status_code=function(x,on_redirect,on_client_error,on_server_error,extra_info="") {
+    if (!missing(on_redirect)) {
         assert_that(is.function(on_redirect))
     }
-    if (!is.null(on_server_error)) {
+    if (!missing(on_server_error)) {
         assert_that(is.function(on_server_error))
     }
-    if (!is.null(on_client_error)) {
+    if (!missing(on_client_error)) {
         assert_that(is.function(on_client_error))
     }
     assert_that(is.string(extra_info))
@@ -53,7 +53,7 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
             "3"={ ## 3xx are redirection codes
                 ## probably indicates that we are using the wrong URL for a service
                 ## the code may or may not work depending on whether e.g. a redirect was followed
-                if (! is.null(on_redirect)) {
+                if (!missing(on_redirect)) {
                     return(on_redirect(xstatus))
                 } else {
                     ## just issue a warning for now
@@ -64,7 +64,7 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
             "4"={ ## 4xx are client errors, e.g. 404 not found
                 ## an error here probably indicates a problem in the ALA4R code
                 ## ? should this be an error or a warning?
-                if (! is.null(on_client_error)) {
+                if (!missing(on_client_error)) {
                     return(on_client_error(xstatus))
                 } else {
                     diag_msg="  Either there was an error with your request, or an error in the ALA4R package."
@@ -82,7 +82,7 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
                 }
             },
             "5"={ ## 5xx are server errors
-                if (! is.null(on_server_error)) {
+                if (!missing(on_server_error)) {
                     return(on_server_error(xstatus))
                 } else {
                     diag_msg="  Either there was an error with the request, or the ALA service may be down (try again later)."
