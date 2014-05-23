@@ -16,7 +16,7 @@
 #'     "off" (no caching, default).
 #'   \item cache_directory string: the directory to use for the cache. 
 #'     By default this is a temporary directory, which means that results will only be cached 
-#'     within an R session. The user may wish to set this to a non-temporary directory for 
+#'     within an R session and cleared automatically when the user exits R. The user may wish to set this to a non-temporary directory for 
 #'     caching across sessions. The directory must exist on the file system.
 #'   \item verbose logical: should ALA4R give verbose output to assist debugging?  (default=FALSE)
 #'   \item user_agent string: the user-agent string used with all web requests to the ALA servers.
@@ -25,7 +25,7 @@
 #'     By default this is NA. Some ALA services require a valid download_reason_id code, either 
 #'     specified here or directly to the associated R function. 
 #'     See \code{ala_reasons()} for a list of valid ID codes.
-#'   \item base_url_spatial string: the base url for spatial web services (default="http://spatial.ala.org.au/ws/")
+#'   \item base_url_spatialch string: the base url for spatial web services (default="http://spatial.ala.org.au/ws/")
 #'   \item base_url_bie string: the base url for BIE web services (default="http://bie.ala.org.au/ws/")
 #'   \item base_url_biocache string: the base url for biocache web services (default="http://biocache.ala.org.au/ws/")
 #' }
