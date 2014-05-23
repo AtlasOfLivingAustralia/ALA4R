@@ -10,13 +10,5 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}, Ben Raymond, Jeremy VanDerWal, Lee Belbin
 #' @docType package
 #' @references \url{http://api.ala.org.au/ws}
-#' Currently, not all services of the following pages had been moved to api.ala.org.au
-#' The following web service reference pages are therefore added for completeness:
-#' \itemize{
-#' \item \url{http://bie.ala.org.au/ws}
-#' \item \url{http://biocache.la.org.au/ws}
-#' \item \url{http://spatial.ala.org.au/layers-service/}
-#' }
-#' 
 #' @import stringr httr plyr digest RCurl jsonlite assertthat
 NULL
