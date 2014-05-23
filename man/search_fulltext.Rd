@@ -2,17 +2,16 @@
 \alias{search_fulltext}
 \title{Full text search}
 \usage{
-search_fulltext(taxon, fq, start, page_size, sort_by, sort_dir)
+search_fulltext(query, fq, start, page_size, sort_by, sort_dir)
 }
 \arguments{
-  \item{taxon}{string: (required) a character string for
-  the taxon of interest}
+  \item{query}{string: the search term}
 
   \item{fq}{string: (optional) character string or vector
   of strings, specifying filters to be applied to the
   original query. These are of the form
   "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See
-  ala_fields("general") for all the fields that are
+  \code{ala_fields("general")} for all the fields that are
   queryable. NOTE that fq matches are case-sensitive, but
   sometimes the entries in the fields are not consistent in
   terms of case (e.g. kingdom names "Fungi" and "Plantae"
@@ -36,11 +35,15 @@ search_fulltext(taxon, fq, start, page_size, sort_by, sort_dir)
 \value{
 a named list with the components "meta" (search metadata),
 "facets" (search facet results), and "data" (the search
-results, in the form of a dataframe).
+results, in the form of a dataframe). The contents (column
+names) of the data frame will vary depending on the details
+of the search and the results.
 }
 \description{
 Performs a search across all objects, and selects the
-closest matches
+closest matches. Generally, the user will provide the
+search term via the \code{query} parameter, with optional
+filtering via \code{fq}.
 }
 \examples{
 # find information ALA holds on red kangaroo
@@ -56,5 +59,8 @@ Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
 \url{http://api.ala.org.au/}
+}
+\seealso{
+\code{\link{ala_fields}}
 }
 
