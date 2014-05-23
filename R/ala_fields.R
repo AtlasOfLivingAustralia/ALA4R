@@ -16,21 +16,19 @@
 #' @param field_id text: id of environmental/contextual layer field for which to look up information
 #' Prepend "el" for "environmental" (gridded) layers and "cl" for "contextual" (polygonal) layers
 #' @return A data frame containing the field names and various attributes
-#'
-#' TODO: Summary of #fields returned. We are using "layers" here but "fields" in intersect. 
-#' ids from http://spatial.ala.org.au/ws/layers are NUMERIC but lookup prepends "el" and "cl"! 
-#' Improve error return on invalid ids (eg "field_info("cl680"))
 #' 
 #' @examples
 #' \dontrun{
-#' o=ala_fields("occurrence")
-#' o[1:2]
 #' l=ala_fields("layers")
 #' l[1,]
 #' field_info("cl22")
 #' field_info("el773")
 #' }
-#' @export
+#' @export ala_fields
+
+# TODO: Summary of #fields returned. We are using "layers" here but "fields" in intersect. 
+# ids from http://spatial.ala.org.au/ws/layers are NUMERIC but lookup prepends "el" and "cl"! 
+# Improve error return on invalid ids (eg "field_info("cl680"))
 
 
 ala_fields=function(fields_type="occurrence") {
