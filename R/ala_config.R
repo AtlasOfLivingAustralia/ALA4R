@@ -3,35 +3,33 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' 
-#' Invoking ala_config() with no arguments returns a list with the current values of the options. 
-#' Invoking ala_config("reset") will reset all options to their default values.
+#' Invoking \code{ala_config()} with no arguments returns a list with the current values of the options. 
 #' 
-#' Valid options are: \itemize{
-#' \item reset: "reset" will reset the options to their default values
-#' \item caching: caching can be 
-#' "on" (results will be cached, and any cached results will be re-used), 
-#' "refresh" (cached results will be refreshed and the new results stored in the cache), or 
-#' "off" (no caching, default).
-#' \item cache_directory: the directory to use for the cache. 
-#' By default this is a temporary directory, which means that results will only be cached 
-#' within an R session. The user may wish to set this to a non-temporary directory for 
-#' caching across sessions. The directory must exist on the file system.
-#' \item verbose: should ALA4R give verbose output to assist debugging?  (logical, default=FALSE)
-#' \item user_agent: the user-agent string used with all web requests to the ALA servers.
-#' Default = "ALA4R" with version number, R version and date and user platform
-#' \item download_reason_id: the ID code of the "download reason" required by some ALA services. 
-#' By default this is NA. Some ALA services require a valid download_reason_id code, either 
-#' specified here or directly to the associated R function. 
-#' See ala_reasons() for a list of valid ID codes.
-#' \item base_url_spatial: the base url for spatial web services (default="http://spatial.ala.org.au/ws/")
-#' \item base_url_bie: the base url for BIE web services (default="http://bie.ala.org.au/ws/")
-#' \item base_url_biocache: the base url for biocache web services (default="http://biocache.ala.org.au/ws/")
+#' \code{ala_reasons()} returns a data frame with information describing the valid options for \code{download_reason_id}
+#' 
+#' @param \dots Options can be defined using name=value. Valid options are:
+#' \itemize{
+#'   \item reset: \code{ala_config("reset")} will reset the options to their default values
+#'   \item caching string: caching can be 
+#'     "on" (results will be cached, and any cached results will be re-used), 
+#'     "refresh" (cached results will be refreshed and the new results stored in the cache), or 
+#'     "off" (no caching, default).
+#'   \item cache_directory string: the directory to use for the cache. 
+#'     By default this is a temporary directory, which means that results will only be cached 
+#'     within an R session. The user may wish to set this to a non-temporary directory for 
+#'     caching across sessions. The directory must exist on the file system.
+#'   \item verbose logical: should ALA4R give verbose output to assist debugging?  (default=FALSE)
+#'   \item user_agent string: the user-agent string used with all web requests to the ALA servers.
+#'     Default = "ALA4R" with version number, R version and date and user platform
+#'   \item download_reason_id (numeric): the ID code of the "download reason" required by some ALA services. 
+#'     By default this is NA. Some ALA services require a valid download_reason_id code, either 
+#'     specified here or directly to the associated R function. 
+#'     See \code{ala_reasons()} for a list of valid ID codes.
+#'   \item base_url_spatial string: the base url for spatial web services (default="http://spatial.ala.org.au/ws/")
+#'   \item base_url_bie string: the base url for BIE web services (default="http://bie.ala.org.au/ws/")
+#'   \item base_url_biocache string: the base url for biocache web services (default="http://biocache.ala.org.au/ws/")
 #' }
-#'
-#' ala_reasons() returns a data frame with information describing the valid options for "download_reason"
 #' 
-#' @param \dots Options can be defined using name=value. Valid option names are
-#' listed above
 #' @return For ala_config(), a list of all options. When ala_config(...) is
 #' called with arguments, nothing is returned but the configuration is set.
 #' 
@@ -40,7 +38,7 @@
 #' ala_config()
 #' ala_config(caching="off")
 #' ala_reasons()
-#' ala_config(download_reason_id="9",verbose=TRUE)
+#' ala_config(download_reason_id=9,verbose=TRUE)
 #' ala_config("reset")
 #' 
 #' @export ala_config
@@ -64,7 +62,7 @@ ala_config=function(...) {
     ## ideally, the valid download_reason_id values should be populated dynamically from the ala_reasons() function. However if that is called (from here) before the AL4R_config option has been set, then we get infinite recursion. To be addressed later ...
 
     ## has the user asked to reset options to defaults?
-    if (identical(user_options,list("reset"))) {
+    if (identical(tolower(user_options),list("reset"))) {
         temp=list(default_options)
         names(temp)=ala_option_name
         options(temp)        
