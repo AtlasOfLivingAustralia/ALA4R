@@ -10,7 +10,7 @@
 #' @param vernacular logical: if TRUE, match on common names as well as scientific names, otherwise match only on scientific names
 #' @param guids_only logical: if TRUE, a named list of GUIDs will be returned. Otherwise, a data frame with more comprehensive information for each name will be returned.
 #' @param output_format string: controls the print method for the returned object (only applicable when guids_only is FALSE). Either "complete" (the complete data structure is displayed), or "simple" (a simplified version is displayed). Note that the complete data structure exists in both cases: this option only controls what is displayed when the object is printed to the console. The default output format is "simple"
-#' @return A data frame of results, or named list of GUIDs if guids_only is TRUE
+#' @return A data frame of results, or named list of GUIDs if \code{guids_only} is TRUE
 #' 
 #' @examples
 #' 
@@ -25,7 +25,7 @@
 # TODO: Should #occurrences be returned to help identification? (low priority)
 # Note that there were issues with single-word all-lower-case names or other variants of unexpected lower/upper-case (see issue #649)
 # This is now resolved, although some other odd case-related behaviour still seems to occur, for example:
-# "Gallirallus australis" matches this species, "Gallirallus australi" matches nothing, yet "Gallirallus Australi" matches Gallirallus
+# "Gallirallus australis" matches this species, "Gallirallus australi" matches nothing, yet "Gallirallus Australi" matches Gallirallus genus
 
 
 search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="simple") {

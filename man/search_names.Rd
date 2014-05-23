@@ -28,7 +28,7 @@ search_names(taxa = c(), vernacular = FALSE, guids_only = FALSE,
 }
 \value{
 A data frame of results, or named list of GUIDs if
-guids_only is TRUE
+\code{guids_only} is TRUE
 }
 \description{
 Provides GUID, taxonomic classification, and other
