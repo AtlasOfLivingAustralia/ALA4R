@@ -184,6 +184,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         }
         x=list(data=x,meta=xc)
     }
+	class(x) <- c('occurrences',class(x)) #add the occurrences class
     x
 }
 
