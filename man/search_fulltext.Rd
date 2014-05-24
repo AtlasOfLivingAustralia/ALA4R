@@ -2,7 +2,8 @@
 \alias{search_fulltext}
 \title{Full text search}
 \usage{
-search_fulltext(query, fq, start, page_size, sort_by, sort_dir)
+search_fulltext(query, fq, output_format = "simple", start, page_size,
+  sort_by, sort_dir)
 }
 \arguments{
   \item{query}{string: the search term}
@@ -19,6 +20,15 @@ search_fulltext(query, fq, start, page_size, sort_by, sort_dir)
   c("field1:abc","field2:def") will match records that have
   field1 value "abc" and field2 value "def"). To obtain OR
   behaviour, use the form c("field1:abc OR field2:def")}
+
+  \item{output_format}{string: controls the print method
+  for the "data" component of the returned object. Either
+  "complete" (the complete data structure is displayed), or
+  "simple" (a simplified version is displayed). Note that
+  the complete data structure exists in both cases: this
+  option only controls what is displayed when the object is
+  printed to the console. The default output format is
+  "simple"}
 
   \item{start}{numeric: (optional) (positive integer) start
   offset for the results}
