@@ -1,11 +1,11 @@
-#' Fetch a taxon profile given a scientific name or LSID
+#' Fetch a taxon profile given a scientific name or LSID (GUID)
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' 
 #' @param scientificname string: scientific name of the taxon of interest (species, genus, family etc) 
 #' @param guid string: The Life Science Identifier of the taxon of interest
-#' @param verbose logical: how much progress information to display; default is set by ala_config().
+#' @param verbose logical: how much progress information to display; default is set by \code{ala_config()}
 #' @return species profile in the form of a named list
 
 #' @examples
@@ -19,21 +19,21 @@
 
 # TODO: support multiple names or guids passed as a vector? (LB:low priority)
 
-species_info=function(scientificname=NULL,guid=NULL,verbose=ala_config()$verbose) {
-    if (!is.null(scientificname)) {
+species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
+    if (!missing(scientificname)) {
         assert_that(is.string(scientificname))
     }
-    if (!is.null(guid)) {
+    if (!missing(guid)) {
         assert_that(is.string(guid))
     }
     assert_that(is.flag(verbose))
-    if (is.null(scientificname) && is.null(guid)) {
+    if (missing(scientificname) && missing(guid)) {
         stop("either the scientific name or the guid must be provided")
     }
-    if ((! is.null(scientificname)) && (! is.null(guid))) {
+    if ((!missing(scientificname)) && (!missing(guid))) {
         stop("either the scientific name or the guid must be provided, but not both")
     }
-    if (! is.null(scientificname)) {
+    if (!missing(scientificname)) {
         guid=search_names(scientificname,vernacular=FALSE,guids_only=TRUE)
         if (length(guid)<1) {
             return(NULL)
