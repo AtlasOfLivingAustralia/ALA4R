@@ -32,7 +32,7 @@ specieslist(taxon, wkt, fq, page_size)
 }
 \value{
 Data frame with (at least) the columns \itemize{
-\item{family} \item{Scientific.name} \item{Common.name}
+\item{Family} \item{Scientific.name} \item{Common.name}
 \item{Taxon.rank} \item{guid} \item{N.occurrences} }
 }
 \description{

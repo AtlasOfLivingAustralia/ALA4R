@@ -13,7 +13,7 @@
 #' the ALA server). Default=NA, meaning that the server default value (currently 10) will be used.
 #' @return Data frame with (at least) the columns
 #' \itemize{
-#' \item{family} \item{Scientific.name} \item{Common.name} \item{Taxon.rank}
+#' \item{Family} \item{Scientific.name} \item{Common.name} \item{Taxon.rank}
 #' \item{guid} \item{N.occurrences}
 #' }
 #' @seealso \code{\link{ala_fields}} for occurrence fields that are queryable via the \code{fq} parameter
@@ -25,11 +25,11 @@
 #' }
 #' @export specieslist
 
-## TODO: (As per advice from Adam): move away from webportal/species.csv to http://biocache.ala.org.au/ws/occurrences/facets/download?q=data_resource_uid:dr364&facets=species_guid&lookup=true&count=true
+## TODO: (As per advice from Adam): move away from webportal/species.csv to http://biocache.ala.org.au/ws/occurrences/facets/download?q=data_resource_uid:dr364&facets=species_guid&lookup=true&count=true - see partial implementation below (commented out - not working)
+## TODO avoid warning on empty results (see below)
 ## TODO? use data.table if available, similarly to occurrences()
 
 specieslist=function(taxon,wkt,fq,page_size) {
-    base_url=paste(ala_config()$base_url_biocache,"webportal/species.csv",sep="")
     this_query=list()
     if (!missing(taxon)) {
         assert_that(is.string(taxon))
@@ -59,6 +59,14 @@ specieslist=function(taxon,wkt,fq,page_size) {
         assert_that(is.count(page_size))
         this_query$pageSize=page_size
     }
+    base_url=paste(ala_config()$base_url_biocache,"webportal/species.csv",sep="")
+    ## (As per advice from Adam): move away from webportal/species.csv to http://biocache.ala.org.au/ws/occurrences/facets/download?q=data_resource_uid:dr364&facets=species_guid&lookup=true&count=true
+    #base_url=paste(ala_config()$base_url_biocache,"occurrences/facets/download")
+    #this_query$facets="species_guid"
+    #this_query$lookup="true"
+    #this_query$count="true"
+    ## no, this doesn't work: need to ask Adam how this should be done
+    
     this_url=parse_url(base_url)
     this_url$query=this_query
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
