@@ -1,5 +1,5 @@
 <!--
-%\VignetteEngine{knitr::docco_linear}
+%\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{ALA4R}
 -->
 
