@@ -1,4 +1,15 @@
+<!--
+%\VignetteEngine{knitr::docco_linear}
+%\VignetteIndexEntry{ALA4R}
+-->
+
 # ALA4R
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(out.extra='style="display:block; margin: auto"', fig.align="center")
+```
+
 
 This project enables the R community to directly access data and resources hosted by the Atlas of Living Australia (ALA: http://ala.org.au/). Our goal is to enable outputs (e.g. observations of species) to be queried and output in a range of standard formats.
 
