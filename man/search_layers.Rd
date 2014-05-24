@@ -2,7 +2,7 @@
 \alias{search_layers}
 \title{Search for environmental and contextual data layers}
 \usage{
-search_layers(type = "all", query)
+search_layers(type = "all", query, output_format = "simple")
 }
 \arguments{
   \item{type}{string: either "all" (all possible layers;
@@ -12,6 +12,14 @@ search_layers(type = "all", query)
   \item{query}{text string: optional search term against
   layer metadata. Only layers that include this term in
   their metadata will be returned.}
+
+  \item{output_format}{string: controls the print method
+  for the returned object. Either "complete" (the complete
+  data structure is displayed), or "simple" (a simplified
+  version is displayed). Note that the complete data
+  structure exists in both cases: this option only controls
+  what is displayed when the object is printed to the
+  console. The default output format is "simple"}
 }
 \value{
 A data frame of results. The contents (column names) of the
