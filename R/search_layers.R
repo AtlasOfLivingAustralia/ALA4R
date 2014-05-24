@@ -30,5 +30,12 @@ search_layers = function(type="all",query) {
     if (!missing(query)) {
         out=out[grepl(query,out$name,ignore.case=TRUE) | grepl(query,out$description,ignore.case=TRUE),]
     }
-    out
+    ## change id from numeric to "elxxx" or "clxxx" as appropriate for environmental/contextual
+    out$id=paste(substr(tolower(out$type),1,1),"l",out$id,sep="")
+    ## remove some columns that are unlikely to be of value here
+    xcols=setdiff(names(out),unwanted_columns("layers"))
+    ## reorder columns, for minor convenience
+    firstcols=intersect(c("name","id","type","description"),xcols)
+    xcols=c(firstcols,setdiff(xcols,firstcols))
+    out[,xcols]
 }
