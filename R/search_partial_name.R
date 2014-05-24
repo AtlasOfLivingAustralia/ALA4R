@@ -64,6 +64,12 @@ search_partial_name=function(taxon,geo_only=FALSE,output_format="simple",index_t
         out$matchedNames=unlist(out$matchedNames)
         out$scientificNameMatches=unlist(out$scientificNameMatches)
         out$commonNameMatches=unlist(out$commonNameMatches)
+        ## remove some columns that are unlikely to ever be of value to R users
+        xcols=setdiff(names(out),unwanted_columns("general"))
+        ## reorder columns, for minor convenience
+        firstcols=intersect(c("name","commonName","guid","rankString"),xcols)
+        xcols=c(firstcols,setdiff(xcols,firstcols))
+        out=out[,xcols]
     }
     class(out) <- c('search_partial_name',class(out)) #add the search_partial_name class
     attr(out,"output_format")=output_format
