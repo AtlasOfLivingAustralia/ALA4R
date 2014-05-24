@@ -1,36 +1,25 @@
 \name{search_layers}
 \alias{search_layers}
-\title{Provides a list of all environmental and contextual layers in ALA}
+\title{Search for environmental and contextual data layers}
 \usage{
-search_layers(type = "all", query = NULL)
+search_layers(type = "all", query)
 }
 \arguments{
-  \item{type}{string: a selection of "all", "grids" or
-  "shapes" associated with all possible layers, only
-  environmental grids or contextual shapefiles}
+  \item{type}{string: either "all" (all possible layers;
+  default), "grids" (gridded environmental layers), or
+  "shapes" (contextual shapefile layers)}
 
   \item{query}{text string: optional search term against
   layer metadata. Only layers that include this term in
   their metadata will be returned.}
 }
 \value{
-A data frame of results \itemize{ \item{name} \item{id}
-\item{type} \item{path} \item{description} \item{source}
-\item{displayname} \item{enabled} \item{uid}
-\item{metadatapath} \item{classification1}
-\item{classification2} \item{notes} \item{source_link}
-\item{licence_link} \item{licence_notes} \item{maxlatitude}
-\item{minlatitude} \item{minlongitude} \item{maxlongitude}
-\item{pid} \item{shape} \item{path_orig}
-\item{environmentalvalueunits} \item{scale}
-\item{environmentalvaluemax} \item{environmentalvaluemin}
-\item{lookuptablepath} \item{citation_date} \item{datalang}
-\item{licence_level} \item{mddataset} \item{mdhrlv}
-\item{respparty_role} \item{keywords} \item{domain} }
+A data frame of results. The contents (column names) of the
+data frame will vary depending on the details of the search
+and the results.
 }
 \description{
-Provides a list of all environmental and contextual layers
-in ALA
+Search for environmental and contextual data layers
 }
 \examples{
 \dontrun{
