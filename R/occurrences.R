@@ -189,19 +189,19 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
 }
 
 #' @export
-"summary.occurrences" = function(x) {
-	cat('number of species:',length(unique(x$data$Scientific.Name)),'\n')
-	cat('number of taxonomically corrected names:',length(unique(x$data$Species...matched)),'\n')
-	cat('number of observation records:',nrow(x$data),'\n')
-	ass = check_assertions(x) #need to get existing assertions in occur dataset
+"summary.occurrences" <- function(object,...) {
+	cat('number of species:',length(unique(object$data$Scientific.Name)),'\n')
+	cat('number of taobjectonomically corrected names:',length(unique(object$data$Species...matched)),'\n')
+	cat('number of observation records:',nrow(object$data),'\n')
+	ass = check_assertions(object) #need to get eobjectisting assertions in occur dataset
 	if (nrow(ass)>0) {
 		cat('assertions checked:',nrow(ass),'\n')
 		for (ii in 1:nrow(ass)) {
-			rwi = length(which(as.logical(x$data[,ass$occur.colnames[ii]])==TRUE)) #count the number of records with issues
+			rwi = length(which(as.logical(object$data[,ass$occur.colnames[ii]])==TRUE)) #count the number of records with issues
 			if (rwi>0) cat('\t',ass$occur.colnames[ii],': ',rwi,' records ',ifelse(as.logical(ass$fatal[ii]),'-- considered fatal',''),sep='','\n')
 		}
 	} else { cat('no asserting issues\n') }
-	invisible(x)
+	invisible(object)
 }
 
 

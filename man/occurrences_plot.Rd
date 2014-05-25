@@ -16,7 +16,7 @@ occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
   mapped; these can be assertion columnnames, or 'all' or
   'none' or any combination of 'error', 'warning' or
   'fatal'. Column or categories in your dataset can be
-  viewed using \code(check_assertions).}
+  viewed using \code{check_assertions}.}
 
   \item{grouped}{logical: TRUE creates a single plot for
   all observations; FALSE plots individual maps for the
@@ -37,7 +37,7 @@ Generates a plot of occurrence data retrieved using
 \dontrun{
 #download some observations
 x=occurrences(taxon="golden bowerbird",download_reason_id=10)
-
+occurrences_plot(x)
 
 }
 }
