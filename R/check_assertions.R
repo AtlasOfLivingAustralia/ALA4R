@@ -1,23 +1,20 @@
-#' check assertions in occurrences object
+#' Check assertions in occurrences object
 #'
-#' This provides a data.frame detailing the assertions that are found in dataset returned from \code{occurrences}.
+#' This provides a data.frame detailing the assertions that are found in a dataset returned from \code{\link{occurrences}}.
 #'
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' 
-#' @param x an list object that has been downloaded using \code{occurrences}
+#' @param x list: an object returned from \code{\link{occurrences}}
 #' 
 #' @return A dataframe of assertions column names, descriptions and categories/error codes.
 #'
 #' @examples
 #' \dontrun{
-#' #download species data will all possible assertions
+#' #download species data with all possible assertions
 #' x=occurrences(taxon="golden bowerbird",download_reason_id=10,qa=ala_fields('assertions')$name)
 #' (asserts = check_assertions(x)) #data.frame of assertions, their description and column names
 #' }
-
 #' @export
-### 
-## not exported for users: internal ALA4R use only
 check_assertions = function(x) {
 	if (any(class(x)=='occurrences')) {
 		cois = colnames(x$data) #get the column names
