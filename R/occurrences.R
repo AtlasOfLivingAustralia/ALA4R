@@ -189,18 +189,22 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
 }
 
 #' @export
-summary.occurrences = function(x) {
-	cat('number of species:',length(unique(x$data$ScientificName)),'\n')
+"summary.occurrences" = function(x) {
+	cat('number of species:',length(unique(x$data$Scientific.Name)),'\n')
+	cat('number of taxonomically corrected names:',length(unique(x$data$Species...matched)),'\n')
 	cat('number of observation records:',nrow(x$data),'\n')
 	ass = check_assertions(x) #need to get existing assertions in occur dataset
 	if (nrow(ass)>0) {
-		cat('assertions included:',paste(ass$occur.colnames,collapse=', '),'\n')
-		# roi.fatal = roi.missing = roi.warning = roi.error = NULL
-		# for (coi in ass$occur.colnames) {
-			# if (ass$fatal
-		# }
+		cat('assertions checked:',nrow(ass),'\n')
+		for (ii in 1:nrow(ass)) {
+			rwi = length(which(as.logical(x$data[,ass$occur.colnames[ii]])==TRUE)) #count the number of records with issues
+			if (rwi>0) cat('\t',ass$occur.colnames[ii],': ',rwi,' records ',ifelse(as.logical(ass$fatal[ii]),'-- considered fatal',''),sep='','\n')
+		}
 	} else { cat('no asserting issues\n') }
+	invisible(x)
 }
+
+
 
 ## private function to change full field names to their id values (e.g. "Radiation - lowest period (Bio22)" to id "el871")
 #
