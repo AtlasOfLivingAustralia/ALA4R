@@ -24,7 +24,7 @@
 
 ### function to visualize data
 ### NEED to check inputs
-occurrences.plot(x, file='Rplots.pdf', grouped=TRUE, 
+occurrences_plot = function(x, file='Rplots.pdf', grouped=TRUE, 
 	qa=c('geospatialIssue','temporalIssue','taxonomicIssue','detectedOutlier','Suspected.outlier','data.Are.Generalised','species.Outside.Expert.Range'),...) 
 {
 	require(sp) #ensure sp package

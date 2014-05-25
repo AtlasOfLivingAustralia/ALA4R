@@ -188,19 +188,18 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     x
 }
 
-#@export
+#' @export
 summary.occurrences = function(x) {
-	#number of species, number of observations, proportion unique, proportion with assertion issues,
 	cat('number of species:',length(unique(x$data$ScientificName)),'\n')
 	cat('number of observation records:',nrow(x$data),'\n')
 	ass = check_assertions(x) #need to get existing assertions in occur dataset
 	if (nrow(ass)>0) {
-		cat('assertions included:',print(ass$occur.colnames,collapse=', '),'\n')
+		cat('assertions included:',paste(ass$occur.colnames,collapse=', '),'\n')
 		# roi.fatal = roi.missing = roi.warning = roi.error = NULL
 		# for (coi in ass$occur.colnames) {
 			# if (ass$fatal
 		# }
-	} else { cat('no asserting issues\n')
+	} else { cat('no asserting issues\n') }
 }
 
 ## private function to change full field names to their id values (e.g. "Radiation - lowest period (Bio22)" to id "el871")

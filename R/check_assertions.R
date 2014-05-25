@@ -1,6 +1,7 @@
 ### get a list of assertions that are found in dataset returned from occurrences()
 ## not exported for users: internal ALA4R use only
 check_assertions = function(x) {
+	if (any(class(x)=='occurrences')) {
 	cois = colnames(x$data) #get the column names
 	ass = ala_fields('assertions') #get the assertions
 	ass$occur.colnames = NA
@@ -13,4 +14,5 @@ check_assertions = function(x) {
 		}
 	}
 	na.omit(ass)
+	} else { stop('check_assertions must have an object of class occurrences from e.g., occurrences() in the ALA4R package') }
 }
