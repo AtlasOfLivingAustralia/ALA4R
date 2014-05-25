@@ -10,12 +10,12 @@ Currently in a very preliminary state: everything is liable to change.
 
 Install the dependencies first:
 ```{r}
-install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat"))
+install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp"))
 ```
 
-If you wish to use the `sp` package for spatial data and `data.table` package for potentially faster loading of data matrices (both optional), also do:
+If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
 ```{r}
-install.packages(c("sp","data.table"))
+install.packages(c("data.table"))
 ```
 
 Then the ALA4R package itself:
@@ -34,12 +34,12 @@ or install `libcurl4-openssl-dev` via the Software Centre.
 
 Then, fire up R and install the dependencies that we need:
 ```{r}
-install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat"))
+install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp"))
 ```
 
-If you wish to use the `sp` package for spatial data and `data.table` package for potentially faster loading of data matrices (both optional), also do:
+If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
 ```{r}
-install.packages(c("sp","data.table"))
+install.packages(c("data.table"))
 ```
 
 Then the ALA4R package itself:

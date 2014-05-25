@@ -19,12 +19,12 @@ This project enables the R community to directly access data and resources hoste
 
 First, install some packages from CRAN that are required by our package (CRAN is a network of ftp and web servers around the world that store identical, up-to-date, versions of code and documentation for R):
 ```{r eval=FALSE}
-install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat"))
+install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp"))
 ```
 
-If you wish to use the `sp` package for spatial data and `data.table` package for potentially faster loading of data matrices (both optional), also do:
+If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
 ```{r eval=FALSE}
-install.packages(c("sp","data.table"))
+install.packages(c("data.table"))
 ```
 
 Then install the ALA4R package itself from RForge:
@@ -43,12 +43,12 @@ or install `libcurl4-openssl-dev` via the Software Centre.
 
 Then, fire up R and install the dependencies that we need:
 ```{r eval=FALSE}
-install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat"))
+install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp"))
 ```
 
-If you wish to use the `sp` package for spatial data and `data.table` package for potentially faster loading of data matrices (both optional), also do:
+If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
 ```{r eval=FALSE}
-install.packages(c("sp","data.table"))
+install.packages(c("data.table"))
 ```
 
 Then the ALA4R package itself:
