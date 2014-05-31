@@ -10,6 +10,7 @@
 #' }
 #' 
 #' @param download_reason_id integer: (required) a reason code for the download. See \code{ala_reasons()} for valid values. The download_reason_id can be passed directly to this function, or alternatively set using \code{ala_config(download_reason_id=...)}
+#' @param reason string: (optional) user-supplied description of the reason for the download. Providing this information is optional but will help the ALA to better support users by building a better understanding of user communities and their data requests
 #' @param taxon string: (optional) taxonomic query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")
 #' @param wkt string: (optional) a WKT (well-known text) string providing a spatial polygon within which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.131 -26,140 -37))"
 #' @param fq string: (optional) character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". 
@@ -51,7 +52,7 @@
 ## TODO LATER: add params: lat, lon, radius (for specifying a search circle)
 
 
-occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,use_data_table=TRUE) {
+occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,reason,use_data_table=TRUE) {
     ## check input parms are sensible
     reason_ok=!is.na(download_reason_id)
     if (reason_ok) {
@@ -90,7 +91,6 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         names(fq)=rep("fq",length(fq))
         this_query=c(this_query,fq)
     }
-      
     if (!missing(fields)) {
         assert_that(is.character(fields))
         ## user has specified some fields
@@ -120,6 +120,10 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
             stop("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"assertions\")")
         }
         this_query$qa=str_c(qa,collapse=",")
+    }
+    if (!missing(reason)) {
+        assert_that(is.string(reason))
+        this_query$reason=reason
     }
     this_query$reasonTypeId=download_reason_id
     this_query$esc="\\" ## force backslash-escaping of quotes rather than double-quote escaping

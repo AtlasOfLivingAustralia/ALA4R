@@ -3,7 +3,7 @@
 \title{Get occurrence data}
 \usage{
 occurrences(taxon, wkt, fq, fields, extra, qa,
-  download_reason_id = ala_config()$download_reason_id,
+  download_reason_id = ala_config()$download_reason_id, reason,
   use_data_table = TRUE)
 }
 \arguments{
@@ -12,6 +12,12 @@ occurrences(taxon, wkt, fq, fields, extra, qa,
   values. The download_reason_id can be passed directly to
   this function, or alternatively set using
   \code{ala_config(download_reason_id=...)}}
+
+  \item{reason}{string: (optional) user-supplied
+  description of the reason for the download. Providing
+  this information is optional but will help the ALA to
+  better support users by building a better understanding
+  of user communities and their data requests}
 
   \item{taxon}{string: (optional) taxonomic query of the
   form field:value (e.g. "genus:Macropus") or a free text
