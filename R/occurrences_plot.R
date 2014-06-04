@@ -19,6 +19,7 @@
 #' occurrences_plot(x)
 #' 
 #' }
+#' @import sp
 #' @export occurrences_plot
 
 ### function to visualize data
