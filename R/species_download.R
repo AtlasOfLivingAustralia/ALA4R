@@ -12,8 +12,8 @@
 #' @seealso \code{\link{ala_fields}}
 #' @examples
 #' # Download data for Fabaceae
-#' x=species_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","order","family","genus","scientificName"))
-#' # equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,kingdom,phylum,class,order,family,genus,scientificName&q=family:Fabaceae
+#' x=species_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","bioOrder","family","genus","scientificName"))
+#' # equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,kingdom,phylum,class,bioOrder,family,genus,scientificName&q=family:Fabaceae
 #' @export
 species_download=function(query,fq,fields,verbose=ala_config()$verbose) {
     base_url=paste(ala_config()$base_url_bie,"download",sep="")
@@ -40,7 +40,7 @@ species_download=function(query,fq,fields,verbose=ala_config()$verbose) {
         ## user has specified some fields
         fields=fields_description_to_id(fields=fields,fields_type="general") ## replace long names with ids
         valid_fields=ala_fields(fields_type="general")
-        unknown=setdiff(fields,c(valid_fields$name,"order")) ## add "order" here, since it seems to be a valid field name. See issue #689
+        unknown=setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
             stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"general\")")
         }
