@@ -6,11 +6,11 @@ occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
   grouped = FALSE, taxon_level = "species", ...)
 }
 \arguments{
-  \item{x}{an list object that has been downloaded using
+  \item{x:}{a list object that has been downloaded using
   \code{occurrences}}
 
-  \item{file}{name of file to be created; defaults to
-  RPlots.pdf}
+  \item{filename}{string: name of file to be created;
+  defaults to RPlots.pdf}
 
   \item{qa}{string vector: list of record issues to be
   mapped; these can be assertion columnnames, or 'all' or
@@ -22,9 +22,11 @@ occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
   all observations; FALSE plots individual maps for the
   taxon level defined.}
 
-  \item{taxon_level}{taxanomic level at which to create
-  maps; possible values include 'species', 'genus',
+  \item{taxon_level}{string: taxonomic level at which to
+  create maps; possible values include 'species', 'genus',
   'family' or 'order'}
+
+  \item{\dots:}{other options passed to pdf()}
 }
 \value{
 Generates a pdf that maps the distributions.

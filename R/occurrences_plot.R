@@ -4,12 +4,12 @@
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' 
-#' @param x an list object that has been downloaded using \code{occurrences}
-#' @param file name of file to be created; defaults to RPlots.pdf
+#' @param x: a list object that has been downloaded using \code{occurrences}
+#' @param filename string: name of file to be created; defaults to RPlots.pdf
 #' @param qa string vector: list of record issues to be mapped; these can be assertion columnnames, or 'all' or 'none' or any combination of 'error', 'warning' or 'fatal'. Column or categories in your dataset can be viewed using \code{check_assertions}. 
 #' @param grouped logical: TRUE creates a single plot for all observations; FALSE plots individual maps for the taxon level defined.
-#' @param taxon_level taxanomic level at which to create maps; possible values include 'species', 'genus', 'family' or 'order'
-#' 
+#' @param taxon_level string: taxonomic level at which to create maps; possible values include 'species', 'genus', 'family' or 'order'
+#' @param \dots: other options passed to pdf()
 #' @return Generates a pdf that maps the distributions.
 #' 
 #' @examples
