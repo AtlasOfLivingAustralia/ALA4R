@@ -15,7 +15,7 @@
 #' x=species_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","bioOrder","family","genus","scientificName"))
 #' # equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,kingdom,phylum,class,order,family,genus,scientificName&q=family:Fabaceae
 #' @export
-species_download=function(query,fq,fields) {
+species_download=function(query,fq,fields,verbose=ala_config()$verbose) {
     base_url=paste(ala_config()$base_url_bie,"download",sep="")
     this_query=list()
     ## have we specified a query?
@@ -51,7 +51,7 @@ species_download=function(query,fq,fields) {
     this_url$query=this_query
     
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
-    thisfile=cached_get(url=build_url(this_url),type="binary_filename")
+    thisfile=cached_get(url=build_url(this_url),type="binary_filename",verbose=verbose)
 
     if (!(file.info(thisfile)$size>0)) {
         ## empty file
@@ -62,7 +62,7 @@ species_download=function(query,fq,fields) {
         if (is.element('data.table', installed.packages()[,1])) { ## if data.table package is available
             require(data.table) ## load it
             tryCatch({
-                x=fread(thisfile,stringsAsFactors=FALSE,header=TRUE,verbose=ala_config()$verbose)
+                x=fread(thisfile,stringsAsFactors=FALSE,header=TRUE,verbose=verbose)
                 ## make sure names of x are valid, as per data.table
                 setnames(x,make.names(names(x)))
                 ## now coerce it back to data.frame (for now at least, unless we decide to not do this!)
@@ -90,7 +90,8 @@ species_download=function(query,fq,fields) {
 }
 
 #' @export
-#"summary.occurrences" <- function(object,...) {
+#"summary.species_download" <- function(object,...) {
+# NOTE this code below copied from elsewhere, is meaningless here until modified
 #	cat('number of species:',length(unique(object$data$Scientific.Name)),'\n')
 #	cat('number of taobjectonomically corrected names:',length(unique(object$data$Species...matched)),'\n')
 #	cat('number of observation records:',nrow(object$data),'\n')

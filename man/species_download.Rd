@@ -2,7 +2,7 @@
 \alias{species_download}
 \title{Download taxonomic data}
 \usage{
-species_download(query, fq, fields)
+species_download(query, fq, fields, verbose = ala_config()$verbose)
 }
 \arguments{
   \item{query}{string: (optional) query of the form
