@@ -6,8 +6,8 @@ occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
   grouped = FALSE, taxon_level = "species", ...)
 }
 \arguments{
-  \item{x:}{a list object that has been downloaded using
-  \code{occurrences}}
+  \item{x}{list: a list object that has been downloaded
+  using \code{occurrences}}
 
   \item{filename}{string: name of file to be created;
   defaults to RPlots.pdf}
@@ -26,7 +26,7 @@ occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
   create maps; possible values include 'species', 'genus',
   'family' or 'order'}
 
-  \item{\dots:}{other options passed to pdf()}
+  \item{\dots}{: other options passed to pdf()}
 }
 \value{
 Generates a pdf that maps the distributions.
