@@ -97,8 +97,8 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     out
 }
 
-#"@export
-print.search_fulltext=function(x,...) {
+#'@export
+"print.search_fulltext"=function(x,...) {
     cat(sprintf("Search metadata:\n"))
     print(format(as.data.frame(x$meta)))
     cat(sprintf("\nFacet results:\n"))
