@@ -188,12 +188,11 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         }
         x=list(data=x,meta=xc)
     }
-	class(x) <- c('occurrences',class(x)) #add the occurrences class
+    class(x) <- c('occurrences',class(x)) #add the occurrences class
     x
 }
 
-#' @export
-"summary.occurrences" <- function(object,...) {
+"summary.occurrences" <- function(object, ...) {
 	cat('number of species:',length(unique(object$data$Scientific.Name)),'\n')
 	cat('number of taobjectonomically corrected names:',length(unique(object$data$Species...matched)),'\n')
 	cat('number of observation records:',nrow(object$data),'\n')
