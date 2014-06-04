@@ -79,10 +79,6 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         }
         this_query$wkt=wkt
     }
-    if (length(this_query)==0) {
-        ## not a valid request!
-        stop("invalid request: need at least taxon or wkt to be specified")
-    }
     if (!missing(fq)) {
         assert_that(is.character(fq))
         ## can have multiple fq parameters, need to specify in url as fq=a:b&fq=c:d&fq=...
@@ -90,6 +86,10 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         fq=as.list(fq)
         names(fq)=rep("fq",length(fq))
         this_query=c(this_query,fq)
+    }
+    if (length(this_query)==0) {
+        ## not a valid request!
+        stop("invalid request: need at least one of taxon, fq, or wkt to be specified")
     }
     if (!missing(fields)) {
         assert_that(is.character(fields))
