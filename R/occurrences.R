@@ -207,16 +207,4 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
 	} else { cat('no asserting issues\n') }
 	invisible(object)
 }
-
-
-
-## private function to change full field names to their id values (e.g. "Radiation - lowest period (Bio22)" to id "el871")
-#
-# replaced by fields_description_to_id in ala_fields
-#
-#field_longname_to_short=function(fields) {
-#    assert_that(is.character(fields))
-#    valid_fields=ala_fields(fields_type="occurrence")
-#    laply(fields,function(z)ifelse(z %in% valid_fields$description & ! z %in% valid_fields$name,valid_fields$name[which(valid_fields$description==z)],z))
-#}    
     
