@@ -40,8 +40,7 @@ species_download=function(query,fq,fields,verbose=ala_config()$verbose) {
         ## user has specified some fields
         fields=fields_description_to_id(fields=fields,fields_type="general") ## replace long names with ids
         valid_fields=ala_fields(fields_type="general")
-        valid_fields=c(valid_fields,"order") ## add this here, since it seems to be a valid field name. See issue #689
-        unknown=setdiff(fields,valid_fields$name)
+        unknown=setdiff(fields,c(valid_fields$name,"order")) ## add "order" here, since it seems to be a valid field name. See issue #689
         if (length(unknown)>0) {
             stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"general\")")
         }

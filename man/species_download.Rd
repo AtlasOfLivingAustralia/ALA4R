@@ -40,7 +40,7 @@ Download taxonomic data
 }
 \examples{
 # Download data for Fabaceae
-x=species_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","bioOrder","family","genus","scientificName"))
+x=species_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","order","family","genus","scientificName"))
 # equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,kingdom,phylum,class,order,family,genus,scientificName&q=family:Fabaceae
 }
 \author{
