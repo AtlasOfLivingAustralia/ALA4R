@@ -76,7 +76,7 @@ search_partial_name=function(taxon,geo_only=FALSE,output_format="simple",index_t
     out
 }
 
-#' @export
+#' @S3method print search_partial_name
 "print.search_partial_name" <- function(x, ...)
 {
     cols=names(x)

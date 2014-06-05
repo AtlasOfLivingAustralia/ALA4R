@@ -47,7 +47,7 @@ search_layers = function(type="all",query,output_format="simple") {
     out
 }
 
-#' @export
+#' @S3method print search_layers
 "print.search_layers" <- function(x, ...)
 {
     cols=names(x)

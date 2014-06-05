@@ -192,6 +192,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     x
 }
 
+#'@S3method summary occurrences
 "summary.occurrences" <- function(object, ...) {
 	cat('number of species:',length(unique(object$data$Scientific.Name)),'\n')
 	cat('number of taobjectonomically corrected names:',length(unique(object$data$Species...matched)),'\n')

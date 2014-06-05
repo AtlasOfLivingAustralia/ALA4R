@@ -97,7 +97,7 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     out
 }
 
-#'@export
+#'@S3method print search_fulltext
 "print.search_fulltext"=function(x,...) {
     cat(sprintf("Search metadata:\n"))
     print(format(as.data.frame(x$meta)))
