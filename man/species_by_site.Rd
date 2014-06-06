@@ -6,25 +6,21 @@ species_by_site(taxon, wkt, gridsize = 0.1, SPdata.frame = FALSE,
   verbose = ala_config()$verbose)
 }
 \arguments{
-  \item{taxon}{text: the identifier to get the species data
-  from the ala biocache. E.g. "genus:Macropus".}
+  \item{taxon}{string: the identifier to get the species
+  data from the ala biocache. E.g. "genus:Macropus".}
 
-  \item{wkt}{text: Bounding area in Well Known Text (WKT)
+  \item{wkt}{string: Bounding area in Well Known Text (WKT)
   format. E.g. "POLYGON((118 -30,146 -30,146 -11,118
   -11,118 -30))".}
 
-  \item{gridsize}{numeric: size of outputtt =
-  species_by_site(taxon='genus:Macropus',wkt =
-  'POLYGON((118 -30,146 -30,146 -11,118 -11,118
-  -30))',gridsize=0.1,verbose=TRUE) grid cells in decimal
-  degrees. E.g. "0.1" (=~10km)}
+  \item{gridsize}{numeric: size of output grid cells in
+  decimal degrees. E.g. 0.1 (=~10km)}
 
-  \item{SPdata.frame}{boolean value defining if the output
-  should be returned as a SpatialPointsDataFrame of the sp
-  package.}
+  \item{SPdata.frame}{logical: should the output be
+  returned as a SpatialPointsDataFrame of the sp package?}
 
-  \item{verbose}{boolean value defining how much progress
-  information to display; default is set by ala_config().}
+  \item{verbose}{logical: show additional progress
+  information? [default is set by ala_config()]}
 }
 \value{
 A dataframe or a SpatialPointsDataFrame containing the
@@ -42,7 +38,7 @@ cell.
 #download the matrix (data.frame) of Eucalyptus in Tasmania based on a 0.1 degree grid
 tt=species_by_site(taxon='genus:Eucalyptus',wkt='POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))',gridsize=0.1,verbose=TRUE)
 str(tt)
-qv: post http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Eucalyptus&qname=data&area=POLYGON((144\%20-43,148\%20-43,148\%20-40,144\%20-40,144\%20-43))&bs=http://biocache.ala.org.au/ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1
+# equivalent direct webservice call: POST http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Eucalyptus&qname=data&area=POLYGON((144\%20-43,148\%20-43,148\%20-40,144\%20-40,144\%20-43))&bs=http://biocache.ala.org.au/ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1
 }
 }
 \author{

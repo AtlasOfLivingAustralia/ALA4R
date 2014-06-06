@@ -10,12 +10,11 @@
 #' @references \url{http://spatial.ala.org.au/ws}
 #' @references \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' 
-#' @param taxon text: the identifier to get the species data from the ala biocache. E.g. "genus:Macropus".
-#' @param wkt text: Bounding area in Well Known Text (WKT) format. E.g. "POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))".
-#' @param gridsize numeric: size of outputtt = species_by_site(taxon='genus:Macropus',wkt = 'POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))',gridsize=0.1,verbose=TRUE)
-#' grid cells in decimal degrees. E.g. "0.1" (=~10km)
-#' @param SPdata.frame boolean value defining if the output should be returned as a SpatialPointsDataFrame of the sp package.
-#' @param verbose boolean value defining how much progress information to display; default is set by ala_config().
+#' @param taxon string: the identifier to get the species data from the ala biocache. E.g. "genus:Macropus".
+#' @param wkt string: Bounding area in Well Known Text (WKT) format. E.g. "POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))".
+#' @param gridsize numeric: size of output grid cells in decimal degrees. E.g. 0.1 (=~10km)
+#' @param SPdata.frame logical: should the output be returned as a SpatialPointsDataFrame of the sp package?
+#' @param verbose logical: show additional progress information? [default is set by ala_config()]
 #' @return A dataframe or a SpatialPointsDataFrame containing the species by sites data.... 
 #'
 #' @examples
@@ -23,7 +22,7 @@
 #' #download the matrix (data.frame) of Eucalyptus in Tasmania based on a 0.1 degree grid
 #' tt=species_by_site(taxon='genus:Eucalyptus',wkt='POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))',gridsize=0.1,verbose=TRUE)
 #' str(tt)
-#' qv: post http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Eucalyptus&qname=data&area=POLYGON((144%20-43,148%20-43,148%20-40,144%20-40,144%20-43))&bs=http://biocache.ala.org.au/ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1
+#' # equivalent direct webservice call: POST http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Eucalyptus&qname=data&area=POLYGON((144%20-43,148%20-43,148%20-40,144%20-40,144%20-43))&bs=http://biocache.ala.org.au/ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1
 #' }
 
 # TODO Lee to add dataframe output specifications (sent 23/4/2014)
