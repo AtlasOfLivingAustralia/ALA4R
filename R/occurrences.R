@@ -160,6 +160,10 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
                     setnames(x,make.names(names(x)))
                     ## now coerce it back to data.frame (for now at least, unless we decide to not do this!)
                     x=as.data.frame(x)
+                    ## convert column data types
+                    ## ALA supplies *all* values as quoted text, even numeric, so read.table leaves them as character type
+                    ## we will convert whatever looks like numeric or logical to those classes
+                    x=colwise(convert_dt)(x)
                     read_ok=TRUE
                 } else {
                     x=NULL
@@ -207,4 +211,19 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
 	} else { cat('no asserting issues\n') }
 	invisible(object)
 }
-    
+
+
+# internal function for converting chr data types to numeric or logical
+convert_dt=function(x) {
+    if (see_if(is.character(x))) {
+        ux=unique(x)
+        if (all(nchar(ux)<1)) {
+            ## all empty strings - leave as is
+        } else if (all(ux %in% c("true","false","TRUE","FALSE","","NA"))) {
+            x=as.logical(x)
+        } else if (all(nchar(ux)<1 | ux=="NA" | !is.na(suppressWarnings(as.numeric(ux))))) {
+            x=as.numeric(x)
+        }
+    }
+    x
+}
