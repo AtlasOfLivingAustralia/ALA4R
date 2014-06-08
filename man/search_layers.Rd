@@ -2,7 +2,7 @@
 \alias{search_layers}
 \title{Search for environmental and contextual data layers}
 \usage{
-search_layers(type = "all", query, output_format = "simple")
+search_layers(query, type = "all", output_format = "simple")
 }
 \arguments{
   \item{type}{string: either "all" (all possible layers;

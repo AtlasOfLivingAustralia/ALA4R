@@ -16,7 +16,7 @@
 #' str(l)
 #' }
 #' @export
-search_layers = function(type="all",query,output_format="simple") {
+search_layers = function(query,type="all",output_format="simple") {
     assert_that(is.string(type))
     type=match.arg(tolower(type),c("all","grids","shapes"))
     if (!missing(query)) {
