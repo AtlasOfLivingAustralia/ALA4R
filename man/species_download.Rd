@@ -13,14 +13,14 @@ species_download(query, fq, fields, verbose = ala_config()$verbose,
   \item{fq}{string: character string or vector of strings,
   specifying filters to be applied to the original query.
   These are of the form "INDEXEDFIELD:VALUE" e.g.
-  "kingdom:Fungi". See \code{ala_fields("occurrence")} for
-  all the fields that are queryable. NOTE that fq matches
-  are case-sensitive, but sometimes the entries in the
-  fields are not consistent in terms of case (e.g. kingdom
-  names "Fungi" and "Plantae" but "ANIMALIA"). fq matches
-  are ANDed by default (e.g. c("field1:abc","field2:def")
-  will match records that have field1 value "abc" and
-  field2 value "def"). To obtain OR behaviour, use the form
+  "kingdom:Fungi". See \code{ala_fields("general")} for all
+  the fields that are queryable. NOTE that fq matches are
+  case-sensitive, but sometimes the entries in the fields
+  are not consistent in terms of case (e.g. kingdom names
+  "Fungi" and "Plantae" but "ANIMALIA"). fq matches are
+  ANDed by default (e.g. c("field1:abc","field2:def") will
+  match records that have field1 value "abc" and field2
+  value "def"). To obtain OR behaviour, use the form
   c("field1:abc OR field2:def")}
 
   \item{fields}{string vector: (optional) a vector of field
