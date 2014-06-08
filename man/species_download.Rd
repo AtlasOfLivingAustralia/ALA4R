@@ -2,7 +2,8 @@
 \alias{species_download}
 \title{Download taxonomic data}
 \usage{
-species_download(query, fq, fields, verbose = ala_config()$verbose)
+species_download(query, fq, fields, verbose = ala_config()$verbose,
+  use_data_table = TRUE)
 }
 \arguments{
   \item{query}{string: (optional) query of the form
@@ -31,6 +32,12 @@ species_download(query, fq, fields, verbose = ala_config()$verbose)
 
   \item{verbose}{logical: how much progress information to
   display; default is set by \code{ala_config()}}
+
+  \item{use_data_table}{logical: if TRUE, attempt to read
+  the data.csv file using the fread function from the
+  data.table package. Requires data.table to be available.
+  If this fails, or use_data_table is FALSE, then
+  read.table will be used (which may be slower)}
 }
 \value{
 data frame

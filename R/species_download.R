@@ -8,6 +8,7 @@
 #' @param fields string vector: (optional) a vector of field names to return. Note that the columns of the returned data frame 
 #' are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("general")} for valid field names.
 #' @param verbose logical: how much progress information to display; default is set by \code{ala_config()}
+#' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails, or use_data_table is FALSE, then read.table will be used (which may be slower)
 #' @return data frame
 #' @seealso \code{\link{ala_fields}}
 #' @examples
@@ -15,7 +16,8 @@
 #' x=species_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","bioOrder","family","genus","scientificName"))
 #' # equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,kingdom,phylum,class,bioOrder,family,genus,scientificName&q=family:Fabaceae
 #' @export
-species_download=function(query,fq,fields,verbose=ala_config()$verbose) {
+species_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_table=TRUE) {
+    assert_that(is.flag(use_data_table))
     base_url=paste(ala_config()$base_url_bie,"download",sep="")
     this_query=list()
     ## have we specified a query?
@@ -59,7 +61,7 @@ species_download=function(query,fq,fields,verbose=ala_config()$verbose) {
     } else {
         ## if data.table is available, first try using this
         read_ok=FALSE
-        if (is.element('data.table', installed.packages()[,1])) { ## if data.table package is available
+        if (use_data_table & is.element('data.table', installed.packages()[,1])) { ## if data.table package is available
             require(data.table) ## load it
             tryCatch({
                 x=fread(thisfile,stringsAsFactors=FALSE,header=TRUE,verbose=verbose)
@@ -67,6 +69,12 @@ species_download=function(query,fq,fields,verbose=ala_config()$verbose) {
                 setnames(x,make.names(names(x)))
                 ## now coerce it back to data.frame (for now at least, unless we decide to not do this!)
                 x=as.data.frame(x)
+                if (!empty(x)) {
+                    ## convert column data types
+                    ## ALA supplies *all* values as quoted text, even numeric, and they appear here as character type
+                    ## we will convert whatever looks like numeric or logical to those classes
+                    x=colwise(convert_dt)(x)
+                }
                 read_ok=TRUE
             }, error=function(e) {
                 warning("ALA4R: reading of csv as data.table failed, will fall back to read.table (may be slow). The error message was: ",e)
@@ -74,36 +82,36 @@ species_download=function(query,fq,fields,verbose=ala_config()$verbose) {
             })
         }
         if (!read_ok) {
-            x=read.table(thisfile,header=TRUE,comment.char="",as.is=TRUE)
+            x=read.table(thisfile,sep=",",header=TRUE,comment.char="",as.is=TRUE)
+            if (!empty(x)) {
+                ## convert column data types
+                ## read.table handles quoted numerics but not quoted logicals
+                x=colwise(convert_dt)(x,test_numeric=FALSE)
+            }
         }
 
-        if (!empty(x)) {
-            ## make sure logical columns are actually of type logical
-            logicals=which(as.vector(colSums(x=="true"|x=="false")==nrow(x))) ## get the logical columns
-            x[,logicals]=apply(x[,logicals],2,function(x) as.logical(x)) ## convert columns to logical            
-        } else {
+        if (empty(x)) {
             warning("no matching records were returned")
         }
     }
     #class(x) <- c('species_download',class(x)) #add the custom class
     x
 }
-
-#' @export
-#"summary.species_download" <- function(object,...) {
-# NOTE this code below copied from elsewhere, is meaningless here until modified
-#	cat('number of species:',length(unique(object$data$Scientific.Name)),'\n')
-#	cat('number of taobjectonomically corrected names:',length(unique(object$data$Species...matched)),'\n')
-#	cat('number of observation records:',nrow(object$data),'\n')
-#	ass = check_assertions(object) #need to get eobjectisting assertions in occur dataset
-#	if (nrow(ass)>0) {
-#		cat('assertions checked:',nrow(ass),'\n')
-#		for (ii in 1:nrow(ass)) {
-#			rwi = length(which(as.logical(object$data[,ass$occur.colnames[ii]])==TRUE)) #count the number of records with issues
-#			if (rwi>0) cat('\t',ass$occur.colnames[ii],': ',rwi,' records ',ifelse(as.logical(ass$fatal[ii]),'-- considered fatal',''),sep='','\n')
-#		}
-#	} else { cat('no asserting issues\n') }
-#	invisible(object)
-#}
-    
-    
+        
+# internal function for converting chr data types to numeric or logical
+convert_dt=function(x,test_numeric=TRUE) {
+    assert_that(is.flag(test_numeric))
+    if (see_if(is.character(x))) {
+        ux=unique(x)
+        if (all(nchar(ux)<1)) {
+            ## all empty strings - leave as is
+        } else if (all(ux %in% c("true","false","TRUE","FALSE","","NA"))) {
+            x=as.logical(x)
+        } else if (test_numeric) {
+            if (all(nchar(ux)<1 | ux=="NA" | !is.na(suppressWarnings(as.numeric(ux))))) {
+                x=as.numeric(x)
+            }
+        }
+    }
+    x
+}
