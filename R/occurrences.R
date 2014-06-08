@@ -24,7 +24,7 @@
 #' are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence")} for valid field names.
 #' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence")} for valid field names.
 #' @param qa string vector: (optional) list of record issues to include in the download. See \code{ala_fields("assertions")} for valid values, or use "none" to include no record issues
-#' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails, or use_data_table is FALSE, then read.table will be used (which may be slow)
+#' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails, or use_data_table is FALSE, then read.table will be used (which may be slower)
 #' 
 #' @return Data frame
 #' 
@@ -54,6 +54,7 @@
 
 occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,reason,use_data_table=TRUE) {
     ## check input parms are sensible
+    assert_that(is.flag(use_data_table))
     reason_ok=!is.na(download_reason_id)
     if (reason_ok) {
         valid_reasons=ala_reasons()
@@ -142,7 +143,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     } else {
         ## if data.table is available, first try using this
         read_ok=FALSE
-        if (is.element('data.table', installed.packages()[,1])) { ## if data.table package is available
+        if (use_data_table & is.element('data.table', installed.packages()[,1])) { ## if data.table package is available
             require(data.table) ## load it
             tryCatch({
                 ## first need to extract data.csv from the zip file
@@ -160,10 +161,12 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
                     setnames(x,make.names(names(x)))
                     ## now coerce it back to data.frame (for now at least, unless we decide to not do this!)
                     x=as.data.frame(x)
-                    ## convert column data types
-                    ## ALA supplies *all* values as quoted text, even numeric, so read.table leaves them as character type
-                    ## we will convert whatever looks like numeric or logical to those classes
-                    x=colwise(convert_dt)(x)
+                    if (!empty(x)) {
+                        ## convert column data types
+                        ## ALA supplies *all* values as quoted text, even numeric, and they appear here as character type
+                        ## we will convert whatever looks like numeric or logical to those classes
+                        x=colwise(convert_dt)(x)
+                    }
                     read_ok=TRUE
                 } else {
                     x=NULL
@@ -176,13 +179,14 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         }
         if (!read_ok) {
             x=read.table(unz(thisfile,filename="data.csv"),header=TRUE,comment.char="",as.is=TRUE)
+            if (!empty(x)) {
+                ## convert column data types
+                ## read.table handles quoted numerics but not quoted logicals
+                x=colwise(convert_dt)(x,test_numeric=FALSE)
+            }
         }
 
         if (!empty(x)) {
-            ## make sure logical columns are actually of type logical
-            logicals=which(as.vector(colSums(x=="true"|x=="false")==nrow(x))) ## get the logical columns
-            x[,logicals]=apply(x[,logicals],2,function(x) as.logical(x)) ## convert columns to logical
-            
             ## also read the citation info
             ## this file won't exist if there are no rows in the data.csv file, so only do it if nrow(x)>0
             xc=read.table(unz(thisfile,"citation.csv"),header=TRUE,comment.char="",as.is=TRUE)
@@ -214,15 +218,18 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
 
 
 # internal function for converting chr data types to numeric or logical
-convert_dt=function(x) {
+convert_dt=function(x,test_numeric=TRUE) {
+    assert_that(is.flag(test_numeric))
     if (see_if(is.character(x))) {
         ux=unique(x)
         if (all(nchar(ux)<1)) {
             ## all empty strings - leave as is
         } else if (all(ux %in% c("true","false","TRUE","FALSE","","NA"))) {
             x=as.logical(x)
-        } else if (all(nchar(ux)<1 | ux=="NA" | !is.na(suppressWarnings(as.numeric(ux))))) {
-            x=as.numeric(x)
+        } else if (test_numeric) {
+            if (all(nchar(ux)<1 | ux=="NA" | !is.na(suppressWarnings(as.numeric(ux))))) {
+                x=as.numeric(x)
+            }
         }
     }
     x
