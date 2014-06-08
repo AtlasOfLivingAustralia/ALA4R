@@ -101,6 +101,8 @@ ala_config=function(...) {
                     if (!see_if(is.string(user_options[[i]]))) {
                         stop("cache_directory should be a string")
                     }
+                    ## strip trailing file separator, if there is one
+                    user_options[[i]]=sub("[/\\]+$","",user_options[[i]])
                     if (! (file.exists(user_options[[i]]) && file.info(user_options[[i]])$isdir)) {
                         ## cache directory does not exist. We could create it, but this is probably better left to the user to manage
                         stop("cache directory ",user_options[[i]]," does not exist");
