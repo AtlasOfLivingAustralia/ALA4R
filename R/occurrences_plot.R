@@ -39,7 +39,7 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 		if ('all' %in% qa) tt = c(tt,ass$occur.colnames)
 		if ('error' %in% qa) tt = c(tt,ass$occur.colnames[which(ass$category=='error')])
 		if ('warning' %in% qa) tt = c(tt,ass$occur.colnames[which(ass$category=='warning')])
-		if ('fatal' %in% qa) tt = c(tt,ass$occur.colnames[which(is.logical(ass$fatal)==TRUE)])
+		if ('fatal' %in% qa) tt = c(tt,ass$occur.colnames[which(as.logical(ass$fatal)==TRUE)])
 		if (any(qa %in% colnames(x$data))) {
 			valid_fields=ass$occur.colnames ## valid entries for qa
 			unknown=setdiff(qa,valid_fields)
@@ -49,7 +49,7 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 			tt = intersect(qa,valid_fields)
 		}
 		tt = intersect(tt,colnames(x$data))
-		qa = ifelse(length(tt)>0,tt,NULL)
+		if (length(tt)>0) { qa = tt } else { qa = NULL }
     }
     	
 	###note this will ideally be states
