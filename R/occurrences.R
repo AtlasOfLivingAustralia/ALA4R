@@ -24,7 +24,7 @@
 #' are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence")} for valid field names.
 #' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence")} for valid field names.
 #' @param qa string vector: (optional) list of record issues to include in the download. See \code{ala_fields("assertions")} for valid values, or use "none" to include no record issues
-#' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails, or use_data_table is FALSE, then read.table will be used (which may be slower)
+#' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails with an error or warning, or if use_data_table is FALSE, then read.table will be used (which may be slower)
 #' 
 #' @return Data frame
 #' 
@@ -172,7 +172,11 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
                     x=NULL
                     read_ok=TRUE
                 }
-            }, error=function(e) {
+            }, warning=function(e) {
+                warning("ALA4R: reading of csv as data.table failed, will fall back to read.table (may be slow). The warning message was: ",e)
+                read_ok=FALSE
+            }
+             , error=function(e) {
                 warning("ALA4R: reading of csv as data.table failed, will fall back to read.table (may be slow). The error message was: ",e)
                 read_ok=FALSE
             })
@@ -219,6 +223,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
 
 # internal function for converting chr data types to numeric or logical
 convert_dt=function(x,test_numeric=TRUE) {
+    ## set test_numeric to FALSE to skip checking for numeric columns - might be a little faster if not needed
     assert_that(is.flag(test_numeric))
     if (see_if(is.character(x))) {
         ux=unique(x)

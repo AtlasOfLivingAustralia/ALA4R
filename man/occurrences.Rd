@@ -64,8 +64,9 @@ occurrences(taxon, wkt, fq, fields, extra, qa,
   \item{use_data_table}{logical: if TRUE, attempt to read
   the data.csv file using the fread function from the
   data.table package. Requires data.table to be available.
-  If this fails, or use_data_table is FALSE, then
-  read.table will be used (which may be slower)}
+  If this fails with an error or warning, or if
+  use_data_table is FALSE, then read.table will be used
+  (which may be slower)}
 }
 \value{
 Data frame
