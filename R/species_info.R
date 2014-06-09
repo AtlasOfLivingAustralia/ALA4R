@@ -43,7 +43,7 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
     url=paste(ala_config()$base_url_bie,"species/",guid,".json",sep="")
     out=cached_get(URLencode(url),type="json",verbose=verbose)
     ## rename a couple of things
-    names(out$classification)=str_replace_all(names(x$classification),"^clazz","class")
+    names(out$classification)=str_replace_all(names(out$classification),"^clazz","class")
     ## restructure any list children of out to be data.frames
     for (k in 1:length(out)) {
         if (is.list(out[[k]])) {
