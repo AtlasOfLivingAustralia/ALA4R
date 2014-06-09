@@ -15,7 +15,8 @@ species_info(scientificname, guid, verbose = ala_config()$verbose)
   display; default is set by \code{ala_config()}}
 }
 \value{
-species profile in the form of a named list
+species profile in the form of a named list, each element
+of which is generally a data frame
 }
 \description{
 Fetch a taxon profile given a scientific name or LSID
