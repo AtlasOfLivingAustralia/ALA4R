@@ -203,7 +203,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
 #'@S3method summary occurrences
 "summary.occurrences" <- function(object, ...) {
 	cat('number of species:',length(unique(object$data$Scientific.Name)),'\n')
-	cat('number of taobjectonomically corrected names:',length(unique(object$data$Species...matched)),'\n')
+	cat('number of taxonomically corrected names:',length(unique(object$data$Species...matched)),'\n')
 	cat('number of observation records:',nrow(object$data),'\n')
 	ass = check_assertions(object) #need to get eobjectisting assertions in occur dataset
 	if (nrow(ass)>0) {
