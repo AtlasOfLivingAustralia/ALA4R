@@ -4,7 +4,7 @@
 \usage{
 occurrences(taxon, wkt, fq, fields, extra, qa,
   download_reason_id = ala_config()$download_reason_id, reason,
-  use_data_table = TRUE)
+  verbose = ala_config()$verbose, use_data_table = TRUE)
 }
 \arguments{
   \item{download_reason_id}{integer: (required) a reason
@@ -61,6 +61,9 @@ occurrences(taxon, wkt, fq, fields, extra, qa,
   \code{ala_fields("assertions")} for valid values, or use
   "none" to include no record issues}
 
+  \item{verbose}{logical: show additional progress
+  information? [default is set by ala_config()]}
+
   \item{use_data_table}{logical: if TRUE, attempt to read
   the data.csv file using the fread function from the
   data.table package. Requires data.table to be available.
@@ -74,7 +77,9 @@ Data frame
 \description{
 Retrieve ALA occurrence data via the "occurrence download"
 web service. At least one of \code{taxon}, \code{wkt}, or
-\code{fq} must be supplied for a valid query.
+\code{fq} must be supplied for a valid query. Note that the
+current service is limited to a maximum of 500000 records
+per request.
 }
 \examples{
 \dontrun{
@@ -99,5 +104,9 @@ definitions:
 \item WKT reference:
 \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 }
+}
+\seealso{
+\code{\link{ala_reasons}} for download reasons;
+\code{\link{ala_config}}
 }
 

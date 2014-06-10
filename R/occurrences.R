@@ -1,6 +1,6 @@
 #' Get occurrence data
 #' 
-#' Retrieve ALA occurrence data via the "occurrence download" web service. At least one of \code{taxon}, \code{wkt}, or \code{fq} must be supplied for a valid query.
+#' Retrieve ALA occurrence data via the "occurrence download" web service. At least one of \code{taxon}, \code{wkt}, or \code{fq} must be supplied for a valid query. Note that the current service is limited to a maximum of 500000 records per request.
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \itemize{
@@ -24,10 +24,11 @@
 #' are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence")} for valid field names.
 #' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence")} for valid field names.
 #' @param qa string vector: (optional) list of record issues to include in the download. See \code{ala_fields("assertions")} for valid values, or use "none" to include no record issues
+#' @param verbose logical: show additional progress information? [default is set by ala_config()]
 #' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails with an error or warning, or if use_data_table is FALSE, then read.table will be used (which may be slower)
 #' 
 #' @return Data frame
-#' 
+#' @seealso \code{\link{ala_reasons}} for download reasons; \code{\link{ala_config}}
 #' @examples
 #' \dontrun{ 
 #' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),download_reason_id=10)
@@ -51,8 +52,7 @@
 ## TODO: more extensive testing, particularly of the csv-conversion process
 ## TODO LATER: add params: lat, lon, radius (for specifying a search circle)
 
-
-occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,reason,use_data_table=TRUE) {
+occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,reason,verbose=ala_config()$verbose,use_data_table=TRUE) {
     ## check input parms are sensible
     assert_that(is.flag(use_data_table))
     reason_ok=!is.na(download_reason_id)
@@ -149,14 +149,14 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
                 ## first need to extract data.csv from the zip file
                 ## this may end up making fread() slower than direct read.table() ... needs testing
                 tempsubdir=tempfile(pattern="dir")
-                if (ala_config()$verbose) {
+                if (verbose) {
                     cat(sprintf(" ALA4R: unzipping downloaded occurrences data.csv file into %s\n",tempsubdir))
                 }
                 dir.create(tempsubdir)
                 unzip(thisfile,files=c("data.csv"),junkpaths=TRUE,exdir=tempsubdir)
                 ## first check if file is empty
                 if (file.info(file.path(tempsubdir,"data.csv"))$size>0) {
-                    x=fread(file.path(tempsubdir,"data.csv"),stringsAsFactors=FALSE,header=TRUE,verbose=ala_config()$verbose)
+                    x=fread(file.path(tempsubdir,"data.csv"),stringsAsFactors=FALSE,header=TRUE,verbose=verbose)
                     ## make sure names of x are valid, as per data.table
                     setnames(x,make.names(names(x)))
                     ## now coerce it back to data.frame (for now at least, unless we decide to not do this!)
@@ -173,11 +173,15 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
                     read_ok=TRUE
                 }
             }, warning=function(e) {
-                warning("ALA4R: reading of csv as data.table failed, will fall back to read.table (may be slow). The warning message was: ",e)
+                if (verbose) {
+                    warning("ALA4R: reading of csv as data.table failed, will fall back to read.table (may be slow). The warning message was: ",e)
+                }
                 read_ok=FALSE
             }
              , error=function(e) {
-                warning("ALA4R: reading of csv as data.table failed, will fall back to read.table (may be slow). The error message was: ",e)
+                if (verbose) {
+                    warning("ALA4R: reading of csv as data.table failed, will fall back to read.table (may be slow). The error message was: ",e)
+                }
                 read_ok=FALSE
             })
         }
@@ -191,6 +195,9 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         }
 
         if (!empty(x)) {
+            if (nrow(x)==500000) {
+                warning("Only 500000 data rows were returned from the ALA server: this might not be the full data set you need. Contact support@ala.org.au")
+            }
             ## also read the citation info
             ## this file won't exist if there are no rows in the data.csv file, so only do it if nrow(x)>0
             xc=read.table(unz(thisfile,"citation.csv"),header=TRUE,comment.char="",as.is=TRUE)
