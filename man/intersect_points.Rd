@@ -6,29 +6,23 @@ intersect_points(pnts, fids, SPdata.frame = FALSE,
   verbose = ala_config()$verbose)
 }
 \arguments{
-  \item{pnts}{vector of lat & lons or 2 column data.frame
-  or matrix of lat,lons. NOTE: the number of locations must
-  be less than 1000.}
+  \item{pnts}{numeric: vector of lat & lons or 2 column
+  data.frame or matrix of lat,lons. NOTE: the number of
+  locations must be less than 1000.}
 
-  \item{fids}{text: ids of layers to be intersected. list
+  \item{fids}{string: ids of layers to be intersected. list
   of possible layers is available from ala_fields().}
 
-  \item{SPdata.frame}{boolean value defining if the output
-  should be returned as a SpatialPointsDataFrame of the sp
-  package.}
+  \item{SPdata.frame}{logical: should the output should be
+  returned as a SpatialPointsDataFrame of the sp package?}
 
-  \item{verbose}{boolean value defining how much progress
-  information to display; default is set by ala_config().}
+  \item{verbose}{logical: show additional progress
+  information? [default is set by ala_config()]}
 }
 \value{
 A SpatialPointsDataFrame containing the intersecting data
 information. Missing data or incorrectly identified field
 id values will result in NA data
-
-TODO: Pity that "fields" rather than "layers" are used.
-Confusing. TODO: check that the URL strings here are
-guaranteed to be appropriately URL-encoded TODO: Limit of
-1000 points is a nuisance, surely?
 }
 \description{
 Intersect environmental or contextual layers at a given a
@@ -62,5 +56,13 @@ records can be interesected with any number of
 environmental (el) and contextual (cl) layers but
 intersect_points could be used to sample background (non
 species-site) values of layers.
+}
+\seealso{
+\code{\link{ala_config}}
+
+TODO: Pity that "fields" rather than "layers" are used.
+Confusing. TODO: check that the URL strings here are
+guaranteed to be appropriately URL-encoded TODO: Limit of
+1000 points is a nuisance, surely?
 }
 

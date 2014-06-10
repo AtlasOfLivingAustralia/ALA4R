@@ -11,8 +11,8 @@ species_info(scientificname, guid, verbose = ala_config()$verbose)
   \item{guid}{string: The Life Science Identifier of the
   taxon of interest}
 
-  \item{verbose}{logical: how much progress information to
-  display; default is set by \code{ala_config()}}
+  \item{verbose}{logical: show additional progress
+  information? [default is set by ala_config()]}
 }
 \value{
 species profile in the form of a named list, each element
@@ -33,5 +33,8 @@ Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
 \url{http://api.ala.org.au/}
+}
+\seealso{
+\code{\link{ala_config}}
 }
 

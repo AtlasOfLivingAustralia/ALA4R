@@ -30,8 +30,8 @@ species_download(query, fq, fields, verbose = ala_config()$verbose,
   list of fields will be returned. See
   \code{ala_fields("general")} for valid field names.}
 
-  \item{verbose}{logical: how much progress information to
-  display; default is set by \code{ala_config()}}
+  \item{verbose}{logical: show additional progress
+  information? [default is set by ala_config()]}
 
   \item{use_data_table}{logical: if TRUE, attempt to read
   the data.csv file using the fread function from the
@@ -57,6 +57,6 @@ Atlas of Living Australia \email{support@ala.org.au}
 \url{http://api.ala.org.au/}
 }
 \seealso{
-\code{\link{ala_fields}}
+\code{\link{ala_fields}}, \code{\link{ala_config}}
 }
 

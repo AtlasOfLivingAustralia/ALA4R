@@ -5,9 +5,9 @@
 #' 
 #' @param scientificname string: scientific name of the taxon of interest (species, genus, family etc) 
 #' @param guid string: The Life Science Identifier of the taxon of interest
-#' @param verbose logical: how much progress information to display; default is set by \code{ala_config()}
+#' @param verbose logical: show additional progress information? [default is set by ala_config()]
 #' @return species profile in the form of a named list, each element of which is generally a data frame
-
+#' @seealso \code{\link{ala_config}}
 #' @examples
 #' 
 #' species_info("Grevillea humilis subsp. maritima")

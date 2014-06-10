@@ -8,11 +8,12 @@
 #' number of environmental (el) and contextual (cl) layers but intersect_points could be used
 #' to sample background (non species-site) values of layers.
 #' 
-#' @param pnts vector of lat & lons or 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 1000.
-#' @param fids text: ids of layers to be intersected. list of possible layers is available from ala_fields().
-#' @param SPdata.frame boolean value defining if the output should be returned as a SpatialPointsDataFrame of the sp package.
-#' @param verbose boolean value defining how much progress information to display; default is set by ala_config().
+#' @param pnts numeric: vector of lat & lons or 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 1000.
+#' @param fids string: ids of layers to be intersected. list of possible layers is available from ala_fields().
+#' @param SPdata.frame logical: should the output should be returned as a SpatialPointsDataFrame of the sp package?
+#' @param verbose logical: show additional progress information? [default is set by ala_config()]
 #' @return A SpatialPointsDataFrame containing the intersecting data information. Missing data or incorrectly identified field id values will result in NA data
+#' @seealso \code{\link{ala_config}}
 #'
 #'TODO: Pity that "fields" rather than "layers" are used. Confusing.
 #'TODO: check that the URL strings here are guaranteed to be appropriately URL-encoded
