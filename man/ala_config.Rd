@@ -33,12 +33,15 @@ ala_reasons()
   download_reason_id code, either specified here or
   directly to the associated R function.  See
   \code{ala_reasons()} for a list of valid ID codes.  \item
-  base_url_spatialch string: the base url for spatial web
+  base_url_spatial string: the base url for spatial web
   services (default="http://spatial.ala.org.au/ws/") \item
   base_url_bie string: the base url for BIE web services
   (default="http://bie.ala.org.au/ws/") \item
   base_url_biocache string: the base url for biocache web
-  services (default="http://biocache.ala.org.au/ws/") }}
+  services (default="http://biocache.ala.org.au/ws/") \item
+  base_url_alaspatial string: the base url for older ALA
+  spatial services
+  (default="http://spatial.ala.org.au/alaspatial/ws/") }}
 }
 \value{
 For ala_config(), a list of all options. When
