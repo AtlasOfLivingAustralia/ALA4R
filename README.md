@@ -4,7 +4,7 @@ The Atlas of Living Australia (ALA) provides tools to enable users of biodiversi
 
 Currently in a preliminary state: everything is liable to change.
 
-Example code presented at the 2014 ALA Science Symposium will be made available here soon.
+The use-examples presented at the 2014 ALA Science Symposium are [available here]{"/jjvanderwal/ALA4R/tree/master/examples/"}.
 
 
 ## Installing
