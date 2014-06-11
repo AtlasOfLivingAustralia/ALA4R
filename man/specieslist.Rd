@@ -24,16 +24,9 @@ specieslist(taxon, wkt, fq, page_size)
   will match records that have field1 value "abc" and
   field2 value "def"). To obtain OR behaviour, use the form
   c("field1:abc OR field2:def")}
-
-  \item{page_size}{Maximum number of records to return (may
-  not be honoured by the ALA server). Default=NA, meaning
-  that the server default value (currently 10) will be
-  used.}
 }
 \value{
-Data frame with (at least) the columns \itemize{
-\item{Family} \item{Scientific.name} \item{Common.name}
-\item{Taxon.rank} \item{guid} \item{N.occurrences} }
+data frame of results
 }
 \description{
 Retrieve a list of taxa matching a search query, within a
