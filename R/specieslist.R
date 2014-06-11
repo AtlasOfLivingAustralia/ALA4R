@@ -62,9 +62,9 @@ specieslist=function(taxon,wkt,fq) {
         x=read.table(thisfile,sep=",",header=TRUE,comment.char="")
         ## rename "X..Occurrences" (which was "# Occurrences" in the csv file)
         names(x)=str_replace(names(x),"X..Occurrences","N.occurrences")
-        ## we also have a column labelled "LSID" (from old ws) or "taxon_concept_lsid" --- this should be "guid" for consistency with other functions
-        names(x)=str_replace(names(x),"LSID","guid")
+        ## column "taxon_concept_lsid" --- this should be "guid" for consistency with other functions
         names(x)=str_replace(names(x),"taxon_concept_lsid","guid")
+        names(x)=str_replace(names(x),"Number.of.records","N.occurrences") ## for backwards compatibility with the previous ws
     } else {
         x=NULL
     }
