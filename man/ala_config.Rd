@@ -27,12 +27,13 @@ ala_reasons()
   user-agent string used with all web requests to the ALA
   servers.  Default = "ALA4R" with version number, R
   version and date and user platform \item
-  download_reason_id (numeric): the ID code of the
-  "download reason" required by some ALA services.  By
-  default this is NA. Some ALA services require a valid
-  download_reason_id code, either specified here or
-  directly to the associated R function.  See
-  \code{ala_reasons()} for a list of valid ID codes.  \item
+  download_reason_id numeric or string: the "download
+  reason" required by some ALA services, either as a
+  numeric ID (currently 0--11) or a string (see
+  \code{ala_reasons()} for a list of valid ID codes and
+  names). By default this is NA. Some ALA services require
+  a valid download_reason_id code, either specified here or
+  directly to the associated R function.  \item
   base_url_spatial string: the base url for spatial web
   services (default="http://spatial.ala.org.au/ws/") \item
   base_url_bie string: the base url for BIE web services

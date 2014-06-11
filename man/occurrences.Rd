@@ -7,10 +7,12 @@ occurrences(taxon, wkt, fq, fields, extra, qa,
   verbose = ala_config()$verbose, use_data_table = TRUE)
 }
 \arguments{
-  \item{download_reason_id}{integer: (required) a reason
-  code for the download. See \code{ala_reasons()} for valid
-  values. The download_reason_id can be passed directly to
-  this function, or alternatively set using
+  \item{download_reason_id}{numeric or string: (required) a
+  reason code for the download, either as a numeric ID
+  (currently 0--11) or a string (see \code{ala_reasons()}
+  for a list of valid ID codes and names). The
+  download_reason_id can be passed directly to this
+  function, or alternatively set using
   \code{ala_config(download_reason_id=...)}}
 
   \item{reason}{string: (optional) user-supplied

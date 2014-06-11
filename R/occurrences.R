@@ -8,8 +8,7 @@
 #' \item Field definitions: \url{https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc}
 #' \item WKT reference: \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' }
-#' 
-#' @param download_reason_id integer: (required) a reason code for the download. See \code{ala_reasons()} for valid values. The download_reason_id can be passed directly to this function, or alternatively set using \code{ala_config(download_reason_id=...)}
+#' @param download_reason_id numeric or string: (required) a reason code for the download, either as a numeric ID (currently 0--11) or a string (see \code{ala_reasons()} for a list of valid ID codes and names). The download_reason_id can be passed directly to this function, or alternatively set using \code{ala_config(download_reason_id=...)}
 #' @param reason string: (optional) user-supplied description of the reason for the download. Providing this information is optional but will help the ALA to better support users by building a better understanding of user communities and their data requests
 #' @param taxon string: (optional) taxonomic query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")
 #' @param wkt string: (optional) a WKT (well-known text) string providing a spatial polygon within which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.131 -26,140 -37))"
@@ -58,6 +57,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     reason_ok=!is.na(download_reason_id)
     if (reason_ok) {
         valid_reasons=ala_reasons()
+        download_reason_id=convert_reason(download_reason_id) ## convert from string to numeric if needed
         reason_ok=download_reason_id %in% valid_reasons$id
     }
     if (! reason_ok) {
