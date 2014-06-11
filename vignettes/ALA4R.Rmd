@@ -19,7 +19,7 @@ This project enables the R community to directly access data and resources hoste
 
 First, install some packages from CRAN that are required by our package (CRAN is a network of ftp and web servers around the world that store identical, up-to-date, versions of code and documentation for R):
 ```{r eval=FALSE}
-install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp"))
+install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp","knitr"))
 ```
 
 If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
@@ -43,7 +43,7 @@ or install `libcurl4-openssl-dev` via the Software Centre.
 
 Then, fire up R and install the dependencies that we need:
 ```{r eval=FALSE}
-install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp"))
+install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp","knitr"))
 ```
 
 If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
