@@ -18,7 +18,8 @@ Imports:
     RCurl,
     jsonlite,
     assertthat,
-    sp
+    sp,
+    knitr
 Suggests:
     data.table
 License: GPL (>= 3)
