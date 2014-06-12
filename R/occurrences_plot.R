@@ -17,15 +17,12 @@
 #' #download some observations
 #' x=occurrences(taxon="golden bowerbird",download_reason_id=10)
 #' occurrences_plot(x)
-#' 
 #' }
-#' @import sp
 #' @export occurrences_plot
 
 ### function to visualize data
 occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), grouped=FALSE, taxon_level='species',...) 
 {
-	require(sp) #ensure sp package
 	if (!any(class(x)=='occurrences')) stop('check_assertions must have an object of class occurrences from e.g., occurrences() in the ALA4R package')
 	assert_that(is.string(filename))
 	if (substr(filename,nchar(filename)-2,nchar(filename))!='pdf') filename=paste(filename,'.pdf',sep='') #append a pdf suffix to filename

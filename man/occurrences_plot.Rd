@@ -40,7 +40,6 @@ Generates a plot of occurrence data retrieved using
 #download some observations
 x=occurrences(taxon="golden bowerbird",download_reason_id=10)
 occurrences_plot(x)
-
 }
 }
 \author{
