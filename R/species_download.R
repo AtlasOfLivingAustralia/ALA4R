@@ -98,20 +98,3 @@ species_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_
     x
 }
         
-# internal function for converting chr data types to numeric or logical
-convert_dt=function(x,test_numeric=TRUE) {
-    assert_that(is.flag(test_numeric))
-    if (see_if(is.character(x))) {
-        ux=unique(x)
-        if (all(nchar(ux)<1)) {
-            ## all empty strings - leave as is
-        } else if (all(ux %in% c("true","false","TRUE","FALSE","","NA"))) {
-            x=as.logical(x)
-        } else if (test_numeric) {
-            if (all(nchar(ux)<1 | ux=="NA" | !is.na(suppressWarnings(as.numeric(ux))))) {
-                x=as.numeric(x)
-            }
-        }
-    }
-    x
-}
