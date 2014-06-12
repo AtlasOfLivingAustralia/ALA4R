@@ -4,16 +4,16 @@
 \usage{
 occurrences(taxon, wkt, fq, fields, extra, qa,
   download_reason_id = ala_config()$download_reason_id, reason,
-  verbose = ala_config()$verbose, check_record_count = TRUE,
+  verbose = ala_config()$verbose, record_count_only = FALSE,
   use_data_table = TRUE)
 }
 \arguments{
-  \item{download_reason_id}{numeric or string: (required) a
-  reason code for the download, either as a numeric ID
-  (currently 0--11) or a string (see \code{ala_reasons()}
-  for a list of valid ID codes and names). The
-  download_reason_id can be passed directly to this
-  function, or alternatively set using
+  \item{download_reason_id}{numeric or string: (required
+  unless record_count_only is TRUE) a reason code for the
+  download, either as a numeric ID (currently 0--11) or a
+  string (see \code{ala_reasons()} for a list of valid ID
+  codes and names). The download_reason_id can be passed
+  directly to this function, or alternatively set using
   \code{ala_config(download_reason_id=...)}}
 
   \item{reason}{string: (optional) user-supplied
@@ -67,12 +67,13 @@ occurrences(taxon, wkt, fq, fields, extra, qa,
   \item{verbose}{logical: show additional progress
   information? [default is set by ala_config()]}
 
-  \item{check_record_count}{logical: if TRUE, an initial
-  record count query will be made and the number of records
-  printed to the console. Setting this to FALSE might make
-  the overall operation marginally faster. Note that record
-  counts are not made if a cached copy of the data is being
-  used}
+  \item{record_count_only}{logical: if TRUE, return just
+  the count of records that would be downloaded, but don't
+  download them. Note that the record count is always
+  re-retrieved from the ALA, regardless of the caching
+  settings. If a cached copy of this query exists on the
+  local machine, the actual data set size may therefore
+  differ from this record count}
 
   \item{use_data_table}{logical: if TRUE, attempt to read
   the data.csv file using the fread function from the
@@ -94,6 +95,7 @@ per request.
 \examples{
 \dontrun{
 x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),download_reason_id=10)
+x=occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE)
 x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10)
 
 y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10)

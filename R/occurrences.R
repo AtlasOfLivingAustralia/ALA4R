@@ -8,7 +8,7 @@
 #' \item Field definitions: \url{https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc}
 #' \item WKT reference: \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' }
-#' @param download_reason_id numeric or string: (required) a reason code for the download, either as a numeric ID (currently 0--11) or a string (see \code{ala_reasons()} for a list of valid ID codes and names). The download_reason_id can be passed directly to this function, or alternatively set using \code{ala_config(download_reason_id=...)}
+#' @param download_reason_id numeric or string: (required unless record_count_only is TRUE) a reason code for the download, either as a numeric ID (currently 0--11) or a string (see \code{ala_reasons()} for a list of valid ID codes and names). The download_reason_id can be passed directly to this function, or alternatively set using \code{ala_config(download_reason_id=...)}
 #' @param reason string: (optional) user-supplied description of the reason for the download. Providing this information is optional but will help the ALA to better support users by building a better understanding of user communities and their data requests
 #' @param taxon string: (optional) taxonomic query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")
 #' @param wkt string: (optional) a WKT (well-known text) string providing a spatial polygon within which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.131 -26,140 -37))"
@@ -24,7 +24,7 @@
 #' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence")} for valid field names.
 #' @param qa string vector: (optional) list of record issues to include in the download. See \code{ala_fields("assertions")} for valid values, or use "none" to include no record issues
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
-#' @param check_record_count logical: if TRUE, an initial record count query will be made and the number of records printed to the console. Setting this to FALSE might make the overall operation marginally faster. Note that record counts are not made if a cached copy of the data is being used
+#' @param record_count_only logical: if TRUE, return just the count of records that would be downloaded, but don't download them. Note that the record count is always re-retrieved from the ALA, regardless of the caching settings. If a cached copy of this query exists on the local machine, the actual data set size may therefore differ from this record count
 #' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails with an error or warning, or if use_data_table is FALSE, then read.table will be used (which may be slower)
 #' 
 #' @return Data frame
@@ -32,6 +32,7 @@
 #' @examples
 #' \dontrun{ 
 #' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),download_reason_id=10)
+#' x=occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE)
 #' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10)
 #' 
 #' y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10)
@@ -52,19 +53,10 @@
 ## TODO: more extensive testing, particularly of the csv-conversion process
 ## TODO LATER: add params: lat, lon, radius (for specifying a search circle)
 
-occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,reason,verbose=ala_config()$verbose,check_record_count=TRUE,use_data_table=TRUE) {
+occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,reason,verbose=ala_config()$verbose,record_count_only=FALSE,use_data_table=TRUE) {
     ## check input parms are sensible
     assert_that(is.flag(use_data_table))
-    assert_that(is.flag(check_record_count))    
-    reason_ok=!is.na(download_reason_id)
-    if (reason_ok) {
-        valid_reasons=ala_reasons()
-        download_reason_id=convert_reason(download_reason_id) ## convert from string to numeric if needed
-        reason_ok=download_reason_id %in% valid_reasons$id
-    }
-    if (! reason_ok) {
-        stop("download_reason_id must be a valid reason_id. See ala_reasons(). Set this value directly here or through ala_config(download_reason_id=...)")
-    }
+    assert_that(is.flag(record_count_only))    
     #taxon = clean_string(taxon) ## clean up the taxon name # no - because this can be an indexed query like field1:value1
     base_url=paste(ala_config()$base_url_biocache,"occurrences/index/download",sep="")
   
@@ -95,8 +87,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         stop("invalid request: need at least one of taxon, fq, or wkt to be specified")
     }
     ## check the number of records
-    check_record_count=TRUE
-    if (check_record_count) {        
+    if (record_count_only) {
         ## check using e.g. http://biocache.ala.org.au/ws/occurrences/search?q=*:*&pageSize=0&facet=off
         temp_query=this_query
         temp_query$pageSize=0
@@ -104,15 +95,24 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         this_url=parse_url(paste(ala_config()$base_url_biocache,"occurrences/search",sep=""))
         this_url$query=temp_query
         this_url=build_url(this_url)
-        ## don't need to check number of records if caching is on and we already have the file
-        cache_file_exists=file.exists(ala_cache_filename(this_url))
-        if ((ala_config()$caching %in% c("off","refresh")) | (!cache_file_exists & ala_config()$caching=="on")) {
+        # ## don't need to check number of records if caching is on and we already have the file
+        # cache_file_exists=file.exists(ala_cache_filename(this_url))
+        # if ((ala_config()$caching %in% c("off","refresh")) | (!cache_file_exists & ala_config()$caching=="on")) {
             ## check
-            num_records=cached_get(url=this_url,type="json")$totalRecords
-            cat(sprintf('ALA4R occurrences: downloading dataset with %d records',num_records))
-        }
+        #    num_records=cached_get(url=this_url,type="json")$totalRecords
+        #    cat(sprintf('ALA4R occurrences: downloading dataset with %d records',num_records))
+        #}
+        return(cached_get(url=this_url,type="json",caching="off")$totalRecords)
     }
-    
+    reason_ok=!is.na(download_reason_id)
+    if (reason_ok) {
+        valid_reasons=ala_reasons()
+        download_reason_id=convert_reason(download_reason_id) ## convert from string to numeric if needed
+        reason_ok=download_reason_id %in% valid_reasons$id
+    }
+    if (! reason_ok) {
+        stop("download_reason_id must be a valid reason_id. See ala_reasons(). Set this value directly here or through ala_config(download_reason_id=...)")
+    }
     if (!missing(fields)) {
         assert_that(is.character(fields))
         ## user has specified some fields
