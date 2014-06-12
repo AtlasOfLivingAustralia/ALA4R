@@ -103,15 +103,10 @@ intersect_points = function(pnts,fids,SPdata.frame=FALSE,verbose=ala_config()$ve
 	}
 	###deal with SpatialPointsDataFrame
 	if (SPdata.frame) { #if output is requested as a SpatialPointsDataFrame
-		if (is.element('sp', installed.packages()[,1])) { #if sp package is available
-			require(sp) #load the library		
-			## coerce to SpatialPointsDataFrame class
-			if (nrow(out)>0) {
-				out=SpatialPointsDataFrame(coords=out[,c("longitude","latitude")],proj4string=CRS("+proj=longlat +ellps=WGS84"),data=out)
-			}
-		} else {
-			warning('sp package needs to be installed; data output is output as a simple dataframe')
-		}
+            ## coerce to SpatialPointsDataFrame class
+            if (nrow(out)>0) {
+                out=SpatialPointsDataFrame(coords=out[,c("longitude","latitude")],proj4string=CRS("+proj=longlat +ellps=WGS84"),data=out)
+            }
 	}
 	###return the output
     return(out)

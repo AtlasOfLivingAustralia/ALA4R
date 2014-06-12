@@ -76,14 +76,9 @@ species_by_site = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala
 
     ##deal with SpatialPointsDataFrame
     if (SPdata.frame) { #if output is requested as a SpatialPointsDataFrame
-        if (is.element('sp', installed.packages()[,1])) { #if sp package is available
-            require(sp) #load the library		
-            ## coerce to SpatialPointsDataFrame class
-            if (nrow(out)>0) {
-                out=SpatialPointsDataFrame(coords=out[,c("Longitude","Latitude")],proj4string=CRS("+proj=longlat +ellps=WGS84"),data=out)
-            }
-        } else {
-            warning('sp package needs to be installed; data output is output as a simple dataframe')
+        ## coerce to SpatialPointsDataFrame class
+        if (nrow(out)>0) {
+            out=SpatialPointsDataFrame(coords=out[,c("Longitude","Latitude")],proj4string=CRS("+proj=longlat +ellps=WGS84"),data=out)
         }
     }
     ##return the output
