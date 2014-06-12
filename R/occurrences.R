@@ -24,6 +24,7 @@
 #' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence")} for valid field names.
 #' @param qa string vector: (optional) list of record issues to include in the download. See \code{ala_fields("assertions")} for valid values, or use "none" to include no record issues
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
+#' @param check_record_count logical: if TRUE, an initial record count query will be made and the number of records printed to the console. Setting this to FALSE might make the overall operation marginally faster. Note that record counts are not made if a cached copy of the data is being used
 #' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails with an error or warning, or if use_data_table is FALSE, then read.table will be used (which may be slower)
 #' 
 #' @return Data frame
@@ -51,9 +52,10 @@
 ## TODO: more extensive testing, particularly of the csv-conversion process
 ## TODO LATER: add params: lat, lon, radius (for specifying a search circle)
 
-occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,reason,verbose=ala_config()$verbose,use_data_table=TRUE) {
+occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,reason,verbose=ala_config()$verbose,check_record_count=TRUE,use_data_table=TRUE) {
     ## check input parms are sensible
     assert_that(is.flag(use_data_table))
+    assert_that(is.flag(check_record_count))    
     reason_ok=!is.na(download_reason_id)
     if (reason_ok) {
         valid_reasons=ala_reasons()
@@ -92,6 +94,25 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         ## not a valid request!
         stop("invalid request: need at least one of taxon, fq, or wkt to be specified")
     }
+    ## check the number of records
+    check_record_count=TRUE
+    if (check_record_count) {        
+        ## check using e.g. http://biocache.ala.org.au/ws/occurrences/search?q=*:*&pageSize=0&facet=off
+        temp_query=this_query
+        temp_query$pageSize=0
+        temp_query$facet="off"
+        this_url=parse_url(paste(ala_config()$base_url_biocache,"occurrences/search",sep=""))
+        this_url$query=temp_query
+        this_url=build_url(this_url)
+        ## don't need to check number of records if caching is on and we already have the file
+        cache_file_exists=file.exists(ala_cache_filename(this_url))
+        if ((ala_config()$caching %in% c("off","refresh")) | (!cache_file_exists & ala_config()$caching=="on")) {
+            ## check
+            num_records=cached_get(url=this_url,type="json")$totalRecords
+            cat(sprintf('ALA4R occurrences: downloading dataset with %d records',num_records))
+        }
+    }
+    
     if (!missing(fields)) {
         assert_that(is.character(fields))
         ## user has specified some fields

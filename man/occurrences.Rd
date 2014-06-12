@@ -4,7 +4,8 @@
 \usage{
 occurrences(taxon, wkt, fq, fields, extra, qa,
   download_reason_id = ala_config()$download_reason_id, reason,
-  verbose = ala_config()$verbose, use_data_table = TRUE)
+  verbose = ala_config()$verbose, check_record_count = TRUE,
+  use_data_table = TRUE)
 }
 \arguments{
   \item{download_reason_id}{numeric or string: (required) a
@@ -65,6 +66,13 @@ occurrences(taxon, wkt, fq, fields, extra, qa,
 
   \item{verbose}{logical: show additional progress
   information? [default is set by ala_config()]}
+
+  \item{check_record_count}{logical: if TRUE, an initial
+  record count query will be made and the number of records
+  printed to the console. Setting this to FALSE might make
+  the overall operation marginally faster. Note that record
+  counts are not made if a cached copy of the data is being
+  used}
 
   \item{use_data_table}{logical: if TRUE, attempt to read
   the data.csv file using the fread function from the
