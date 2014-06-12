@@ -104,15 +104,13 @@ alamap=leaflet(data=datlist,title="Amblyornis newtonianus",base.map="mqsat",popu
 ##--------------------------------------------------------------------------
 ## Community composition and turnover
 
-library(reshape)
 library(vegan)
 library(mgcv)
 library(geosphere)
 
 ## define our area of interest
-wkt="POLYGON((152.2 -32.0,152.22 -32.03,152.34 -33.12,152.258 -33.365,151.8 -33.8238889,151.73 -33.87,151.2 -34.1,151.058997 -34.100853,151.031 -34.101,150.83 -34.1,150.820829214863 -34.0997671901757,150.475343537448 -33.9252976120416,142.1 -27.2333,141.3333 -26.5,139.5833 -24.7833,130.8 -14.4,130.1 -13.5,129.95 -12.4333,129.95 -12.43,130.09307 -11.81894,130.1282 -11.78006,130.46359 -11.43409,130.4855 -11.4269,130.64065 -11.42583,130.64482 -11.42583,131.0642 -11.4278,131.95 -11.8167,132.4833 -12.0833,132.867863178 -12.315261752,132.867890531 -12.315289078,152.2 -32.0))"
-
-x=occurrences(taxon="genus:Eucalyptus",wkt=wkt,qa="none",download_reason_id=10) ## download all Eucalyptus records in this area
+wkt="POLYGON((152.5 -35,152.5 -32,140 -32,140 -35,152.5 -35))"
+x=occurrences(taxon="family:Fabaceae",wkt=wkt,qa="none",download_reason_id=10) ## download legume records: this is a large family of flowering plants
 x=x$data ## just take the data component
 ## subset and re-name some columns for convenience
 x=x[,c("Matched.Scientific.Name","Taxon.Rank...matched","Kingdom...matched","Phylum...matched","Class...matched","Order...matched","Family...matched","Genus...matched","Species...matched","Longitude...processed","Latitude...processed","Event.Date...parsed","Basis.Of.Record...processed")]
@@ -122,22 +120,13 @@ names(x)=c("Scientific.Name","Taxon.Rank","Kingdom","Phylum","Class","Order","Fa
 x$Longitude=round(x$Longitude*2)/2
 x$Latitude=round(x$Latitude*2)/2
 
-## define an "along-transect" position for plotting purposes
-temp=x[sample.int(nrow(x),1000),]
-fit=lm(Latitude~Longitude,data=temp)
-fitrange=predict(fit,newdata=x)
-predtp=function(lon)(predict(fit,newdata=data.frame(Longitude=lon))-min(fitrange))/(max(fitrange)-min(fitrange))
-x$Transect.Position=(fitrange-min(fitrange))/(max(fitrange)-min(fitrange)) ## position scaled from 0-1
-## some plot labels
-transect.labels=c("Sydney","Dubbo","Bourke","Longreach","Diamantina NP","Mt Isa","Kakadu NP","Darwin")
-transect.pos=predtp(c(151.2,148.61,145.95,144.24,141.26,139.48,132.39,130.86))
-
 ## create sites-by-species data frame
 ## aggregate records within 0.5-degree bins
 ## this could also be done with e.g. the reshape library or the table() function
-xsub=x$Taxon.Rank!="genus" ## discard genus-level records
+## NOTE - this example inherently makes some strong assumptions about *absences* in the data. Follow this example at your own risk
+xsub=x$Taxon.Rank %in% c("species","subspecies","variety","form","cultivar") ## discard genus- and higher-level records
 unames=unique(x[xsub,]$Scientific.Name) ## unique names 
-ull=unique(x[xsub,c("Longitude","Latitude","Transect.Position")])
+ull=unique(x[xsub,c("Longitude","Latitude")])
 xgridded=matrix(NA,nrow=nrow(ull),ncol=length(unames))
 for (uli in 1:nrow(ull)) {
     lidx=xsub & x$Longitude==ull[uli,]$Longitude & x$Latitude==ull[uli,]$Latitude
@@ -147,31 +136,27 @@ xgridded=as.data.frame(xgridded)
 names(xgridded)=unames
 xgridded=cbind(ull,xgridded)
 
-## plot richness vs transect position
-plot(xgridded$Transect.Position,apply(xgridded[,-c(1:3)],1,sum),axes=FALSE,ylab="Richness",xlab="",pch=20,col="grey25")
-axis(1,at=transect.pos,labels=transect.labels,las=2,padj=0)
-axis(2)
+## plot richness vs longitude
+plot(xgridded$Longitude,apply(xgridded[,-c(1:2)],1,sum),ylab="Richness",xlab="Longitude",pch=20,col="grey25")
 
 ## calculate dissimilarity between nearby grid cells as a function of along-transect position
-D=vegdist(xgridded[,-c(1:3)],'bray') ## bray-curtis dissimilarity
+D=vegdist(xgridded[,-c(1:2)],'bray') ## bray-curtis dissimilarity
 Dm=as.matrix(D)
 Dll=apply(xgridded[,1:2],1,function(z){distVincentySphere(z,xgridded[,1:2])}) ## calculate geographic distance from longitude and latitude
 closeidx=Dll>0 & Dll<100e3 ## find grid cells within 100km of each other
-temp=matrix(xgridded$Transect.Position,nrow=nrow(xgridded),ncol=nrow(xgridded)) ## create matrix of Transect.Position that matches the size  of the pairwise-D matrices
+temp=matrix(xgridded$Longitude,nrow=nrow(xgridded),ncol=nrow(xgridded)) ## create matrix of Longitude that matches the size  of the pairwise-D matrices
 ## plot dissimilarity as a function of transect position
-plot(temp[closeidx],Dm[closeidx],xlab="",ylab="Dissimilarity",axes=FALSE,pch=20,col="grey85")
-axis(1,at=transect.pos,labels=transect.labels,las=2,padj=0)
-axis(2)
+plot(temp[closeidx],Dm[closeidx],xlab="Longitude",ylab="Dissimilarity",pch=20,col="grey85")
 ## add smooth fit via gam()
 fit=gam(d~s(tp,k=7),data=data.frame(tp=temp[closeidx],d=Dm[closeidx]))
-tpp=seq(from=0,to=1,length.out=100)
+tpp=seq(from=min(xgridded$Longitude),to=max(xgridded$Longitude),length.out=100)
 fitp=predict(fit,newdata=data.frame(tp=tpp))
 lines(tpp,fitp,col=1)
 
 ## clustering
 cl=hclust(D,method="ave") ## UPGMA clustering
 plot(cl) ## plot dendrogram
-grp=cutree(cl,15) ## extract group labels at the 15-group level
+grp=cutree(cl,20) ## extract group labels at the 20-group level
 ## coalesce small (outlier) groups into a single catch-all
 sing=which(table(grp)<5)
 grp[grp %in% sing]=21 ## singletons to new combined group
@@ -183,5 +168,4 @@ library(maps)
 library(mapdata)
 map("worldHires","Australia", xlim=c(105,155), ylim=c(-45,-10), col="gray90", fill=TRUE)
 thiscol=c("#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf") ## colours for cluster
-thiscol=thiscol[-3]
 with(xgridded,points(Longitude,Latitude,pch=21,col=thiscol[grp],bg=thiscol[grp],cex=0.75))
