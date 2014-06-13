@@ -6,12 +6,13 @@ intersect_points(pnts, fids, SPdata.frame = FALSE,
   verbose = ala_config()$verbose)
 }
 \arguments{
-  \item{pnts}{numeric: vector of lat & lons or 2 column
-  data.frame or matrix of lat,lons. NOTE: the number of
-  locations must be less than 1000.}
+  \item{pnts}{numeric: vector of latitude/longitude pairs,
+  or a 2 column data.frame or matrix of lat,lons. NOTE: the
+  number of locations must be less than 1000.}
 
-  \item{fids}{string: ids of layers to be intersected. list
-  of possible layers is available from ala_fields().}
+  \item{fids}{string vector: ids of layers to be
+  intersected. The list of possible layers is available
+  from ala_fields("layers").}
 
   \item{SPdata.frame}{logical: should the output should be
   returned as a SpatialPointsDataFrame of the sp package?}
