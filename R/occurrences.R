@@ -116,7 +116,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     if (!missing(fields)) {
         assert_that(is.character(fields))
         ## user has specified some fields
-        fields=fields_description_to_id(fields=fields,fields_type="occurrence") ## replace long names with ids
+        fields=fields_name_to_id(fields=fields,fields_type="occurrence") ## replace long names with ids
         valid_fields=ala_fields(fields_type="occurrence")
         unknown=setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
@@ -126,7 +126,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     }
     if (!missing(extra)) {
         assert_that(is.character(extra))
-        extra=fields_description_to_id(fields=extra,fields_type="occurrence") ## replace long names with ids
+        extra=fields_name_to_id(fields=extra,fields_type="occurrence") ## replace long names with ids
         valid_fields=ala_fields(fields_type="occurrence")
         unknown=setdiff(extra,valid_fields$name)
         if (length(unknown)>0) {

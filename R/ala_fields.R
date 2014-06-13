@@ -90,7 +90,7 @@ field_info = function(field_id) {
 
 ## private function to replace any full field names (descriptions) with their id values
 ## e.g. "Radiation - lowest period (Bio22)" to id "el871"
-fields_description_to_id=function(fields,fields_type) {
+fields_name_to_id=function(fields,fields_type) {
     assert_that(is.character(fields))
     assert_that(is.string(fields_type))
     fields_type=match.arg(tolower(fields_type),c("occurrence","general","layers","assertions"))
@@ -103,14 +103,41 @@ fields_description_to_id=function(fields,fields_type) {
     switch(fields_type,
            "layers"=laply(fields,function(z) ifelse(z %in% valid_fields$desc & ! z %in% valid_fields$id,{
                if (sum(valid_fields$desc==z,na.rm=TRUE)>1)
-                   warning(" multiple ",fields_type," fields match the description \"",z,"\", using first")                
+                   warning(" multiple ",fields_type," fields match the name \"",z,"\", using first")                
                valid_fields$id[which(valid_fields$desc==z)]
            },z)),
            "occurrence"=,
            "assertions"=laply(fields,function(z) ifelse(z %in% valid_fields$description & ! z %in% valid_fields$name,{
                if (sum(valid_fields$description==z,na.rm=TRUE)>1)
-                   warning(" multiple ",fields_type," fields match the description \"",z,"\", using first") 
+                   warning(" multiple ",fields_type," fields match the name \"",z,"\", using first") 
                valid_fields$name[which(valid_fields$description==z)]
+           },z)),
+           fields ## default to just returning the fields as supplied 
+       )
+}
+
+## private function to replace any id values with their full field names (descriptions)
+fields_id_to_name=function(fields,fields_type) {
+    assert_that(is.character(fields))
+    assert_that(is.string(fields_type))
+    fields_type=match.arg(tolower(fields_type),c("occurrence","general","layers","assertions"))
+    valid_fields=ala_fields(fields_type=fields_type)
+    ## merge differently for "layers" fields, because those column names differ from other fields_type
+    ## for layers, the long name is in "desc", with the id in "id" (and "name" is something different)
+    ## for "occurrence" and "assertions", long name is in "description" and id is in "name"
+    ## for general, there is no long name (description)
+    ## for each one, warn if multiple matches on long name are found
+    switch(fields_type,
+           "layers"=laply(fields,function(z) ifelse(z %in% valid_fields$id & ! z %in% valid_fields$desc,{
+               if (sum(valid_fields$id==z,na.rm=TRUE)>1)
+                   warning(" multiple ",fields_type," fields match the id \"",z,"\", using first")                
+               valid_fields$desc[which(valid_fields$id==z)]
+           },z)),
+           "occurrence"=,
+           "assertions"=laply(fields,function(z) ifelse(z %in% valid_fields$name & ! z %in% valid_fields$description,{
+               if (sum(valid_fields$name==z,na.rm=TRUE)>1)
+                   warning(" multiple ",fields_type," fields match the id \"",z,"\", using first") 
+               valid_fields$description[which(valid_fields$name==z)]
            },z)),
            fields ## default to just returning the fields as supplied 
        )

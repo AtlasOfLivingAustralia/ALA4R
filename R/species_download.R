@@ -40,7 +40,7 @@ species_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_
     if (!missing(fields)) {
         assert_that(is.character(fields))
         ## user has specified some fields
-        fields=fields_description_to_id(fields=fields,fields_type="general") ## replace long names with ids
+        fields=fields_name_to_id(fields=fields,fields_type="general") ## replace long names with ids
         valid_fields=ala_fields(fields_type="general")
         unknown=setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {

@@ -68,7 +68,7 @@ intersect_points = function(pnts,fids,SPdata.frame=FALSE,verbose=ala_config()$ve
         }
     }
     ##format the fields string
-    fids=fields_description_to_id(fields=fids,fields_type="layers") ## replace long names with ids
+    fids=fields_name_to_id(fields=fids,fields_type="layers") ## replace long names with ids
     if (length(fids)>1) {
         fids_str = paste(fids,collapse=',',sep='')
     } else {
