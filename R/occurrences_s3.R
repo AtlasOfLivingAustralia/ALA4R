@@ -7,6 +7,8 @@
 #' 
 #' @param object list: a 'occurrence' object that has been downloaded using \code{occurrences}
 #' @param spatial numeric: value in decimal degrees to to create a unique subset of the data. Value of 0 means no rounding and use values as is. Values <0 mean ignore spatial unique parameter.
+#' @param incomparables logical/numeric: currently ignored, but needed for S3 method consistency
+#' @param \dots not currently used
 #'
 #' @details
 #' \code{unique} will give the min value for all columns that are not used in the aggregation.
@@ -46,7 +48,7 @@ NULL
 
 #' @rdname occurrences_s3
 #' @S3method unique occurrences
-"unique.occurrences" <- function(object, spatial=0, ...) {
+"unique.occurrences" <- function(object, incomparables=FALSE, spatial=0, ...) {
 	assert_that(is.numeric(spatial)) #ensure unique.spatial is numeric
 	if (spatial<0) {
 		cat('ignoring spatial \n')

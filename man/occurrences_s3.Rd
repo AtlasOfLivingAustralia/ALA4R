@@ -6,7 +6,8 @@
 \usage{
 summary.occurrences(object, ...)
 
-\method{unique}{occurrences}(object, spatial = 0, ...)
+\method{unique}{occurrences}(object, incomparables = FALSE, spatial = 0,
+  ...)
 }
 \arguments{
   \item{object}{list: a 'occurrence' object that has been
@@ -16,6 +17,9 @@ summary.occurrences(object, ...)
   create a unique subset of the data. Value of 0 means no
   rounding and use values as is. Values <0 mean ignore
   spatial unique parameter.}
+
+  \item{incomparables}{logical/numeric: currently ignored,
+  but needed for S3 method consistency}
 
   \item{\dots}{not currently used}
 }
