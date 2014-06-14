@@ -6,7 +6,7 @@
 \usage{
 summary.occurrences(object, ...)
 
-\method{unique}{occurrences}(x, incomparables = FALSE, ...)
+\method{unique}{occurrences}(x, incomparables = FALSE, spatial = 0, ...)
 }
 \arguments{
   \item{object}{list: an 'occurrence' object that has been
