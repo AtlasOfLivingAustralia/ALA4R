@@ -80,7 +80,7 @@ search_partial_name=function(taxon,geo_only=FALSE,output_format="simple",index_t
 "print.search_partial_name" <- function(x, ...)
 {
     cols=names(x)
-    if (attr(x,"output_format")=="simple") {
+    if (identical(attr(x,"output_format"),"simple")) {
         cols=intersect(c("name","commonName","matchedNames","rankString","guid"),cols)
     }
     m <- as.matrix(format.data.frame(x[,cols], na.encode = FALSE))

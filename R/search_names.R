@@ -99,7 +99,7 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
         print(format(x))
     } else {
         cols=names(x)
-        if (attr(x,"output_format")=="simple") {
+        if (identical(attr(x,"output_format"),"simple")) {
             cols=intersect(c("searchTerm","name","commonName","rank","guid"),cols)
         }
         m=as.matrix(format.data.frame(x[,cols],na.encode=FALSE))

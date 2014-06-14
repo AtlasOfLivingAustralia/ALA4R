@@ -51,7 +51,7 @@ search_layers = function(query,type="all",output_format="simple") {
 "print.search_layers" <- function(x, ...)
 {
     cols=names(x)
-    if (attr(x,"output_format")=="simple") {
+    if (identical(attr(x,"output_format"),"simple")) {
         cols=intersect(c("name","id","description","type","notes","environmentalvalueunits","licence_notes","licence_link","notes"),cols)
     }
     m=as.matrix(format.data.frame(x[,cols],na.encode=FALSE))

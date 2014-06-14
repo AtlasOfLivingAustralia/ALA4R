@@ -107,7 +107,7 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     print(format(x$facets))    
     cat(sprintf("\nSearch results:\n"))
     cols=names(x$data)
-    if (attr(x,"output_format")=="simple") {
+    if (identical(attr(x,"output_format"),"simple")) {
         cols=intersect(c("name","commonName","rank","guid"),cols)
     }
     print(as.matrix(format.data.frame(x$data[,cols],na.encode=FALSE)))
