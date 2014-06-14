@@ -50,7 +50,7 @@ NULL
 "unique.occurrences" <- function(x, incomparables=FALSE, ...) {
     ## can't add spatial to the argument list, because then it doesn't match the generic "unique" function and the build process complains
     ## default value for spatial
-    if (is.missing(spatial)) {
+    if (missing(spatial)) {
         spatial=0
     }
 	assert_that(is.numeric(spatial)) #ensure unique.spatial is numeric
