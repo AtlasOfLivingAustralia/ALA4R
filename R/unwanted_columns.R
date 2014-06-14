@@ -2,8 +2,10 @@
 unwanted_columns=function(type) {
     type=match.arg(tolower(type),c("general","layers"))
     switch(type,
-           "general"=c("rankId","left","right","idxType","highlight","linkIdentifier","isExcluded","hasChildren"),
+           "general"=c("rawRank","rankId","left","right","idxType","highlight","linkIdentifier","isExcluded","hasChildren","image","thumbnail"),
+             ## rawRank appears to be a duplicate of rank or rankString
              ## hasChildren seems always to be false, even for taxa that ought to have children (e.g. Macropus)
+             ## image and thumbnail appear to be internal paths, not full URLs
            "layers"=c("pid","path","path_orig","path_1km","enabled","uid","licence_level","lookuptablepath","mdhrlv","mddatest","grid","shape"),
              ## datalang appears to be all "eng" "Eng" "enu" "" or NA (2x"enu" records appear to be in English and from DEH/DEWHA)
              ## grid is redundant: all env layers are grid==TRUE, all contextual layers are grid==NA
