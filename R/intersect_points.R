@@ -4,43 +4,44 @@
 #' @references \url{http://api.ala.org.au/}
 #' @references \url{http://spatial.ala.org.au/layers/}
 #' 
-#' The key related function is occurrences() where species records can be interesected with any
+#' The key related function is occurrences() where species records can be intersected with any
 #' number of environmental (el) and contextual (cl) layers but intersect_points could be used
 #' to sample background (non species-site) values of layers.
 #' 
 #' @param pnts numeric: vector of latitude/longitude pairs, or a 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 1000.
-#' @param fids string vector: ids of layers to be intersected. The list of possible layers is available from ala_fields("layers").
+#' @param layers string vector: ids of layers to be intersected. The list of possible layers is available from ala_fields("layers").
 #' @param SPdata.frame logical: should the output should be returned as a SpatialPointsDataFrame of the sp package?
+#' @param use_layer_names logical: replace layer id's (e.g. "el871") with their names (e.g. "radiationLowestPeriodBio22")
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
-#' @return A SpatialPointsDataFrame containing the intersecting data information. Missing data or incorrectly identified field id values will result in NA data
+#' @return A SpatialPointsDataFrame containing the intersecting data information. Missing data or incorrectly identified layer id values will result in NA data
 #' @seealso \code{\link{ala_config}}
 #'
-#'TODO: Pity that "fields" rather than "layers" are used. Confusing.
+#'TODO: Pity that "fields" rather than "layers" are used. Confusing. - changed to "layers" 14-Jun BR
 #'TODO: check that the URL strings here are guaranteed to be appropriately URL-encoded
 #'TODO: Limit of 1000 points is a nuisance, surely?
 #'
 #' @examples
 #' \dontrun{
-#' #single point with multiple fields
-#' fields = c('cl22','cl23','el773')
+#' #single point with multiple layers
+#' layers = c('cl22','cl23','el773')
 #' pnts = c(-23.1,149.1)
-#' intersect_points(pnts,fields)
+#' intersect_points(pnts,layers)
 #' #Web Service equivalent: http://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  
 #' 
-#' #multiple points as a grid sampling multiple fields
-#' fields = c('cl22','cl23','el773')
+#' #multiple points as a grid sampling multiple layers
+#' layers = c('cl22','cl23','el773')
 #' pnts = data.frame(expand.grid(lat=seq(-29,-19,1.0),lon=seq(130.0,140.0,1.0)))
-#' intersect_points(pnts,fields)
+#' intersect_points(pnts,layers)
 #' 
 #' }
 #' @export
 
-## undocumented: field ids in "fids" can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). I haven't documented this (yet) until it is implemented across all functions - BR
+## undocumented: layer ids in "layers" can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). I haven't documented this (yet) until it is implemented across all functions - BR
 
-intersect_points = function(pnts,fids,SPdata.frame=FALSE,verbose=ala_config()$verbose) {
+intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,verbose=ala_config()$verbose) {
     ## input parameter checking
     assert_that(is.numeric(pnts))
-    assert_that(is.character(fids))
+    assert_that(is.character(layers))
     assert_that(is.flag(SPdata.frame))
     assert_that(is.flag(verbose))
     
@@ -67,17 +68,17 @@ intersect_points = function(pnts,fids,SPdata.frame=FALSE,verbose=ala_config()$ve
             bulk = TRUE #this is a bulk set of points
         }
     }
-    ##format the fields string
-    fids=fields_name_to_id(fields=fids,fields_type="layers") ## replace long names with ids
-    if (length(fids)>1) {
-        fids_str = paste(fids,collapse=',',sep='')
+    ##format the layers string
+    layers=fields_name_to_id(fields=layers,fields_type="layers") ## replace long names with ids
+    if (length(layers)>1) {
+        layers_str = paste(layers,collapse=',',sep='')
     } else {
-        fids_str = fids
+        layers_str = layers
     }
     
     ##download the data
     if (bulk) { #get the results if it is a bulk request
-        url_str = paste(base_url,'intersect/batch?fids=',fids_str,'&points=',pnts_str,sep='') #define the url string
+        url_str = paste(base_url,'intersect/batch?fids=',layers_str,'&points=',pnts_str,sep='') #define the url string
         url_str=URLencode(url_str) ## should not be needed, but do it anyway
         this_cache_file=ala_cache_filename(url_str) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
         if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(this_cache_file))) {
@@ -96,19 +97,19 @@ intersect_points = function(pnts,fids,SPdata.frame=FALSE,verbose=ala_config()$ve
             if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
         }
         out = read.csv(unz(this_cache_file,'sample.csv'),as.is=TRUE) #read in the csv data from the zip file
-        checks = NULL; for (ii in colnames(out)) { if (all(is.na(out[,ii]))) checks = c(checks,ii) } #identify bad field IDs
-        if (!is.null(checks)) warning(paste(paste(checks,collapse=', '),'are invalid field ids')) #warn user of bad field ids
+        checks = NULL; for (ii in colnames(out)) { if (all(is.na(out[,ii]))) checks = c(checks,ii) } #identify bad layer IDs
+        if (!is.null(checks)) warning(paste(paste(checks,collapse=', '),'are invalid layer ids')) #warn user of bad layer ids
     } else { #get results if just a single location
-        url_str = paste(base_url,'intersect/',fids_str,'/',pnts_str,sep='') #define the url string
+        url_str = paste(base_url,'intersect/',layers_str,'/',pnts_str,sep='') #define the url string
         url_str=URLencode(url_str) ## should not be needed, but do it anyway
         out = cached_get(url_str,type="json") #get the data
-        if (length(out)==0) stop('all field ids provided were invalid') #nothing returned if no valid IDs provided
+        if (length(out)==0) stop('all layer ids provided were invalid') #nothing returned if no valid IDs provided
         tt = t(out$value); colnames(tt) = out$field 
         out = data.frame(latitude=pnts[1],longitude=pnts[2],tt) # define the output the same as the bulk output
                                         #if NOT using jsonlite
                                         #    out = do.call('rbind.fill',lapply(out,as.data.frame,stringsAsFactors=FALSE)) #define the output
                                         #}
-        checks = setdiff(fids,colnames(out)[-c(1,2)]); if (length(checks)>0) warning(paste(paste(checks,collapse=', '),'are invalid field ids')) #warn user of bad field ids
+        checks = setdiff(layers,colnames(out)[-c(1,2)]); if (length(checks)>0) warning(paste(paste(checks,collapse=', '),'are invalid layer ids')) #warn user of bad layer ids
     }
     ##deal with SpatialPointsDataFrame
     if (SPdata.frame) { #if output is requested as a SpatialPointsDataFrame
@@ -117,6 +118,10 @@ intersect_points = function(pnts,fids,SPdata.frame=FALSE,verbose=ala_config()$ve
             out=SpatialPointsDataFrame(coords=out[,c("longitude","latitude")],proj4string=CRS("+proj=longlat +ellps=WGS84"),data=out)
         }
     }
+    if (use_layer_names) {
+        names(out)=make.names(fields_id_to_name(names(out),"layers"))
+    }
+    names(out)=rename_variables(names(out),type="layers") ## rename vars for consistency
     ##return the output
     out
 }
