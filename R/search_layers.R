@@ -36,6 +36,7 @@ search_layers = function(query,type="all",output_format="simple") {
     if (!empty(out)) {
         out$id=paste(substr(tolower(out$type),1,1),"l",out$id,sep="")
     }
+    names(out)=rename_variables(names(out),type="layers")
     ## remove some columns that are unlikely to be of value here
     xcols=setdiff(names(out),unwanted_columns("layers"))
     ## reorder columns, for minor convenience

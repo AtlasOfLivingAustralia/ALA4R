@@ -87,6 +87,7 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
             attr(x,"output_format")=output_format
         }
     }
+    names(x)=rename_variables(names(x),type="general")
     class(x)=c("search_names",class(x)) ## add the search_names class
     x
 }

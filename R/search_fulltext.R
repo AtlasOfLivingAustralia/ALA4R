@@ -89,6 +89,7 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     } else {
         ## rename some columns
         names(out$data)[names(out$data)=="classs"]="class"
+        names(out$data)=rename_variables(names(out$data),type="general")
         ## remove unwanted columns
         xcols=setdiff(names(out$data),unwanted_columns("general"))
         out$data=out$data[,xcols]

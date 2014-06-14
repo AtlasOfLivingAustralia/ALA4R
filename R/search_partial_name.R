@@ -64,6 +64,8 @@ search_partial_name=function(taxon,geo_only=FALSE,output_format="simple",index_t
         out$matchedNames=unlist(out$matchedNames)
         out$scientificNameMatches=unlist(out$scientificNameMatches)
         out$commonNameMatches=unlist(out$commonNameMatches)
+        ## rename columns
+        names(out)=rename_variables(names(out),type="general")
         ## remove some columns that are unlikely to ever be of value to R users
         xcols=setdiff(names(out),unwanted_columns("general"))
         ## reorder columns, for minor convenience
