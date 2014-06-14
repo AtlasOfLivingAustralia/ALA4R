@@ -1,12 +1,19 @@
+\docType{data}
 \name{occurrences_s3}
 \alias{occurrences_s3}
+\alias{remove.fatal}
 \alias{summary.occurrences}
 \alias{unique.occurrences}
 \title{Summarize, filter and subset occurrence data}
+\format{\preformatted{ logi TRUE
+}}
 \usage{
-summary.occurrences(object, ...)
+\method{summary}{occurrences}(object, ...)
 
-\method{unique}{occurrences}(x, incomparables = FALSE, spatial = 0, ...)
+\method{unique}{occurrences}(x, spatial = 0, temporal = NULL,
+  na.rm = FALSE, incomparables = FALSE, ...)
+
+remove.fatal
 }
 \arguments{
   \item{object}{list: an 'occurrence' object that has been
@@ -19,6 +26,41 @@ summary.occurrences(object, ...)
   decimal degrees used to to create a unique subset of the
   data. Value of 0 means no rounding and use values as is.
   Values <0 mean ignore spatial unique parameter}
+
+  \item{temporal}{character: specifies the temporal unit
+  for which to keep unique records; this can be by "year",
+  "month", "yearmonth" or "full" date. NULL means ignore
+  temporal unique parameter}
+
+  \item{na.rm}{logical: keep (FALSE) or remove (TRUE)
+  missing spatial or temporal data}
+
+  \item{remove.fatal}{logical: remove flagged assertion
+  issues that are considered "fatal"; see
+  \code{check_assertions}}
+
+  \item{exclude.spatial}{character vector: defining flagged
+  spatial assertion issues to be removed. Values can
+  include 'warnings','error','missing','none'; see
+  \code{check_assertions}}
+
+  \item{exclude.temporal}{character vector: defining
+  flagged temporal assertion issues to be removed. Values
+  can include 'warnings','error','missing','none'; see
+  \code{check_assertions}}
+
+  \item{exclude.taxonomic}{character vector: defining
+  flagged taxonomic assertion issues to be removed. Values
+  can include 'warnings','error','missing','none'; see
+  \code{check_assertions}}
+
+  \item{max.spatial.uncertainty}{numeric: number defining
+  the maximum spatial uncertainty (in meters) one is
+  willing to accept.}
+
+  \item{keep.missing.spatial.uncertainty}{logical: keep
+  (FALSE) or remove (TRUE) information missing spatial
+  uncertainty data.}
 
   \item{incomparables}{logical/numeric: currently ignored,
   but needed for S3 method consistency}
@@ -46,8 +88,17 @@ summary(x)
 #keep spatially unique data at 0.01 degrees (latitude and longitude)
 tt = unique(x,spatial=0.01)
 summary(tt)
+
+#keep spatially unique data that is also unique year/month for the collection date
+tt = unique(x,spatial=0,temporal='yearmonth')
+summary(tt)
+
+#keep only information for which fatal or "error" assertions do not exist
+tt = subset(x)
+summary(tt)
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
 }
+\keyword{datasets}
 
