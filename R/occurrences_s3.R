@@ -47,7 +47,7 @@ NULL
 
 #' @rdname occurrences_s3
 #' @S3method unique occurrences
-"unique.occurrences" <- function(object, incomparables=FALSE, ...) {
+"unique.occurrences" <- function(x, incomparables=FALSE, ...) {
     ## can't add spatial to the argument list, because then it doesn't match the generic "unique" function and the build process complains
     ## default value for spatial
     if (is.missing(spatial)) {
@@ -58,18 +58,18 @@ NULL
 		cat('ignoring spatial \n')
 	} else {
 		if (spatial>0) { #round the data to the spatial accuracy of interest
-			object$data$Latitude...processed = round(object$data$Latitude...processed / spatial) * spatial
-			object$data$Longitude...processed = round(object$data$Longitude...processed / spatial) * spatial
+			x$data$Latitude...processed = round(x$data$Latitude...processed / spatial) * spatial
+			x$data$Longitude...processed = round(x$data$Longitude...processed / spatial) * spatial
 		}
-		tt = object$data[,c("Species...matched","Latitude...processed","Longitude...processed")] #keep only spatial and species data
-		tt = aggregate(object$data$Species...matched,by=list(tt$Species...matched,tt$Latitude...processed,tt$Longitude...processed),length) #get the number of 'unique' spatial data
+		tt = x$data[,c("Species...matched","Latitude...processed","Longitude...processed")] #keep only spatial and species data
+		tt = aggregate(x$data$Species...matched,by=list(tt$Species...matched,tt$Latitude...processed,tt$Longitude...processed),length) #get the number of 'unique' spatial data
 		for (ii in 1:nrow(tt)) { #cycle through each of the unique values
 			if (tt$x[ii] > 1) {
-				roi = which(object$data$Species...matched==tt[ii,1] & object$data$Latitude...processed==tt[ii,2] & object$data$Longitude...processed==tt[ii,3]) #get the rows of interest
-				for (jj in colnames(object$data)) object$data[roi,jj] = min(object$data[roi,jj]) #replace all data with the minimum
+				roi = which(x$data$Species...matched==tt[ii,1] & x$data$Latitude...processed==tt[ii,2] & x$data$Longitude...processed==tt[ii,3]) #get the rows of interest
+				for (jj in colnames(x$data)) x$data[roi,jj] = min(x$data[roi,jj]) #replace all data with the minimum
 			}			
 		}
-		object$data = unique(object$data) #keep the unique data
+		x$data = unique(x$data) #keep the unique data
 	} 
-	object
+	x
 }
