@@ -4,12 +4,15 @@
 \alias{unique.occurrences}
 \title{Summarize, filter and subset occurrence data}
 \usage{
-summary.occurrences(x, ...)
+summary.occurrences(object, ...)
 
 \method{unique}{occurrences}(x, incomparables = FALSE, ...)
 }
 \arguments{
-  \item{x}{list: a 'occurrence' object that has been
+  \item{object}{list: an 'occurrence' object that has been
+  downloaded using \code{occurrences}}
+
+  \item{x}{list: an 'occurrence' object that has been
   downloaded using \code{occurrences}}
 
   \item{incomparables}{logical/numeric: currently ignored,
