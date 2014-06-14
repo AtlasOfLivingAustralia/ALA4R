@@ -60,7 +60,7 @@ ala_fields=function(fields_type="occurrence") {
 #' @export
 field_info = function(field_id) {
     assert_that(is.string(field_id))
-    field_id=fields_description_to_id(fields=field_id,fields_type="layers")
+    field_id=fields_name_to_id(fields=field_id,fields_type="layers")
     base_url = paste(ala_config()$base_url_spatial,"field",sep="")
     ## if we supply an unknown field_id, we get 500 error from the server. But this doesn't make sense, so we mask the server error and simply return an empty data frame in this case
     this_server_error=function(z) NULL
