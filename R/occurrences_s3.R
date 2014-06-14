@@ -5,7 +5,7 @@
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' 
-#' @param object list: a 'occurrence' object that has been downloaded using \code{occurrences}
+#' @param x list: a 'occurrence' object that has been downloaded using \code{occurrences}
 #' @param incomparables logical/numeric: currently ignored, but needed for S3 method consistency
 #' @param \dots not currently used
 #'
@@ -30,19 +30,19 @@ NULL
 
 #' @rdname occurrences_s3
 #' @S3method summary occurrences
-"summary.occurrences" <- function(object, ...) {
-	cat('number of names:',length(unique(object$data$Scientific.Name)),'\n')
-	cat('number of taxonomically corrected names:',length(unique(object$data$Matched.Scientific.Name)),'\n')
-	cat('number of observation records:',nrow(object$data),'\n')
-	ass = check_assertions(object) #need to get existing assertions in occur dataset
+"summary.occurrences" <- function(x, ...) {
+	cat('number of names:',length(unique(x$data$Scientific.Name)),'\n')
+	cat('number of taxonomically corrected names:',length(unique(x$data$Matched.Scientific.Name)),'\n')
+	cat('number of observation records:',nrow(x$data),'\n')
+	ass = check_assertions(x) #need to get existing assertions in occur dataset
 	if (nrow(ass)>0) {
 		cat('assertions checked:',nrow(ass),'\n')
 		for (ii in 1:nrow(ass)) {
-			rwi = length(which(as.logical(object$data[,ass$occur.colnames[ii]])==TRUE)) #count the number of records with issues
+			rwi = length(which(as.logical(x$data[,ass$occur.colnames[ii]])==TRUE)) #count the number of records with issues
 			if (rwi>0) cat('\t',ass$occur.colnames[ii],': ',rwi,' records ',ifelse(as.logical(ass$fatal[ii]),'-- considered fatal',''),sep='','\n')
 		}
 	} else { cat('no asserting issues\n') }
-	invisible(object)
+	invisible(x)
 }
 
 #' @rdname occurrences_s3
