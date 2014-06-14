@@ -47,7 +47,10 @@ a named list with the components "meta" (search metadata),
 "facets" (search facet results), and "data" (the search
 results, in the form of a dataframe). The contents (column
 names) of the data frame will vary depending on the details
-of the search and the results.
+of the search and the results, but should contain at least
+the columns \code{guid}, \code{name}, \code{score},
+\code{commonName}, \code{rank}, \code{author},
+\code{isAustralian}, and \code{occCount}.
 }
 \description{
 Performs a search across all objects, and selects the
