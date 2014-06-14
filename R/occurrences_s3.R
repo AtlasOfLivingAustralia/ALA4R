@@ -6,12 +6,11 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' 
 #' @param object list: a 'occurrence' object that has been downloaded using \code{occurrences}
-#' @param spatial numeric: value in decimal degrees to to create a unique subset of the data. Value of 0 means no rounding and use values as is. Values <0 mean ignore spatial unique parameter.
 #' @param incomparables logical/numeric: currently ignored, but needed for S3 method consistency
 #' @param \dots not currently used
 #'
 #' @details
-#' \code{unique} will give the min value for all columns that are not used in the aggregation.
+#' \code{unique} will give the min value for all columns that are not used in the aggregation. \code{unique} takes a "spatial" parameter (numeric) which specifies a rounding value in decimal degrees used to to create a unique subset of the data. Value of 0 means no rounding and use values as is. Values <0 mean ignore spatial unique parameter.
 #' 
 #' @examples
 #' #download some observations
@@ -48,7 +47,12 @@ NULL
 
 #' @rdname occurrences_s3
 #' @S3method unique occurrences
-"unique.occurrences" <- function(object, incomparables=FALSE, spatial=0, ...) {
+"unique.occurrences" <- function(object, incomparables=FALSE, ...) {
+    ## can't add spatial to the argument list, because then it doesn't match the generic "unique" function and the build process complains
+    ## default value for spatial
+    if (is.missing(spatial)) {
+        spatial=0
+    }
 	assert_that(is.numeric(spatial)) #ensure unique.spatial is numeric
 	if (spatial<0) {
 		cat('ignoring spatial \n')

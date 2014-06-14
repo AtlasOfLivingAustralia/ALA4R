@@ -6,17 +6,11 @@
 \usage{
 summary.occurrences(object, ...)
 
-\method{unique}{occurrences}(object, incomparables = FALSE, spatial = 0,
-  ...)
+\method{unique}{occurrences}(object, incomparables = FALSE, ...)
 }
 \arguments{
   \item{object}{list: a 'occurrence' object that has been
   downloaded using \code{occurrences}}
-
-  \item{spatial}{numeric: value in decimal degrees to to
-  create a unique subset of the data. Value of 0 means no
-  rounding and use values as is. Values <0 mean ignore
-  spatial unique parameter.}
 
   \item{incomparables}{logical/numeric: currently ignored,
   but needed for S3 method consistency}
@@ -32,7 +26,11 @@ data.
 }
 \details{
 \code{unique} will give the min value for all columns that
-are not used in the aggregation.
+are not used in the aggregation. \code{unique} takes a
+"spatial" parameter (numeric) which specifies a rounding
+value in decimal degrees used to to create a unique subset
+of the data. Value of 0 means no rounding and use values as
+is. Values <0 mean ignore spatial unique parameter.
 }
 \examples{
 #download some observations
