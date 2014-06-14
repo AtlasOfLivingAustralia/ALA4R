@@ -15,13 +15,13 @@ summary.occurrences(object, ...)
   \item{x}{list: an 'occurrence' object that has been
   downloaded using \code{occurrences}}
 
-  \item{incomparables}{logical/numeric: currently ignored,
-  but needed for S3 method consistency}
-
   \item{spatial}{numeric: specifies a rounding value in
   decimal degrees used to to create a unique subset of the
   data. Value of 0 means no rounding and use values as is.
   Values <0 mean ignore spatial unique parameter}
+
+  \item{incomparables}{logical/numeric: currently ignored,
+  but needed for S3 method consistency}
 
   \item{\dots}{not currently used}
 }
@@ -46,8 +46,6 @@ summary(x)
 #keep spatially unique data at 0.01 degrees (latitude and longitude)
 tt = unique(x,spatial=0.01)
 summary(tt)
-
-#remove rows that have assertions that are fatal and have spatial errors
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

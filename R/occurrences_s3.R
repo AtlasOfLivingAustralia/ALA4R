@@ -7,8 +7,8 @@
 #' 
 #' @param object list: an 'occurrence' object that has been downloaded using \code{occurrences}
 #' @param x list: an 'occurrence' object that has been downloaded using \code{occurrences}
-#' @param incomparables logical/numeric: currently ignored, but needed for S3 method consistency
 #' @param spatial numeric: specifies a rounding value in decimal degrees used to to create a unique subset of the data. Value of 0 means no rounding and use values as is. Values <0 mean ignore spatial unique parameter
+#' @param incomparables logical/numeric: currently ignored, but needed for S3 method consistency
 #' @param \dots not currently used
 #'
 #' @details
@@ -24,8 +24,6 @@
 #' #keep spatially unique data at 0.01 degrees (latitude and longitude)
 #' tt = unique(x,spatial=0.01)
 #' summary(tt)
-#' 
-#' #remove rows that have assertions that are fatal and have spatial errors
 #' 
 #' @name occurrences_s3
 NULL
@@ -50,29 +48,23 @@ NULL
 #' @rdname occurrences_s3
 #' @S3method unique occurrences
 "unique.occurrences" <- function(x, incomparables=FALSE, spatial=0, ...) {
-    ## can't add spatial to the argument list, because then it doesn't match the generic "unique" function and the build process complains
-    ## default value for spatial
-    ## but not sure if "exists" is the correct way to check for it (can't use "missing" because it isn't an argument) so leave it in the parms list for now - BR
-    #if (!exists(spatial)) {
-    #    spatial=0
-    #}
-	assert_that(is.numeric(spatial)) #ensure unique.spatial is numeric
-	if (spatial<0) {
-		cat('ignoring spatial \n')
-	} else {
-		if (spatial>0) { #round the data to the spatial accuracy of interest
-			x$data$Latitude...processed = round(x$data$Latitude...processed / spatial) * spatial
-			x$data$Longitude...processed = round(x$data$Longitude...processed / spatial) * spatial
-		}
-		tt = x$data[,c("Species...matched","Latitude...processed","Longitude...processed")] #keep only spatial and species data
-		tt = aggregate(x$data$Species...matched,by=list(tt$Species...matched,tt$Latitude...processed,tt$Longitude...processed),length) #get the number of 'unique' spatial data
-		for (ii in 1:nrow(tt)) { #cycle through each of the unique values
-			if (tt$x[ii] > 1) {
-				roi = which(x$data$Species...matched==tt[ii,1] & x$data$Latitude...processed==tt[ii,2] & x$data$Longitude...processed==tt[ii,3]) #get the rows of interest
-				for (jj in colnames(x$data)) x$data[roi,jj] = min(x$data[roi,jj]) #replace all data with the minimum
-			}			
-		}
-		x$data = unique(x$data) #keep the unique data
-	} 
-	x
+    assert_that(is.numeric(spatial)) #ensure unique.spatial is numeric
+    if (spatial<0) {
+        cat('ignoring spatial \n')
+    } else {
+        if (spatial>0) { #round the data to the spatial accuracy of interest
+            x$data$Latitude...processed = round(x$data$Latitude...processed / spatial) * spatial
+            x$data$Longitude...processed = round(x$data$Longitude...processed / spatial) * spatial
+        }
+        tt = x$data[,c("Species...matched","Latitude...processed","Longitude...processed")] #keep only spatial and species data
+        tt = aggregate(x$data$Species...matched,by=list(tt$Species...matched,tt$Latitude...processed,tt$Longitude...processed),length) #get the number of 'unique' spatial data
+        for (ii in 1:nrow(tt)) { #cycle through each of the unique values
+            if (tt$x[ii] > 1) {
+                roi = which(x$data$Species...matched==tt[ii,1] & x$data$Latitude...processed==tt[ii,2] & x$data$Longitude...processed==tt[ii,3]) #get the rows of interest
+                for (jj in colnames(x$data)) x$data[roi,jj] = min(x$data[roi,jj]) #replace all data with the minimum
+            }			
+        }
+        x$data = unique(x$data) #keep the unique data
+    } 
+    x
 }
