@@ -67,7 +67,9 @@ NULL
 #' @S3method unique occurrences
 "unique.occurrences" <- function(x, incomparables=FALSE, spatial=0, temporal=NULL, na.rm=FALSE, ...) {
     assert_that(is.numeric(spatial)) #ensure unique.spatial is numeric
-	if (!is.null(temporal) | !temporal %in% c('year','month', 'yearmonth','full')) {stop('temporal value must be NULL, "year", "month", "yearmonth" or "full"')}
+	if (!is.null(temporal)) {
+		if (!temporal %in% c('year','month', 'yearmonth','full')) stop('temporal value must be NULL, "year", "month", "yearmonth" or "full"')
+	}
 	cois = list(Species...matched = x$data$Species...matched) #start defining the columns of interest to do the "unique" by
     if (spatial<0) {
         cat('ignoring spatial \n')
@@ -100,13 +102,6 @@ NULL
 #' @rdname occurrences_s3
 #' @method subset occurrences
 #' @S3method subset occurrences
-remove.fatal=TRUE
-exclude.spatial='error'
-exclude.temporal='error'
-exclude.taxonomic='error'
-max.spatial.uncertainty=NULL
-keep.missing.spatial.uncertainty=TRUE
-
 "subset.occurrences" = function(x, remove.fatal=TRUE, exclude.spatial='error', exclude.temporal='error', 
 	exclude.taxonomic='error', max.spatial.uncertainty=NULL, keep.missing.spatial.uncertainty=TRUE, ...) 
 {

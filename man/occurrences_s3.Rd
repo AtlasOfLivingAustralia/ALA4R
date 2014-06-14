@@ -1,19 +1,19 @@
-\docType{data}
 \name{occurrences_s3}
 \alias{occurrences_s3}
-\alias{remove.fatal}
+\alias{subset.occurrences}
 \alias{summary.occurrences}
 \alias{unique.occurrences}
 \title{Summarize, filter and subset occurrence data}
-\format{\preformatted{ logi TRUE
-}}
 \usage{
 \method{summary}{occurrences}(object, ...)
 
-\method{unique}{occurrences}(x, spatial = 0, temporal = NULL,
-  na.rm = FALSE, incomparables = FALSE, ...)
+\method{unique}{occurrences}(x, incomparables = FALSE, spatial = 0,
+  temporal = NULL, na.rm = FALSE, ...)
 
-remove.fatal
+\method{subset}{occurrences}(x, remove.fatal = TRUE,
+  exclude.spatial = "error", exclude.temporal = "error",
+  exclude.taxonomic = "error", max.spatial.uncertainty = NULL,
+  keep.missing.spatial.uncertainty = TRUE, ...)
 }
 \arguments{
   \item{object}{list: an 'occurrence' object that has been
@@ -100,5 +100,4 @@ summary(tt)
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
 }
-\keyword{datasets}
 
