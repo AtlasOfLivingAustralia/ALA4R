@@ -26,3 +26,17 @@ clean_string <- function(x) {
 	x = gsub('\\s+',' ',x) ## replace multiple whitespaces with single
 	x
 }
+
+
+rename_variables=function(varnames,type) {
+    assert_that(is.character(varnames))
+    assert_that(is.string(type))
+    type=match.arg(tolower(type),c("general","layers","occurrence","assertions"))
+    if (TRUE) {
+        ## for now, just return the names as-is, but enforce validity as variable names
+        make.names(varnames)
+     } else {
+        ## proposal to move to camelCase
+        tocamel(make.names(varnames))
+    }
+}
