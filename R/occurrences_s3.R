@@ -65,7 +65,7 @@ NULL
 #' @rdname occurrences_s3
 #' @method unique occurrences
 #' @S3method unique occurrences
-"unique.occurrences" <- function(x, spatial=0, temporal=NULL, na.rm=FALSE, incomparables=FALSE, ...) {
+"unique.occurrences" <- function(x, incomparables=FALSE, spatial=0, temporal=NULL, na.rm=FALSE, ...) {
     assert_that(is.numeric(spatial)) #ensure unique.spatial is numeric
 	if (!is.null(temporal) | !temporal %in% c('year','month', 'yearmonth','full')) {stop('temporal value must be NULL, "year", "month", "yearmonth" or "full"')}
 	cois = list(Species...matched = x$data$Species...matched) #start defining the columns of interest to do the "unique" by
