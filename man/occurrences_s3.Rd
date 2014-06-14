@@ -16,6 +16,8 @@ summary.occurrences(object, ...)
   create a unique subset of the data. Value of 0 means no
   rounding and use values as is. Values <0 mean ignore
   spatial unique parameter.}
+
+  \item{\dots}{not currently used}
 }
 \description{
 Set of S3 methods to summarize, filter and get unique
