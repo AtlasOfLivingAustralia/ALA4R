@@ -4,9 +4,12 @@ check_wkt=function(wkt,silent=TRUE) {
     wkt_OK=FALSE
     ## readWKT depends on rgeos, which we want to avoid
     ##try({ readWKT(wkt);wkt_OK=TRUE },silent=TRUE)
-
+    
     ## instead we do some lightweight WKT checking here, and rely on the error message from the server to identify more subtle errors in the WKT string
-
+    if (nchar(wkt)<1) {
+        ## empty string: treat as invalid wkt
+        return(FALSE)
+    }
     ## we only check POLYGONs here
     if (grepl("^polygon",tolower(str_trim(wkt)))) {
         is_valid_wkt_polygon(wkt)
