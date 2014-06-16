@@ -24,7 +24,10 @@ species_by_site(taxon, wkt, gridsize = 0.1, SPdata.frame = FALSE,
 }
 \value{
 A dataframe or a SpatialPointsDataFrame containing the
-species by sites data....
+species by sites data. Columns will include longitude,
+latitude, and each species present. Values for species are
+record counts (i.e. number of recorded occurrences of that
+taxon in each grid cell)
 }
 \description{
 A data.frame is returned as grid cells by species with

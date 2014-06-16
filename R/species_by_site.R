@@ -15,7 +15,7 @@
 #' @param gridsize numeric: size of output grid cells in decimal degrees. E.g. 0.1 (=~10km)
 #' @param SPdata.frame logical: should the output be returned as a SpatialPointsDataFrame of the sp package?
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
-#' @return A dataframe or a SpatialPointsDataFrame containing the species by sites data.... 
+#' @return A dataframe or a SpatialPointsDataFrame containing the species by sites data. Columns will include longitude, latitude, and each species present. Values for species are record counts (i.e. number of recorded occurrences of that taxon in each grid cell) 
 #'
 #' @examples
 #' \dontrun{
@@ -67,13 +67,16 @@ species_by_site = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala
             if (status$state=='FAILED') { stop(status$message) } #stop if there was an error
             Sys.sleep(2)
         }; cat('\n')
-        download_to_file(paste('http://spatial.ala.org.au/alaspatial/ws/download/',pid,sep=''),outfile=this_cache_file,binary_file=TRUE)
+        download_to_file(paste('http://spatial.ala.org.au/alaspatial/ws/download/',pid,sep=''),outfile=this_cache_file,binary_file=TRUE,verbose=verbose)
     } else {
         ## we are using the existing cached file
         if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
     }
     out = read.csv(unz(this_cache_file,'SitesBySpecies.csv'),as.is=TRUE,skip=4) #read in the csv data from the zip file; omit the first 4 header rows
 
+    ## drop the "Species" column, which appears to be a site identifier (but just constructed from the longitude and latitude, so is not particularly helpful
+    out=out[,!names(out)=="Species"]
+    
     ##deal with SpatialPointsDataFrame
     if (SPdata.frame) { #if output is requested as a SpatialPointsDataFrame
         ## coerce to SpatialPointsDataFrame class
@@ -81,6 +84,9 @@ species_by_site = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala
             out=SpatialPointsDataFrame(coords=out[,c("Longitude","Latitude")],proj4string=CRS("+proj=longlat +ellps=WGS84"),data=out)
         }
     }
+    ## rename variables
+    names(out)=rename_variables(names(out),type="other")
+    
     ##return the output
     out
 }
