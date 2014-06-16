@@ -12,7 +12,9 @@ field_info(field_id)
   - for searching taxa, datasets, layers, and collections
   metadata \item "occurrence" - for searching species
   occurrence records \item "layers" - fields associated
-  with the environmental and contextual layers \item
+  with the environmental and contextual layers. For
+  additional information on layers, including metadata and
+  licensing, see \code{\link{search_layers}} \item
   "assertions" - record issues associated with occurrences
   }}
 
