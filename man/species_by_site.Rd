@@ -38,7 +38,7 @@ cell.
 }
 \examples{
 \dontrun{
-#download the matrix (data.frame) of Eucalyptus in Tasmania based on a 0.1 degree grid
+# Eucalyptus in Tasmania based on a 0.1 degree grid
 tt=species_by_site(taxon='genus:Eucalyptus',wkt='POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))',gridsize=0.1,verbose=TRUE)
 str(tt)
 # equivalent direct webservice call: POST http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Eucalyptus&qname=data&area=POLYGON((144\%20-43,148\%20-43,148\%20-40,144\%20-40,144\%20-43))&bs=http://biocache.ala.org.au/ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1

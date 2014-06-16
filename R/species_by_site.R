@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' #download the matrix (data.frame) of Eucalyptus in Tasmania based on a 0.1 degree grid
+#' # Eucalyptus in Tasmania based on a 0.1 degree grid
 #' tt=species_by_site(taxon='genus:Eucalyptus',wkt='POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))',gridsize=0.1,verbose=TRUE)
 #' str(tt)
 #' # equivalent direct webservice call: POST http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Eucalyptus&qname=data&area=POLYGON((144%20-43,148%20-43,148%20-40,144%20-40,144%20-43))&bs=http://biocache.ala.org.au/ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1
@@ -27,8 +27,8 @@
 
 # TODO Lee to add dataframe output specifications (sent 23/4/2014)
 # TODO need way to better check input species query
-# TODO precheck of taxon 
-#'
+# TODO precheck of taxon
+
 #' @export
 species_by_site = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala_config()$verbose) {
     ##TODO data checks
@@ -37,13 +37,13 @@ species_by_site = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala
     ## check input parms are sensible
     assert_that(is.string(taxon))
     assert_that(is.string(wkt))
-    assert_that(is.logical(SPdata.frame))
+    assert_that(is.numeric(gridsize), gridsize>0)
+    assert_that(is.flag(SPdata.frame))
+    assert_that(is.flag(verbose))
 	
     ## wkt string supplied and valid?
-    if (str_length(wkt)>0) {
-        if (! check_wkt(wkt)) {
-            warning("WKT string appears to be invalid: ",wkt)
-        }
+    if (! check_wkt(wkt)) {
+        warning("WKT string appears to be invalid: ",wkt)
     }
     
     ##setup the key query
@@ -60,6 +60,7 @@ species_by_site = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala
         pid = cached_post(URLencode(url_str),'',caching='off') #should simply return a pid
         if (pid=="") { stop("there has been an issue with this service. Please try again but if the issue persists, contact support@@ala.org.au") } #catch for these missing pid issues
         status_url = paste('http://spatial.ala.org.au/alaspatial/ws/job?pid=',pid,sep='')
+        if(verbose) { cat("  ALA4R: waiting for sites-by-species results to become available: ") }
         status=cached_get(URLencode(status_url),type="json",caching="off")#get the data url
         while (status$state != "SUCCESSFUL") {
             if(verbose) { cat('.') } #keep checking the status until finished
