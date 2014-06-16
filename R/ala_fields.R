@@ -10,13 +10,12 @@
 #' \itemize{
 #' \item "general" - for searching taxa, datasets, layers, and collections metadata
 #' \item "occurrence" - for searching species occurrence records
-#' \item "layers" - fields associated with the environmental and contextual layers
+#' \item "layers" - fields associated with the environmental and contextual layers. For additional information on layers, including metadata and licensing, see \code{\link{search_layers}}
 #' \item "assertions" - record issues associated with occurrences
 #' }
 #' @param field_id text: id of environmental/contextual layer field for which to look up information
 #' Prepend "el" for "environmental" (gridded) layers and "cl" for "contextual" (polygonal) layers
 #' @return A data frame containing the field names and various attributes
-#' 
 #' @examples
 #' \dontrun{
 #' l=ala_fields("layers")
@@ -49,10 +48,15 @@ ala_fields=function(fields_type="occurrence") {
         ## just pull out the bits that we want and construct ids here that match the field names in x
         more_x$id=paste(substr(tolower(more_x$type),1,1),"l",more_x$id,sep="")
         more_x=more_x[,c("name","id")]
-        names(more_x)=c("name_short","id")            
+        names(more_x)=c("shortName","id")
         x=merge(x,more_x,by="id")
+        x$type[x$type=="c"]="Contextual"
+        x$type[x$type=="b"]="Contextual" ## there is an errant "b" here that should be "c"
+        x$type[x$type=="e"]="Environmental" ## for consistency with search_layers
     }        
-    x
+    ## drop unwanted columns
+    xcols=setdiff(names(x),unwanted_columns(fields_type))
+    x[,xcols]
 }
 
 
