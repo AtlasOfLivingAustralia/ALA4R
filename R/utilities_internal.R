@@ -53,7 +53,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
     assert_that(is.character(varnames))
     assert_that(is.string(type))
     type=match.arg(tolower(type),c("general","layers","occurrence","assertions","other")) ## use "other" to make no variable name substtutions, just enforce case/separator conventions
-    if (FALSE) {
+    if (TRUE) {
         ## just return the names as-is, but enforce validity as variable names
         varnames=make.names(varnames)
      } else {
