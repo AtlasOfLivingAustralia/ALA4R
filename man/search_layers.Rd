@@ -30,12 +30,10 @@ and the results.
 Search for environmental and contextual data layers
 }
 \examples{
-\dontrun{
 search_layers(type="all")
 search_layers(type="grids",query="income")
 l=search_layers(type="shapes",query="coral")
 str(l)
-}
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
