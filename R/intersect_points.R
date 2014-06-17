@@ -32,7 +32,7 @@
 #' @export
 intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,verbose=ala_config()$verbose) {
     ## input parameter checking
-    assert_that(is.numeric(pnts) | all(apply(pnts,2,is.numeric)))
+    assert_that(is.numeric(pnts) || all(apply(pnts,2,is.numeric)))
     assert_that(is.character(layers))
     assert_that(is.flag(SPdata.frame))
     assert_that(is.flag(verbose))
