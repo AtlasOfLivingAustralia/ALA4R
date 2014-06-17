@@ -19,6 +19,7 @@
 #' @examples
 #' l=ala_fields("layers")
 #' l[1,]
+#' a=ala_fields("assertions")
 #' field_info("cl22")
 #' field_info("el773")
 #' @export ala_fields
