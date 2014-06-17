@@ -17,17 +17,14 @@
 #' Prepend "el" for "environmental" (gridded) layers and "cl" for "contextual" (polygonal) layers
 #' @return A data frame containing the field names and various attributes
 #' @examples
-#' \dontrun{
 #' l=ala_fields("layers")
 #' l[1,]
 #' field_info("cl22")
 #' field_info("el773")
-#' }
 #' @export ala_fields
 
-# TODO: Summary of #fields returned. We are using "layers" here but "fields" in intersect. 
+# TODO: Summary of #fields returned
 # ids from http://spatial.ala.org.au/ws/layers are NUMERIC but lookup prepends "el" and "cl"! 
-# Improve error return on invalid ids (eg "field_info("cl680"))
 
 
 ala_fields=function(fields_type="occurrence") {
@@ -78,15 +75,11 @@ field_info = function(field_id) {
         ## we might wish to issue a warning for empty responses
         if (substr(field_id,1,2) == 'cl') {
             out = out$objects #keep only the content
-            #if NOT using jsonlite
-            #    out=do.call('rbind.fill',lapply(out,as.data.frame)) #bind the data as a dataframe
-            #}
-            out
         } else if (substr(field_id,1,2) == 'el') {
             out = as.data.frame(rbind(out)) #bind the data as a dataframe	
             rownames(out) = NULL #reset the row names
-            out
         }
+        out
     }
 }	
 
