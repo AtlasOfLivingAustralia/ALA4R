@@ -98,9 +98,6 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
         if (length(out)==0) stop('all layer ids provided were invalid') #nothing returned if no valid IDs provided
         tt = t(out$value); colnames(tt) = out$field 
         out = data.frame(latitude=pnts[1],longitude=pnts[2],tt) # define the output the same as the bulk output
-                                        #if NOT using jsonlite
-                                        #    out = do.call('rbind.fill',lapply(out,as.data.frame,stringsAsFactors=FALSE)) #define the output
-                                        #}
         checks = setdiff(layers,colnames(out)[-c(1,2)]); if (length(checks)>0) warning(paste(paste(checks,collapse=', '),'are invalid layer ids')) #warn user of bad layer ids
     }
     ##deal with SpatialPointsDataFrame
