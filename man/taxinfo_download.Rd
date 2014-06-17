@@ -1,8 +1,8 @@
-\name{species_download}
-\alias{species_download}
+\name{taxinfo_download}
+\alias{taxinfo_download}
 \title{Download taxonomic data}
 \usage{
-species_download(query, fq, fields, verbose = ala_config()$verbose,
+taxinfo_download(query, fq, fields, verbose = ala_config()$verbose,
   use_data_table = TRUE)
 }
 \arguments{
@@ -47,7 +47,7 @@ Download taxonomic data
 }
 \examples{
 # Download data for Fabaceae
-x=species_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","bioOrder","family","genus","scientificName"))
+x=taxinfo_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","bioOrder","family","genus","scientificName"))
 # equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,kingdom,phylum,class,bioOrder,family,genus,scientificName&q=family:Fabaceae
 }
 \author{

@@ -32,7 +32,7 @@ clean_string <- function(x) {
 unwanted_columns=function(type) {
     type=match.arg(tolower(type),c("general","layers","occurrence","assertions"))
     switch(type,
-           "general"=c("rawRank","rankId","left","right","idxType","highlight","linkIdentifier","isExcluded","hasChildren","image","thumbnail"),
+           "general"=c("rawRank","rawRankString","rankId","rankID","left","right","idxType","highlight","linkIdentifier","isExcluded","hasChildren","image","thumbnail"),
              ## rawRank appears to be a duplicate of rank or rankString
              ## hasChildren seems always to be false, even for taxa that ought to have children (e.g. Macropus)
              ## image and thumbnail appear to be internal paths, not full URLs
@@ -85,10 +85,10 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
         if (type=="general") {
             ## general names, from e.g. name searching
             varnames[varnames=="occCount"]="occurrenceCount"
-            varnames[varnames=="vernacularName"]="commonName" ## species_download provides "vernacularName", others "commonName"
+            varnames[varnames=="vernacularName"]="commonName" ## taxinfo_download provides "vernacularName", others "commonName"
             varnames=str_replace_all(varnames,"conservationStatusIn","conservationStatus")
 
-            if (any(varnames=="rank") & any(varnames=="rank")) {
+            if (any(varnames=="rank") & any(varnames=="rankString")) {
                 if (verbose) {
                     warning("data contains both \"rank\" and \"rankString\" columns, not renaming \"rankString\"")
                 }

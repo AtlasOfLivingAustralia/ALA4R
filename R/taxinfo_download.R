@@ -13,10 +13,10 @@
 #' @seealso \code{\link{ala_fields}}, \code{\link{ala_config}}
 #' @examples
 #' # Download data for Fabaceae
-#' x=species_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","bioOrder","family","genus","scientificName"))
+#' x=taxinfo_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","bioOrder","family","genus","scientificName"))
 #' # equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,kingdom,phylum,class,bioOrder,family,genus,scientificName&q=family:Fabaceae
 #' @export
-species_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_table=TRUE) {
+taxinfo_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_table=TRUE) {
     assert_that(is.flag(use_data_table))
     base_url=paste(ala_config()$base_url_bie,"download",sep="")
     this_query=list()
@@ -95,7 +95,7 @@ species_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_
         }
         names(x)=rename_variables(names(x),type="general")
     }
-    #class(x) <- c('species_download',class(x)) #add the custom class
+    #class(x) <- c('taxinfo_download',class(x)) #add the custom class
     x
 }
         

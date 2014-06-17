@@ -23,7 +23,7 @@ library(phytools)
 sx=search_fulltext("penguins")
 (sx$data[,c("name","rank","score","commonName")])
 
-tx=species_download("family:SPHENISCIDAE",fields=c("guid","genus","nameComplete","rank")) ## download data
+tx=taxinfo_download("family:SPHENISCIDAE",fields=c("guid","genus","nameComplete","rank")) ## download data
 tx=tx[tx$Taxon.Rank %in% c("species","subspecies"),] ## restrict to species and subspecies
 temp=colwise(factor, c("Genus","Scientific.Name"))(tx) ## as.phylo requires the taxonomic columns to be factors
 ax=as.phylo(~Genus/Scientific.Name,data=temp) ## create phylo object of Scientific.Name nested within Genus
