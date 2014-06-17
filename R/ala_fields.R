@@ -11,7 +11,7 @@
 #' \item "general" - for searching taxa, datasets, layers, and collections metadata
 #' \item "occurrence" - for searching species occurrence records
 #' \item "layers" - fields associated with the environmental and contextual layers. For additional information on layers, including metadata and licensing, see \code{\link{search_layers}}
-#' \item "assertions" - record issues associated with occurrences
+#' \item "assertions" - potential issues flagged on one or more occurrence record fields
 #' }
 #' @param field_id text: id of environmental/contextual layer field for which to look up information
 #' Prepend "el" for "environmental" (gridded) layers and "cl" for "contextual" (polygonal) layers
@@ -21,6 +21,7 @@
 #' l=ala_fields("layers")
 #' l[1,]
 #' a=ala_fields("assertions")
+#' a[,5]
 #' field_info("cl22")
 #' field_info("el773")
 #' }
