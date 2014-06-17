@@ -42,7 +42,7 @@ ala_fields=function(fields_type="occurrence") {
 
     x=cached_get(base_url,type="json")
 
-    ## for "layers", shorter, more manageable names are provided from http://spatial.ala.org.au/ws/layers in API. Add these as an extra column: name_short
+    ## for "layers", shorter, more manageable names are provided from http://spatial.ala.org.au/ws/layers in API. Add these as an extra column: shortName
     if (identical(fields_type,"layers")) {
         more_x=cached_get(url=paste(ala_config()$base_url_spatial,"layers",sep=""),type="json")
         ## just pull out the bits that we want and construct ids here that match the field names in x
