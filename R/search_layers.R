@@ -9,12 +9,10 @@
 #' @return A data frame of results. The contents (column names) of the data frame will vary depending on the details of the search and the results.
 #' 
 #' @examples
-#' \dontrun{
 #' search_layers(type="all")
 #' search_layers(type="grids",query="income")
 #' l=search_layers(type="shapes",query="coral")
 #' str(l)
-#' }
 #' @export
 search_layers = function(query,type="all",output_format="simple") {
     assert_that(is.string(type))
@@ -36,10 +34,16 @@ search_layers = function(query,type="all",output_format="simple") {
     if (!empty(out)) {
         out$id=paste(substr(tolower(out$type),1,1),"l",out$id,sep="")
     }
-    names(out)=rename_variables(names(out),type="layers")
     ## remove some columns that are unlikely to be of value here
     xcols=setdiff(names(out),unwanted_columns("layers"))
+    out=out[,xcols]
+    ## change variable names for consistency
+    names(out)=rename_variables(names(out),type="layers")
+    ## change "name" to "shortName", "displayname" to "name" so as to match ala_fields("layers")
+    names(out)[names(out)=="name"]="shortName"
+    names(out)[names(out)=="displayname"]="name"    
     ## reorder columns, for minor convenience
+    xcols=names(out)
     firstcols=intersect(c("name","id","type","description"),xcols)
     xcols=c(firstcols,setdiff(xcols,firstcols))
     out=out[,xcols]

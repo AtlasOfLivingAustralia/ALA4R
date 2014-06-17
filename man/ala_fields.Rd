@@ -32,12 +32,11 @@ Retrieves a list of all field names that can be used with
 data retrieval functions
 }
 \examples{
-\dontrun{
 l=ala_fields("layers")
 l[1,]
+a=ala_fields("assertions")
 field_info("cl22")
 field_info("el773")
-}
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

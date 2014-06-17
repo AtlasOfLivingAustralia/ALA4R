@@ -47,7 +47,7 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
     ## restructure any list children of out to be data.frames
     for (k in 1:length(out)) {
         if (is.list(out[[k]])) {
-            out[[k]]=as.data.frame(out[[k]])
+            out[[k]]=as.data.frame(out[[k]],stringsAsFactors=FALSE)
         }
     }
     out

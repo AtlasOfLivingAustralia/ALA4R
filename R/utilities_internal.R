@@ -53,7 +53,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
     assert_that(is.character(varnames))
     assert_that(is.string(type))
     type=match.arg(tolower(type),c("general","layers","occurrence","assertions","other")) ## use "other" to make no variable name substtutions, just enforce case/separator conventions
-    if (TRUE) {
+    if (FALSE) {
         ## just return the names as-is, but enforce validity as variable names
         varnames=make.names(varnames)
      } else {
@@ -61,14 +61,33 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
         varnames=tocamel(make.names(varnames))
         ## try to convert some all-lowercase names to camel, e.g. environmentalvaluemax minlatitude minlongitude
 
-        ## ** todo **
-        
+        ## ** TODO more exhaustively**
+        for (kw in c("longitude","latitude","value","units")) {
+            varnames=str_replace_all(varnames,kw,paste(toupper(substring(kw,1,1)),substring(kw,2),sep=""))
+        }
+        ## some that only seem to appear at the ends of variable names, so be conservative with these replacements
+        for (kw in c("min","max","path")) {
+            varnames=str_replace_all(varnames,paste(kw,"$",sep=""),paste(toupper(substr(kw,1,1)),substring(kw,2),sep=""))
+        }        
         ## enforce first letter lowercase
         varnames=paste(tolower(substr(varnames,1,1)),substring(varnames,2),sep="")
+        if (type %in% c("layers","occurrence")) {
+            ## but some acronyms in layer names should remain all-uppercase
+            ## currently this list is: c("iBRA","iMCRA","aCTTAMS","gER","nZ","nSW","lGA","nRM","rAMSAR","nDVI","nPP","aSRI","gEOMACS")
+            ## but we can catch all of these with a regular expression and not need to hard-code it
+            idx=str_detect(varnames,"^[a-z][A-Z]")
+            temp=varnames[idx]
+            varnames[idx]=paste(toupper(substr(temp,1,1)),substring(temp,2),sep="")
+            ## "seaWIFS" to "SeaWIFS"
+            varnames=str_replace_all(varnames,"seaWIFS","SeaWIFS")
+        }
         ## some global re-naming
         if (type=="general") {
             ## general names, from e.g. name searching
             varnames[varnames=="occCount"]="occurrenceCount"
+            varnames[varnames=="vernacularName"]="commonName" ## species_download provides "vernacularName", others "commonName"
+            varnames=str_replace_all(varnames,"conservationStatusIn","conservationStatus")
+
             if (any(varnames=="rank") & any(varnames=="rank")) {
                 if (verbose) {
                     warning("data contains both \"rank\" and \"rankString\" columns, not renaming \"rankString\"")
@@ -77,6 +96,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
                 varnames[varnames=="rankString"]="rank" ## returned as "rank" by some services and "rankString" by others
             }
         } else if (type=="layers") {
+            varnames[varnames=="desc"]="description"
         } else if (type=="occurrence") {
         } else if (type=="assertions") {
         }
