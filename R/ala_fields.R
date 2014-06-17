@@ -52,6 +52,7 @@ ala_fields=function(fields_type="occurrence") {
         x$type[x$type=="b"]="Contextual" ## there is an errant "b" here that should be "c"
         x$type[x$type=="e"]="Environmental" ## for consistency with search_layers
     }        
+    names(x)=rename_variables(names(x),type=fields_type)
     ## drop unwanted columns
     xcols=setdiff(names(x),unwanted_columns(fields_type))
     x[,xcols]
