@@ -76,6 +76,8 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
             names(x)[names(x)=="classs"]="class"
             ## remove some columns that are unlikely to be of value here
             xcols=setdiff(names(x),unwanted_columns("general"))
+            ## also remove hasChildren, since it always seems to be false
+            xcols=setdiff(xcols,c("hasChildren"))
             ## reorder columns, for minor convenience
             firstcols=intersect(c("searchTerm","name","commonName","guid","rank"),xcols)
             xcols=c(firstcols,setdiff(xcols,firstcols))

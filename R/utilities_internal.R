@@ -32,10 +32,8 @@ clean_string <- function(x) {
 unwanted_columns=function(type) {
     type=match.arg(tolower(type),c("general","layers","occurrence","assertions"))
     switch(type,
-           "general"=c("rawRank","rawRankString","rankId","rankID","left","right","idxType","highlight","linkIdentifier","isExcluded","hasChildren","image","thumbnail"),
+           "general"=c("rawRank","rawRankString","rankId","rankID","left","right","idxType","highlight","linkIdentifier","isExcluded"),
              ## rawRank appears to be a duplicate of rank or rankString
-             ## hasChildren seems always to be false, even for taxa that ought to have children (e.g. Macropus)
-             ## image and thumbnail appear to be internal paths, not full URLs
            "layers"=c("pid","path","path_orig","path_1km","enabled","uid","licence_level","lookuptablepath","mdhrlv","mddatest","datalang","grid","shape","enabled","indb","spid","sid","sdesc","sname"),
              ## datalang appears to be all "eng" "Eng" "enu" "" or NA (2x"enu" records appear to be in English and from DEH/DEWHA)
              ## grid is redundant: all env layers are grid==TRUE, all contextual layers are grid==NA
@@ -50,6 +48,10 @@ unwanted_columns=function(type) {
 
 
 rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
+    if (length(varnames)<1) {
+        ## catch in case names from empty data frame were passed
+        return(varnames)
+    }
     assert_that(is.character(varnames))
     assert_that(is.string(type))
     type=match.arg(tolower(type),c("general","layers","occurrence","assertions","other")) ## use "other" to make no variable name substtutions, just enforce case/separator conventions

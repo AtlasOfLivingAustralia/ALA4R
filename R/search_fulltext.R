@@ -92,6 +92,10 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
         names(out$data)=rename_variables(names(out$data),type="general")
         ## remove unwanted columns
         xcols=setdiff(names(out$data),unwanted_columns("general"))
+        ## also some additional ones specific here
+        xcols=setdiff(xcols,c("hasChildren","image","thumbnail"))
+        ## hasChildren seems always to be false, even for taxa that ought to have children (e.g. Macropus)
+        ## image and thumbnail appear to be internal paths, not full URLs
         out$data=out$data[,xcols]
     }
     out$facets=x$facetResults$searchResults    
