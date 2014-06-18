@@ -96,7 +96,7 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
         xcols=setdiff(xcols,c("hasChildren","image","thumbnail"))
         ## hasChildren seems always to be false, even for taxa that ought to have children (e.g. Macropus)
         ## image and thumbnail appear to be internal paths, not full URLs
-        out$data=out$data[,xcols]
+        out$data=subset(out$data,select=xcols)
     }
     out$facets=x$facetResults$searchResults    
     class(out)="search_fulltext"

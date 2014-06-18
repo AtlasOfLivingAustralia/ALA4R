@@ -60,13 +60,13 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
     ## taxonConcept
     tempcols=setdiff(names(out$taxonConcept),unwanted_columns(type="general"))
     #tempcols=setdiff(tempcols,c("id","parentId","infoSourceId"))
-    out$taxonConcept=out$taxonConcept[,tempcols]
+    out$taxonConcept=subset(out$taxonConcept,select=tempcols)    
     names(out$taxonConcept)=rename_variables(names(out$taxonConcept),type="general")
     ## taxonName
     names(out$taxonName)=rename_variables(names(out$taxonName),type="general")
     ## classification
     tempcols=setdiff(names(out$classification),unwanted_columns(type="general"))
-    out$classification=out$classification[,tempcols]
+    out$classification=subset(out$classification,select=tempcols)
     names(out$classification)=str_replace_all(names(out$classification),"^clazz","class")
     names(out$classification)=rename_variables(names(out$classification),type="general")
     ## identifiers is a list - is OK
@@ -76,7 +76,7 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
     ## synonyms
     tempcols=setdiff(names(out$synonyms),unwanted_columns(type="general"))    
     #tempcols=setdiff(tempcols,c("id","infoSourceId"))
-    out$synonyms=out$synonyms[,tempcols]
+    out$synonyms=subset(out$synonyms,select=tempcols)
     names(out$synonyms)=rename_variables(names(out$synonyms),type="general")
     ## sameAsConcepts
     #tempcols=setdiff(names(out$sameAsConcepts),c("id"))

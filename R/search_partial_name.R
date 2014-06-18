@@ -71,7 +71,7 @@ search_partial_name=function(taxon,geo_only=FALSE,output_format="simple",index_t
         ## reorder columns, for minor convenience
         firstcols=intersect(c("name","commonName","guid","rankString"),xcols)
         xcols=c(firstcols,setdiff(xcols,firstcols))
-        out=out[,xcols]
+        out=subset(out,select=xcols)        
     }
     class(out) <- c('search_partial_name',class(out)) #add the search_partial_name class
     attr(out,"output_format")=output_format

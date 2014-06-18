@@ -81,7 +81,7 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
             ## reorder columns, for minor convenience
             firstcols=intersect(c("searchTerm","name","commonName","guid","rank"),xcols)
             xcols=c(firstcols,setdiff(xcols,firstcols))
-            x=x[,xcols]
+            x=subset(x,select=xcols)
             attr(x,"output_format")=output_format
             
         } else {

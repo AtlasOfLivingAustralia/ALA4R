@@ -40,7 +40,10 @@ ala_fields=function(fields_type="occurrence") {
            )
 
     x=cached_get(base_url,type="json")
-
+    ## we have a list of unwanted columns that get removed from results
+    ## since this function returns a list of field names, also remove the unwanted fields from the results list
+    x=x[!x$name %in% unwanted_columns(fields_type),]
+    
     ## for "layers", shorter, more manageable names are provided from http://spatial.ala.org.au/ws/layers in API. Add these as an extra column: shortName
     if (identical(fields_type,"layers")) {
         more_x=cached_get(url=paste(ala_config()$base_url_spatial,"layers",sep=""),type="json")
@@ -52,11 +55,11 @@ ala_fields=function(fields_type="occurrence") {
         x$type[x$type=="c"]="Contextual"
         x$type[x$type=="b"]="Contextual" ## there is an errant "b" here that should be "c"
         x$type[x$type=="e"]="Environmental" ## for consistency with search_layers
-    }        
+    }
     names(x)=rename_variables(names(x),type=fields_type)
     ## drop unwanted columns
     xcols=setdiff(names(x),unwanted_columns(fields_type))
-    x[,xcols]
+    subset(x,select=xcols)
 }
 
 

@@ -36,7 +36,7 @@ search_layers = function(query,type="all",output_format="simple") {
     }
     ## remove some columns that are unlikely to be of value here
     xcols=setdiff(names(out),unwanted_columns("layers"))
-    out=out[,xcols]
+    out=subset(out,select=xcols)
     ## change variable names for consistency
     names(out)=rename_variables(names(out),type="layers")
     ## change "name" to "shortName", "displayname" to "name" so as to match ala_fields("layers")
@@ -46,7 +46,7 @@ search_layers = function(query,type="all",output_format="simple") {
     xcols=names(out)
     firstcols=intersect(c("name","id","type","description"),xcols)
     xcols=c(firstcols,setdiff(xcols,firstcols))
-    out=out[,xcols]
+    out=subset(out,select=xcols)
     attr(out,"output_format")=output_format
     class(out)=c("search_layers",class(out)) ## add the search_names class
     out

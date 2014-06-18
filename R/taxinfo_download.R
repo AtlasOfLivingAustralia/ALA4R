@@ -100,8 +100,11 @@ taxinfo_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_
 
         if (empty(x)) {
             warning("no matching records were returned")
+        } else {
+            xcols=setdiff(names(x),unwanted_columns(type="general"))
+            x=subset(x,select=xcols)
+            names(x)=rename_variables(names(x),type="general")
         }
-        names(x)=rename_variables(names(x),type="general")
     }
     #class(x) <- c('taxinfo_download',class(x)) #add the custom class
     x
