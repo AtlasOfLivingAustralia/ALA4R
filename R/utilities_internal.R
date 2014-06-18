@@ -89,6 +89,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
             varnames[varnames=="occCount"]="occurrenceCount"
             varnames[varnames=="vernacularName"]="commonName" ## taxinfo_download provides "vernacularName", others "commonName"
             varnames=str_replace_all(varnames,"conservationStatusIn","conservationStatus")
+            varnames=str_replace_all(varnames,"scientificNameForAcceptedConcept","acceptedConceptName") ## taxinfo_download returns the former, but should be the latter for consistency elsewhere
 
             if (any(varnames=="rank") & any(varnames=="rankString")) {
                 if (verbose) {
@@ -105,6 +106,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
             } else {
                 varnames[varnames=="taxonRank"]="rank" ## returned as "Taxon.Rank" (camelcased to "taxonRank") by taxinfo_download
             }
+            
             
         } else if (type=="layers") {
             varnames[varnames=="desc"]="description"
