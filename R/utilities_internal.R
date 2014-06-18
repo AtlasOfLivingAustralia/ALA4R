@@ -1,5 +1,7 @@
 ## some utility functions used internally within the ALA4R library: not exported 
 
+##----------------------------------------------------------------------------------------------
+
 ## internal function for converting chr data types to numeric or logical
 convert_dt=function(x,test_numeric=TRUE) {
     ## set test_numeric to FALSE to skip checking for numeric columns - might be a little faster if not needed
@@ -19,6 +21,7 @@ convert_dt=function(x,test_numeric=TRUE) {
     x
 }
 
+##----------------------------------------------------------------------------------------------
 
 clean_string <- function(x) {
 	x = gsub("[^[:alpha:]\\. ]", "", x) #remove anything but alpha characters
@@ -27,6 +30,30 @@ clean_string <- function(x) {
 	x
 }
 
+##----------------------------------------------------------------------------------------------
+
+##convert to camel case ... modified from help forum example
+## not exported for users: internal ALA4R use only
+tocamel = function (x, delim = "[^[:alnum:]]", upper = FALSE, sep = "") {
+    assert_that(is.character(x))
+    assert_that(is.string(delim))
+    s <- strsplit(x, delim)
+	tfun = function(y) {
+        if (any(is.na(y))) {
+            y
+        }
+        else {
+            first <- substring(y, 1, 1)
+            if (isTRUE(upper)) 
+                first <- toupper(first)
+            else first[-1] <- toupper(first[-1])
+            paste(first, substring(y, 2), sep = "", collapse = sep)
+        }
+    }
+    sapply(s, tfun)
+}
+
+##----------------------------------------------------------------------------------------------
 
 ## define column names that we will remove from the results because we don't think they will be useful in the ALA4R context
 unwanted_columns=function(type) {
@@ -46,6 +73,7 @@ unwanted_columns=function(type) {
            )
 }
 
+##----------------------------------------------------------------------------------------------
 
 rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
     if (length(varnames)<1) {
