@@ -81,6 +81,7 @@ field_info = function(field_id) {
             out = as.data.frame(rbind(out)) #bind the data as a dataframe	
             rownames(out) = NULL #reset the row names
         }
+        names(out)=rename_variables(names(out),type="layers")
         out
     }
 }	
@@ -96,14 +97,15 @@ fields_name_to_id=function(fields,fields_type) {
     valid_fields=ala_fields(fields_type=fields_type)
     ## merge differently for "layers" fields, because those column names differ from other fields_type
     ## for layers, the long name is in "desc", with the id in "id" (and "name" is something different)
+    ## ** as of 17-Jun-2014, "desc" is now renamed "description"
     ## for "occurrence" and "assertions", long name is in "description" and id is in "name"
     ## for general, there is no long name (description)
     ## for each one, warn if multiple matches on long name are found
     switch(fields_type,
-           "layers"=laply(fields,function(z) ifelse(z %in% valid_fields$desc & ! z %in% valid_fields$id,{
-               if (sum(valid_fields$desc==z,na.rm=TRUE)>1)
+           "layers"=laply(fields,function(z) ifelse(z %in% valid_fields$description & ! z %in% valid_fields$id,{
+               if (sum(valid_fields$description==z,na.rm=TRUE)>1)
                    warning(" multiple ",fields_type," fields match the name \"",z,"\", using first")                
-               valid_fields$id[which(valid_fields$desc==z)]
+               valid_fields$id[which(valid_fields$description==z)]
            },z)),
            "occurrence"=,
            "assertions"=laply(fields,function(z) ifelse(z %in% valid_fields$description & ! z %in% valid_fields$name,{
@@ -123,14 +125,15 @@ fields_id_to_name=function(fields,fields_type) {
     valid_fields=ala_fields(fields_type=fields_type)
     ## merge differently for "layers" fields, because those column names differ from other fields_type
     ## for layers, the long name is in "desc", with the id in "id" (and "name" is something different)
+    ## ** as of 17-Jun-2014, "desc" is now renamed "description"
     ## for "occurrence" and "assertions", long name is in "description" and id is in "name"
     ## for general, there is no long name (description)
     ## for each one, warn if multiple matches on long name are found
     switch(fields_type,
-           "layers"=laply(fields,function(z) ifelse(z %in% valid_fields$id & ! z %in% valid_fields$desc,{
+           "layers"=laply(fields,function(z) ifelse(z %in% valid_fields$id & ! z %in% valid_fields$description,{
                if (sum(valid_fields$id==z,na.rm=TRUE)>1)
                    warning(" multiple ",fields_type," fields match the id \"",z,"\", using first")                
-               valid_fields$desc[which(valid_fields$id==z)]
+               valid_fields$description[which(valid_fields$id==z)]
            },z)),
            "occurrence"=,
            "assertions"=laply(fields,function(z) ifelse(z %in% valid_fields$name & ! z %in% valid_fields$description,{
