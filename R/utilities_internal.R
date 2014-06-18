@@ -76,7 +76,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
         if (type %in% c("layers","occurrence")) {
             ## but some acronyms in layer names should remain all-uppercase
             ## currently this list is: c("iBRA","iMCRA","aCTTAMS","gER","nZ","nSW","lGA","nRM","rAMSAR","nDVI","nPP","aSRI","gEOMACS")
-            ## but we can catch all of these with a regular expression and not need to hard-code it
+            ## but since these all occur at the start of variable names, we can catch them with a regular expression and not need to hard-code a list
             idx=str_detect(varnames,"^[a-z][A-Z]")
             temp=varnames[idx]
             varnames[idx]=paste(toupper(substr(temp,1,1)),substring(temp,2),sep="")
@@ -97,6 +97,15 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
             } else {
                 varnames[varnames=="rankString"]="rank" ## returned as "rank" by some services and "rankString" by others
             }
+            ## ditto for taxonRank
+            if (any(varnames=="rank") & any(varnames=="taxonRank")) {
+                if (verbose) {
+                    warning("data contains both \"rank\" and \"taxonRank\" columns, not renaming \"taxonRank\"")
+                }
+            } else {
+                varnames[varnames=="taxonRank"]="rank" ## returned as "Taxon.Rank" (camelcased to "taxonRank") by taxinfo_download
+            }
+            
         } else if (type=="layers") {
             varnames[varnames=="desc"]="description"
         } else if (type=="occurrence") {
