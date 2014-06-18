@@ -42,13 +42,48 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
     }
     url=paste(ala_config()$base_url_bie,"species/",guid,".json",sep="")
     out=cached_get(URLencode(url),type="json",verbose=verbose)
-    ## rename a couple of things
-    names(out$classification)=str_replace_all(names(out$classification),"^clazz","class")
     ## restructure any list children of out to be data.frames
     for (k in 1:length(out)) {
         if (is.list(out[[k]])) {
             out[[k]]=as.data.frame(out[[k]],stringsAsFactors=FALSE)
         }
     }
+    ## weed out unwanted columns and rename variables in each child object
+    ## some columns consistently used across these child objects but seem to be internal identifiers and of little use here
+    dud_cols=c("id","parentId","infoSourceId","documentId")
+    for (k in 1:length(out)) {
+        if (class(out[[k]])=="data.frame") {
+            tempcols=setdiff(names(out[[k]]),dud_cols)
+            out[[k]]=out[[k]][,tempcols]
+        }
+    }
+    ## taxonConcept
+    tempcols=setdiff(names(out$taxonConcept),unwanted_columns(type="general"))
+    #tempcols=setdiff(tempcols,c("id","parentId","infoSourceId"))
+    out$taxonConcept=out$taxonConcept[,tempcols]
+    names(out$taxonConcept)=rename_variables(names(out$taxonConcept),type="general")
+    ## taxonName
+    names(out$taxonName)=rename_variables(names(out$taxonName),type="general")
+    ## classification
+    tempcols=setdiff(names(out$classification),unwanted_columns(type="general"))
+    out$classification=out$classification[,tempcols]
+    names(out$classification)=str_replace_all(names(out$classification),"^clazz","class")
+    names(out$classification)=rename_variables(names(out$classification),type="general")
+    ## identifiers is a list - is OK
+    ## commonNames - just the dud_cols above
+    #tempcols=setdiff(names(out$commonNames),c("infoSourceId","documentId"))
+    #out$commonNames=out$commonNames[,tempcols]
+    ## synonyms
+    tempcols=setdiff(names(out$synonyms),unwanted_columns(type="general"))    
+    #tempcols=setdiff(tempcols,c("id","infoSourceId"))
+    out$synonyms=out$synonyms[,tempcols]
+    names(out$synonyms)=rename_variables(names(out$synonyms),type="general")
+    ## sameAsConcepts
+    #tempcols=setdiff(names(out$sameAsConcepts),c("id"))
+    #out$sameAsConcepts=out$sameAsConcepts[,tempcols]
+    names(out$sameAsConcepts)=rename_variables(names(out$sameAsConcepts),type="general")
+    ## all other child objects seem OK at the moment
+    ## we could in principle run everything through the rename/remove columns functions
+    ## but let's not do so for now
     out
 }
