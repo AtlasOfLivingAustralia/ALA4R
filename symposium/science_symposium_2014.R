@@ -24,9 +24,9 @@ sx=search_fulltext("penguins")
 (sx$data[,c("name","rank","score","commonName")])
 
 tx=taxinfo_download("family:SPHENISCIDAE",fields=c("guid","genus","nameComplete","rank")) ## download data
-tx=tx[tx$Taxon.Rank %in% c("species","subspecies"),] ## restrict to species and subspecies
-temp=colwise(factor, c("Genus","Scientific.Name"))(tx) ## as.phylo requires the taxonomic columns to be factors
-ax=as.phylo(~Genus/Scientific.Name,data=temp) ## create phylo object of Scientific.Name nested within Genus
+tx=tx[tx$rank %in% c("species","subspecies"),] ## restrict to species and subspecies
+temp=colwise(factor, c("genus","scientificName"))(tx) ## as.phylo requires the taxonomic columns to be factors
+ax=as.phylo(~genus/scientificName,data=temp) ## create phylo object of Scientific.Name nested within Genus
 tr=plotTree(ax,type="fan",fsize=0.7) ## plot it
 
 ## plot tree with images
@@ -66,8 +66,8 @@ if (FALSE) {
     ## create WKT string
     wkt=paste("POLYGON((",paste(apply(lonlat,1,function(z)paste(z,collapse=" ")),collapse=","),"))",sep="")
 }
-x=specieslist(wkt=wkt,fq="state_conservation:*",page_size=100)
-arrange(x,N.occurrences)
+x=specieslist(wkt=wkt,fq="state_conservation:*")
+arrange(x,count)
 
 
 ##--------------------------------------------------------------------------
