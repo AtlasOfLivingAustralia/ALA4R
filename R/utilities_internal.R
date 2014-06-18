@@ -90,8 +90,6 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
         ## change all to camelCase
         varnames=tocamel(make.names(varnames))
         ## try to convert some all-lowercase names to camel, e.g. environmentalvaluemax minlatitude minlongitude
-
-        ## ** TODO more exhaustively**
         for (kw in c("longitude","latitude","value","units")) {
             varnames=str_replace_all(varnames,kw,paste(toupper(substring(kw,1,1)),substring(kw,2),sep=""))
         }
@@ -116,6 +114,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
             ## general names, from e.g. name searching
             varnames[varnames=="occCount"]="occurrenceCount"
             varnames[varnames=="vernacularName"]="commonName" ## taxinfo_download provides "vernacularName", others "commonName"
+            varnames=str_replace_all(varnames,"conservationStatusInAustralia","conservationStatusAUS")
             varnames=str_replace_all(varnames,"conservationStatusIn","conservationStatus")
             varnames=str_replace_all(varnames,"scientificNameForAcceptedConcept","acceptedConceptName") ## taxinfo_download returns the former, but should be the latter for consistency elsewhere
 
