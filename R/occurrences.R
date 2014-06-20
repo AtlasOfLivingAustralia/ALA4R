@@ -25,15 +25,18 @@
 #' @param qa string vector: (optional) list of record issues to include in the download. See \code{ala_fields("assertions")} for valid values, or use "none" to include no record issues
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
 #' @param record_count_only logical: if TRUE, return just the count of records that would be downloaded, but don't download them. Note that the record count is always re-retrieved from the ALA, regardless of the caching settings. If a cached copy of this query exists on the local machine, the actual data set size may therefore differ from this record count
+#' @param use_layer_names logical: if TRUE, layer names will be used as layer column names in the returned data frame (e.g. "radiationLowestPeriodBio22"). Otherwise, layer id value will be used for layer column names (e.g. "el871")
 #' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails with an error or warning, or if use_data_table is FALSE, then read.table will be used (which may be slower)
 #' 
 #' @return Data frame
 #' @seealso \code{\link{ala_reasons}} for download reasons; \code{\link{ala_config}}
 #' @examples
+#' x=occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE) ## count of records from this data provider
+#' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10) ## download records, with standard fields
+#' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence")$name) ## download records, with all fields
+#' 
 #' \dontrun{ 
 #' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),download_reason_id=10)
-#' x=occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE)
-#' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10)
 #' 
 #' y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10)
 #' str(y)
@@ -53,9 +56,8 @@
 ## TODO: more extensive testing, particularly of the csv-conversion process
 ## TODO LATER: add params: lat, lon, radius (for specifying a search circle)
 
-occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,reason,verbose=ala_config()$verbose,record_count_only=FALSE,use_data_table=TRUE) {
+occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,reason,verbose=ala_config()$verbose,record_count_only=FALSE,use_layer_names=TRUE,use_data_table=TRUE) {
     ## check input parms are sensible
-    assert_that(is.flag(use_data_table))
     assert_that(is.flag(record_count_only))    
     #taxon = clean_string(taxon) ## clean up the taxon name # no - because this can be an indexed query like field1:value1
     base_url=paste(ala_config()$base_url_biocache,"occurrences/index/download",sep="")
@@ -104,6 +106,8 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         #}
         return(cached_get(url=this_url,type="json",caching="off")$totalRecords)
     }
+    assert_that(is.flag(use_data_table))
+    assert_that(is.flag(use_layer_names))
     reason_ok=!is.na(download_reason_id)
     if (reason_ok) {
         valid_reasons=ala_reasons()
@@ -219,6 +223,13 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
             if (nrow(x)==500000) {
                 warning("Only 500000 data rows were returned from the ALA server: this might not be the full data set you need. Contact support@ala.org.au")
             }
+            names(x)=str_replace_all(names(x),"^(el|cl)\\.([0-9]+)","\\1\\2") ## change e.g. el.xxx to elxxx
+            if (use_layer_names) {
+                names(x)=make.names(fields_id_to_name(names(x),fields_type="layers"))
+            } else {
+                names(x)=make.names(fields_name_to_id(names(x),fields_type="layers",make_names=TRUE)) ## use make_names because names here have dots instead of spaces (not tested)
+            }
+            ##names(x)=rename_variables(names(x),type="occurrence")
             ## also read the citation info
             ## this file won't exist if there are no rows in the data.csv file, so only do it if nrow(x)>0
             xc=read.table(unz(thisfile,"citation.csv"),header=TRUE,comment.char="",as.is=TRUE)

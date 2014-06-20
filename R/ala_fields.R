@@ -94,9 +94,10 @@ field_info = function(field_id) {
 
 ## private function to replace any full field names (descriptions) with their id values
 ## e.g. "Radiation - lowest period (Bio22)" to id "el871"
-fields_name_to_id=function(fields,fields_type) {
+fields_name_to_id=function(fields,fields_type,make_names=FALSE) {
     assert_that(is.character(fields))
     assert_that(is.string(fields_type))
+    assert_that(is.flag(make_names)) ## if TRUE, apply make.names to variable names before matching
     fields_type=match.arg(tolower(fields_type),c("occurrence","general","layers","assertions"))
     valid_fields=ala_fields(fields_type=fields_type)
     ## merge differently for "layers" fields, because those column names differ from other fields_type
@@ -105,6 +106,13 @@ fields_name_to_id=function(fields,fields_type) {
     ## for "occurrence" and "assertions", long name is in "description" and id is in "name"
     ## for general, there is no long name (description)
     ## for each one, warn if multiple matches on long name are found
+    if (make_names) {
+        switch(fields_type,
+               "layers"=,
+               "occurrence"=,
+               "assertions"=valid_fields$description<-make.names(valid_fields$description)
+           )
+    }
     switch(fields_type,
            "layers"=laply(fields,function(z) ifelse(z %in% valid_fields$description & ! z %in% valid_fields$id,{
                if (sum(valid_fields$description==z,na.rm=TRUE)>1)
