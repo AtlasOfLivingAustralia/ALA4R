@@ -34,14 +34,14 @@ search_layers = function(query,type="all",output_format="simple") {
     if (!empty(out)) {
         out$id=paste(substr(tolower(out$type),1,1),"l",out$id,sep="")
     }
-    ## remove some columns that are unlikely to be of value here
-    xcols=setdiff(names(out),unwanted_columns("layers"))
-    out=subset(out,select=xcols)
     ## change variable names for consistency
     names(out)=rename_variables(names(out),type="layers")
     ## change "name" to "shortName", "displayname" to "name" so as to match ala_fields("layers")
     names(out)[names(out)=="name"]="shortName"
     names(out)[names(out)=="displayname"]="name"    
+    ## remove some columns that are unlikely to be of value here
+    xcols=setdiff(names(out),unwanted_columns("layers"))
+    out=subset(out,select=xcols)
     ## reorder columns, for minor convenience
     xcols=names(out)
     firstcols=intersect(c("name","id","type","description"),xcols)
