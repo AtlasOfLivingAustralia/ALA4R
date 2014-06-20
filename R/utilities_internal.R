@@ -61,7 +61,7 @@ unwanted_columns=function(type) {
     switch(type,
            "general"=c("rawRank","rawRankString","rankId","rankID","left","right","idxType","highlight","linkIdentifier","isExcluded"),
              ## rawRank appears to be a duplicate of rank or rankString
-           "layers"=c("pid","path","path_orig","path_1km","enabled","uid","licence_level","lookuptablepath","mdhrlv","mddatest","datalang","grid","shape","enabled","indb","spid","sid","sdesc","sname"),
+           "layers"=c("pid","path","path_orig","path_1km","enabled","uid","licence_level","lookuptablepath","mdhrlv","mddatest","datalang","grid","shape","enabled","indb","spid","sid","sdesc","sname","defaultlayer","namesearch","intersect","layerbranch","analysis","addtomap"),
              ## datalang appears to be all "eng" "Eng" "enu" "" or NA (2x"enu" records appear to be in English and from DEH/DEWHA)
              ## grid is redundant: all env layers are grid==TRUE, all contextual layers are grid==NA
              ## ditto for shape: all contextual are TRUE, all grid are NA
@@ -138,6 +138,9 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
         } else if (type=="layers") {
             varnames[varnames=="desc"]="description"
         } else if (type=="occurrence") {
+            varnames=str_replace_all(varnames,ignore.case("axonconceptguid"),"axonConceptLsid") ## occurrences currently returns "MatchTaxonConceptGUID" but the valid field name uses LSID
+            varnames=str_replace_all(varnames,"vernacularName","commonName")
+            varnames=str_replace_all(varnames,"taxonRank","rank")
         } else if (type=="assertions") {
         }
     }
