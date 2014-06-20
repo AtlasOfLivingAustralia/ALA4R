@@ -46,8 +46,9 @@
 #' }
 #' @export occurrences
 
+## NOTE - the all-fields example caused a segfault on rforge, so don't take it out of the dontrun block [this one: x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence")$name) ## download records, with all fields]
 
-## NOTE - the column names that are returned for assertions are the full names/descriptions, do not match the requested (short) names, e.g.: y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10,qa=c("unknownCountry","homonymIssue")) gives qa columns "Supplied.country.not.recognised" and "Homonym.issues.with.supplied.name"
+## NOTE - the column names that are returned for assertions are the full names/descriptions, do not match the requested (short) names, e.g.: y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10,qa=c("unknownCountry","homonymIssue")) gives qa columns "suppliedCountryNotRecognised"  "homonymIssuesWithSuppliedName". See check_assertions() and its occurColnames if this needs to be resolved
 
 ## undocumented: field names in "fields" and "extra" can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). I haven't documented this (yet) because it probably ought to be implemented similarly in other functions - BR
 
