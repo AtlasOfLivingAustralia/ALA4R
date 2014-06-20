@@ -80,6 +80,8 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 	
 	###generate the plots
 	pdf(filename,...)
+        ## wrap plotting code in tryCatch block so that device will be closed cleanly on error
+        tryCatch({
 		if (grouped) {
 			tplot(x$data,Main='all species',coi=qa)
 		} else {
@@ -107,7 +109,9 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 				}
 			}
 		}
+            }, error=function(e) { dev.off(); unlink(filename); stop(e) })
 	dev.off()
+        invisible(0) ## return nothing
 }
 
 
