@@ -21,8 +21,9 @@
 #' @seealso \code{\link{ala_fields}}, \code{\link{ala_config}}
 #' @examples
 #' # Download data for Fabaceae
-#' x=taxinfo_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","bioOrder","family","genus","scientificName"))
-#' # equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,kingdom,phylum,class,bioOrder,family,genus,scientificName&q=family:Fabaceae
+#' x=taxinfo_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","bioOrder","family","genus","nameComplete"))
+#' ## note that requesting "nameComplete" gives the scientific name but requesting "scientificName" will not --- bug to be fixed in ALA's web service
+#' # equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,kingdom,phylum,class,bioOrder,family,genus,nameComplete&q=family:Fabaceae
 #' @export
 taxinfo_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_table=TRUE) {
     assert_that(is.flag(use_data_table))
