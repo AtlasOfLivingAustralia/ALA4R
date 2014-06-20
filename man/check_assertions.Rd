@@ -18,11 +18,9 @@ are found in a dataset returned from
 \code{\link{occurrences}}.
 }
 \examples{
-\dontrun{
 #download species data with all possible assertions
 x=occurrences(taxon="golden bowerbird",download_reason_id=10,qa=ala_fields('assertions')$name)
 (asserts = check_assertions(x)) #data.frame of assertions, their description and column names
-}
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
