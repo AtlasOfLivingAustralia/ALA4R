@@ -26,7 +26,8 @@ specieslist(taxon, wkt, fq)
   c("field1:abc OR field2:def")}
 }
 \value{
-data frame of results
+data frame of results, with taxa and their occurrence
+counts
 }
 \description{
 Retrieve a list of taxa matching a search query, within a
