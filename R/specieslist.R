@@ -9,7 +9,7 @@
 #' @param taxon string: Text of taxon, e.g. "Macropus rufus" or "macropodidae"
 #' @param wkt string: WKT (well-known text) defining a polygon within which to limit taxon search, e.g. "POLYGON((140 -37,151 -37,151 -26,140 -26,140 -37))"
 #' @param fq string: character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See \code{ala_fields("occurrence")} for all the fields that are queryable. NOTE that fq matches are case-sensitive, but sometimes the entries in the fields are not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA"). fq matches are ANDed by default (e.g. c("field1:abc","field2:def") will match records that have field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form c("field1:abc OR field2:def")
-#' @return data frame of results
+#' @return data frame of results, with taxa and their occurrence counts
 #' @seealso \code{\link{ala_fields}} for occurrence fields that are queryable via the \code{fq} parameter
 #' @examples
 #' x=specieslist(taxon="macropus",wkt="POLYGON((140 -37,151 -37,151 -26,140 -26,140 -37))")
@@ -58,11 +58,9 @@ specieslist=function(taxon,wkt,fq) {
     ## check for zero-sized file
     if (file.info(thisfile)$size>0) {
         x=read.table(thisfile,sep=",",header=TRUE,comment.char="")
-        ## rename "X..Occurrences" (which was "# Occurrences" in the csv file)
-        names(x)=str_replace(names(x),"X..Occurrences","N.occurrences")
-        ## column "taxon_concept_lsid" --- this should be "guid" for consistency with other functions
-        names(x)=str_replace(names(x),"taxon_concept_lsid","guid")
-        names(x)=str_replace(names(x),"Number.of.records","N.occurrences") ## for backwards compatibility with the previous ws
+        ## rename "X..Occurrences" (which was "# Occurrences" in the csv file), or "Number.of.records" (later webservice) or "count" (current web service!)
+        names(x)[names(x) %in% c("count","X..Occurrences","Number.of.records")]="occurrenceCount"
+        names(x)=rename_variables(names(x),type="occurrence")
     } else {
         x=NULL
     }
