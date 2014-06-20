@@ -100,9 +100,8 @@ per request.
 \examples{
 x=occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE) ## count of records from this data provider
 x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10) ## download records, with standard fields
-x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence")$name) ## download records, with all fields
-
 \dontrun{
+x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence")$name) ## download records, with all fields
 x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),download_reason_id=10)
 
 y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10)
