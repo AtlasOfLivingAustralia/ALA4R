@@ -1,6 +1,6 @@
 #' Quick plot of occurrence data
 #' 
-#' Generates a plot of occurrence data retrieved using \code{occurrences}.
+#' Generates a plot of occurrence data retrieved using \code{\link{occurrences}}
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' 
@@ -8,7 +8,7 @@
 #' @param filename string: name of file to be created; defaults to RPlots.pdf
 #' @param qa string vector: list of record issues to be mapped; these can be assertion columnnames, or 'all' or 'none' or any combination of 'error', 'warning' or 'fatal'. Column or categories in your dataset can be viewed using \code{check_assertions}. 
 #' @param grouped logical: TRUE creates a single plot for all observations; FALSE plots individual maps for the taxon level defined.
-#' @param taxon_level string: taxonomic level at which to create maps; possible values include 'species', 'genus', 'family' or 'order'
+#' @param taxon_level string: taxonomic level at which to create maps; possible values are 'species', 'genus', 'family' or 'order'
 #' @param \dots : other options passed to pdf()
 #' @return Generates a pdf that maps the distributions.
 #' 
@@ -19,17 +19,17 @@
 #' occurrences_plot(x)
 #' }
 #' @export occurrences_plot
-
-### function to visualize data
 occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), grouped=FALSE, taxon_level='species',...) 
 {
 	if (!any(class(x)=='occurrences')) stop('check_assertions must have an object of class occurrences from e.g., occurrences() in the ALA4R package')
+        assert_that(is.string(taxon_level))
+        taxon_level=match.arg(tolower(taxon_level),c("species","genus","family","order"))
 	assert_that(is.string(filename))
 	if (substr(filename,nchar(filename)-2,nchar(filename))!='pdf') filename=paste(filename,'.pdf',sep='') #append a pdf suffix to filename
 	assert_that(is.flag(grouped))
 	assert_that(is.character(qa))
 	ass = check_assertions(x)
-	if ('none'%in% qa) { 
+	if ('none' %in% qa) { 
 		qa = NULL
 	} else {
 		tt = NULL
@@ -57,7 +57,7 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 		image(aus,col='grey') #draw the base australia
 		title(main=Main)
 		degAxis(1); degAxis(2) #add on the axis
-		points(xx$Longitude...processed,xx$Latitude...processed,pch=19,col='black')
+		points(xx$longitude,xx$latitude,pch=19,col='black')
 		if (is.null(coi)) {
 			legend('bottomleft',legend='assumed good',pch=19,col='black',bty='n',cex=0.75)
 		} else {
@@ -66,7 +66,7 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 			for (ii in 1:length(coi)) {
 				roi = which(as.logical(xx[,coi[ii]])==TRUE) #define the points that have the issue
 				if (length(roi) > 0) {
-					points(xx$Longitude...processed[roi],xx$Latitude...processed[roi],pch=19,col=legend.cols[ii])
+					points(xx$longitude[roi],xx$latitude[roi],pch=19,col=legend.cols[ii])
 					c2use = c(c2use,ii)
 				}				
 			}
@@ -83,17 +83,18 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 		if (grouped) {
 			tplot(x$data,Main='all species',coi=qa)
 		} else {
-			assert_that(is.string(taxon_level))
-			if (taxon_level %in% c('species','genus','family','order')) {
-				if (taxon_level=='species') grouping = 'Species...matched'
-				if (taxon_level=='genus') grouping = 'Genus...matched'
-				if (taxon_level=='family') grouping = 'Family...matched'
-				if (taxon_level=='order') grouping = 'Order...matched'
-			} else {
-				dev.off()
-				unlink(filename)
-				stop("taxon_level must be defined as one of 'species', 'genus', 'family' or 'order'")
-			}
+			##if (taxon_level %in% c('species','genus','family','order')) { ## this check made with match.arg at top of function
+                            grouping=taxon_level
+                            ## code for old variable names, left here temporarily
+                            ##if (taxon_level=='species') grouping = 'Species...matched'
+                            ##if (taxon_level=='genus') grouping = 'Genus...matched'
+                            ##if (taxon_level=='family') grouping = 'Family...matched'
+                            ##if (taxon_level=='order') grouping = 'Order...matched'
+			##} else {
+			##	dev.off()
+			##	unlink(filename)
+			##	stop("taxon_level must be defined as one of 'species', 'genus', 'family' or 'order'")
+			##}
 			cat('this is plotting',length(unique(x$data[,grouping])),taxon_level,'maps... names will act as status bar\n')
 			for (spp in unique(x$data[,grouping])) {
 				cat('\t',spp,'\n')

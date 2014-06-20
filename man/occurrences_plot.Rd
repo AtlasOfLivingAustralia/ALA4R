@@ -23,7 +23,7 @@ occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
   taxon level defined.}
 
   \item{taxon_level}{string: taxonomic level at which to
-  create maps; possible values include 'species', 'genus',
+  create maps; possible values are 'species', 'genus',
   'family' or 'order'}
 
   \item{\dots}{: other options passed to pdf()}
@@ -33,7 +33,7 @@ Generates a pdf that maps the distributions.
 }
 \description{
 Generates a plot of occurrence data retrieved using
-\code{occurrences}.
+\code{\link{occurrences}}
 }
 \examples{
 \dontrun{
