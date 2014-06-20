@@ -48,18 +48,28 @@ NULL
 #' @method summary occurrences
 #' @S3method summary occurrences
 "summary.occurrences" <- function(object, ...) {
+    ## names are a little problematic at the moment: sometimes scientificName doesn't come back (being resolved in web service I hope)
+    if ("scientificName" %in% names(object$data)) {
 	cat('number of names:',length(unique(object$data$scientificNameOriginal)),'\n')
 	cat('number of taxonomically corrected names:',length(unique(object$data$scientificName)),'\n')
-	cat('number of observation records:',nrow(object$data),'\n')
-	ass = check_assertions(object) #need to get existing assertions in occur dataset
-	if (nrow(ass)>0) {
-		cat('number of assertions listed:',nrow(ass),' -- ones with flagged issues are listed below\n')
-		for (ii in 1:nrow(ass)) {
-			rwi = length(which(as.logical(object$data[,ass$occurColnames[ii]])==TRUE)) #count the number of records with issues
-			if (rwi>0) cat('\t',ass$occurColnames[ii],': ',rwi,' records ',ifelse(as.logical(ass$fatal[ii]),'-- considered fatal',''),sep='','\n')
-		}
-	} else { cat('no asserting issues\n') }
-	invisible(object)
+    } else if ("taxonName" %in% names(object$data)) {
+	cat('number of names:',length(unique(object$data$taxonNameOriginal)),'\n')
+	cat('number of taxonomically corrected names:',length(unique(object$data$taxonName)),'\n')
+    }
+    cat('number of observation records:',nrow(object$data),'\n')
+    ass = check_assertions(object) #need to get existing assertions in occur dataset
+    if (nrow(ass)>0) {
+        cat('number of assertions listed:',nrow(ass),' -- ones with flagged issues are listed below\n')
+        for (ii in 1:nrow(ass)) {
+            rwi = length(which(as.logical(object$data[,ass$occurColnames[ii]])==TRUE)) #count the number of records with issues
+            if (rwi>0) {
+                cat('\t',ass$occurColnames[ii],': ',rwi,' records ',ifelse(as.logical(ass$fatal[ii]),'-- considered fatal',''),sep='','\n')
+            }
+        }
+    } else {
+        cat('no asserting issues\n')
+    }
+    invisible(object)
 }
 
 #' @rdname occurrences_s3
