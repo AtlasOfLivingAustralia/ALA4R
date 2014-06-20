@@ -12,15 +12,15 @@
 
 \method{subset}{occurrences}(x, remove.fatal = TRUE,
   exclude.spatial = "error", exclude.temporal = "error",
-  exclude.taxonomic = "error", max.spatial.uncertainty = NULL,
+  exclude.taxonomic = "error", max.spatial.uncertainty,
   keep.missing.spatial.uncertainty = TRUE, ...)
 }
 \arguments{
   \item{object}{list: an 'occurrence' object that has been
-  downloaded using \code{occurrences}}
+  downloaded using \code{\link{occurrences}}}
 
   \item{x}{list: an 'occurrence' object that has been
-  downloaded using \code{occurrences}}
+  downloaded using \code{\link{occurrences}}}
 
   \item{spatial}{numeric: specifies a rounding value in
   decimal degrees used to to create a unique subset of the
@@ -37,22 +37,22 @@
 
   \item{remove.fatal}{logical: remove flagged assertion
   issues that are considered "fatal"; see
-  \code{check_assertions}}
+  \code{\link{check_assertions}}}
 
   \item{exclude.spatial}{character vector: defining flagged
   spatial assertion issues to be removed. Values can
   include 'warnings','error','missing','none'; see
-  \code{check_assertions}}
+  \code{\link{check_assertions}}}
 
   \item{exclude.temporal}{character vector: defining
   flagged temporal assertion issues to be removed. Values
   can include 'warnings','error','missing','none'; see
-  \code{check_assertions}}
+  \code{\link{check_assertions}}}
 
   \item{exclude.taxonomic}{character vector: defining
   flagged taxonomic assertion issues to be removed. Values
   can include 'warnings','error','missing','none'; see
-  \code{check_assertions}}
+  \code{\link{check_assertions}}}
 
   \item{max.spatial.uncertainty}{numeric: number defining
   the maximum spatial uncertainty (in meters) one is
@@ -69,10 +69,10 @@
 }
 \description{
 Set of S3 methods to summarize, filter and get unique
-occurrence data retrieved using \code{occurrences}. This
-uses information based on selections of assertions (quality
-assurance issues ALA has identified), spatial and temporal
-data.
+occurrence data retrieved using \code{\link{occurrences}}.
+This uses information based on selections of assertions
+(quality assurance issues ALA has identified), spatial and
+temporal data.
 }
 \details{
 \code{unique} will give the min value for all columns that

@@ -19,7 +19,7 @@ check_assertions = function(x) {
         ass = ala_fields('assertions') #get the assertions
         ass$occurColnames = NA
         for(coi in cois) {
-            tt=c(grep(coi,ass$name),grep(coi,rename_variables(ass$description,type="assertions")))
+            tt=which(coi==ass$name | coi==rename_variables(ass$description,type="assertions"))
             ## old code for previous variable names
             ## tt = c(grep(tocamel(coi),tocamel(ass$name)),grep(tocamel(coi),tocamel(ass$description))) #check if in name or description columns
             if (length(tt)==0) {

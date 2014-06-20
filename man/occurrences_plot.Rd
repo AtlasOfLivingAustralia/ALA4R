@@ -33,7 +33,7 @@ Generates a pdf that maps the distributions.
 }
 \description{
 Generates a plot of occurrence data retrieved using
-\code{\link{occurrences}}
+\code{\link{occurrences}}.
 }
 \examples{
 \dontrun{

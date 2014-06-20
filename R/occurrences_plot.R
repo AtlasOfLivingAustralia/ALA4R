@@ -1,6 +1,6 @@
 #' Quick plot of occurrence data
 #' 
-#' Generates a plot of occurrence data retrieved using \code{\link{occurrences}}
+#' Generates a plot of occurrence data retrieved using \code{\link{occurrences}}.
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' 
@@ -33,12 +33,12 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 		qa = NULL
 	} else {
 		tt = NULL
-		if ('all' %in% qa) tt = c(tt,ass$occur.colnames)
-		if ('error' %in% qa) tt = c(tt,ass$occur.colnames[which(ass$category=='error')])
-		if ('warning' %in% qa) tt = c(tt,ass$occur.colnames[which(ass$category=='warning')])
-		if ('fatal' %in% qa) tt = c(tt,ass$occur.colnames[which(as.logical(ass$fatal)==TRUE)])
+		if ('all' %in% qa) tt = c(tt,ass$occurColnames)
+		if ('error' %in% qa) tt = c(tt,ass$occurColnames[which(ass$category=='error')])
+		if ('warning' %in% qa) tt = c(tt,ass$occurColnames[which(ass$category=='warning')])
+		if ('fatal' %in% qa) tt = c(tt,ass$occurColnames[which(as.logical(ass$fatal)==TRUE)])
 		if (any(qa %in% colnames(x$data))) {
-			valid_fields=ass$occur.colnames ## valid entries for qa
+			valid_fields=ass$occurColnames ## valid entries for qa
 			unknown=setdiff(qa,valid_fields)
 			if (length(unknown)>0) {
 				warning("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"assertions\")")

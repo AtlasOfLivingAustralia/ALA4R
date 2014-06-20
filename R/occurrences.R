@@ -224,12 +224,16 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
                 warning("Only 500000 data rows were returned from the ALA server: this might not be the full data set you need. Contact support@ala.org.au")
             }
             names(x)=str_replace_all(names(x),"^(el|cl)\\.([0-9]+)","\\1\\2") ## change e.g. el.xxx to elxxx
+            ## TODO WTF is "cl.1050.b" etc?
             if (use_layer_names) {
                 names(x)=make.names(fields_id_to_name(names(x),fields_type="layers"))
             } else {
                 names(x)=make.names(fields_name_to_id(names(x),fields_type="layers",make_names=TRUE)) ## use make_names because names here have dots instead of spaces (not tested)
             }
-            ##names(x)=rename_variables(names(x),type="occurrence")
+            names(x)=rename_variables(names(x),type="occurrence")
+            ## remove unwanted columns
+            xcols=setdiff(names(x),unwanted_columns("occurrence"))
+            x=subset(x,select=xcols)
             ## also read the citation info
             ## this file won't exist if there are no rows in the data.csv file, so only do it if nrow(x)>0
             xc=read.table(unz(thisfile,"citation.csv"),header=TRUE,comment.char="",as.is=TRUE)

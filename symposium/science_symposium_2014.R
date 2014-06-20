@@ -79,16 +79,16 @@ summary(x)
 
 ## or as leaflet plot
 library(leafletR)
-x$data=x$data[!is.na(x$data$Longitude...processed) & !is.na(x$data$Latitude...processed),] ## drop any records with missing lat/lon values: leaflet does not like them
+x$data=x$data[!is.na(x$data$longitude) & !is.na(x$data$latitude),] ## drop any records with missing lat/lon values: leaflet does not like them
 xa=check_assertions(x)
-x_afcols=names(x$data) %in% xa$occur.colnames[xa$fatal] ## columns of x corresponding to a fatal assertion
+x_afcols=names(x$data) %in% xa$occurColnames[xa$fatal] ## columns of x corresponding to a fatal assertion
 x_afrows=apply(x$data[,x_afcols],1,any) ## rows of x that have a fatal assertion
 these_assertions=names(x$data)[x_afcols] ## which fatal assertions are present in this data?
-datlist=list(toGeoJSON(data=x$data[!x_afrows,c("Latitude...processed","Longitude...processed")],name="Am0",dest=tempdir())) ## start with the "clean" data (data rows without fatal assertions)
+datlist=list(toGeoJSON(data=x$data[!x_afrows,c("latitude","longitude")],name="Am0",dest=tempdir())) ## start with the "clean" data (data rows without fatal assertions)
 ## now for each assertion, create a geojson formatted-file of the associated data
 for (k in 1:length(these_assertions)) {
     idx=x$data[,which(x_afcols)[k]]
-    datlist[k+1]=toGeoJSON(data=x$data[idx,c("Latitude...processed","Longitude...processed")],name=paste("Am",k,sep=""),dest=tempdir())
+    datlist[k+1]=toGeoJSON(data=x$data[idx,c("latitude","longitude")],name=paste("Am",k,sep=""),dest=tempdir())
 }
 ## create styles
 sty0=styleSingle(col="white",fill="black",fill.alpha=1)
@@ -112,44 +112,41 @@ library(geosphere)
 wkt="POLYGON((152.5 -35,152.5 -32,140 -32,140 -35,152.5 -35))"
 x=occurrences(taxon="family:Fabaceae",wkt=wkt,qa="none",download_reason_id=10) ## download legume records: this is a large family of flowering plants
 x=x$data ## just take the data component
-## subset and re-name some columns for convenience
-x=x[,c("Matched.Scientific.Name","Taxon.Rank...matched","Kingdom...matched","Phylum...matched","Class...matched","Order...matched","Family...matched","Genus...matched","Species...matched","Longitude...processed","Latitude...processed","Event.Date...parsed","Basis.Of.Record...processed")]
-names(x)=c("Scientific.Name","Taxon.Rank","Kingdom","Phylum","Class","Order","Family","Genus","Species","Longitude","Latitude","Event.Date","Basis.Of.Record")
 
 ## bin into 0.5-degree grid cells
-x$Longitude=round(x$Longitude*2)/2
-x$Latitude=round(x$Latitude*2)/2
+x$longitude=round(x$longitude*2)/2
+x$latitude=round(x$latitude*2)/2
 
 ## create sites-by-species data frame
 ## aggregate records within 0.5-degree bins
 ## this could also be done with e.g. the reshape library or the table() function
 ## NOTE - this example inherently makes some strong assumptions about *absences* in the data. Follow this example at your own risk
-xsub=x$Taxon.Rank %in% c("species","subspecies","variety","form","cultivar") ## discard genus- and higher-level records
-unames=unique(x[xsub,]$Scientific.Name) ## unique names 
-ull=unique(x[xsub,c("Longitude","Latitude")])
+xsub=x$rank %in% c("species","subspecies","variety","form","cultivar") ## discard genus- and higher-level records
+unames=unique(x[xsub,]$scientificName) ## unique names 
+ull=unique(x[xsub,c("longitude","latitude")])
 xgridded=matrix(NA,nrow=nrow(ull),ncol=length(unames))
 for (uli in 1:nrow(ull)) {
-    lidx=xsub & x$Longitude==ull[uli,]$Longitude & x$Latitude==ull[uli,]$Latitude
-    xgridded[uli,]=as.numeric(unames %in% x[lidx,]$Scientific.Name)
+    lidx=xsub & x$longitude==ull[uli,]$longitude & x$latitude==ull[uli,]$latitude
+    xgridded[uli,]=as.numeric(unames %in% x[lidx,]$scientificName)
 }
 xgridded=as.data.frame(xgridded)
 names(xgridded)=unames
 xgridded=cbind(ull,xgridded)
 
 ## plot richness vs longitude
-plot(xgridded$Longitude,apply(xgridded[,-c(1:2)],1,sum),ylab="Richness",xlab="Longitude",pch=20,col="grey25")
+plot(xgridded$longitude,apply(xgridded[,-c(1:2)],1,sum),ylab="Richness",xlab="Longitude",pch=20,col="grey25")
 
 ## calculate dissimilarity between nearby grid cells as a function of along-transect position
 D=vegdist(xgridded[,-c(1:2)],'bray') ## bray-curtis dissimilarity
 Dm=as.matrix(D)
 Dll=apply(xgridded[,1:2],1,function(z){distVincentySphere(z,xgridded[,1:2])}) ## calculate geographic distance from longitude and latitude
 closeidx=Dll>0 & Dll<100e3 ## find grid cells within 100km of each other
-temp=matrix(xgridded$Longitude,nrow=nrow(xgridded),ncol=nrow(xgridded)) ## create matrix of Longitude that matches the size  of the pairwise-D matrices
+temp=matrix(xgridded$longitude,nrow=nrow(xgridded),ncol=nrow(xgridded)) ## create matrix of longitude that matches the size  of the pairwise-D matrices
 ## plot dissimilarity as a function of transect position
 plot(temp[closeidx],Dm[closeidx],xlab="Longitude",ylab="Dissimilarity",pch=20,col="grey85")
 ## add smooth fit via gam()
 fit=gam(d~s(tp,k=7),data=data.frame(tp=temp[closeidx],d=Dm[closeidx]))
-tpp=seq(from=min(xgridded$Longitude),to=max(xgridded$Longitude),length.out=100)
+tpp=seq(from=min(xgridded$longitude),to=max(xgridded$longitude),length.out=100)
 fitp=predict(fit,newdata=data.frame(tp=tpp))
 lines(tpp,fitp,col=1)
 
@@ -162,10 +159,10 @@ sing=which(table(grp)<5)
 grp[grp %in% sing]=21 ## singletons to new combined group
 grp=sapply(grp,function(z)which(unique(grp)==z)) ## renumber groups
 ## plot
-with(xgridded,plot(Longitude,Latitude,pch=21,col=grp,bg=grp))
+with(xgridded,plot(longitude,latitude,pch=21,col=grp,bg=grp))
 ## or slightly nicer map plot
 library(maps)
 library(mapdata)
 map("worldHires","Australia", xlim=c(105,155), ylim=c(-45,-10), col="gray90", fill=TRUE)
 thiscol=c("#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf") ## colours for cluster
-with(xgridded,points(Longitude,Latitude,pch=21,col=thiscol[grp],bg=thiscol[grp],cex=0.75))
+with(xgridded,points(longitude,latitude,pch=21,col=thiscol[grp],bg=thiscol[grp],cex=0.75))

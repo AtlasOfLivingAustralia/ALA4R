@@ -69,6 +69,8 @@ unwanted_columns=function(type) {
              ## enabled appears to be all TRUE
              ## spid is redundant with id
              ## no idea what sid,sname, or sdesc are, but don't look particularly useful in our context
+           "occurrence"=c("lft","rgt","rankId"),
+             ## lft and rgt look the same as left and right in general fields
            c("")
            )
 }
@@ -99,17 +101,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
         }        
         ## enforce first letter lowercase
         varnames=paste(tolower(substr(varnames,1,1)),substring(varnames,2),sep="")
-        if (type %in% c("layers","occurrence")) {
-            ## but some acronyms in layer names should remain all-uppercase
-            ## currently this list is: c("iBRA","iMCRA","aCTTAMS","gER","nZ","nSW","lGA","nRM","rAMSAR","nDVI","nPP","aSRI","gEOMACS")
-            ## but since these all occur at the start of variable names, we can catch them with a regular expression and not need to hard-code a list
-            idx=str_detect(varnames,"^[a-z][A-Z]")
-            temp=varnames[idx]
-            varnames[idx]=paste(toupper(substr(temp,1,1)),substring(temp,2),sep="")
-            ## "seaWIFS" to "SeaWIFS"
-            varnames=str_replace_all(varnames,"seaWIFS","SeaWIFS")
-        }
-        ## some global re-naming
+        ## some global re-naming by data type
         if (type=="general") {
             ## general names, from e.g. name searching
             varnames[varnames=="occCount"]="occurrenceCount"
@@ -133,16 +125,35 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
             } else {
                 varnames[varnames=="taxonRank"]="rank" ## returned as "Taxon.Rank" (camelcased to "taxonRank") by taxinfo_download
             }
-            
-            
         } else if (type=="layers") {
             varnames[varnames=="desc"]="description"
         } else if (type=="occurrence") {
+            ## "scientificName" is actually scientificNameOriginal
+            varnames[varnames=="scientificName"]="scientificNameOriginal"
+            ## and "matchedScientificName" will get changed to "scientificName" below
+            varnames[varnames=="recordID"]="id"
+            varnames[varnames=="xVersion"]="version" ## is actually "_version_" in web service
             varnames=str_replace_all(varnames,ignore.case("axonconceptguid"),"axonConceptLsid") ## occurrences currently returns "MatchTaxonConceptGUID" but the valid field name uses LSID
             varnames=str_replace_all(varnames,"vernacularName","commonName")
             varnames=str_replace_all(varnames,"taxonRank","rank")
+            ## rawSomething to somethingOriginal
+            varnames=str_replace_all(varnames,"^raw(.*)$","\\1Original") ## first-letter lowercase will be lost here but gets fixed below
+            ## dump "matched", "processed", and "parsed"
+            varnames=str_replace_all(varnames,ignore.case("(matched|processed|parsed)"),"")
         } else if (type=="assertions") {
         }
+        ## do this again in case, in some cases this gets lost in the processing: enforce first letter lowercase
+        varnames=paste(tolower(substr(varnames,1,1)),substring(varnames,2),sep="")
+        if (type %in% c("layers","occurrence")) {
+            ## but some acronyms in layer names should remain all-uppercase
+            ## currently this list is: c("iBRA","iMCRA","aCTTAMS","gER","nZ","nSW","lGA","nRM","rAMSAR","nDVI","nPP","aSRI","gEOMACS")
+            ## but since these all occur at the start of variable names, we can catch them with a regular expression and not need to hard-code a list
+            idx=str_detect(varnames,"^[a-z][A-Z]")
+            temp=varnames[idx]
+            varnames[idx]=paste(toupper(substr(temp,1,1)),substring(temp,2),sep="")
+            ## "seaWIFS" to "SeaWIFS"
+            varnames=str_replace_all(varnames,"seaWIFS","SeaWIFS")
+        }        
     }
     varnames
 }
