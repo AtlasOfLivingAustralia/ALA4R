@@ -96,8 +96,10 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 			##	stop("taxon_level must be defined as one of 'species', 'genus', 'family' or 'order'")
 			##}
 			cat('this is plotting',length(unique(x$data[,grouping])),taxon_level,'maps... names will act as status bar\n')
+                        spp_count=0
 			for (spp in unique(x$data[,grouping])) {
-				cat('\t',spp,'\n')
+                            spp_count=spp_count+1
+				cat(spp_count,'.\t',spp,'\n',sep="")
 				if (spp!="") { 
 					tplot(x$data[which(x$data[,grouping]==spp),],Main=spp,coi=qa)
 				} else {
