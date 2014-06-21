@@ -7,10 +7,10 @@
 #' This function allows the user to sample environmental/contextual layers at arbitrary locations. It complements the \code{\link{occurrences}} function, which allows values of the same set of layers to be downloaded at species occurrence locations.
 #' 
 #' @param pnts numeric: vector of latitude/longitude pairs, or a 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 1000.
-#' @param layers string vector: ids of layers to be intersected. The list of possible layers is available from \code{ala_fields("layers")}
-#' @param SPdata.frame logical: should the output should be returned as a SpatialPointsDataFrame of the sp package?
+#' @param layers string vector: ids of layers to be intersected. The list of possible layers is available from \code{ala_fields("layers")}. Note: if number of points checked, number of layers must be less than 300.
+#' @param SPdata.frame logical: should the output should be returned as a SpatialPointsDataFrame of the sp package or simply as a data.frame?
 #' @param use_layer_names logical: if TRUE, layer names will be used as column names in the returned data frame (e.g. "radiationLowestPeriodBio22"). Otherwise, layer id value will be used for column names (e.g. "el871")
-#' @param verbose logical: show additional progress information? [default is set by \code{ala_config()}]
+#' @param verbose logical: show additional progress information? [default is set by \code{\link{ala_config}}]
 #' @return A SpatialPointsDataFrame containing the intersecting data information. Missing data or incorrectly identified layer id values will result in NA data
 #' @seealso \code{\link{ala_config}}
 #' @examples
@@ -28,6 +28,7 @@
 ## undocumented feature: layer ids in "layers" can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). I haven't documented this (yet) until it is implemented across all functions - BR
 ## TODO: check that the URL strings here are guaranteed to be appropriately URL-encoded
 ## TODO: Limit of 1000 points is a nuisance, surely?
+## TODO: Limit of 300 layers for multiple points (bulk) is also a nuisance...
 
 #' @export
 intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,verbose=ala_config()$verbose) {
@@ -62,6 +63,7 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     }
     ##format the layers string
     layers=fields_name_to_id(fields=layers,fields_type="layers") ## replace long names with ids
+	if (bulk) { if (length(layers)<299) stop('the number of layers must be <300 if intersecting more than a single location') } #ensure no more than 300 layers when bulk
     if (length(layers)>1) {
         layers_str = paste(layers,collapse=',',sep='')
     } else {
@@ -89,8 +91,11 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
             if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
         }
         out = read.csv(unz(this_cache_file,'sample.csv'),as.is=TRUE) #read in the csv data from the zip file
+		out[which(out=='n/a')] = NA
         checks = NULL; for (ii in colnames(out)) { if (all(is.na(out[,ii]))) checks = c(checks,ii) } #identify bad layer IDs
         if (!is.null(checks)) warning(paste(paste(checks,collapse=', '),'are invalid layer ids')) #warn user of bad layer ids
+		out = out[,-checks] #remove bad columns
+		if (dim(out)[2]==2) stop('no valid data returned from the layers chosen')
     } else { #get results if just a single location
         url_str = paste(base_url,'intersect/',layers_str,'/',pnts_str,sep='') #define the url string
         url_str=URLencode(url_str) ## should not be needed, but do it anyway
@@ -107,10 +112,13 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
             out=SpatialPointsDataFrame(coords=out[,c("longitude","latitude")],proj4string=CRS("+proj=longlat +ellps=WGS84"),data=out)
         }
     }
+	###final formatting before return
     if (use_layer_names) {
         names(out)=make.names(fields_id_to_name(names(out),"layers"))
     }
     names(out)=rename_variables(names(out),type="layers") ## rename vars for consistency
+	out[which(out=='n/a')] = NA
+	
     ##return the output
     out
 }
