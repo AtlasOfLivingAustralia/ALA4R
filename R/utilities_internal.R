@@ -141,8 +141,13 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
             ## dump "matched", "processed", and "parsed"
             varnames=str_replace_all(varnames,ignore.case("(matched|processed|parsed)"),"")
         } else if (type=="assertions") {
+            a=ala_fields("assertions",as_is=TRUE)
+            ## want all assertion field names to match those in a$name
+            ## but some may be camelCased versions of the description
+            a$description=rename_variables(a$description,type="other") ## use "other" here to avoid this renaming code block, just apply camelCasing etc
+            varnames=sapply(varnames,function(z){ifelse(z %in% a$name,z,ifelse(sum(z==a$description)==1,a$name[a$description==z],z))})
         }
-        ## do this again in case, in some cases this gets lost in the processing: enforce first letter lowercase
+        ## do this again, it may have been lost in the processing: enforce first letter lowercase
         varnames=paste(tolower(substr(varnames,1,1)),substring(varnames,2),sep="")
         if (type %in% c("layers","occurrence")) {
             ## but some acronyms in layer names should remain all-uppercase

@@ -13,6 +13,7 @@
 #' \item "layers" - fields associated with the environmental and contextual layers. For additional information on layers, including metadata and licensing, see \code{\link{search_layers}}
 #' \item "assertions" - potential issues flagged on one or more occurrence record fields
 #' }
+#' @param as_is logical: if FALSE, apply ALA4R's renaming of fields for consistency across functions. If TRUE, leave the field names as they are returned from the ALA web service
 #' @param field_id text: id of environmental/contextual layer field for which to look up information
 #' Prepend "el" for "environmental" (gridded) layers and "cl" for "contextual" (polygonal) layers
 #' @return A data frame containing the field names and various attributes
@@ -29,8 +30,9 @@
 # ids from http://spatial.ala.org.au/ws/layers are NUMERIC but lookup prepends "el" and "cl"! 
 
 
-ala_fields=function(fields_type="occurrence") {
+ala_fields=function(fields_type="occurrence",as_is=FALSE) {
     assert_that(is.string(fields_type))
+    assert_that(is.flag(as_is))
     fields_type=match.arg(tolower(fields_type),c("occurrence","general","layers","assertions"))
     switch(fields_type,
            "general"={base_url=paste(ala_config()$base_url_bie,"admin/indexFields",sep="")},
@@ -56,10 +58,13 @@ ala_fields=function(fields_type="occurrence") {
         x$type[x$type=="b"]="Contextual" ## there is an errant "b" here that should be "c"
         x$type[x$type=="e"]="Environmental" ## for consistency with search_layers
     }
-    names(x)=rename_variables(names(x),type=fields_type)
-    ## drop unwanted columns
-    xcols=setdiff(names(x),unwanted_columns(fields_type))
-    subset(x,select=xcols)
+    if (!as_is) {
+        names(x)=rename_variables(names(x),type=fields_type)
+        ## drop unwanted columns
+        xcols=setdiff(names(x),unwanted_columns(fields_type))
+        x=subset(x,select=xcols)
+    }
+    x
 }
 
 
@@ -115,15 +120,21 @@ fields_name_to_id=function(fields,fields_type,make_names=FALSE) {
     }
     switch(fields_type,
            "layers"=laply(fields,function(z) ifelse(z %in% valid_fields$description & ! z %in% valid_fields$id,{
-               if (sum(valid_fields$description==z,na.rm=TRUE)>1)
-                   warning(" multiple ",fields_type," fields match the name \"",z,"\", using first")                
-               valid_fields$id[which(valid_fields$description==z)]
+               if (sum(valid_fields$description==z,na.rm=TRUE)>1) {
+                   if (nchar(z)>0) { ## don't warn if field name is degenerate ""
+                       warning(" multiple ",fields_type," fields match the name \"",z,"\", using first")
+                   }
+               }
+               valid_fields$id[which(valid_fields$description==z)[1]]
            },z)),
            "occurrence"=,
            "assertions"=laply(fields,function(z) ifelse(z %in% valid_fields$description & ! z %in% valid_fields$name,{
-               if (sum(valid_fields$description==z,na.rm=TRUE)>1)
-                   warning(" multiple ",fields_type," fields match the name \"",z,"\", using first") 
-               valid_fields$name[which(valid_fields$description==z)]
+               if (sum(valid_fields$description==z,na.rm=TRUE)>1) {
+                   if (nchar(z)>0) {
+                       warning(" multiple ",fields_type," fields match the name \"",z,"\", using first")
+                   }
+               }
+               valid_fields$name[which(valid_fields$description==z)[1]]
            },z)),
            fields ## default to just returning the fields as supplied 
        )
@@ -143,15 +154,21 @@ fields_id_to_name=function(fields,fields_type) {
     ## for each one, warn if multiple matches on long name are found
     switch(fields_type,
            "layers"=laply(fields,function(z) ifelse(z %in% valid_fields$id & ! z %in% valid_fields$description,{
-               if (sum(valid_fields$id==z,na.rm=TRUE)>1)
-                   warning(" multiple ",fields_type," fields match the id \"",z,"\", using first")                
-               valid_fields$description[which(valid_fields$id==z)]
+               if (sum(valid_fields$id==z,na.rm=TRUE)>1) {
+                   if (nchar(z)>0) {
+                       warning(" multiple ",fields_type," fields match the id \"",z,"\", using first")
+                   }
+               }
+               valid_fields$description[which(valid_fields$id==z)[1]]
            },z)),
            "occurrence"=,
            "assertions"=laply(fields,function(z) ifelse(z %in% valid_fields$name & ! z %in% valid_fields$description,{
-               if (sum(valid_fields$name==z,na.rm=TRUE)>1)
-                   warning(" multiple ",fields_type," fields match the id \"",z,"\", using first") 
-               valid_fields$description[which(valid_fields$name==z)]
+               if (sum(valid_fields$name==z,na.rm=TRUE)>1) {
+                   if (nchar(z)>0) {
+                       warning(" multiple ",fields_type," fields match the id \"",z,"\", using first")
+                   }
+               }
+               valid_fields$description[which(valid_fields$name==z)[1]]
            },z)),
            fields ## default to just returning the fields as supplied 
        )

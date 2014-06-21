@@ -3,7 +3,7 @@
 \alias{field_info}
 \title{Retrieves a list of all field names that can be used with data retrieval functions}
 \usage{
-ala_fields(fields_type = "occurrence")
+ala_fields(fields_type = "occurrence", as_is = FALSE)
 
 field_info(field_id)
 }
@@ -17,6 +17,11 @@ field_info(field_id)
   licensing, see \code{\link{search_layers}} \item
   "assertions" - potential issues flagged on one or more
   occurrence record fields }}
+
+  \item{as_is}{logical: if FALSE, apply ALA4R's renaming of
+  fields for consistency across functions. If TRUE, leave
+  the field names as they are returned from the ALA web
+  service}
 
   \item{field_id}{text: id of environmental/contextual
   layer field for which to look up information Prepend "el"
