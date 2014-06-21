@@ -10,7 +10,8 @@ check_assertions(x)
 }
 \value{
 A dataframe of assertions column names, descriptions and
-categories/error codes.
+categories/error codes. If no assertions are in dataset,
+NULL is returned.
 }
 \description{
 This provides a data.frame detailing the assertions that
