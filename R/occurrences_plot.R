@@ -4,7 +4,7 @@
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' 
-#' @param x list: a list object that has been downloaded using \code{occurrences}
+#' @param x list: a list object that has been downloaded using \code{\link{occurrences}}
 #' @param filename string: name of file to be created; defaults to RPlots.pdf
 #' @param qa string vector: list of record issues to be mapped; these can be assertion columnnames, or 'all' or 'none' or any combination of 'error', 'warning' or 'fatal'. Column or categories in your dataset can be viewed using \code{check_assertions}. 
 #' @param grouped logical: TRUE creates a single plot for all observations; FALSE plots individual maps for the taxon level defined.
@@ -111,7 +111,7 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 		}
             }, error=function(e) { dev.off(); unlink(filename); stop(e) })
 	dev.off()
-        invisible(0) ## return nothing
+    invisible(0) ## return nothing
 }
 
 
