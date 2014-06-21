@@ -63,7 +63,7 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     }
     ##format the layers string
     layers=fields_name_to_id(fields=layers,fields_type="layers") ## replace long names with ids
-	if (bulk) { if (length(layers)<299) stop('the number of layers must be <300 if intersecting more than a single location') } #ensure no more than 300 layers when bulk
+	if (bulk) { if (length(layers)>299) stop('the number of layers must be <300 if intersecting more than a single location') } #ensure no more than 300 layers when bulk
     if (length(layers)>1) {
         layers_str = paste(layers,collapse=',',sep='')
     } else {
@@ -94,7 +94,7 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
 		out[which(out=='n/a')] = NA
         checks = NULL; for (ii in colnames(out)) { if (all(is.na(out[,ii]))) checks = c(checks,ii) } #identify bad layer IDs
         if (!is.null(checks)) warning(paste(paste(checks,collapse=', '),'are invalid layer ids')) #warn user of bad layer ids
-		out = out[,-checks] #remove bad columns
+		out[,checks] = NULL #remove bad columns
 		if (dim(out)[2]==2) stop('no valid data returned from the layers chosen')
     } else { #get results if just a single location
         url_str = paste(base_url,'intersect/',layers_str,'/',pnts_str,sep='') #define the url string
