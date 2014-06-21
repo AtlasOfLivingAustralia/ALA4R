@@ -1,0 +1,224 @@
+# NOT DONE... STILL WORKING ON THESE... JV
+############################################
+
+###function tests
+# export(ala_cache_filename) -- ala_cache_filename=function(url)
+{
+### test weird inputs
+ala_cache_filename("http://biocache.ala.org.au/ws/index/fields") #basic example
+ala_cache_filename(TRUE) 
+ala_cache_filename(letters[1:26]) 
+ala_cache_filename("shite") 
+}
+# export(ala_config) -- 
+{
+
+}
+# export(ala_fields) -- ala_fields=function(fields_type="occurrence")
+{
+###testing fields_type
+head(ala_fields(fields_type="occurrence")) #default
+head(ala_fields(fields_type="occur")) 
+head(ala_fields(fields_type="occ"))
+head(ala_fields(fields_type="o")) 
+
+head(ala_fields(fields_type="g") )
+head(ala_fields(fields_type="L") )
+head(ala_fields(fields_type="a"))
+
+head(ala_fields(fields_type=letters[1:4])) #should fail
+head(ala_fields(fields_type=1:10)) #should fail
+head(ala_fields(fields_type=1)) #should fail
+}
+# export(ala_reasons) -- ala_reasons=function()
+{
+ala_reasons()
+ala_reasons(TRUE) #this should throw and error because there is an unused argument
+}
+# export(field_info) -- field_info = function(field_id)
+{
+###TODO sometimes json file returned is tooooo big. for example field_info('cl1060') -- need to raise issue with ALA people to reduce json file sizes
+tt = ala_fields('layers')
+for (ii in tt$id) { cat(ii,'\n'); tt = field_info(ii) ; cat(dim(tt),'\n')} #this fails where JSON file too large
+
+}
+# export(intersect_points) -- intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,verbose=ala_config()$verbose)
+{
+###TODO assess the need for verbose=ala_config()$verbose -- here it only adds a single line of info to the user and that is the temporary file name
+###TODO assess the value of allowing upto 300 layers. The code below takes over an hour and still does not complete
+
+###DONE change all 'n/a' in the output that comes back from ALA given lat& lon are outside Australia to NA and warn user 
+###DONE ensure single point & multipoint outputs are the same... namely, where there is a single incorrect name in the "layers" input, single point removes that column but multipoint has a column of NAs
+###DONE multipoint need to return an error when all layers are invalid just like the single point
+###DONE enforce 300 layer limit for bulk point download
+
+### check pnts outside Oz, points outside 'global' values, non-numeric values, 3 columns for input
+layers = c('cl22','cl23','el773')
+pnts = data.frame(expand.grid(lat=seq(-29,19,10.0),lon=seq(-130.0,140.0,10.0))) ### points are outside australia
+intersect_points(pnts,layers)
+pnts = data.frame(expand.grid(lat=seq(-100,19,10.0),lon=seq(-130.0,370,10.0))) ### points are outside global values of -90 to +90 & -180 to 180
+intersect_points(pnts,layers)
+pnts = data.frame(expand.grid(lat=seq(-29,19,10.0),lon=c(letters[1:4])) ### points are shit values
+intersect_points(pnts,layers)
+pnts = data.frame(expand.grid(lat=seq(-29,19,10.0),lon=seq(-130.0,140.0,10.0),elev=10)) ### points are outside australia and 3 columns of inputs
+intersect_points(pnts,layers)
+
+### test "layers" flags -- single incorrect selection, no valid layers, try all layers
+layers = c('cl22','cl23','shite') #single incorrect layer name
+pnts = c(-23.1,149.1)
+intersect_points(pnts,layers)
+pnts = data.frame(expand.grid(lat=seq(-29,-19,1.0),lon=seq(130.0,140.0,1.0)))
+intersect_points(pnts,layers)
+
+layers = c('shite') #single incorrect layer name
+pnts = c(-23.1,149.1)
+intersect_points(pnts,layers)
+pnts = data.frame(expand.grid(lat=seq(-29,-19,1.0),lon=seq(130.0,140.0,1.0)))
+intersect_points(pnts,layers)
+
+layers = c('shite','shite2') #multiple incorrect layer name
+pnts = c(-23.1,149.1)
+intersect_points(pnts,layers)
+pnts = data.frame(expand.grid(lat=seq(-29,-19,1.0),lon=seq(130.0,140.0,1.0)))
+intersect_points(pnts,layers) 
+
+layers = ala_fields('layers')$id #all layers
+pnts = c(-23.1,149.1)
+intersect_points(pnts,layers)
+pnts = data.frame(expand.grid(lat=seq(-29,-19,2.0),lon=seq(130.0,140.0,2.0)))
+intersect_points(pnts,layers) #this now provides appropriate error ... not allowed to request more than 300
+
+layers = ala_fields('layers')$id[1:299] #first 299 possible layers
+pnts = c(-23.1,149.1)
+intersect_points(pnts,layers)
+pnts = data.frame(expand.grid(lat=seq(-29,-19,2.0),lon=seq(130.0,140.0,2.0)))
+intersect_points(pnts,layers) #this take its time but should be fine... but is yet untested as it was still running for more than an hour
+
+### test all the logicals
+layers = c('cl22','cl23')
+pnts = c(-23.1,149.1) #single point
+intersect_points(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,verbose=ala_config()$verbose) #default
+intersect_points(pnts,layers,SPdata.frame=TRUE,use_layer_names=FALSE,verbose=!ala_config()$verbose) #opposite to default
+
+pnts = data.frame(expand.grid(lat=seq(-29,-19,1.0),lon=seq(130.0,140.0,1.0))) #multipoint
+intersect_points(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,verbose=ala_config()$verbose) #default
+intersect_points(pnts,layers,SPdata.frame=TRUE,use_layer_names=FALSE,verbose=!ala_config()$verbose) #opposite to default
+
+}
+# export(check_assertions) -- check_assertions = function(x)
+{
+###TODO : raise an issue with ALA that three assertions are not returned even if requested. The are "coordinatesOutOfRange", "missingCollectionDate", "uncertaintyNotSpecified"
+
+###DONE : stop if no assertions in occurrences dataset
+
+#basic example and what we would expect
+x=occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)
+ass = check_assertions(x); head(ass); dim(ass)
+#test to get all assertions
+x=occurrences(taxon="Amblyornis newtonianus",download_reason_id=10,qa=ala_fields('assertions')$name)
+ass = check_assertions(x); head(ass); dim(ass); length(ala_fields('assertions')$name) #dim(ass)[1] should be equal to length of ala_fields
+setdiff(ala_fields('assertions')$name,ass$name) #identify the missing ones
+#test to get all assertions
+x=occurrences(taxon="Amblyornis newtonianus",download_reason_id=10,qa='none')
+ass = check_assertions(x); head(ass); dim(ass) #dim(ass)[1] should be equal to length of ala_fields
+#test non-occurrence dataset
+ass = check_assertions('bs')
+}
+# export(occurrences) -- occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,reason,verbose=ala_config()$verbose,record_count_only=FALSE,use_layer_names=TRUE,use_data_table=TRUE)
+{
+x=occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)
+
+
+}
+# S3method(summary,occurrences) -- "summary.occurrences" <- function(object, ...)
+{
+###DONE fix issues associated with no qa values
+x=occurrences(taxon="Amblyornis newtonianus",download_reason_id=10) #typpical download
+summary(x)
+x=occurrences(taxon="Amblyornis newtonianus",download_reason_id=10,qa='none') # no qa
+summary(x)
+}
+# S3method(subset,occurrences) -- "subset.occurrences" = function(x, remove.fatal=TRUE, exclude.spatial='error', exclude.temporal='error', 
+#	exclude.taxonomic='error', max.spatial.uncertainty, keep.missing.spatial.uncertainty=TRUE, ...)
+{
+
+}
+# S3method(unique,occurrences) -- "unique.occurrences" <- function(x, incomparables=FALSE, spatial=0, temporal=NULL, na.rm=FALSE, ...)
+{
+###DONE fix issue when spatial is -ve number
+
+x=occurrences(taxon="Amblyornis newtonianus",download_reason_id=10) #typpical download
+summary(unique(x))
+summary(unique(x,spatial=1))
+summary(unique(x,spatial=1,temporal='year'))
+summary(unique(x,spatial=1,temporal='yearmonth'))
+summary(unique(x,spatial=1,temporal='month'))
+summary(unique(x,spatial=1,temporal='full'))
+summary(unique(x,spatial=-1))
+summary(unique(x,spatial=-1,temporal='year'))
+summary(unique(x,spatial=-1,temporal='yearmonth'))
+summary(unique(x,spatial=-1,temporal='month'))
+summary(unique(x,spatial=-1,temporal='full'))
+summary(unique(x,spatial=1,na.rm=TRUE))
+summary(unique(x,spatial=1,temporal='year',na.rm=TRUE))
+summary(unique(x,spatial=1,temporal='yearmonth',na.rm=TRUE))
+summary(unique(x,spatial=1,temporal='month',na.rm=TRUE))
+summary(unique(x,spatial=1,temporal='full',na.rm=TRUE))
+summary(unique(x,spatial=-1,na.rm=TRUE))
+summary(unique(x,spatial=-1,temporal='year',na.rm=TRUE))
+summary(unique(x,spatial=-1,temporal='yearmonth',na.rm=TRUE))
+summary(unique(x,spatial=-1,temporal='month',na.rm=TRUE))
+summary(unique(x,spatial=-1,temporal='full',na.rm=TRUE))
+}
+# export(occurrences_plot)
+{
+
+}
+# export(search_fulltext)
+{
+
+}
+# S3method(print,search_fulltext)
+{
+
+}
+# export(search_layers)
+{
+
+}
+# S3method(print,search_layers)
+{
+
+}
+# export(search_names)
+{
+
+}
+# S3method(print,search_names)
+{
+
+}
+# export(search_partial_name)
+{
+
+}
+# S3method(print,search_partial_name)
+{
+
+}
+# export(species_by_site)
+{
+
+}
+# export(species_info)
+{
+
+}
+# export(specieslist)
+{
+
+}
+# export(taxinfo_download)
+{
+
+}
