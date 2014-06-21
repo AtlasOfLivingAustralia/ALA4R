@@ -7,7 +7,7 @@ occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
 }
 \arguments{
   \item{x}{list: a list object that has been downloaded
-  using \code{occurrences}}
+  using \code{\link{occurrences}}}
 
   \item{filename}{string: name of file to be created;
   defaults to RPlots.pdf}

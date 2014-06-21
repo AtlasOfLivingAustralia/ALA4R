@@ -12,10 +12,12 @@ intersect_points(pnts, layers, SPdata.frame = FALSE, use_layer_names = TRUE,
 
   \item{layers}{string vector: ids of layers to be
   intersected. The list of possible layers is available
-  from \code{ala_fields("layers")}}
+  from \code{ala_fields("layers")}. Note: if number of
+  points checked, number of layers must be less than 300.}
 
   \item{SPdata.frame}{logical: should the output should be
-  returned as a SpatialPointsDataFrame of the sp package?}
+  returned as a SpatialPointsDataFrame of the sp package or
+  simply as a data.frame?}
 
   \item{use_layer_names}{logical: if TRUE, layer names will
   be used as column names in the returned data frame (e.g.
@@ -23,7 +25,8 @@ intersect_points(pnts, layers, SPdata.frame = FALSE, use_layer_names = TRUE,
   will be used for column names (e.g. "el871")}
 
   \item{verbose}{logical: show additional progress
-  information? [default is set by \code{ala_config()}]}
+  information? [default is set by
+  \code{\link{ala_config}}]}
 }
 \value{
 A SpatialPointsDataFrame containing the intersecting data
