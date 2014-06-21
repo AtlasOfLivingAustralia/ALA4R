@@ -50,25 +50,23 @@ NULL
 "summary.occurrences" <- function(object, ...) {
     ## names are a little problematic at the moment: sometimes scientificName doesn't come back (being resolved in web service I hope)
     if ("scientificName" %in% names(object$data)) {
-	cat('number of names:',length(unique(object$data$scientificNameOriginal)),'\n')
-	cat('number of taxonomically corrected names:',length(unique(object$data$scientificName)),'\n')
+		cat('number of names:',length(unique(object$data$scientificNameOriginal)),'\n')
+		cat('number of taxonomically corrected names:',length(unique(object$data$scientificName)),'\n')
     } else if ("taxonName" %in% names(object$data)) {
-	cat('number of names:',length(unique(object$data$taxonNameOriginal)),'\n')
-	cat('number of taxonomically corrected names:',length(unique(object$data$taxonName)),'\n')
+		cat('number of names:',length(unique(object$data$taxonNameOriginal)),'\n')
+		cat('number of taxonomically corrected names:',length(unique(object$data$taxonName)),'\n')
     }
     cat('number of observation records:',nrow(object$data),'\n')
-    ass = check_assertions(object) #need to get existing assertions in occur dataset
-    if (nrow(ass)>0) {
+    ass = suppressWarnings(check_assertions(object)) #need to get existing assertions in occur dataset
+	if (is.null(ass)) {
+		cat('no assertion issues\n')
+	} else {
         cat('number of assertions listed:',nrow(ass),' -- ones with flagged issues are listed below\n')
         for (ii in 1:nrow(ass)) {
             rwi = length(which(as.logical(object$data[,ass$occurColnames[ii]])==TRUE)) #count the number of records with issues
-            if (rwi>0) {
-                cat('\t',ass$occurColnames[ii],': ',rwi,' records ',ifelse(as.logical(ass$fatal[ii]),'-- considered fatal',''),sep='','\n')
-            }
+            if (rwi>0) cat('\t',ass$occurColnames[ii],': ',rwi,' records ',ifelse(as.logical(ass$fatal[ii]),'-- considered fatal',''),sep='','\n')
         }
-    } else {
-        cat('no asserting issues\n')
-    }
+    } 
     invisible(object)
 }
 
@@ -81,18 +79,14 @@ NULL
         if (!temporal %in% c('year','month', 'yearmonth','full')) stop('temporal value must be NULL, "year", "month", "yearmonth" or "full"')
     }
     cois = list(species=x$data$species) #start defining the columns of interest to do the "unique" by
-    if (spatial<0) {
-        cat('ignoring spatial \n')
-    } else {
+    if (spatial>=0) {
         if (spatial>0) { #round the data to the spatial accuracy of interest
             x$data$latitude = round(x$data$latitude / spatial) * spatial
             x$data$longitude = round(x$data$longitude / spatial) * spatial
         }
         cois$latitude=x$data$latitude; cois$longitude=x$data$longitude #append the latitude and longitude
     }
-    if (is.null(temporal)) {
-        cat('ignoring temporal \n')
-    } else {
+    if (!is.null(temporal)) {
         if (temporal=='full') {
             cois$eventDate=x$data$eventDate #add the full date to cois
         } else {
@@ -100,7 +94,8 @@ NULL
             if (length(grep('year',temporal))>0) cois$year=x$data$year
         }
     }
-    x$data = aggregate(x$data,by=cois,min)[,-c(1:length(names(cois)))] #get 'unique' spatial/temporal data
+    cat('extracting unique data using columns: ', paste(names(cois),collapse=','),'\n')
+	x$data = aggregate(x$data,by=cois,min)[,-c(1:length(names(cois)))] #get 'unique' spatial/temporal data
     if (na.rm) {
         rois = which(is.na(x$data[,names(cois)]),arr.ind=TRUE)[,1]
         if ('eventDate' %in% names(cois)) rois = c(rois,which(x$data$eventDate==""))
@@ -116,61 +111,60 @@ NULL
 	exclude.taxonomic='error', max.spatial.uncertainty, keep.missing.spatial.uncertainty=TRUE, ...) 
 {
 	assert_that(is.character(exclude.spatial))
-        assert_that(is.character(exclude.temporal))
-        assert_that(is.character(exclude.taxonomic)) #check assertions are character vectors
+    assert_that(is.character(exclude.temporal))
+    assert_that(is.character(exclude.taxonomic)) #check assertions are character vectors
 	if(!all(c(exclude.spatial,exclude.temporal,exclude.temporal) %in% c('warnings','error','missing','none'))) {
-            stop("exclude spatial, temporal and taxonomic must be a vector containing words of 'warnings','error','missing' or 'none'")
-        }
+		stop("exclude spatial, temporal and taxonomic must be a vector containing words of 'warnings','error','missing' or 'none'")
+	}
 	assert_that(is.flag(remove.fatal)) #ensure fatal is logical flag
 	assert_that(is.flag(keep.missing.spatial.uncertainty))
 	
 	ass = check_assertions(x) #need to get existing assertions in occur dataset
-	if (nrow(ass)==0) {
-            warning('no assertions in occurrence data')
-        }
-	
 	roi = NULL #define an object outlining rows to remove
-	for (ii in 1:nrow(ass)) {
-		if (ass$fatal[ii]==TRUE) {
-			if (remove.fatal) { #remove the fatal data
-				roi = c(roi, which(x$data[,ass$occurColnames[ii]] == TRUE)); next
-			} 
-		}
-		if (ass$code[ii] < 10000) { #remove data with spatial issues
-			if (length(exclude.spatial)>0) {
-				if (ass$category[ii] %in% exclude.spatial) {
+	
+	if (is.null(ass)) {
+		warning('no assertions in occurrence data')
+	} else {
+		for (ii in 1:nrow(ass)) {
+			if (ass$fatal[ii]==TRUE) {
+				if (remove.fatal) { #remove the fatal data
 					roi = c(roi, which(x$data[,ass$occurColnames[ii]] == TRUE)); next
-				}
+				} 
 			}
-		} else if (ass$code[ii] >= 10000 & ass$code[ii] < 20000) { #remove data with taxonomic issues
-			if (length(exclude.taxonomic)>0 ) {
-				if (ass$category[ii] %in% exclude.taxonomic) {
-					roi = c(roi, which(x$data[,ass$occurColnames[ii]] == TRUE)); next
+			if (ass$code[ii] < 10000) { #remove data with spatial issues
+				if (length(exclude.spatial)>0) {
+					if (ass$category[ii] %in% exclude.spatial) {
+						roi = c(roi, which(x$data[,ass$occurColnames[ii]] == TRUE)); next
+					}
 				}
-			}		
-		} else if (ass$code[ii] >= 30000) { #remove data with temporal issues
-			if (length(exclude.temporal)>0 ) {
-				if (ass$category[ii] %in% exclude.temporal) {
-					roi = c(roi, which(x$data[,ass$occurColnames[ii]] == TRUE)); next
-				}
-			}		
+			} else if (ass$code[ii] >= 10000 & ass$code[ii] < 20000) { #remove data with taxonomic issues
+				if (length(exclude.taxonomic)>0 ) {
+					if (ass$category[ii] %in% exclude.taxonomic) {
+						roi = c(roi, which(x$data[,ass$occurColnames[ii]] == TRUE)); next
+					}
+				}		
+			} else if (ass$code[ii] >= 30000) { #remove data with temporal issues
+				if (length(exclude.temporal)>0 ) {
+					if (ass$category[ii] %in% exclude.temporal) {
+						roi = c(roi, which(x$data[,ass$occurColnames[ii]] == TRUE)); next
+					}
+				}		
+			}
 		}
 	}
-        if (!missing(max.spatial.uncertainty)) {
-            assert_that(is.numeric(max.spatial.uncertainty))
-            if (! "coordinateUncertaintyInMetres" %in% names(x$data)) {
-                warning("column \"coordinateUncertaintyInMetres\" is not present in this occurrences object: ignoring max.spatial.uncertainty parameter")
-            } else {
-		if (keep.missing.spatial.uncertainty==FALSE) {
-                    roi = c(roi,which(is.na(x$data$coordinateUncertaintyInMetres)))
-                }
-		roi = c(roi,which(x$data$coordinateUncertaintyInMetres<=max.spatial.uncertainty))
-            }
+	if (!missing(max.spatial.uncertainty)) {
+		assert_that(is.numeric(max.spatial.uncertainty))
+		if (! "coordinateUncertaintyInMetres" %in% names(x$data)) {
+			warning("column \"coordinateUncertaintyInMetres\" is not present in this occurrences object: ignoring max.spatial.uncertainty parameter")
+		} else {
+			if (keep.missing.spatial.uncertainty==FALSE) {
+				roi = c(roi,which(is.na(x$data$coordinateUncertaintyInMetres)))
+			}
+			roi = c(roi,which(x$data$coordinateUncertaintyInMetres<=max.spatial.uncertainty))
+		}
 	}
-
 	roi = unique(roi) #remove duplicates
 	if (length(roi)>0) x$data = x$data[-roi,] #remove the data
-        
-	x
+ 	x
 }
 
