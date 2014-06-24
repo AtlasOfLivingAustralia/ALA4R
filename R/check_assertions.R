@@ -4,7 +4,8 @@
 #'
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
-#' 
+#' @references \url{http://biocache.ala.org.au/ws/assertions/codes}
+#'  
 #' @param x list: an object returned from \code{\link{occurrences}}
 #' 
 #' @return A dataframe of assertions column names, descriptions and categories/error codes. If no assertions are in dataset, NULL is returned.
@@ -13,6 +14,8 @@
 #' #download species data with all possible assertions
 #' x=occurrences(taxon="golden bowerbird",download_reason_id=10,qa=ala_fields('assertions')$name)
 #' asserts = check_assertions(x) #data.frame of assertions, their description and column names
+#' asserts[0:83,5] # List out descriptions of all (current) assertions
+#' 
 #' @export
 check_assertions = function(x) {
     if (any(class(x)=='occurrences')) {
