@@ -24,9 +24,10 @@
 #' 
 #' #multiple points as a grid sampling multiple layers
 #' layers = c('cl22','cl23','el773')
-#' pnts = data.frame(expand.grid(lat=seq(-29,-19,1.0),lon=seq(130.0,140.0,1.0)))
+#' pnts = data.frame(expand.grid(lat=seq(-29,-19,2.0),lon=seq(130.0,140.0,2.0)))
 #' intersect_points(pnts,layers)
-#' NOTE: An intersect of 121 points with 299 layers took >35 minutes (see LIMITS below)
+#' NOTE: An intersect of 121 points with 299 layers took > 2hours (see LIMITS below). The process is far more dependent
+#' on number of points than layers. Be warned.
 #'
 ## undocumented feature: layer ids in "layers" can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). I haven't documented this (yet) until it is implemented across all functions - BR
 ## TODO: check that the URL strings here are guaranteed to be appropriately URL-encoded
