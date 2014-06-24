@@ -4,7 +4,9 @@
 #' @references \url{http://api.ala.org.au/}
 #' @references \url{http://spatial.ala.org.au/layers/}
 #'
-#' This function allows the user to sample environmental/contextual layers at arbitrary locations. It complements the \code{\link{occurrences}} function, which allows values of the same set of layers to be downloaded at species occurrence locations.
+#' This function allows the user to sample environmental/contextual layers at arbitrary locations. It complements 
+#' the \code{\link{occurrences}} function, which allows values of the same set of layers to be downloaded at 
+#' species occurrence locations.
 #' 
 #' @param pnts numeric: vector of latitude/longitude pairs, or a 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 1000.
 #' @param layers string vector: ids of layers to be intersected. The list of possible layers is available from \code{ala_fields("layers")}. Note: if number of points checked, number of layers must be less than 300.
@@ -24,11 +26,12 @@
 #' layers = c('cl22','cl23','el773')
 #' pnts = data.frame(expand.grid(lat=seq(-29,-19,1.0),lon=seq(130.0,140.0,1.0)))
 #' intersect_points(pnts,layers)
-
+#' NOTE: An intersect of 121 points with 299 layers took >35 minutes (see LIMITS below)
+#'
 ## undocumented feature: layer ids in "layers" can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). I haven't documented this (yet) until it is implemented across all functions - BR
 ## TODO: check that the URL strings here are guaranteed to be appropriately URL-encoded
 ## TODO: Limit of 1000 points is a nuisance, surely?
-## TODO: Limit of 300 layers for multiple points (bulk) is also a nuisance...
+## TODO: Limit of 299 layers for multiple points (bulk) is also a nuisance.
 
 #' @export
 intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,verbose=ala_config()$verbose) {
