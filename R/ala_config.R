@@ -2,9 +2,10 @@
 #'
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
+#' @references \url{http://spatial.ala.org.au/layers-service/} this will eventually move to the api link
 #' 
 #' Invoking \code{ala_config()} with no arguments returns a list with the current values of the options. 
-#' 
+#'
 #' \code{ala_reasons()} returns a data frame with information describing the valid options for \code{download_reason_id}
 #' 
 #' @param \dots Options can be defined using name=value. Valid options are:
@@ -21,7 +22,9 @@
 #'   \item verbose logical: should ALA4R give verbose output to assist debugging?  (default=FALSE)
 #'   \item user_agent string: the user-agent string used with all web requests to the ALA servers.
 #'     Default = "ALA4R" with version number, R version and date and user platform
-#'   \item download_reason_id numeric or string: the "download reason" required by some ALA services, either as a numeric ID (currently 0--11) or a string (see \code{ala_reasons()} for a list of valid ID codes and names). By default this is NA. Some ALA services require a valid download_reason_id code, either specified here or directly to the associated R function. 
+#'   \item download_reason_id numeric or string: the "download reason" required by some ALA services, either as a numeric ID (currently 0--11) 
+#'   or a string (see \code{ala_reasons()} for a list of valid ID codes and names). By default this is NA. Some ALA services require a valid 
+#'   download_reason_id code, either specified here or directly to the associated R function. 
 #'   \item base_url_spatial string: the base url for spatial web services (default="http://spatial.ala.org.au/ws/")
 #'   \item base_url_bie string: the base url for BIE web services (default="http://bie.ala.org.au/ws/")
 #'   \item base_url_biocache string: the base url for biocache web services (default="http://biocache.ala.org.au/ws/")
