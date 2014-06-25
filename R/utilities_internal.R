@@ -160,5 +160,11 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
             varnames=str_replace_all(varnames,"seaWIFS","SeaWIFS")
         }        
     }
+	if (type=="assertions") { ###hardcoded assertion variable name changes	
+		if ("coordinatesAreOutOfRangeForSpecies" %in% varnames) varnames[which(varnames=="coordinatesAreOutOfRangeForSpecies")] = "coordinatesOutOfRange"
+		if ("collectionDateMissing" %in% varnames) varnames[which(varnames=="collectionDateMissing")] = "missingCollectionDate"
+		if ("coordinateUncertaintyNotSpecified" %in% varnames) varnames[which(varnames=="coordinateUncertaintyNotSpecified")] = "uncertaintyNotSpecified"
+	}	
+	#return the varnames
     varnames
 }
