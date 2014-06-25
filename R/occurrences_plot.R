@@ -100,15 +100,15 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 			if (grouped) {
 				tplot(x$data,Main='all species',coi=qa,pch)
 			} else {
-				cat('this is plotting',length(unique(x$data[,grouping])),taxon_level,'maps... names will act as status bar\n')
+				cat('this is plotting',length(unique(x$data[,taxon_level])),taxon_level,'maps... names will act as status bar\n')
 				spp_count=0
-				for (spp in unique(x$data[,grouping])) {
+				for (spp in unique(x$data[,taxon_level])) {
 					spp_count=spp_count+1
 					cat(spp_count,'.\t',spp,'\n',sep="")
 					if (spp!="") { 
-						tplot(x$data[which(x$data[,grouping]==spp),],Main=spp,coi=qa,pch)
+						tplot(x$data[which(x$data[,taxon_level]==spp),],Main=spp,coi=qa,pch)
 					} else {
-						tplot(x$data[which(x$data[,grouping]==spp),],Main='unmatched species name',coi=qa,pch)
+						tplot(x$data[which(x$data[,taxon_level]==spp),],Main='unmatched species name',coi=qa,pch)
 					}
 				}
 			}
