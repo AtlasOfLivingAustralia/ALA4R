@@ -8,15 +8,15 @@ ala_fields(fields_type = "occurrence", as_is = FALSE)
 field_info(field_id)
 }
 \arguments{
-  \item{fields_type}{text: either \itemize{ \item "general"
-  - for searching taxa, datasets, layers, and collections
-  metadata \item "occurrence" - for searching species
-  occurrence records \item "layers" - fields associated
-  with the environmental and contextual layers. For
-  additional information on layers, including metadata and
-  licensing, see \code{\link{search_layers}} \item
-  "assertions" - potential issues flagged on one or more
-  occurrence record fields }}
+  \item{fields_type}{text: one of the following \itemize{
+  \item "general" - for searching taxa, datasets, layers,
+  and collections metadata \item "occurrence" - for
+  searching species occurrence records \item "layers" -
+  fields associated with the environmental and contextual
+  layers. For additional information on layers, including
+  metadata and licensing, see \code{\link{search_layers}}
+  \item "assertions" - potential issues flagged on one or
+  more occurrence record fields }}
 
   \item{as_is}{logical: if FALSE, apply ALA4R's renaming of
   fields for consistency across functions. If TRUE, leave
@@ -30,7 +30,7 @@ field_info(field_id)
 }
 \value{
 A data frame containing the field names and various
-attributes
+attributes; NULL is returned if no match is found.
 }
 \description{
 Retrieves a list of all field names that can be used with
@@ -39,6 +39,8 @@ data retrieval functions
 \examples{
 l=ala_fields("layers")
 l[1,]
+o=ala_fields("occurrence")
+o[1:13,]
 a=ala_fields("assertions")
 a[,5]
 field_info("cl22")

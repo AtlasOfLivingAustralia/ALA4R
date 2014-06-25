@@ -21,9 +21,15 @@ are found in a dataset returned from
 \examples{
 #download species data with all possible assertions
 x=occurrences(taxon="golden bowerbird",download_reason_id=10,qa=ala_fields('assertions')$name)
-(asserts = check_assertions(x)) #data.frame of assertions, their description and column names
+asserts = check_assertions(x) #data.frame of assertions, their description and column names
+asserts[0:83,5] # List out descriptions of all (current) assertions
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
+}
+\references{
+\url{http://api.ala.org.au/}
+
+\url{http://biocache.ala.org.au/ws/assertions/codes}
 }
 

@@ -1,9 +1,9 @@
 \name{occurrences_plot}
 \alias{occurrences_plot}
-\title{Quick plot of occurrence data}
+\title{Quick geographic plot of occurrence data}
 \usage{
 occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
-  grouped = FALSE, taxon_level = "species", ...)
+  grouped = FALSE, taxon_level = "species", pch, ...)
 }
 \arguments{
   \item{x}{list: a list object that has been downloaded
@@ -26,6 +26,9 @@ occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
   create maps; possible values are 'species', 'genus',
   'family' or 'order'}
 
+  \item{pch}{single number of character representing point
+  type. See description of pch in ?points .}
+
   \item{\dots}{: other options passed to pdf()}
 }
 \value{
@@ -33,16 +36,23 @@ Generates a pdf that maps the distributions.
 }
 \description{
 Generates a plot of occurrence data retrieved using
-\code{\link{occurrences}}.
+\code{\link{occurrences}}.The plot uses an Australian
+basemap and colours the occurrence records dots according
+to parameters
 }
 \examples{
 \dontrun{
 #download some observations
 x=occurrences(taxon="golden bowerbird",download_reason_id=10)
 occurrences_plot(x)
+x=occurrences(taxon="Cider Gum",download_reason_id=10)
+occurrences_plot(x,"alaPlot.pdf",qa="fatal",grouped=FALSE, taxon_level="species",pch='X')
 }
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
+}
+\references{
+\url{http://api.ala.org.au/}
 }
 

@@ -1,7 +1,10 @@
 # NOT DONE... STILL WORKING ON THESE... JV
-############################################
+# Empty functions are still not tested
+#####################################################################
 
 ###function tests
+#####################################################################
+#####################################################################
 # export(ala_cache_filename) -- ala_cache_filename=function(url)
 {
 ### test weird inputs
@@ -10,10 +13,14 @@ ala_cache_filename(TRUE)
 ala_cache_filename(letters[1:26]) 
 ala_cache_filename("shite") 
 }
+#####################################################################
+#####################################################################
 # export(ala_config) -- 
 {
 
 }
+#####################################################################
+#####################################################################
 # export(ala_fields) -- ala_fields=function(fields_type="occurrence")
 {
 ###testing fields_type
@@ -30,18 +37,25 @@ head(ala_fields(fields_type=letters[1:4])) #should fail
 head(ala_fields(fields_type=1:10)) #should fail
 head(ala_fields(fields_type=1)) #should fail
 }
+#####################################################################
+#####################################################################
 # export(ala_reasons) -- ala_reasons=function()
 {
 ala_reasons()
 ala_reasons(TRUE) #this should throw and error because there is an unused argument
 }
+#####################################################################
+#####################################################################
 # export(field_info) -- field_info = function(field_id)
 {
-###TODO sometimes json file returned is tooooo big. for example field_info('cl1060') -- need to raise issue with ALA people to reduce json file sizes
+###DONE sometimes json file returned is tooooo big. for example field_info('cl1060') -- need to raise issue with ALA people to reduce json file sizes
+###issue was raised with ALA and that file needs to be fixed...
+###DONE warn user when no data is returne that it is likely not a valid field name and that they should check ala_field('layers')
 tt = ala_fields('layers')
 for (ii in tt$id) { cat(ii,'\n'); tt = field_info(ii) ; cat(dim(tt),'\n')} #this fails where JSON file too large
-
 }
+#####################################################################
+#####################################################################
 # export(intersect_points) -- intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,verbose=ala_config()$verbose)
 {
 ###TODO assess the need for verbose=ala_config()$verbose -- here it only adds a single line of info to the user and that is the temporary file name
@@ -105,9 +119,12 @@ intersect_points(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,verbose=ala
 intersect_points(pnts,layers,SPdata.frame=TRUE,use_layer_names=FALSE,verbose=!ala_config()$verbose) #opposite to default
 
 }
+#####################################################################
+#####################################################################
 # export(check_assertions) -- check_assertions = function(x)
 {
 ###TODO : raise an issue with ALA that three assertions are not returned even if requested. The are "coordinatesOutOfRange", "missingCollectionDate", "uncertaintyNotSpecified"
+###INTERIM FIX: hardcode names in renaming utility function
 
 ###DONE : stop if no assertions in occurrences dataset
 
@@ -124,12 +141,16 @@ ass = check_assertions(x); head(ass); dim(ass) #dim(ass)[1] should be equal to l
 #test non-occurrence dataset
 ass = check_assertions('bs')
 }
+#####################################################################
+#####################################################################
 # export(occurrences) -- occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,reason,verbose=ala_config()$verbose,record_count_only=FALSE,use_layer_names=TRUE,use_data_table=TRUE)
 {
 x=occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)
 
 
 }
+#####################################################################
+#####################################################################
 # S3method(summary,occurrences) -- "summary.occurrences" <- function(object, ...)
 {
 ###DONE fix issues associated with no qa values
@@ -138,11 +159,16 @@ summary(x)
 x=occurrences(taxon="Amblyornis newtonianus",download_reason_id=10,qa='none') # no qa
 summary(x)
 }
+#####################################################################
+#####################################################################
 # S3method(subset,occurrences) -- "subset.occurrences" = function(x, remove.fatal=TRUE, exclude.spatial='error', exclude.temporal='error', 
 #	exclude.taxonomic='error', max.spatial.uncertainty, keep.missing.spatial.uncertainty=TRUE, ...)
 {
+x=occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)
 
 }
+#####################################################################
+#####################################################################
 # S3method(unique,occurrences) -- "unique.occurrences" <- function(x, incomparables=FALSE, spatial=0, temporal=NULL, na.rm=FALSE, ...)
 {
 ###DONE fix issue when spatial is -ve number
@@ -170,55 +196,86 @@ summary(unique(x,spatial=-1,temporal='yearmonth',na.rm=TRUE))
 summary(unique(x,spatial=-1,temporal='month',na.rm=TRUE))
 summary(unique(x,spatial=-1,temporal='full',na.rm=TRUE))
 }
+#####################################################################
+#####################################################################
 # export(occurrences_plot)
 {
+x=occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)
+occurrences_plot(x,grouped=TRUE,pch=letters[1:10])
+occurrences_plot(x,grouped=TRUE,pch='shite')
 
 }
+#####################################################################
+#####################################################################
 # export(search_fulltext)
 {
 
 }
+#####################################################################
+#####################################################################
 # S3method(print,search_fulltext)
 {
 
 }
+#####################################################################
+#####################################################################
 # export(search_layers)
 {
 
 }
+#####################################################################
+#####################################################################
 # S3method(print,search_layers)
 {
 
 }
+#####################################################################
+#####################################################################
 # export(search_names)
 {
 
 }
+#####################################################################
+#####################################################################
 # S3method(print,search_names)
 {
 
 }
+#####################################################################
+#####################################################################
 # export(search_partial_name)
 {
 
 }
+#####################################################################
+#####################################################################
 # S3method(print,search_partial_name)
 {
 
 }
+#####################################################################
+#####################################################################
 # export(species_by_site)
 {
 
 }
+#####################################################################
+#####################################################################
 # export(species_info)
 {
 
 }
+#####################################################################
+#####################################################################
 # export(specieslist)
 {
 
 }
+#####################################################################
+#####################################################################
 # export(taxinfo_download)
 {
 
 }
+#####################################################################
+#####################################################################

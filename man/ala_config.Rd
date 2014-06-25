@@ -66,6 +66,9 @@ Atlas of Living Australia \email{support@ala.org.au}
 \references{
 \url{http://api.ala.org.au/}
 
+\url{http://spatial.ala.org.au/layers-service/} this will
+eventually move to the api link
+
 Invoking \code{ala_config()} with no arguments returns a
 list with the current values of the options.
 
