@@ -15,6 +15,7 @@
 #' maps for the taxon level defined.
 #' @param taxon_level string: taxonomic level at which to create maps; possible values are 'species', 
 #' 'genus', 'family' or 'order'
+#' @param pch single number of character representing point type. See description of pch in ?points .
 #' @param \dots : other options passed to pdf()
 #' @return Generates a pdf that maps the distributions.
 #' 
@@ -24,10 +25,10 @@
 #' x=occurrences(taxon="golden bowerbird",download_reason_id=10)
 #' occurrences_plot(x)
 #' x=occurrences(taxon="Cider Gum",download_reason_id=10)
-#' occurrences_plot(x,"alaPlot.pdf",qa="fatal",grouped=FALSE, taxon_level="species")
+#' occurrences_plot(x,"alaPlot.pdf",qa="fatal",grouped=FALSE, taxon_level="species",pch='X')
 #' }
 #' @export occurrences_plot
-occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), grouped=FALSE, taxon_level='species',...) 
+occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), grouped=FALSE, taxon_level='species', pch, ...) 
 {
 	if (!any(class(x)=='occurrences')) stop('check_assertions must have an object of class occurrences from e.g., occurrences() in the ALA4R package')
         assert_that(is.string(taxon_level))
@@ -36,6 +37,12 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 	if (substr(filename,nchar(filename)-2,nchar(filename))!='pdf') filename=paste(filename,'.pdf',sep='') #append a pdf suffix to filename
 	assert_that(is.flag(grouped))
 	assert_that(is.character(qa))
+	if (missing('pch')) {
+		pch=19
+	} else {
+		if (length(pch)>1) { pch=pch[1]; warning('only using first element of supplied pch vector') }
+		if (nchar(pch)>1) { pch=substr(pch,1,1); warning('only using first character of supplied pch text') }
+	}
 	ass = check_assertions(x)
 	if ('none' %in% qa) { 
 		qa = NULL
@@ -61,27 +68,27 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 	data(aus) #load('data/aus') #load the data
 	
 	###plot function to be used
-	tplot = function(xx,Main,coi,...) {
+	tplot = function(xx,Main,coi,pch) {
 		image(aus,col='grey') #draw the base australia
 		title(main=Main)
 		degAxis(1); degAxis(2) #add on the axis
-		points(xx$longitude,xx$latitude,pch=19,col='black')
+		points(xx$longitude,xx$latitude,pch=pch,col='black')
 		if (is.null(coi)) {
-			legend('bottomleft',legend='assumed good',pch=19,col='black',bty='n',cex=0.75)
+			legend('bottomleft',legend='assumed good',pch=pch,col='black',bty='n',cex=0.75)
 		} else {
 			legend.cols = rainbow(length(coi)) #define the legend colors
 			c2use = NULL #define columns to keep because they had issues
 			for (ii in 1:length(coi)) {
 				roi = which(as.logical(xx[,coi[ii]])==TRUE) #define the points that have the issue
 				if (length(roi) > 0) {
-					points(xx$longitude[roi],xx$latitude[roi],pch=19,col=legend.cols[ii])
+					points(xx$longitude[roi],xx$latitude[roi],pch=pch,col=legend.cols[ii])
 					c2use = c(c2use,ii)
 				}				
 			}
 			if (is.null(c2use)) {
-				legend('bottomleft',legend='assumed good',pch=19,col='black',bty='n',cex=0.75)
+				legend('bottomleft',legend='assumed good',pch=pch,col='black',bty='n',cex=0.75)
 			} else {
-				legend('bottomleft',legend=c('assumed good',coi[c2use]),pch=19,col=c('black',legend.cols[c2use]),bty='n',cex=0.75)
+				legend('bottomleft',legend=c('assumed good',coi[c2use]),pch=pch,col=c('black',legend.cols[c2use]),bty='n',cex=0.75)
 			}
 		}
 	}
@@ -90,34 +97,22 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 	pdf(filename,...)
         ## wrap plotting code in tryCatch block so that device will be closed cleanly on error
         tryCatch({
-		if (grouped) {
-			tplot(x$data,Main='all species',coi=qa)
-		} else {
-			##if (taxon_level %in% c('species','genus','family','order')) { ## this check made with match.arg at top of function
-                            grouping=taxon_level
-                            ## code for old variable names, left here temporarily
-                            ##if (taxon_level=='species') grouping = 'Species...matched'
-                            ##if (taxon_level=='genus') grouping = 'Genus...matched'
-                            ##if (taxon_level=='family') grouping = 'Family...matched'
-                            ##if (taxon_level=='order') grouping = 'Order...matched'
-			##} else {
-			##	dev.off()
-			##	unlink(filename)
-			##	stop("taxon_level must be defined as one of 'species', 'genus', 'family' or 'order'")
-			##}
-			cat('this is plotting',length(unique(x$data[,grouping])),taxon_level,'maps... names will act as status bar\n')
-                        spp_count=0
-			for (spp in unique(x$data[,grouping])) {
-                            spp_count=spp_count+1
-				cat(spp_count,'.\t',spp,'\n',sep="")
-				if (spp!="") { 
-					tplot(x$data[which(x$data[,grouping]==spp),],Main=spp,coi=qa)
-				} else {
-					tplot(x$data[which(x$data[,grouping]==spp),],Main='unmatched species name',coi=qa)
+			if (grouped) {
+				tplot(x$data,Main='all species',coi=qa,pch)
+			} else {
+				cat('this is plotting',length(unique(x$data[,grouping])),taxon_level,'maps... names will act as status bar\n')
+				spp_count=0
+				for (spp in unique(x$data[,grouping])) {
+					spp_count=spp_count+1
+					cat(spp_count,'.\t',spp,'\n',sep="")
+					if (spp!="") { 
+						tplot(x$data[which(x$data[,grouping]==spp),],Main=spp,coi=qa,pch)
+					} else {
+						tplot(x$data[which(x$data[,grouping]==spp),],Main='unmatched species name',coi=qa,pch)
+					}
 				}
 			}
-		}
-            }, error=function(e) { dev.off(); unlink(filename); stop(e) })
+		}, error=function(e) { dev.off(); unlink(filename); stop(e) })
 	dev.off()
     invisible(0) ## return nothing
 }
