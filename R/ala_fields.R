@@ -18,7 +18,7 @@
 #' leave the field names as they are returned from the ALA web service
 #' @param field_id text: id of environmental/contextual layer field for which to look up information
 #' Prepend "el" for "environmental" (gridded) layers and "cl" for "contextual" (polygonal) layers
-#' @return A data frame containing the field names and various attributes
+#' @return A data frame containing the field names and various attributes; NULL is returned if no match is found.
 #' @examples
 #' l=ala_fields("layers")
 #' l[1,]
@@ -85,7 +85,9 @@ field_info = function(field_id) {
         ## if we got a 500 error, the response will be NULL
         ## it was most likely from an un-matched field name (but we do not get any sort of informative error message from the server)
         ## just return an empty data frame with no warning
-        data.frame()
+        ##data.frame()
+		warning('No information returned. Please check field_id is valid using ala_fields(\"layers\").')
+		return(NULL)
     } else {
         ## we might wish to issue a warning for empty responses
         if (substr(field_id,1,2) == 'cl') {
