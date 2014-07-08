@@ -8,12 +8,13 @@ intersect_points(pnts, layers, SPdata.frame = FALSE, use_layer_names = TRUE,
 \arguments{
   \item{pnts}{numeric: vector of latitude/longitude pairs,
   or a 2 column data.frame or matrix of lat,lons. NOTE: the
-  number of locations must be less than 1000.}
+  number of locations must be less than 100000.}
 
   \item{layers}{string vector: ids of layers to be
   intersected. The list of possible layers is available
-  from \code{ala_fields("layers")}. Note: if number of
-  points checked, number of layers must be less than 300.}
+  from \code{ala_fields("layers")}. Note: if more than one
+  location has been provided in \code{pnts}, the number of
+  layers must be less than 700.}
 
   \item{SPdata.frame}{logical: should the output should be
   returned as a SpatialPointsDataFrame of the sp package or
@@ -48,8 +49,6 @@ intersect_points(pnts,layers)
 layers = c('cl22','cl23','el773')
 pnts = data.frame(expand.grid(lat=seq(-29,-19,2.0),lon=seq(130.0,140.0,2.0)))
 intersect_points(pnts,layers)
-NOTE: An intersect of 121 points with 299 layers took > 2hours (see LIMITS below). The process is far more dependent
-on number of points than layers. Be warned.
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
@@ -63,7 +62,12 @@ This function allows the user to sample
 environmental/contextual layers at arbitrary locations. It
 complements the \code{\link{occurrences}} function, which
 allows values of the same set of layers to be downloaded at
-species occurrence locations.
+species occurrence locations. NOTE: large requests may be
+slow. A large number of points will have a bigger slowdown
+than a large number of layers. Be warned. Note also that
+large requests may currently fail with a "414 Request-URI
+Too Large" error. This is a known limitation and under
+review.
 }
 \seealso{
 \code{\link{ala_config}}

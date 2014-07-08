@@ -6,10 +6,10 @@
 #'
 #' This function allows the user to sample environmental/contextual layers at arbitrary locations. It complements 
 #' the \code{\link{occurrences}} function, which allows values of the same set of layers to be downloaded at 
-#' species occurrence locations.
-#' 
-#' @param pnts numeric: vector of latitude/longitude pairs, or a 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 1000.
-#' @param layers string vector: ids of layers to be intersected. The list of possible layers is available from \code{ala_fields("layers")}. Note: if number of points checked, number of layers must be less than 300.
+#' species occurrence locations. NOTE: large requests may be slow. A large number of points will have a bigger slowdown than a large number of layers. Be warned.
+#' Note also that large requests may currently fail with a "414 Request-URI Too Large" error. This is a known limitation and under review.
+#' @param pnts numeric: vector of latitude/longitude pairs, or a 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 100000.
+#' @param layers string vector: ids of layers to be intersected. The list of possible layers is available from \code{ala_fields("layers")}. Note: if more than one location has been provided in \code{pnts}, the number of layers must be less than 700.
 #' @param SPdata.frame logical: should the output should be returned as a SpatialPointsDataFrame of the sp package or simply as a data.frame?
 #' @param use_layer_names logical: if TRUE, layer names will be used as column names in the returned data frame (e.g. "radiationLowestPeriodBio22"). Otherwise, layer id value will be used for column names (e.g. "el871")
 #' @param verbose logical: show additional progress information? [default is set by \code{\link{ala_config}}]
@@ -26,13 +26,10 @@
 #' layers = c('cl22','cl23','el773')
 #' pnts = data.frame(expand.grid(lat=seq(-29,-19,2.0),lon=seq(130.0,140.0,2.0)))
 #' intersect_points(pnts,layers)
-#' NOTE: An intersect of 121 points with 299 layers took > 2hours (see LIMITS below). The process is far more dependent
-#' on number of points than layers. Be warned.
-#'
+
 ## undocumented feature: layer ids in "layers" can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). I haven't documented this (yet) until it is implemented across all functions - BR
 ## TODO: check that the URL strings here are guaranteed to be appropriately URL-encoded
-## TODO: Limit of 1000 points is a nuisance, surely?
-## TODO: Limit of 299 layers for multiple points (bulk) is also a nuisance.
+## TODO: previous limits of 1000 points and 299 layers have been increased here to reflect the increase on the service end. However, we now get 414 (URL too long) errors with large requests - this is yet to be dealt with.
 
 #' @export
 intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,verbose=ala_config()$verbose) {
@@ -41,6 +38,9 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     assert_that(is.character(layers))
     assert_that(is.flag(SPdata.frame))
     assert_that(is.flag(verbose))
+
+    num_points_limit=100000 # was previously 1000
+    num_layers_limit=700 # was previously 300
     
     base_url=ala_config()$base_url_spatial #get the base url
     bulk = FALSE #set the default to not bulk
@@ -51,7 +51,7 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
         if (nrow(pnts)==1) { #this is for a single coordinate pair
             pnts_str = paste(pnts[1,],collapse='/',sep='') #setup the points str for the url
         } else { #this is for the bulk intersect process where there is more than 1 coordinate pairs
-            if (nrow(pnts)>1001) stop('number of locations checked must be less than 1000') #ensure maximum limit is not breached
+            if (nrow(pnts)>(num_points_limit+1)) stop('number of locations checked must be less than ',num_points_limit) #ensure maximum limit is not breached
             pnts_str = paste(paste(pnts[,1],pnts[,2],sep=','),collapse=',',sep='') #setup the points str for the url
             bulk = TRUE #this is a bulk set of points
         }
@@ -60,14 +60,14 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
         if (length(pnts) == 2) { #this is for the single coordinate pair
             pnts_str = paste(pnts,collapse='/',sep='') #setup the points str for the url
         } else {  #this is for the bulk intersect process where there is more than 1 coordinate pairs
-            if (length(pnts)>2001) stop('number of locations checked must be less than 1000') #ensure maximum limit is not breached
+            if (length(pnts)>(num_points_limit*2+1)) stop('number of locations checked must be less than ',num_points_limit) #ensure maximum limit is not breached
             pnts_str = paste(pnts,collapse=',',sep='') #setup the points str for the url
             bulk = TRUE #this is a bulk set of points
         }
     }
     ##format the layers string
     layers=fields_name_to_id(fields=layers,fields_type="layers") ## replace long names with ids
-	if (bulk) { if (length(layers)>299) stop('the number of layers must be <300 if intersecting more than a single location') } #ensure no more than 300 layers when bulk
+	if (bulk) { if (length(layers)>(num_layers_limit-1)) stop('the number of layers must be <',num_layers_limit,' if intersecting more than a single location') } #ensure no more than 300 layers when bulk
     if (length(layers)>1) {
         layers_str = paste(layers,collapse=',',sep='')
     } else {
