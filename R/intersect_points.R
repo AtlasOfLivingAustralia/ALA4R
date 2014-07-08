@@ -6,8 +6,7 @@
 #'
 #' This function allows the user to sample environmental/contextual layers at arbitrary locations. It complements 
 #' the \code{\link{occurrences}} function, which allows values of the same set of layers to be downloaded at 
-#' species occurrence locations. NOTE: large requests may be slow. A large number of points will have a bigger slowdown than a large number of layers. Be warned.
-#' Note also that large requests may currently fail with a "414 Request-URI Too Large" error. This is a known limitation and under review.
+#' species occurrence locations. NOTE: large requests may be slow. A single point (even with a large number of layers) will generally be OK; a large number of points may be very slow. Be warned.
 #' @param pnts numeric: vector of latitude/longitude pairs, or a 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 100000.
 #' @param layers string vector: ids of layers to be intersected. The list of possible layers is available from \code{ala_fields("layers")}. Note: if more than one location has been provided in \code{pnts}, the number of layers must be less than 700.
 #' @param SPdata.frame logical: should the output should be returned as a SpatialPointsDataFrame of the sp package or simply as a data.frame?
@@ -28,8 +27,8 @@
 #' intersect_points(pnts,layers)
 
 ## undocumented feature: layer ids in "layers" can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). I haven't documented this (yet) until it is implemented across all functions - BR
-## TODO: check that the URL strings here are guaranteed to be appropriately URL-encoded
-## TODO: previous limits of 1000 points and 299 layers have been increased here to reflect the increase on the service end. However, we now get 414 (URL too long) errors with large requests - this is yet to be dealt with.
+
+## Previous limits of 1000 points and 299 layers have been increased here to reflect the increase on the service end. The batch version uses POST now to avoid 414 (URL too long) errors. Non-batch version does not seem to suffer 414s, even with 300 layers
 
 #' @export
 intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,verbose=ala_config()$verbose) {
@@ -41,6 +40,7 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
 
     num_points_limit=100000 # was previously 1000
     num_layers_limit=700 # was previously 300
+    use_post=TRUE # use POST for batch operations, not GET?
     
     base_url=ala_config()$base_url_spatial #get the base url
     bulk = FALSE #set the default to not bulk
@@ -67,7 +67,7 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     }
     ##format the layers string
     layers=fields_name_to_id(fields=layers,fields_type="layers") ## replace long names with ids
-	if (bulk) { if (length(layers)>(num_layers_limit-1)) stop('the number of layers must be <',num_layers_limit,' if intersecting more than a single location') } #ensure no more than 300 layers when bulk
+    if (bulk) { if (length(layers)>(num_layers_limit-1)) stop('the number of layers must be <',num_layers_limit,' if intersecting more than a single location') } #ensure no more than 300 layers when bulk
     if (length(layers)>1) {
         layers_str = paste(layers,collapse=',',sep='')
     } else {
@@ -76,14 +76,21 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     
     ##download the data
     if (bulk) { #get the results if it is a bulk request
-        url_str = paste(base_url,'intersect/batch?fids=',layers_str,'&points=',pnts_str,sep='') #define the url string
-        url_str=URLencode(url_str) ## should not be needed, but do it anyway
+        if (use_post) {
+            url_str=paste(base_url,"intersect/batch",sep="")
+        } else {
+            url_str = paste(base_url,'intersect/batch?fids=',layers_str,'&points=',pnts_str,sep='') #define the url string
+            url_str=URLencode(url_str) ## should not be needed, but do it anyway
+        }
         this_cache_file=ala_cache_filename(url_str) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
         if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(this_cache_file))) {
             ## fetch the data from the server
-            ## we use cached_get operations here even though we're not caching, just because it keeps the user-agent etc string consistent
-                                        #status_url=cached_get(url_str,type="json",caching="off")$statusUrl #submit the url and get the url of the status
-            status_url=jsonlite::fromJSON(paste(readLines(url_str,warn=FALSE),collapse = ""))$statusUrl ## using GET (in cached_get) for this can give 414 errors ("url too long") which do not seem to happen with readLines, so use that until we figure out why
+            if (use_post) {
+                status_url=jsonlite::fromJSON(cached_post(url_str,body=paste('fids=',layers_str,'&points=',pnts_str,sep=''),type="text"))$statusUrl
+            } else {
+                ## we use cached_get operations here even though we're not caching, just because it keeps the user-agent etc string consistent
+                status_url=jsonlite::fromJSON(paste(readLines(url_str,warn=FALSE),collapse = ""))$statusUrl ## using GET (in cached_get) for this can give 414 errors ("url too long") which do not seem to happen with readLines, so use that until we figure out why
+            }
             data_url=cached_get(status_url,type="json",caching="off") #get the data url
             while (data_url$status != 'finished') { #keep checking the status until finished
                 Sys.sleep(5)

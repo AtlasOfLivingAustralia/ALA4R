@@ -63,11 +63,9 @@ environmental/contextual layers at arbitrary locations. It
 complements the \code{\link{occurrences}} function, which
 allows values of the same set of layers to be downloaded at
 species occurrence locations. NOTE: large requests may be
-slow. A large number of points will have a bigger slowdown
-than a large number of layers. Be warned. Note also that
-large requests may currently fail with a "414 Request-URI
-Too Large" error. This is a known limitation and under
-review.
+slow. A single point (even with a large number of layers)
+will generally be OK; a large number of points may be very
+slow. Be warned.
 }
 \seealso{
 \code{\link{ala_config}}
