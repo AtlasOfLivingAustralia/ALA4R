@@ -171,7 +171,7 @@ imfiles=sapply(s,function(z){ ifelse(any(grepl("(\\.jpg)",z$images$smallImageUrl
 ```
 
 And finally, plot the tree:
-```{r results='hide'}
+```{r results='hide', dev.args=list(colortype="pseudo.cube")}
 tr=plotTree(ax,type="fan",ftype="off") ## plot tree without labels
 ## add each image
 for (k in which(nchar(imfiles)>0)) {
