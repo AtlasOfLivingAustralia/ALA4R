@@ -132,11 +132,6 @@ library(plyr)
 
 You may need to install these packages first using `install.packages(c("ape","phytools"))`:
 
-```{r include=FALSE}
-require(phytools)
-require(ape)
-```
-
 ```{r message=FALSE}
 library(ape)
 library(phytools)
