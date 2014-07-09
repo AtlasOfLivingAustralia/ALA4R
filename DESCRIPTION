@@ -21,9 +21,7 @@ Imports:
     sp
 Suggests:
     data.table,
-    knitr,
-    phytools,
-    ape
+    knitr
 License: GPL (>= 3)
 URL: \url{http://rforge.net/ALA4R/}
 LazyLoad: yes
