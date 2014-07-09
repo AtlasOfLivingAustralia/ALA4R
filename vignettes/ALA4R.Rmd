@@ -121,3 +121,59 @@ ala_config(verbose=TRUE)
 ```
 
 
+## Example usage
+
+We'll use the `plyr` package throughout these examples, so load that now:
+```{r}
+library(plyr) 
+```
+
+### Example 1: Name searching and taxonomic trees
+
+You may need to install these packages first using `install.packages(c("ape","phytools"))`:
+
+```{r message=FALSE}
+library(ape)
+library(phytools)
+```
+
+We want to look at the taxonomic tree of penguins, but we don't know what the correct scientific name is, so let's search for it:
+
+```{r}
+sx=search_fulltext("penguins")
+(sx$data[,c("name","rank","score","commonName")])
+```
+And we can see from the first result that penguins correspond to the family Spheniscidae. Now we can download the taxonomic data:
+
+```{r message=FALSE}
+tx=taxinfo_download("family:SPHENISCIDAE",fields=c("guid","genus","nameComplete","rank")) ## download data
+tx=tx[tx$rank %in% c("species","subspecies"),] ## restrict to species and subspecies
+```
+
+We can make a taxonomic tree plot using the `phytools` package:
+```{r results='hide'}
+temp=colwise(factor, c("genus","scientificName"))(tx) ## as.phylo requires the taxonomic columns to be factors
+ax=as.phylo(~genus/scientificName,data=temp) ## create phylo object of Scientific.Name nested within Genus
+tr=plotTree(ax,type="fan",fsize=0.7) ## plot it
+```
+
+We can also plot the tree with images of the different penguin species. We'll first extract a species profile for each species identifier (guid) in our results:
+
+```{r}
+s=lapply(tx$guid,function(z){ species_info(guid=z) })
+```
+And for each of those species profiles, find the first jpeg image, download it and store it in our data cache:
+
+```{r}
+library(jpeg)
+imfiles=sapply(s,function(z){ ifelse(any(grepl("(\\.jpg)",z$images$smallImageUrl,ignore.case=TRUE)),ALA4R:::cached_get(z$images$smallImageUrl[grepl("(\\.jpg)",z$images$smallImageUrl,ignore.case=TRUE)][1],type="binary_filename"),"") })
+```
+
+And finally, plot the tree:
+```{r results='hide'}
+tr=plotTree(ax,type="fan",ftype="off") ## plot tree without labels
+## add each image
+for (k in which(nchar(imfiles)>0)) {
+    tryCatch({ im=readJPEG(imfiles[k]); rasterImage(im,tr$xx[k]-1/10,tr$yy[k]-1/10,tr$xx[k]+1/10,tr$yy[k]+1/10) },error=function(e){invisible(1)})
+}
+```
