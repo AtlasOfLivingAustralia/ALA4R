@@ -18,6 +18,6 @@ Atlas of Living Australia \email{support@ala.org.au}, Ben
 Raymond, Jeremy VanDerWal, Lee Belbin
 }
 \references{
-\url{http://api.ala.org.au/ws}
+\url{http://api.ala.org.au/}
 }
 

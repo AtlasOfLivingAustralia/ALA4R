@@ -9,6 +9,6 @@
 #' @name ALA4R
 #' @author Atlas of Living Australia \email{support@@ala.org.au}, Ben Raymond, Jeremy VanDerWal, Lee Belbin
 #' @docType package
-#' @references \url{http://api.ala.org.au/ws}
+#' @references \url{http://api.ala.org.au/}
 #' @import stringr httr plyr digest RCurl jsonlite assertthat sp
 NULL
