@@ -12,9 +12,11 @@
 #' @return data frame of results, with taxa and their occurrence counts
 #' @seealso \code{\link{ala_fields}} for occurrence fields that are queryable via the \code{fq} parameter
 #' @examples
+#' \dontrun{
 #' x=specieslist(taxon="macropus",wkt="POLYGON((140 -37,151 -37,151 -26,140 -26,140 -37))")
 #' x=specieslist(wkt="POLYGON((140 -37,151 -37,151 -26,140 -26,140 -37))")
 #' x=specieslist(wkt="POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,147.62 -42.83))",fq="rank:species")
+#' }
 #' @export specieslist
 
 ## TODO? use data.table if available, similarly to occurrences()
