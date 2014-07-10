@@ -13,7 +13,7 @@ The use-examples presented at the 2014 ALA Science Symposium are [available here
 
 Install the dependencies first:
 ```{r}
-install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp","knitr"))
+install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp"))
 ```
 
 If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
@@ -37,7 +37,7 @@ or install `libcurl4-openssl-dev` via the Software Centre.
 
 Then, fire up R and install the dependencies that we need:
 ```{r}
-install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp","knitr"))
+install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp"))
 ```
 
 If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
