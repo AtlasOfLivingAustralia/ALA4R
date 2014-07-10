@@ -92,7 +92,9 @@ occurrences(taxon, wkt, fq, fields, extra, qa,
   (which may be slower)}
 }
 \value{
-Data frame
+Data frame of occurrence results, with one row per
+occurrence record. The columns of the dataframe will depend
+on the requested fields
 }
 \description{
 Retrieve ALA occurrence data via the "occurrence download"

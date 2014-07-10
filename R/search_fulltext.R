@@ -19,7 +19,7 @@
 #' @param sort_by string: (optional) field to sort on
 #' @param sort_dir string: (optional) sort direction, either "asc" or "desc"
 #' @seealso \code{\link{ala_fields}}
-#' @return a named list with the components "meta" (search metadata), "facets" (search facet results), and "data" (the search results, in the form of a dataframe). The contents (column names) of the data frame will vary depending on the details of the search and the results, but should contain at least the columns \code{guid}, \code{name}, \code{score}, \code{commonName}, \code{rank}, \code{author}, \code{isAustralian}, and \code{occCount}.
+#' @return a named list with the components "meta" (search metadata), "facets" (search facet results), and "data" (the search results, in the form of a dataframe). The contents (column names) of the data frame will vary depending on the details of the search and the results, but should contain at least the columns \code{guid}, \code{name}, \code{score}, \code{commonName}, \code{rank}, \code{author}, \code{isAustralian}, and \code{occurrenceCount}.
 #' 
 #' @examples
 #'  # find information ALA holds on red kangaroo

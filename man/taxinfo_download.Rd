@@ -40,7 +40,9 @@ taxinfo_download(query, fq, fields, verbose = ala_config()$verbose,
   read.table will be used (which may be slower)}
 }
 \value{
-data frame
+data frame of results, containing one row per taxon,
+typically with name, guid, and taxonomic information. The
+columns returned will depend on the field requested
 }
 \description{
 Download taxonomic data

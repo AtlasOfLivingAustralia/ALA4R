@@ -50,7 +50,7 @@ names) of the data frame will vary depending on the details
 of the search and the results, but should contain at least
 the columns \code{guid}, \code{name}, \code{score},
 \code{commonName}, \code{rank}, \code{author},
-\code{isAustralian}, and \code{occCount}.
+\code{isAustralian}, and \code{occurrenceCount}.
 }
 \description{
 Performs a search across all objects, and selects the

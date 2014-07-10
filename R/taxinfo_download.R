@@ -17,7 +17,7 @@
 #' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the 
 #' data.table package. Requires data.table to be available. If this fails, or use_data_table is FALSE, then read.table 
 #' will be used (which may be slower)
-#' @return data frame
+#' @return data frame of results, containing one row per taxon, typically with name, guid, and taxonomic information. The columns returned will depend on the field requested
 #' @seealso \code{\link{ala_fields}}, \code{\link{ala_config}}
 #' @examples
 #' \dontrun{

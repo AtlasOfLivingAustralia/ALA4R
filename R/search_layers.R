@@ -6,7 +6,7 @@
 #' @param type string: either "all" (all possible layers; default), "grids" (gridded environmental layers), or "shapes" (contextual shapefile layers)
 #' @param query text string: optional search term against layer metadata. Only layers that include this term in their metadata will be returned.
 #' @param output_format string: controls the print method for the returned object. Either "complete" (the complete data structure is displayed), or "simple" (a simplified version is displayed). Note that the complete data structure exists in both cases: this option only controls what is displayed when the object is printed to the console. The default output format is "simple"
-#' @return A data frame of results. The contents (column names) of the data frame will vary depending on the details of the search and the results.
+#' @return A data frame of results. The contents (column names) of the data frame will vary depending on the details of the search and the results
 #' 
 #' @examples
 #' search_layers(type="all")

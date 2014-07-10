@@ -28,7 +28,7 @@
 #' @param use_layer_names logical: if TRUE, layer names will be used as layer column names in the returned data frame (e.g. "radiationLowestPeriodBio22"). Otherwise, layer id value will be used for layer column names (e.g. "el871")
 #' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails with an error or warning, or if use_data_table is FALSE, then read.table will be used (which may be slower)
 #' 
-#' @return Data frame
+#' @return Data frame of occurrence results, with one row per occurrence record. The columns of the dataframe will depend on the requested fields
 #' @seealso \code{\link{ala_reasons}} for download reasons; \code{\link{ala_config}}
 #' @examples
 #' x=occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE) ## count of records from this data provider

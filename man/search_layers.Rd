@@ -24,7 +24,7 @@ search_layers(query, type = "all", output_format = "simple")
 \value{
 A data frame of results. The contents (column names) of the
 data frame will vary depending on the details of the search
-and the results.
+and the results
 }
 \description{
 Search for environmental and contextual data layers
