@@ -28,7 +28,7 @@ taxinfo_download(query, fq, fields, verbose = ala_config()$verbose,
   data frame are not guaranteed to retain the ordering of
   the field names given here. If not specified, a default
   list of fields will be returned. See
-  \code{ala_fields("general")} for valid field names.}
+  \code{ala_fields("general")} for valid field names}
 
   \item{verbose}{logical: show additional progress
   information? [default is set by ala_config()]}
