@@ -1,8 +1,8 @@
-\name{species_by_site}
-\alias{species_by_site}
-\title{Species by site}
+\name{sites_by_species}
+\alias{sites_by_species}
+\title{Sites by species}
 \usage{
-species_by_site(taxon, wkt, gridsize = 0.1, SPdata.frame = FALSE,
+sites_by_species(taxon, wkt, gridsize = 0.1, SPdata.frame = FALSE,
   verbose = ala_config()$verbose)
 }
 \arguments{

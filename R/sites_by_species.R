@@ -1,4 +1,4 @@
-#' Species by site
+#' Sites by species
 #' 
 #' A data.frame is returned as grid cells by species with values in each cell being the number 
 #' of occurrences of each species. No null (all zero) species should be returned. The coordinates
@@ -30,7 +30,7 @@
 # TODO precheck of taxon
 
 #' @export
-species_by_site = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala_config()$verbose) {
+sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala_config()$verbose) {
     ##TODO data checks
     ##todo setup output structure and class
     ##todo api movingaveragesize is unnecessary... consider removing...
