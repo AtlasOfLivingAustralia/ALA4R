@@ -9,6 +9,7 @@
 library(knitr)
 opts_chunk$set(out.extra='style="display:block; margin: auto"', fig.align="center")
 tryCatch(library(phytools), error=function(e) { install.packages("phytools",repos="http://cran.us.r-project.org") }) ## needed to ensure phytools is installed on rforge
+tryCatch(library(mapdata), error=function(e) { install.packages("mapdata",repos="http://cran.us.r-project.org") }) ## ditto
 ```
 
 
