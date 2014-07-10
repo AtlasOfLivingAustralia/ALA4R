@@ -123,3 +123,261 @@ ala_config(verbose=TRUE)
 ```
 
 
+## Example usage
+
+We'll use the `plyr` package throughout these examples, so load that now:
+```{r}
+library(plyr) 
+```
+
+### Example 1: Name searching and taxonomic trees
+
+You may need to install these packages first using `install.packages(c("ape","phytools"))`:
+
+```{r message=FALSE}
+library(ape)
+library(phytools)
+```
+
+We want to look at the taxonomic tree of penguins, but we don't know what the correct scientific name is, so let's search for it:
+
+```{r}
+sx=search_fulltext("penguins")
+(sx$data[,c("name","rank","score","commonName")])
+```
+And we can see from the first result that penguins correspond to the family Spheniscidae. Now we can download the taxonomic data (note that the search is case-sensitive, so "SPHENISCIDAE" must appear as it does in the search results above):
+
+```{r message=FALSE}
+tx=taxinfo_download("family:SPHENISCIDAE",fields=c("guid","genus","nameComplete","rank"))
+tx=tx[tx$rank %in% c("species","subspecies"),] ## restrict to species and subspecies
+```
+
+We can make a taxonomic tree plot using the `phytools` package:
+```{r results='hide'}
+## as.phylo requires the taxonomic columns to be factors
+temp=colwise(factor, c("genus","scientificName"))(tx)
+## create phylo object of Scientific.Name nested within Genus
+ax=as.phylo(~genus/scientificName,data=temp)
+tr=plotTree(ax,type="fan",fsize=0.7) ## plot it
+```
+
+We can also plot the tree with images of the different penguin species. We'll first extract a species profile for each species identifier (guid) in our results:
+
+```{r}
+s=lapply(tx$guid,function(z){ species_info(guid=z) })
+```
+And for each of those species profiles, find the first jpeg image, download it and store it in our data cache:
+
+```{r}
+imfiles=sapply(s,function(z){ 
+  ifelse(any(grepl("(\\.jpg)",z$images$smallImageUrl,ignore.case=TRUE)),
+  ALA4R:::cached_get(z$images$smallImageUrl[grepl("(\\.jpg)",z$images$smallImageUrl,
+    ignore.case=TRUE)][1],type="binary_filename"),"") 
+})
+```
+
+And finally, plot the tree:
+```{r results='hide', dev.args=list(png=list(colortype="pseudo.cube"))}
+tr=plotTree(ax,type="fan",ftype="off") ## plot tree without labels
+## add each image
+library(jpeg)
+for (k in which(nchar(imfiles)>0)) {
+    tryCatch({ 
+    	       im=readJPEG(imfiles[k]); 
+	       rasterImage(im,tr$xx[k]-1/10,tr$yy[k]-1/10,tr$xx[k]+1/10,tr$yy[k]+1/10) },
+	       error=function(e){invisible(1)})
+}
+```
+
+### Example 2: Area report: what listed species exist in a given area?
+
+First download an example shapefile of South Australian conservation reserve boundaries: see http://data.sa.gov.au/dataset/conservation-reserve-boundaries. We use the ALA4R's caching mechanism here, but you could equally download this file directly.
+
+```{r eval=FALSE}
+library(maptools)
+shape_filename=ALA4R:::cached_get(
+  "http://www.naturemaps.sa.gov.au/files/CONSERVATION_Npwsa_Reserves_shp.zip",
+  type="binary_filename")
+unzip(shape_filename,exdir=ala_config()$cache_directory) ## unzip this file
+shape=readShapePoly(file.path(ala_config()$cache_directory,
+  "CONSERVATION_NpwsaReserves.shp"))
+## extract just the Morialta Conservation Park polygon
+shape=shape[shape$RESNAME=="Morialta",]
+```
+
+```{r include=FALSE}
+library(maptools)
+shape_filename="CONSERVATION_Npwsa_Reserves_shp.zip" ## use local copy
+unzip(shape_filename,exdir=ala_config()$cache_directory) ## unzip this file
+shape=readShapePoly(file.path(ala_config()$cache_directory,"CONSERVATION_NpwsaReserves.shp"))
+shape=shape[shape$RESNAME=="Morialta",] ## extract just the Morialta Conservation Park polygon
+```
+
+We could create the WKT string using the `rgeos` library:
+```{r eval=FALSE}
+library(rgeos)
+wkt=writeWKT(shape)
+```
+
+Unfortunately, in this instance this gives a WKT string that is too long and won't be accepted by the ALA web service. Instead, let's construct the WKT string directly, which gives us a little more control over its format:
+```{r}
+lonlat=shape@polygons[[1]]@Polygons[[1]]@coords ## extract the polygon coordinates
+## extract the convex hull of the polygon to reduce the length of the WKT string
+temp=chull(lonlat)
+lonlat=lonlat[c(temp,temp[1]),] 
+## create WKT string
+wkt=paste("POLYGON((",paste(apply(lonlat,1,function(z)
+  paste(z,collapse=" ")),collapse=","),"))",sep="")
+```
+
+Now extract the species list in this polygon:
+```{r}
+x=specieslist(wkt=wkt,fq="state_conservation:*")
+(head(arrange(x,desc(occurrenceCount)),20))
+```
+
+### Example 3: Quality assertions
+
+Download occurrence data for the golden bowerbird:
+
+```{r}
+x=occurrences(taxon="Amblyornis newtonianus", download_reason_id=10)
+summary(x)
+```
+
+You can see that some of the points have assertions that are considered "fatal" (i.e. the occurrence record in question is unlikely to be suitable for subsequent analysis). We can use the `occurrences_plot` function to create a PDF file with a plot of this data, showing the points with fatal assertions (this will create an "Rplots.pdf" file in your working directory; not run here):
+
+```{r eval=FALSE}
+occurrences_plot(x,qa="fatal")
+```
+
+There are many other ways of producing spatial plots in R. The `leafletR` package provides a simple method of producing browser-based maps iwth panning, zooming, and background layers:
+
+```{r eval=FALSE}
+library(leafletR)
+## drop any records with missing lat/lon values: leaflet does not like them
+x$data=x$data[!is.na(x$data$longitude) & !is.na(x$data$latitude),] 
+xa=check_assertions(x)
+## columns of x corresponding to a fatal assertion
+x_afcols=names(x$data) %in% xa$occurColnames[xa$fatal]
+## rows of x that have a fatal assertion
+x_afrows=apply(x$data[,x_afcols],1,any)
+## which fatal assertions are present in this data?
+these_assertions=names(x$data)[x_afcols]
+## start with the "clean" data (data rows without fatal assertions)
+datlist=list(toGeoJSON(data=x$data[!x_afrows,c("latitude","longitude")],name="Am0",dest=tempdir()))
+## now for each assertion, create a geojson formatted-file of the associated data
+for (k in 1:length(these_assertions)) {
+    idx=x$data[,which(x_afcols)[k]]
+    datlist[k+1]=toGeoJSON(
+      data=x$data[idx,c("latitude","longitude")],name=paste("Am",k,sep=""),dest=tempdir())
+}
+## create styles
+sty0=styleSingle(col="white",fill="black",fill.alpha=1)
+sty1=styleSingle(col="red",fill="red",fill.alpha=1)
+sty2=styleSingle(col="yellow",fill="yellow",fill.alpha=1)
+sty3=styleSingle(col="blue",fill="blue",fill.alpha=1)
+## create the leaflet map
+alamap=leaflet(data=datlist,title="Amblyornis newtonianus",base.map="mqsat",
+  popup="mag",style=list(sty0,sty1,sty2,sty3),dest=tempdir())
+```
+
+And now you can open the map in your browser with:
+
+```{r eval=FALSE}
+browseURL(alamap)
+```
+
+Note: this would more elegantly be mapped as a single data set with categorical styling (marker colours by assertion) --- but for unknown reasons this didn't seem to work properly.
+
+### Example 4: Community composition and turnover
+
+Some extra packages needed here:
+
+```{r message=FALSE}
+library(vegan)
+library(mgcv)
+library(geosphere)
+```
+
+Define our area of interest as a transect running westwards from the Sydney region, and download the occurrences of legumes (Fabaceae; a large family of flowering plants) in this area:
+```{r eval=FALSE}
+wkt="POLYGON((152.5 -35,152.5 -32,140 -32,140 -35,152.5 -35))"
+x=occurrences(taxon="family:Fabaceae",wkt=wkt,qa="none",download_reason_id=10)
+x=x$data ## just take the data component
+```
+
+Bin the locations into 0.5-degree grid cells:
+```{r eval=FALSE}
+x$longitude=round(x$longitude*2)/2
+x$latitude=round(x$latitude*2)/2
+```
+
+Create a sites-by-species data frame. This could also be done with e.g. the reshape library or the table() function, or indeed directly from ALA4R's `species_by_site` function. Note: this process inherently makes some strong assumptions about *absences* in the data.
+```{r eval=FALSE}
+## discard genus- and higher-level records
+xsub=x$rank %in% c("species","subspecies","variety","form","cultivar")
+unames=unique(x[xsub,]$scientificName) ## unique names 
+ull=unique(x[xsub,c("longitude","latitude")])
+xgridded=matrix(NA,nrow=nrow(ull),ncol=length(unames))
+for (uli in 1:nrow(ull)) {
+    lidx=xsub & x$longitude==ull[uli,]$longitude & x$latitude==ull[uli,]$latitude
+    xgridded[uli,]=as.numeric(unames %in% x[lidx,]$scientificName)
+}
+xgridded=as.data.frame(xgridded)
+names(xgridded)=unames
+xgridded=cbind(ull,xgridded)
+```
+
+```{r include=FALSE}
+## load data from a local copy so that vignette building doesn't require downloading a big chunk of data and slow sites-by-species processing
+## this file generated by running the above unevaluated code blocks, then
+## save(list=c("wkt","xgridded"),file="vignette_fabaceae.RData")
+load("vignette_fabaceae.RData")
+```
+
+Now we can start to examine the patterns in the data. Let's plot richness as a function of longitude:
+```{r}
+plot(xgridded$longitude,apply(xgridded[,-c(1:2)],1,sum),ylab="Richness",
+  xlab="Longitude",pch=20,col="grey25")
+```
+
+The number of species is highest at the eastern end of the transect (the Sydney/Blue Mountains area). This probably reflects both higher species richness as well as greater sampling effort in this area compared to the western end of the transect.
+
+How does the community composition change along the transect? Calculate the dissimilarity between nearby grid cells as a function of along-transect position:
+```{r}
+D=vegdist(xgridded[,-c(1:2)],'bray') ## Bray-Curtis dissimilarity
+Dm=as.matrix(D) ## convert to a matrix object
+## calculate geographic distance from longitude and latitude
+Dll=apply(xgridded[,1:2],1,function(z){distVincentySphere(z,xgridded[,1:2])})
+closeidx=Dll>0 & Dll<100e3 ## find grid cells within 100km of each other
+## create a matrix of longitudes that matches the size of the pairwise-D matrices
+temp=matrix(xgridded$longitude,nrow=nrow(xgridded),ncol=nrow(xgridded))
+## plot dissimilarity as a function of transect position
+plot(temp[closeidx],Dm[closeidx],xlab="Longitude",ylab="Dissimilarity",pch=20,
+  col="grey85")
+## add smooth fit via gam()
+fit=gam(d~s(tp,k=7),data=data.frame(tp=temp[closeidx],d=Dm[closeidx]))
+tpp=seq(from=min(xgridded$longitude),to=max(xgridded$longitude),length.out=100)
+fitp=predict(fit,newdata=data.frame(tp=tpp))
+lines(tpp,fitp,col=1)
+```
+
+Clustering:
+```{r}
+cl=hclust(D,method="ave") ## UPGMA clustering
+plot(cl) ## plot dendrogram
+grp=cutree(cl,20) ## extract group labels at the 20-group level
+## coalesce small (outlier) groups into a single catch-all group
+sing=which(table(grp)<5)
+grp[grp %in% sing]=21 ## singletons to new combined group
+grp=sapply(grp,function(z)which(unique(grp)==z)) ## renumber groups
+## plot
+with(xgridded,plot(longitude,latitude,pch=21,col=grp,bg=grp))
+## or slightly nicer map plot
+library(maps)
+library(mapdata)
+map("worldHires","Australia", xlim=c(105,155), ylim=c(-45,-10), col="gray90", fill=TRUE)
+thiscol=c("#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b",
+  "#e377c2","#7f7f7f","#bcbd22","#17becf") ## colours for cluster
+with(xgridded,points(longitude,latitude,pch=21,col=thiscol[grp],bg=thiscol[grp],cex=0.75))
