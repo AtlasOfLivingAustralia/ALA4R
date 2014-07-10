@@ -12,9 +12,11 @@ intersect_points(pnts, layers, SPdata.frame = FALSE, use_layer_names = TRUE,
 
   \item{layers}{string vector: ids of layers to be
   intersected. The list of possible layers is available
-  from \code{ala_fields("layers")}. Note: if more than one
-  location has been provided in \code{pnts}, the number of
-  layers must be less than 700.}
+  from \code{ala_fields("layers")}. Names can be passed as
+  full layer names (e.g. "Radiation - lowest period
+  (Bio22)") rather than id ("el871"). Note: if more than
+  one location has been provided in \code{pnts}, the number
+  of layers must be less than 700.}
 
   \item{SPdata.frame}{logical: should the output should be
   returned as a SpatialPointsDataFrame of the sp package or

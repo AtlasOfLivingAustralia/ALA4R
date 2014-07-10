@@ -20,8 +20,8 @@
 #' field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form c("field1:abc 
 #' OR field2:def")
 #' @param fields string vector: (optional) a vector of field names to return. Note that the columns of the returned data frame 
-#' are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence")} for valid field names.
-#' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence")} for valid field names.
+#' are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence")} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")
+#' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence")} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")
 #' @param qa string vector: (optional) list of record issues to include in the download. See \code{ala_fields("assertions")} for valid values, or use "none" to include no record issues
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
 #' @param record_count_only logical: if TRUE, return just the count of records that would be downloaded, but don't download them. Note that the record count is always re-retrieved from the ALA, regardless of the caching settings. If a cached copy of this query exists on the local machine, the actual data set size may therefore differ from this record count
@@ -47,10 +47,6 @@
 #' @export occurrences
 
 ## NOTE - the all-fields example caused a segfault on rforge, so don't take it out of the dontrun block [this one: x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence")$name) ## download records, with all fields]
-
-## NOTE - the column names that are returned for assertions are the full names/descriptions, do not match the requested (short) names, e.g.: y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10,qa=c("unknownCountry","homonymIssue")) gives qa columns "suppliedCountryNotRecognised"  "homonymIssuesWithSuppliedName". See check_assertions() and its occurColnames if this needs to be resolved
-
-## undocumented: field names in "fields" and "extra" can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). I haven't documented this (yet) because it probably ought to be implemented similarly in other functions - BR
 
 ## TODO document fq alone as a query
 ## TODO: more extensive testing, particularly of the csv-conversion process

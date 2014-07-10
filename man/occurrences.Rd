@@ -50,14 +50,18 @@ occurrences(taxon, wkt, fq, fields, extra, qa,
   data frame are not guaranteed to retain the ordering of
   the field names given here. If not specified, a default
   list of fields will be returned. See
-  \code{ala_fields("occurrence")} for valid field names.}
+  \code{ala_fields("occurrence")} for valid field names.
+  Field names can be passed as full names (e.g. "Radiation
+  - lowest period (Bio22)") rather than id ("el871")}
 
   \item{extra}{string vector: (optional) a vector of field
   names to include in addition to those specified in
   \code{fields}. This is useful if you would like the
   default list of fields (i.e. when \code{fields} parameter
   is not specified) plus some additional extras. See
-  \code{ala_fields("occurrence")} for valid field names.}
+  \code{ala_fields("occurrence")} for valid field names.
+  Field names can be passed as full names (e.g. "Radiation
+  - lowest period (Bio22)") rather than id ("el871")}
 
   \item{qa}{string vector: (optional) list of record issues
   to include in the download. See
