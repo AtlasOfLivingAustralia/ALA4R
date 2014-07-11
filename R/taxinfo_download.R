@@ -17,14 +17,15 @@
 #' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the 
 #' data.table package. Requires data.table to be available. If this fails, or use_data_table is FALSE, then read.table 
 #' will be used (which may be slower)
-#' @return data frame of results, containing one row per taxon, typically with name, guid, and taxonomic information. The columns returned will depend on the field requested
+#' @return data frame of results, containing one row per taxon, typically with name, guid, and taxonomic information. 
+#' The columns returned will depend on the field requested
 #' @seealso \code{\link{ala_fields}}, \code{\link{ala_config}}
 #' @examples
 #' \dontrun{
 #' # Download data for Fabaceae
-#' x=taxinfo_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","bioOrder","family","genus","nameComplete"))
+#' x=taxinfo_download("genus:Alaba",fields=c("guid","class","bioOrder","nameComplete","occurrenceCount","imageCount"))
 #' ## note that requesting "nameComplete" gives the scientific name but requesting "scientificName" will not --- bug to be fixed in ALA's web service
-#' # equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,kingdom,phylum,class,bioOrder,family,genus,nameComplete&q=family:Fabaceae
+#' # equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,class,bioOrder,nameComplete,occurrenceCount,imageCount&q=family:Fabaceae
 #' }
 #' @export taxinfo_download
 
