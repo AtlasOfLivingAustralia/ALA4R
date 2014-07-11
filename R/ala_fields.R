@@ -89,7 +89,6 @@ field_info = function(field_id) {
 		warning('No information returned. Please check field_id is valid using ala_fields(\"layers\").')
 		return(data.frame())
     } else {
-        ## we might wish to issue a warning for empty responses
         if (substr(field_id,1,2) == 'cl') {
             out = out$objects #keep only the content
         } else if (substr(field_id,1,2) == 'el') {
