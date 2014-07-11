@@ -35,7 +35,8 @@
 #' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10) ## download records, with standard fields
 #' \dontrun{ 
 #' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence")$name) ## download records, with all fields
-#' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),download_reason_id=10)
+#' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),download_reason_id=10) ## download records, with specified fields
+#' x=occurrences(taxon="macropus",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",download_reason_id=10,qa="none") ## download records in polygon, with no quality assertion information
 #' 
 #' y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10)
 #' str(y)
@@ -67,9 +68,6 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     ## wkt string
     if (!missing(wkt)) {
         assert_that(is.string(wkt))
-        if (! check_wkt(wkt)) {
-            stop("invalid WKT string ",wkt)
-        }
         this_query$wkt=wkt
     }
     if (!missing(fq)) {
@@ -190,7 +188,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
                     }
                     read_ok=TRUE
                 } else {
-                    x=NULL
+                    x=data.frame() ## empty result set
                     read_ok=TRUE
                 }
             }, warning=function(e) {
@@ -235,7 +233,13 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
             ## this file won't exist if there are no rows in the data.csv file, so only do it if nrow(x)>0
             xc=read.table(unz(thisfile,"citation.csv"),header=TRUE,comment.char="",as.is=TRUE)
         } else {
-            warning("no matching records were returned")
+            warning("no matching records were returned") ## not sure if we should really issue a warning here, but leave it in for now
+            wkt_ok=check_wkt(wkt)
+            if (is.na(wkt_ok)) {
+                warning("WKT string may not be valid: ",wkt)
+            } else if (!wkt_ok) {
+                warning("WKT string appears to be invalid: ",wkt)
+            }
             xc=NULL
         }
         x=list(data=x,meta=xc)
