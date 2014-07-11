@@ -87,7 +87,7 @@ field_info = function(field_id) {
         ## just return an empty data frame with no warning
         ##data.frame()
 		warning('No information returned. Please check field_id is valid using ala_fields(\"layers\").')
-		return(NULL)
+		return(data.frame())
     } else {
         ## we might wish to issue a warning for empty responses
         if (substr(field_id,1,2) == 'cl') {
