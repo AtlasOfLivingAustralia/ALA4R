@@ -15,9 +15,9 @@ check_wkt=function(wkt,silent=TRUE) {
         is_valid_wkt_polygon(wkt)
     } else {
         if (!silent) {
-            warning("am not able to check this type of WKT string")
+            warning("ALA4R cannot check this type of WKT string")
         }
-        TRUE
+        NA # return NA, i.e. we don't know if it's valid
     }
 }
 
