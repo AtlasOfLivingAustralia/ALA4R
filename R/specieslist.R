@@ -30,7 +30,8 @@ specieslist=function(taxon,wkt,fq) {
     }
     if (!missing(wkt)) {
         assert_that(is.string(wkt))
-        if (! check_wkt(wkt)) {
+        wkt_ok=check_wkt(wkt)
+        if (is.na(wkt_ok) || !wkt_ok) {
             warning("WKT string appears to be invalid: ",wkt)
         }
         this_query$wkt=wkt
