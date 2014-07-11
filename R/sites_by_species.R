@@ -15,17 +15,18 @@
 #' @param gridsize numeric: size of output grid cells in decimal degrees. E.g. 0.1 (=~10km)
 #' @param SPdata.frame logical: should the output be returned as a SpatialPointsDataFrame of the sp package?
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
-#' @return A dataframe or a SpatialPointsDataFrame containing the species by sites data. Columns will include longitude, latitude, and each species present. Values for species are record counts (i.e. number of recorded occurrences of that taxon in each grid cell) 
+#' @return A dataframe or a SpatialPointsDataFrame containing the species by sites data. Columns will include longitude, 
+#' latitude, and each species present. Values for species are record counts (i.e. number of recorded occurrences of that taxon in 
+#' each grid cell) 
 #'
 #' @examples
 #' \dontrun{
 #' # Eucalyptus in Tasmania based on a 0.1 degree grid
-#' tt=species_by_site(taxon='genus:Eucalyptus',wkt='POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))',gridsize=0.1,verbose=TRUE)
-#' str(tt)
+#' ss=sites_by_species(taxon='genus:Eucalyptus',wkt='POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))',gridsize=0.1,verbose=TRUE)
+#' ss[,1:6]
 #' # equivalent direct webservice call: POST http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Eucalyptus&qname=data&area=POLYGON((144%20-43,148%20-43,148%20-40,144%20-40,144%20-43))&bs=http://biocache.ala.org.au/ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1
 #' }
 
-# TODO Lee to add dataframe output specifications (sent 23/4/2014)
 # TODO need way to better check input species query
 # TODO precheck of taxon
 
