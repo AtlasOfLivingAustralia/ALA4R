@@ -36,11 +36,14 @@ information for a list of names. Case-insensitive but
 otherwise exact matches are used.
 }
 \examples{
-search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"))
-search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"),guids_only=TRUE)
-search_names("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
-x=search_names("Grevillea",vernacular=TRUE) ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
-str(x) ## see the complete data structure
+s1=search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"))
+str(s1)
+s2=search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"),guids_only=TRUE)
+str(s2)
+ss=search_names("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
+str(ss)
+sv=search_names("Grevillea",vernacular=TRUE) ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
+str(sv) ## see the complete data structure
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

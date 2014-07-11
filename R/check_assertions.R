@@ -8,8 +8,7 @@
 #'  
 #' @param x list: an object returned from \code{\link{occurrences}}
 #' 
-#' @return A dataframe of assertions column names, descriptions and categories/error codes. 
-#' If no assertions are in dataset, NULL is returned.
+#' @return A dataframe of assertions column names, descriptions and categories/error codes. If no assertions are in the dataset, NULL is returned.
 #'
 #' @examples
 #' #download species data with all possible assertions

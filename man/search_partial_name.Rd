@@ -40,14 +40,15 @@ scientific name or common name of the taxon are known, use
 \code{\link{search_names}} instead.
 }
 \examples{
-# find information ALA holds on red kangaroo (Macropus rufus)
-tt = search_partial_name("red kangaroo",output_format="simple")
-tt
+# find any names containing "allaba"
+s1 = search_partial_name("allaba",output_format="simple")
+str(s1)
 # show all information stored in the object
-as.matrix(tt)
+as.matrix(s1)
 
 # retrieve only species that have geolocated occurrence records
-search_partial_name("Macropus rufus",geo_only=TRUE)
+s2=search_partial_name("Gallaba",geo_only=TRUE)
+s2
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

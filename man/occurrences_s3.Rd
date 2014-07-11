@@ -100,4 +100,9 @@ summary(tt)
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
 }
+\references{
+\url{http://api.ala.org.au/}
+
+\url{http://stat.ethz.ch/R-manual/R-devel/library/methods/html/Methods.html}
+}
 

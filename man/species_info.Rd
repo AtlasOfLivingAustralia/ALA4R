@@ -23,10 +23,12 @@ Fetch a taxon profile given a scientific name or LSID
 (GUID)
 }
 \examples{
-species_info("Grevillea humilis subsp. maritima")
-species_info(guid="urn:lsid:biodiversity.org.au:apni.taxon:248651")
-s=species_info("Alaba vibex")
-str(s)
+s1=species_info("Grevillea humilis subsp. maritima")
+str(s1)
+s2=species_info(guid="urn:lsid:biodiversity.org.au:apni.taxon:248651")
+str(s2)
+s3=species_info("Alaba",verbose=TRUE)
+str(s3)
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}

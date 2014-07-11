@@ -32,7 +32,7 @@ Search for environmental and contextual data layers
 \examples{
 search_layers(type="all")
 search_layers(type="grids",query="income")
-l=search_layers(type="shapes",query="coral")
+l=search_layers(type="shapes",query="coral",output_format="simple")
 str(l)
 }
 \author{

@@ -38,7 +38,7 @@ data retrieval functions
 }
 \examples{
 l=ala_fields("layers")
-l[1,]
+l[,4]
 o=ala_fields("occurrence")
 o[1:13,]
 a=ala_fields("assertions")
