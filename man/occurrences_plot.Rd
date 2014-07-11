@@ -26,7 +26,7 @@ occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
   create maps; possible values are 'species', 'genus',
   'family' or 'order'}
 
-  \item{pch}{single number of character representing point
+  \item{pch}{single number or character representing point
   type. See description of pch in ?points .}
 
   \item{\dots}{: other options passed to pdf()}

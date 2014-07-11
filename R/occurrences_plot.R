@@ -15,7 +15,7 @@
 #' maps for the taxon level defined.
 #' @param taxon_level string: taxonomic level at which to create maps; possible values are 'species', 
 #' 'genus', 'family' or 'order'
-#' @param pch single number of character representing point type. See description of pch in ?points .
+#' @param pch single number or character representing point type. See description of pch in ?points .
 #' @param \dots : other options passed to pdf()
 #' @return Generates a pdf that maps the distributions.
 #' 
