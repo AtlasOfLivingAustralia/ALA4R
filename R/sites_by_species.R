@@ -1,8 +1,6 @@
 #' Sites by species
 #' 
-#' A data.frame is returned as grid cells by species with values in each cell being the number 
-#' of occurrences of each species. No null (all zero) species should be returned. The coordinates
-#' returned are the TOP-LEFT corner of the grid cell.
+#' A data.frame is returned as grid cells by species with values in each cell being the number of occurrences of each species. No null (all zero) species should be returned. The coordinates returned are the TOP-LEFT corner of the grid cell.
 #'
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' 
@@ -15,9 +13,7 @@
 #' @param gridsize numeric: size of output grid cells in decimal degrees. E.g. 0.1 (=~10km)
 #' @param SPdata.frame logical: should the output be returned as a SpatialPointsDataFrame of the sp package?
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
-#' @return A dataframe or a SpatialPointsDataFrame containing the species by sites data. Columns will include longitude, 
-#' latitude, and each species present. Values for species are record counts (i.e. number of recorded occurrences of that taxon in 
-#' each grid cell) 
+#' @return A dataframe or a SpatialPointsDataFrame containing the species by sites data. Columns will include longitude, latitude, and each species present. Values for species are record counts (i.e. number of recorded occurrences of that taxon in each grid cell) 
 #'
 #' @examples
 #' \dontrun{
@@ -41,12 +37,7 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
     assert_that(is.numeric(gridsize), gridsize>0)
     assert_that(is.flag(SPdata.frame))
     assert_that(is.flag(verbose))
-	
-    ## wkt string supplied and valid?
-    if (! check_wkt(wkt)) {
-        warning("WKT string appears to be invalid: ",wkt)
-    }
-    
+	    
     ##setup the key query
     base_url = ala_config()$base_url_alaspatial #get the base url
     url_str = paste(base_url,'sitesbyspecies?speciesq=',taxon,'&qname=data',sep='') #setup the base url string 
@@ -66,7 +57,22 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
         while (status$state != "SUCCESSFUL") {
             if(verbose) { cat('.') } #keep checking the status until finished
             status=cached_get(status_url,type="json",caching="off") #get the status
-            if (status$state=='FAILED') { stop(status$message) } #stop if there was an error
+            if (status$state=='FAILED') {
+                ## stop if there was an error
+                ## first check the wkt string: if it was invalid (or unrecognized by our checker) then warn the user
+                wkt_ok=check_wkt(wkt)
+                if (is.na(wkt_ok)) {
+                    warning("WKT string may not be valid: ",wkt)
+                } else if (!wkt_ok) {
+                    warning("WKT string appears to be invalid: ",wkt)
+                }
+                if (str_detect(status$message,"No occurrences found")) {
+                    ## don't consider "No occurrences found" to be an error
+                    cat('\n')
+                    return(data.frame()) ## return empty results
+                }
+                stop(status$message)
+            } 
             Sys.sleep(2)
         }; cat('\n')
         download_to_file(paste('http://spatial.ala.org.au/alaspatial/ws/download/',pid,sep=''),outfile=this_cache_file,binary_file=TRUE,verbose=verbose)
