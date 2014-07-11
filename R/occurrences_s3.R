@@ -4,6 +4,8 @@
 #' This uses information based on selections of assertions (quality assurance issues ALA has identified), spatial and temporal data.
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
+#' @references \url{http://api.ala.org.au/}
+#' @references \url{http://stat.ethz.ch/R-manual/R-devel/library/methods/html/Methods.html}
 #' 
 #' @param object list: an 'occurrence' object that has been downloaded using \code{\link{occurrences}}
 #' @param x list: an 'occurrence' object that has been downloaded using \code{\link{occurrences}}
