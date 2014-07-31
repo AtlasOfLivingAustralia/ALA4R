@@ -5,6 +5,7 @@ output: html_document
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{ALA4R}
 -->
+<!-- To build this vignette, open this file in RStudio and knit to HTML, then move the HTML file to the vignettes directory -->
 
 # ALA4R
 
@@ -98,8 +99,7 @@ All results will be stored in that cache directory and will be used from one ses
 If you change the cache_directory to a permanent location, you may wish to add something like this to your .Rprofile file, so that it happens automatically each time the ALA4R package is loaded:
 
 ```{r eval=FALSE}
-setHook(packageEvent("ALA4R", "attach"), 
-        function(...) ala_config(cache_directory=file.path("~","mydata","ala_cache")))
+setHook(packageEvent("ALA4R", "attach"), function(...) ala_config(cache_directory=file.path("~","mydata","ala_cache")))
 ```
 
 Caching can also be turned off entirely by:
@@ -175,7 +175,7 @@ And for each of those species profiles, find the first jpeg image, download it a
 imfiles=sapply(s,function(z){ 
   ifelse(any(grepl("(\\.jpg)",z$images$smallImageUrl,ignore.case=TRUE)),
   ALA4R:::cached_get(z$images$smallImageUrl[grepl("(\\.jpg)",z$images$smallImageUrl,
-    ignore.case=TRUE)][1],type="binary_filename"),"") 
+  ignore.case=TRUE)][1],type="binary_filename"),"") 
 })
 ```
 
@@ -186,7 +186,7 @@ tr=plotTree(ax,type="fan",ftype="off") ## plot tree without labels
 library(jpeg)
 for (k in which(nchar(imfiles)>0)) {
     tryCatch({ 
-    	       im=readJPEG(imfiles[k]); 
+    	   im=readJPEG(imfiles[k]); 
 	       rasterImage(im,tr$xx[k]-1/10,tr$yy[k]-1/10,tr$xx[k]+1/10,tr$yy[k]+1/10) },
 	       error=function(e){invisible(1)})
 }
@@ -198,12 +198,9 @@ First download an example shapefile of South Australian conservation reserve bou
 
 ```{r eval=FALSE}
 library(maptools)
-shape_filename=ALA4R:::cached_get(
-  "http://www.naturemaps.sa.gov.au/files/CONSERVATION_Npwsa_Reserves_shp.zip",
-  type="binary_filename")
+shape_filename=ALA4R:::cached_get("http://www.naturemaps.sa.gov.au/files/CONSERVATION_Npwsa_Reserves_shp.zip", type="binary_filename")
 unzip(shape_filename,exdir=ala_config()$cache_directory) ## unzip this file
-shape=readShapePoly(file.path(ala_config()$cache_directory,
-  "CONSERVATION_NpwsaReserves.shp"))
+shape=readShapePoly(file.path(ala_config()$cache_directory, "CONSERVATION_NpwsaReserves.shp"))
 ## extract just the Morialta Conservation Park polygon
 shape=shape[shape$RESNAME=="Morialta",]
 ```
@@ -231,8 +228,7 @@ lonlat=shape@polygons[[1]]@Polygons[[1]]@coords ## extract the polygon coordinat
 temp=chull(lonlat)
 lonlat=lonlat[c(temp,temp[1]),] 
 ## create WKT string
-wkt=paste("POLYGON((",paste(apply(lonlat,1,function(z)
-  paste(z,collapse=" ")),collapse=","),"))",sep="")
+wkt=paste("POLYGON((",paste(apply(lonlat,1,function(z) paste(z,collapse=" ")),collapse=","),"))",sep="")
 ```
 
 Now extract the species list in this polygon:
@@ -274,8 +270,7 @@ datlist=list(toGeoJSON(data=x$data[!x_afrows,c("latitude","longitude")],name="Am
 ## now for each assertion, create a geojson formatted-file of the associated data
 for (k in 1:length(these_assertions)) {
     idx=x$data[,which(x_afcols)[k]]
-    datlist[k+1]=toGeoJSON(
-      data=x$data[idx,c("latitude","longitude")],name=paste("Am",k,sep=""),dest=tempdir())
+    datlist[k+1]=toGeoJSON(data=x$data[idx,c("latitude","longitude")],name=paste("Am",k,sep=""),dest=tempdir())
 }
 ## create styles
 sty0=styleSingle(col="white",fill="black",fill.alpha=1)
@@ -359,8 +354,7 @@ closeidx=Dll>0 & Dll<100e3 ## find grid cells within 100km of each other
 ## create a matrix of longitudes that matches the size of the pairwise-D matrices
 temp=matrix(xgridded$longitude,nrow=nrow(xgridded),ncol=nrow(xgridded))
 ## plot dissimilarity as a function of transect position
-plot(temp[closeidx],Dm[closeidx],xlab="Longitude",ylab="Dissimilarity",pch=20,
-  col="grey85")
+plot(temp[closeidx],Dm[closeidx],xlab="Longitude",ylab="Dissimilarity",pch=20,col="grey85")
 ## add smooth fit via gam()
 fit=gam(d~s(tp,k=7),data=data.frame(tp=temp[closeidx],d=Dm[closeidx]))
 tpp=seq(from=min(xgridded$longitude),to=max(xgridded$longitude),length.out=100)
@@ -383,6 +377,5 @@ with(xgridded,plot(longitude,latitude,pch=21,col=grp,bg=grp))
 library(maps)
 library(mapdata)
 map("worldHires","Australia", xlim=c(105,155), ylim=c(-45,-10), col="gray90", fill=TRUE)
-thiscol=c("#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b",
-  "#e377c2","#7f7f7f","#bcbd22","#17becf") ## colours for cluster
+thiscol=c("#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf") ## colours for cluster
 with(xgridded,points(longitude,latitude,pch=21,col=thiscol[grp],bg=thiscol[grp],cex=0.75))
