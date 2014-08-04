@@ -8,20 +8,6 @@ occurrences(taxon, wkt, fq, fields, extra, qa,
   use_layer_names = TRUE, use_data_table = TRUE)
 }
 \arguments{
-  \item{download_reason_id}{numeric or string: (required
-  unless record_count_only is TRUE) a reason code for the
-  download, either as a numeric ID (currently 0--11) or a
-  string (see \code{ala_reasons()} for a list of valid ID
-  codes and names). The download_reason_id can be passed
-  directly to this function, or alternatively set using
-  \code{ala_config(download_reason_id=...)}}
-
-  \item{reason}{string: (optional) user-supplied
-  description of the reason for the download. Providing
-  this information is optional but will help the ALA to
-  better support users by building a better understanding
-  of user communities and their data requests}
-
   \item{taxon}{string: (optional) taxonomic query of the
   form field:value (e.g. "genus:Macropus") or a free text
   search ("Alaba vibex")}
@@ -67,6 +53,20 @@ occurrences(taxon, wkt, fq, fields, extra, qa,
   to include in the download. See
   \code{ala_fields("assertions")} for valid values, or use
   "none" to include no record issues}
+
+  \item{download_reason_id}{numeric or string: (required
+  unless record_count_only is TRUE) a reason code for the
+  download, either as a numeric ID (currently 0--11) or a
+  string (see \code{ala_reasons()} for a list of valid ID
+  codes and names). The download_reason_id can be passed
+  directly to this function, or alternatively set using
+  \code{ala_config(download_reason_id=...)}}
+
+  \item{reason}{string: (optional) user-supplied
+  description of the reason for the download. Providing
+  this information is optional but will help the ALA to
+  better support users by building a better understanding
+  of user communities and their data requests}
 
   \item{verbose}{logical: show additional progress
   information? [default is set by ala_config()]}

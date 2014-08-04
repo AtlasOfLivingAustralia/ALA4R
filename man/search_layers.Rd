@@ -5,13 +5,13 @@
 search_layers(query, type = "all", output_format = "simple")
 }
 \arguments{
-  \item{type}{string: either "all" (all possible layers;
-  default), "grids" (gridded environmental layers), or
-  "shapes" (contextual shapefile layers)}
-
   \item{query}{text string: optional search term against
   layer metadata. Only layers that include this term in
   their metadata will be returned.}
+
+  \item{type}{string: either "all" (all possible layers;
+  default), "grids" (gridded environmental layers), or
+  "shapes" (contextual shapefile layers)}
 
   \item{output_format}{string: controls the print method
   for the returned object. Either "complete" (the complete

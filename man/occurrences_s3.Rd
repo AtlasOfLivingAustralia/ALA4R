@@ -22,6 +22,9 @@
   \item{x}{list: an 'occurrence' object that has been
   downloaded using \code{\link{occurrences}}}
 
+  \item{incomparables}{logical/numeric: currently ignored,
+  but needed for S3 method consistency}
+
   \item{spatial}{numeric: specifies a rounding value in
   decimal degrees used to to create a unique subset of the
   data. Value of 0 means no rounding and use values as is.
@@ -61,9 +64,6 @@
   \item{keep.missing.spatial.uncertainty}{logical: keep
   (FALSE) or remove (TRUE) information missing spatial
   uncertainty data.}
-
-  \item{incomparables}{logical/numeric: currently ignored,
-  but needed for S3 method consistency}
 
   \item{\dots}{not currently used}
 }

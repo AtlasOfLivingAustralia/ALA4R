@@ -9,6 +9,7 @@
 #' 
 #' @param object list: an 'occurrence' object that has been downloaded using \code{\link{occurrences}}
 #' @param x list: an 'occurrence' object that has been downloaded using \code{\link{occurrences}}
+#' @param incomparables logical/numeric: currently ignored, but needed for S3 method consistency
 #' @param spatial numeric: specifies a rounding value in decimal degrees used to to create a unique subset of the data. Value of 0 means no rounding and use values as is. Values <0 mean ignore spatial unique parameter
 #' @param temporal character: specifies the temporal unit for which to keep unique records; this can be by "year", "month", "yearmonth" or "full" date. NULL means ignore temporal unique parameter
 #' @param na.rm logical: keep (FALSE) or remove (TRUE) missing spatial or temporal data
@@ -18,7 +19,6 @@
 #' @param exclude.taxonomic character vector: defining flagged taxonomic assertion issues to be removed. Values can include 'warnings','error','missing','none'; see \code{\link{check_assertions}}
 #' @param max.spatial.uncertainty numeric: number defining the maximum spatial uncertainty (in meters) one is willing to accept. 
 #' @param keep.missing.spatial.uncertainty logical: keep (FALSE) or remove (TRUE) information missing spatial uncertainty data.
-#' @param incomparables logical/numeric: currently ignored, but needed for S3 method consistency
 #' @param \dots not currently used
 #'
 #' @details
