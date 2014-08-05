@@ -3,7 +3,7 @@
 \title{Quick geographic plot of occurrence data}
 \usage{
 occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
-  grouped = FALSE, taxon_level = "species", pch, ...)
+  grouped = FALSE, taxon_level = "species", pch, cex = 0.75, ...)
 }
 \arguments{
   \item{x}{list: a list object that has been downloaded
@@ -27,7 +27,11 @@ occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
   'family' or 'order'}
 
   \item{pch}{single number or character representing point
-  type. See description of pch in ?points .}
+  type. See description of \code{pch} in
+  \code{\link{points}}.}
+
+  \item{cex}{numeric: character (or symbol) expansion. See
+  description of \code{cex} in \code{\link{points}}.}
 
   \item{\dots}{: other options passed to pdf()}
 }

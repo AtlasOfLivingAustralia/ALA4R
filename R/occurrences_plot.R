@@ -15,7 +15,8 @@
 #' maps for the taxon level defined.
 #' @param taxon_level string: taxonomic level at which to create maps; possible values are 'species', 
 #' 'genus', 'family' or 'order'
-#' @param pch single number or character representing point type. See description of pch in ?points .
+#' @param pch single number or character representing point type. See description of \code{pch} in \code{\link{points}}.
+#' @param cex numeric: character (or symbol) expansion. See description of \code{cex} in \code{\link{points}}.
 #' @param \dots : other options passed to pdf()
 #' @return Generates a pdf that maps the distributions.
 #' 
@@ -28,7 +29,7 @@
 #' occurrences_plot(x,"alaPlot.pdf",qa="fatal",grouped=FALSE, taxon_level="species",pch='+')
 #' }
 #' @export occurrences_plot
-occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), grouped=FALSE, taxon_level='species', pch, ...) 
+occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), grouped=FALSE, taxon_level='species', pch, cex=0.75, ...) 
 {
 	if (!any(class(x)=='occurrences')) stop('check_assertions must have an object of class occurrences from e.g., occurrences() in the ALA4R package')
         assert_that(is.string(taxon_level))
@@ -74,7 +75,7 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 		degAxis(1); degAxis(2) #add on the axis
 		points(xx$longitude,xx$latitude,pch=pch,col='black')
 		if (is.null(coi)) {
-			legend('bottomleft',legend='assumed good',pch=pch,col='black',bty='n',cex=0.75)
+			legend('bottomleft',legend='assumed good',pch=pch,col='black',bty='n',cex=cex)
 		} else {
 			legend.cols = rainbow(length(coi)) #define the legend colors
 			c2use = NULL #define columns to keep because they had issues
@@ -86,9 +87,9 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 				}				
 			}
 			if (is.null(c2use)) {
-				legend('bottomleft',legend='assumed good',pch=pch,col='black',bty='n',cex=0.75)
+				legend('bottomleft',legend='assumed good',pch=pch,col='black',bty='n',cex=cex)
 			} else {
-				legend('bottomleft',legend=c('assumed good',coi[c2use]),pch=pch,col=c('black',legend.cols[c2use]),bty='n',cex=0.75)
+				legend('bottomleft',legend=c('assumed good',coi[c2use]),pch=pch,col=c('black',legend.cols[c2use]),bty='n',cex=cex)
 			}
 		}
 	}
