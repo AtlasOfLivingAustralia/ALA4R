@@ -32,7 +32,14 @@ check_assertions = function(x) {
             }
         }
         ass = na.omit(ass)
-		if (nrow(ass)==0) { warning('no assertions in data'); return(NULL) } else { return(ass) }
+        if (nrow(ass)==0) {
+            if (ala_config()$warn_on_empty) {
+                warning('no assertions in data');
+            }
+            return(NULL)
+        } else {
+            return(ass)
+        }
     } else {
         stop('check_assertions must have an object of class occurrences from e.g., occurrences() in the ALA4R package')
     }

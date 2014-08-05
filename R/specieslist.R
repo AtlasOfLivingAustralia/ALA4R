@@ -64,6 +64,9 @@ specieslist=function(taxon,wkt,fq) {
         names(x)[names(x) %in% c("count","X..Occurrences","Number.of.records")]="occurrenceCount"
         names(x)=rename_variables(names(x),type="occurrence")
     } else {
+        if (ala_config()$warn_on_empty) {
+            warning("no occurrences found")
+        }
         x=NULL
     }
     x

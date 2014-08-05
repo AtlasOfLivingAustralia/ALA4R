@@ -85,6 +85,9 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     out$data=x$results$searchResults
     if (is.list(out$data) & length(out$data)<1) {
         ## no results
+        if (ala_config()$warn_on_empty) {
+            warning("no matching records were returned")
+        }
         out$data=data.frame()
     } else {
         ## rename some columns

@@ -38,6 +38,9 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
     if (!missing(scientificname)) {
         guid=search_names(scientificname,vernacular=FALSE,guids_only=TRUE)
         if (length(guid)<1) {
+            if (ala_config()$warn_on_empty) {
+                warning("no results found")
+            }
             return(list())
         }
         guid=guid[[1]]
@@ -46,6 +49,9 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
     out=cached_get(URLencode(url),type="json",verbose=verbose)
     if (is.null(out)) {
         ## invalid guids will give NULL here, catch them now
+        if (ala_config()$warn_on_empty) {
+            warning("no results found")
+        }
         return(list())
     }
     ## restructure any list children of out to be data.frames

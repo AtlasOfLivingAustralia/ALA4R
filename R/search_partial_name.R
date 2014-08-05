@@ -52,7 +52,9 @@ search_partial_name=function(taxon,geo_only=FALSE,output_format="simple",index_t
 	
     if (length(out)<1) {
         ## no results
-        warning('no matched taxa')
+        if (ala_config()$warn_on_empty) {
+            warning('no matched taxa')
+        }
         return(data.frame())
     } else {
         ## matchedNames, commonNameMatches, and scientificNameMatches are all lists of strings

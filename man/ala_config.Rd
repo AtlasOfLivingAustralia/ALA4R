@@ -23,7 +23,9 @@ ala_reasons()
   non-temporary directory for caching across sessions. The
   directory must exist on the file system.  \item verbose
   logical: should ALA4R give verbose output to assist
-  debugging?  (default=FALSE) \item user_agent string: the
+  debugging?  (default=FALSE) \item warn_on_empty logical:
+  should a warning be issued if a request returns an empty
+  result set? (default=FALSE) \item user_agent string: the
   user-agent string used with all web requests to the ALA
   servers.  Default = "ALA4R" with version number, R
   version and date and user platform \item

@@ -49,6 +49,9 @@ search_layers = function(query,type="all",output_format="simple") {
     out=subset(out,select=xcols)
     attr(out,"output_format")=output_format
     class(out)=c("search_layers",class(out)) ## add the search_names class
+    if (empty(out) && ala_config()$warn_on_empty) {
+        warning("no matching records were returned")
+    }
     out
 }
 

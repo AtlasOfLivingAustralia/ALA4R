@@ -20,6 +20,7 @@
 #'     within an R session and cleared automatically when the user exits R. The user may wish to set this to a non-temporary directory for 
 #'     caching across sessions. The directory must exist on the file system.
 #'   \item verbose logical: should ALA4R give verbose output to assist debugging?  (default=FALSE)
+#'   \item warn_on_empty logical: should a warning be issued if a request returns an empty result set? (default=FALSE)
 #'   \item user_agent string: the user-agent string used with all web requests to the ALA servers.
 #'     Default = "ALA4R" with version number, R version and date and user platform
 #'   \item download_reason_id numeric or string: the "download reason" required by some ALA services, either as a numeric ID (currently 0--11) 
@@ -56,7 +57,7 @@ ala_config=function(...) {
     user_agent_string=paste("ALA4R ",version_string," (",R.Version()$version.string,"/",R.Version()$platform,")",sep="")
 
     ## set default options
-    default_options=list(caching="on",cache_directory=tempdir(),user_agent=user_agent_string,download_reason_id=NA,verbose=FALSE,base_url_spatial="http://spatial.ala.org.au/ws/",base_url_bie="http://bie.ala.org.au/ws/",base_url_biocache="http://biocache.ala.org.au/ws/",base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/")
+    default_options=list(caching="on",cache_directory=tempdir(),user_agent=user_agent_string,download_reason_id=NA,verbose=FALSE,warn_on_empty=FALSE,base_url_spatial="http://spatial.ala.org.au/ws/",base_url_bie="http://bie.ala.org.au/ws/",base_url_biocache="http://biocache.ala.org.au/ws/",base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/")
 
     ## define allowed options, for those that have restricted values
     allowed_options=list(caching=c("on","off","refresh"),download_reason_id=c(1:10))
@@ -122,6 +123,11 @@ ala_config=function(...) {
                 if (identical(this_option_name,"verbose")) {
                     if (!see_if(is.flag(user_options[[i]]))) {
                         stop("verbose should be TRUE or FALSE")
+                    }
+                }
+                if (identical(this_option_name,"warn_on_empty")) {
+                    if (!see_if(is.flag(user_options[[i]]))) {
+                        stop("warn_on_empty should be TRUE or FALSE")
                     }
                 }
                 

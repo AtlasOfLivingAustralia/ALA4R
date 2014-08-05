@@ -233,7 +233,9 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
             ## this file won't exist if there are no rows in the data.csv file, so only do it if nrow(x)>0
             xc=read.table(unz(thisfile,"citation.csv"),header=TRUE,comment.char="",as.is=TRUE)
         } else {
-            warning("no matching records were returned") ## not sure if we should really issue a warning here, but leave it in for now
+            if (ala_config()$warn_on_empty) {
+                warning("no matching records were returned")
+            }
             wkt_ok=check_wkt(wkt)
             if (is.na(wkt_ok)) {
                 warning("WKT string may not be valid: ",wkt)

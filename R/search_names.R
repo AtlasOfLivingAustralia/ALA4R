@@ -65,6 +65,9 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
     }
     if (guids_only) {
         if (empty(x)) {
+            if (ala_config()$warn_on_empty) {
+                warning("no records found");
+            }
             x=list()
         } else {
             x=as.list(x$guid)
@@ -88,6 +91,9 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
             attr(x,"output_format")=output_format
             
         } else {
+            if (ala_config()$warn_on_empty) {
+                warning("no records found");
+            }
             x=data.frame()
             attr(x,"output_format")=output_format
         }

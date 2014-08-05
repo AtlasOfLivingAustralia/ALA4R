@@ -84,10 +84,11 @@ field_info = function(field_id) {
     if (is.null(out)) {
         ## if we got a 500 error, the response will be NULL
         ## it was most likely from an un-matched field name (but we do not get any sort of informative error message from the server)
-        ## just return an empty data frame with no warning
-        ##data.frame()
-		warning('No information returned. Please check field_id is valid using ala_fields(\"layers\").')
-		return(data.frame())
+        ## just return an empty data frame
+        if (ala_config()$warn_on_empty) {
+            warning('No information returned. Please check field_id is valid using ala_fields(\"layers\").')
+        }
+        data.frame()
     } else {
         if (substr(field_id,1,2) == 'cl') {
             out = out$objects #keep only the content

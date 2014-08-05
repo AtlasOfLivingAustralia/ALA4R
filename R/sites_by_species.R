@@ -69,6 +69,9 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
                 if (str_detect(status$message,"No occurrences found")) {
                     ## don't consider "No occurrences found" to be an error
                     cat('\n')
+                    if (ala_config()$warn_on_empty) {
+                        warning("no occurrences found")
+                    }
                     return(data.frame()) ## return empty results
                 }
                 stop(status$message)
@@ -94,7 +97,10 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
     }
     ## rename variables
     names(out)=rename_variables(names(out),type="other")
-    
+    ## warn about empty results if appropriate
+    if (nrow(out)<1 && ala_config()$warn_on_empty) {
+        warning("no occurrences found")
+    }
     ##return the output
     out
 }
