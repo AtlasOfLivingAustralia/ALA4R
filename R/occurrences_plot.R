@@ -38,6 +38,7 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 	if (substr(filename,nchar(filename)-2,nchar(filename))!='pdf') filename=paste(filename,'.pdf',sep='') #append a pdf suffix to filename
 	assert_that(is.flag(grouped))
 	assert_that(is.character(qa))
+        assert_that(is.scalar(cex))
 	if (missing('pch')) {
 		pch=19
 	} else {
