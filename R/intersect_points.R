@@ -87,11 +87,15 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     if (bulk) { #get the results if it is a bulk request
         if (use_post) {
             url_str=paste(base_url,"intersect/batch",sep="")
+            ## we are POSTing, so the fids and points parms don't form part of the URL string
+            ## make sure these are accounted for in the cache file name, though, by using the GET version of the URL to construct our cache file name
+            this_cache_file=ala_cache_filename(URLencode(paste(base_url,'intersect/batch?fids=',layers_str,'&points=',pnts_str,sep='')))
+            
         } else {
             url_str = paste(base_url,'intersect/batch?fids=',layers_str,'&points=',pnts_str,sep='') #define the url string
             url_str=URLencode(url_str) ## should not be needed, but do it anyway
+            this_cache_file=ala_cache_filename(url_str) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
         }
-        this_cache_file=ala_cache_filename(url_str) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
         if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(this_cache_file))) {
             ## fetch the data from the server
             if (use_post) {
