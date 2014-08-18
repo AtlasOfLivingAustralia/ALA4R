@@ -69,12 +69,18 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     ##format the layers string
     layers=fields_name_to_id(fields=layers,fields_type="layers") ## replace long names with ids
     if (bulk) { if (length(layers)>(num_layers_limit-1)) stop('the number of layers must be <',num_layers_limit,' if intersecting more than a single location') } #ensure no more than 300 layers when bulk
-    if (length(layers)>1) {
+	valid_layers = ala_fields('layers')$id #get a list of valid fields
+	unknown = setdiff(layers, valid_layers) #get the different layers
+	if (length(unknown)>0) { 
+		warning(paste(paste(unknown,collapse=', '),'are invalid layer ids')) #warn user of bad layer ids
+		layers = layers[-which(layers %in% unknown)] #remove offending layers
+	}
+	if (length(layers)==0) stop('all layer ids provided were invalid') #nothing returned if no valid IDs provided
+	if (length(layers)>1) {
         layers_str = paste(layers,collapse=',',sep='')
     } else {
         layers_str = layers
     }
-    
     ##download the data
     
     ## workaround for POST problems. First test url length, if it's short enough, use GET
@@ -107,7 +113,14 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
             data_url=cached_get(status_url,type="json",caching="off") #get the data url
             while (data_url$status != 'finished') { #keep checking the status until finished
 				if (data_url$status == "error" ) { stop('ALA batch intersect has returned an error; please check your inputs but if the issue continues, please contact package author.') }
-                Sys.sleep(5)
+                if (verbose & data_url$status == 'waiting') {
+					if (data_url$waiting == "In queue") {
+						cat('your job is in queue... please wait \n')
+					} else {
+						cat('your job is processing... please be patient \n')
+					}
+				}
+				Sys.sleep(5)
                 data_url=cached_get(status_url,type="json",caching="off") #get the data url
             }
             download_to_file(data_url$downloadUrl,outfile=this_cache_file,binary_file=TRUE)
@@ -116,19 +129,12 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
             if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
         }
         out = read.csv(unz(this_cache_file,'sample.csv'),as.is=TRUE) #read in the csv data from the zip file
-		out[which(out=='n/a')] = NA
-        checks = NULL; for (ii in colnames(out)) { if (all(is.na(out[,ii]))) checks = c(checks,ii) } #identify bad layer IDs
-        if (!is.null(checks)) warning(paste(paste(checks,collapse=', '),'are invalid layer ids')) #warn user of bad layer ids
-		out[,checks] = NULL #remove bad columns
-		if (dim(out)[2]==2) stop('no valid data returned from the layers chosen')
-    } else { #get results if just a single location
+	} else { #get results if just a single location
         url_str = paste(base_url,'intersect/',layers_str,'/',pnts_str,sep='') #define the url string
         url_str=URLencode(url_str) ## should not be needed, but do it anyway
         out = cached_get(url_str,type="json") #get the data
-        if (length(out)==0) stop('all layer ids provided were invalid') #nothing returned if no valid IDs provided
         tt = t(out$value); colnames(tt) = out$field 
         out = data.frame(latitude=pnts[1],longitude=pnts[2],tt) # define the output the same as the bulk output
-        checks = setdiff(layers,colnames(out)[-c(1,2)]); if (length(checks)>0) warning(paste(paste(checks,collapse=', '),'are invalid layer ids')) #warn user of bad layer ids
     }
     ##deal with SpatialPointsDataFrame
     if (SPdata.frame) { #if output is requested as a SpatialPointsDataFrame
@@ -142,7 +148,7 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
         names(out)=make.names(fields_id_to_name(names(out),"layers"))
     }
     names(out)=rename_variables(names(out),type="layers") ## rename vars for consistency
-	out[which(out=='n/a')] = NA
+	out[out=='n/a'] = NA
 	
     ##return the output
     out
