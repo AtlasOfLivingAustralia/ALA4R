@@ -24,15 +24,18 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
     if (identical(class(x),"response")) {
         ## if this is a response object, extract the status code
         ## we may also be able to get meaningful diagnostic info out of the message body in some cases
-        if (packageVersion("httr")<0.4) {
-            was_full_response=TRUE
-            xstatus=x$headers$status
-            if (is.null(xstatus)) {
+        was_full_response=TRUE
+        xstatus=x$headers$status
+        if (is.null(xstatus)) {
+            ## newer httr has changed, try this
+            xstatus=as.character(x$status_code) 
+            was_full_response=FALSE
+        }
+        ## check again
+        if (is.null(xstatus)) {
                 warning("error in http status checking: skipped (please notify the package maintainers)")
-            }
-            xstatus=200 ## default to OK
-        } else {            
-            xstatus=x$status
+                was_full_response=FALSE
+                xstatus="200" ## default to OK
         }
     } else {
         ## expect either string (e.g. "500") or integer
