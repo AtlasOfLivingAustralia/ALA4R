@@ -29,9 +29,22 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
     if (identical(caching,"off") && !(type %in% c("filename","binary_filename"))) {
         ## if we are not caching, get this directly without saving to file at all
         if (verbose) { cat(sprintf("  ALA4R: GETting URL %s\n",url)) }
-        x=GET(url=url,user_agent(ala_config()$user_agent))
-        check_status_code(x,on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error)
-        x=content(x,as="text")
+        
+        ## if use RCurl directly
+        h=basicHeaderGatherer()
+        x=getURL(url=url,useragent=ala_config()$user_agent,header=FALSE,headerfunction=h$update)
+        diag_message=""
+        if ((substr(h$value()[["status"]],1,1)=="5") || (substr(h$value()[["status"]],1,1)=="4")) {
+            ## do we have any useful diagnostic info in x?
+            diag_message=get_diag_message(x)
+        }
+        check_status_code(h$value()[["status"]],extra_info=diag_message)
+
+        ## else use httr
+        ##x=GET(url=url,user_agent(ala_config()$user_agent)) ## use httr's GET wrapper around RCurl
+        ##check_status_code(x,on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error)
+        ##x=content(x,as="text")
+        
         if (identical(type,"json")) {
             x=jsonlite::fromJSON(x) ## do text-then-conversion, rather than content(as="parsed") to avoid httr's default use of RJSONIO::fromJSON
         }
