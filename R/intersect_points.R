@@ -93,6 +93,7 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
             }
             data_url=cached_get(status_url,type="json",caching="off") #get the data url
             while (data_url$status != 'finished') { #keep checking the status until finished
+				if (data_url$status == "error" ) { stop('ALA batch intersect has returned an error; please check your inputs but if the issue continues, please contact package author.') }
                 Sys.sleep(5)
                 data_url=cached_get(status_url,type="json",caching="off") #get the data url
             }
