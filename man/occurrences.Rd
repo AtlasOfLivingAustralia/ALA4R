@@ -57,8 +57,8 @@ occurrences(taxon, wkt, fq, fields, extra, qa,
   \item{download_reason_id}{numeric or string: (required
   unless record_count_only is TRUE) a reason code for the
   download, either as a numeric ID (currently 0--11) or a
-  string (see \code{ala_reasons()} for a list of valid ID
-  codes and names). The download_reason_id can be passed
+  string (see \code{\link{ala_reasons}} for a list of valid
+  ID codes and names). The download_reason_id can be passed
   directly to this function, or alternatively set using
   \code{ala_config(download_reason_id=...)}}
 
