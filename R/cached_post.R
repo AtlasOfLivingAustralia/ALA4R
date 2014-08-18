@@ -6,6 +6,7 @@
 # @param body string: the body to POST
 # @param type string: the expected content type. Either "text" (default), "json", or "filename" (this caches the content directly to a file and returns the filename without attempting to read it in)
 # @param caching string: caching behaviour, by default from ala_config()$caching
+# @param content_type string: set the Content-Type header to a specific value (needed for e.g. search_names), default is unset
 # @param ... additional arguments passed to curlPerform
 # @return for type=="text" the content is returned as text. For type=="json", the content is parsed using jsonlite::fromJSON. For "filename", the name of the stored file is returned.
 # @details Depending on the value of caching, the page is either retrieved from the cache or from the url, and stored in the cache if appropriate. The user-agent string is set according to ala_config()$user_agent. The returned response (if not from cached file) is also passed to check_status_code().
@@ -17,7 +18,7 @@
 # out = cached_post(url="http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Macropus&qname=Macropus&area=POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))&bs=http://biocache.ala.org.au/ws&gridsize=0.1&movingaveragesize=9&sitesbyspecies=1",body="")
 
 
-cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,...) {
+cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,content_type,...) {
     assert_that(is.string(url))
     assert_that(is.string(body))
     assert_that(is.string(type))
@@ -56,7 +57,11 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
             }
             f=CFILE(thisfile, mode=file_mode)
             h=basicHeaderGatherer()
-            curlPerform(url=url,postfields=body,post=1L,writedata=f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,...)## not setting this now, it breaks some stuff   httpheader=c("Content-Type" = "application/json"),...)
+            if (!missing(content_type)) {
+                curlPerform(url=url,postfields=body,post=1L,writedata=f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,httpheader=c("Content-Type" = content_type),...)
+            } else {
+                curlPerform(url=url,postfields=body,post=1L,writedata=f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,...)
+            }
             close(f)
             ## check http status here
             ## if unsuccessful, delete the file from the cache first, after checking if there's any useful info in the file body

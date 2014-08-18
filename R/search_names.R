@@ -58,7 +58,7 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
     ## toJSON puts vernacular as a single-element array, which causes failures. Need to convert to scalar logical
     temp=str_replace(temp,"\\[[ ]*false[ ]*\\]","false")
     temp=str_replace(temp,"\\[[ ]*true[ ]*\\]","true")
-    x=cached_post(url=base_url,body=temp,type="json")
+    x=cached_post(url=base_url,body=temp,type="json",content_type="application/json")
     if (identical(x,NA)) {
         ## if a single non-matched name is supplied, we get NA back
         x=NULL
