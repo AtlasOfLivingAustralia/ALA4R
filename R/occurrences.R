@@ -98,7 +98,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         #    num_records=cached_get(url=this_url,type="json")$totalRecords
         #    cat(sprintf('ALA4R occurrences: downloading dataset with %d records',num_records))
         #}
-        return(cached_get(url=this_url,type="json",caching="off")$totalRecords)
+        return(cached_get(url=this_url,type="json",caching="off",verbose=verbose)$totalRecords)
     }
     assert_that(is.flag(use_data_table))
     assert_that(is.flag(use_layer_names))
@@ -154,7 +154,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     this_url$query=this_query
   
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
-    thisfile=cached_get(url=build_url(this_url),type="binary_filename")
+    thisfile=cached_get(url=build_url(this_url),type="binary_filename",verbose=verbose)
     if (!(file.info(thisfile)$size>0)) {
         ## empty file
         x=NULL

@@ -49,14 +49,14 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
     
     this_cache_file=ala_cache_filename(url_str) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
     if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(this_cache_file))) {
-        pid = cached_post(URLencode(url_str),'',caching='off') #should simply return a pid
+        pid = cached_post(URLencode(url_str),'',caching='off',verbose=verbose) #should simply return a pid
         if (pid=="") { stop("there has been an issue with this service. Please try again but if the issue persists, contact support@@ala.org.au") } #catch for these missing pid issues
         status_url = paste('http://spatial.ala.org.au/alaspatial/ws/job?pid=',pid,sep='')
         if(verbose) { cat("  ALA4R: waiting for sites-by-species results to become available: ") }
-        status=cached_get(URLencode(status_url),type="json",caching="off")#get the data url
+        status=cached_get(URLencode(status_url),type="json",caching="off",verbose=verbose)#get the data url
         while (status$state != "SUCCESSFUL") {
             if(verbose) { cat('.') } #keep checking the status until finished
-            status=cached_get(status_url,type="json",caching="off") #get the status
+            status=cached_get(status_url,type="json",caching="off",verbose=verbose) #get the status
             if (status$state=='FAILED') {
                 ## stop if there was an error
                 ## first check the wkt string: if it was invalid (or unrecognized by our checker) then warn the user
