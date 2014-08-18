@@ -78,11 +78,11 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     ##download the data
     
     ## workaround for POST problems. First test url length, if it's short enough, use GET
-    url_str = paste(base_url,'intersect/batch?fids=',layers_str,'&points=',pnts_str,sep='') #define the url string
-    url_str=URLencode(url_str) ## should not be needed, but do it anyway
-    if (nchar(url_str)<8000) {
-        use_post=FALSE
-    }
+    ##url_str = paste(base_url,'intersect/batch?fids=',layers_str,'&points=',pnts_str,sep='') #define the url string
+    ##url_str=URLencode(url_str) ## should not be needed, but do it anyway
+    ##if (nchar(url_str)<8000) {
+    ##    use_post=FALSE
+    ##}
     
     if (bulk) { #get the results if it is a bulk request
         if (use_post) {
