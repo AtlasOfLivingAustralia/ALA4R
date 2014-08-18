@@ -24,8 +24,16 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
     if (identical(class(x),"response")) {
         ## if this is a response object, extract the status code
         ## we may also be able to get meaningful diagnostic info out of the message body in some cases
-        was_full_response=TRUE
-        xstatus=x$headers$status
+        if (packageVersion("httr")<0.4) {
+            was_full_response=TRUE
+            xstatus=x$headers$status
+            if (is.null(xstatus)) {
+                warning("error in http status checking: skipped (please notify the package maintainers)")
+            }
+            xstatus=200 ## default to OK
+        } else {            
+            xstatus=x$status
+        }
     } else {
         ## expect either string (e.g. "500") or integer
         if (!see_if(is.string(x))) {
