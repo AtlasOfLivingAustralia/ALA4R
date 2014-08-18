@@ -113,11 +113,15 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
             data_url=cached_get(status_url,type="json",caching="off") #get the data url
             while (data_url$status != 'finished') { #keep checking the status until finished
 				if (data_url$status == "error" ) { stop('ALA batch intersect has returned an error; please check your inputs but if the issue continues, please contact package author.') }
-                if (verbose & data_url$status == 'waiting') {
-					if (data_url$waiting == "In queue") {
-						cat('your job is in queue... please wait \n')
+                if (verbose) {
+					if (data_url$status == 'waiting') {
+						if (data_url$waiting == "In queue") {
+							cat('your job is in queue... please wait \n')
+						} else {
+							cat('your job is processing... please be patient \n')
+						}
 					} else {
-						cat('your job is processing... please be patient \n')
+						cat('your job is still processing... please be patient \n')
 					}
 				}
 				Sys.sleep(5)
