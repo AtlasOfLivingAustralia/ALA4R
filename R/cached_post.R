@@ -28,11 +28,14 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
 
     ## strip newlines or multiple spaces from url: these seem to cause unexpected behaviour
     url=str_replace_all(url,"[\r\n ]+"," ")
-    
-    if (identical(caching,"off") && !(type %in% c("filename","binary_filename"))) {
+
+    if (FALSE) {
+        ## this is breaking, for some reason. As a workaround use the caching code by default
+        
+    ##if (identical(caching,"off") && !(type %in% c("filename","binary_filename"))) {
         ## if we are not caching, retrieve our page directly without saving to file at all
         if (verbose) { cat(sprintf("  ALA4R: POSTing URL %s\n",url)) }
-        x=POST(url=url,body=body,user_agent(ala_config()$user_agent))
+        x=POST(url=url,body=body,user_agent(ala_config()$user_agent),encode="form")
         check_status_code(x)
         x=content(x,as="text")
         if (identical(type,"json")) {
@@ -44,7 +47,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
         thisfile=digest(paste(url,body)) ## use md5 hash of url plus body as cache filename
         thisfile=file.path(ala_config()$cache_directory,thisfile)
         ## check if file exists
-        if ((caching %in% c("refresh")) || (! file.exists(thisfile))) {
+        if ((caching %in% c("off","refresh")) || (! file.exists(thisfile))) {
             ## file does not exist, or we want to refresh it, so go ahead and get it and save to thisfile
             if (verbose) { cat(sprintf("  ALA4R: caching %s POST to file %s\n",url,thisfile)) }
             file_mode="w" ## text mode
@@ -53,7 +56,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
             }
             f=CFILE(thisfile, mode=file_mode)
             h=basicHeaderGatherer()
-            curlPerform(url=url,postfields=body,post=1L,writedata=f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,httpheader=c("Content-Type" = "application/json"),...)
+            curlPerform(url=url,postfields=body,post=1L,writedata=f@ref,useragent=ala_config()$user_agent,verbose=verbose,headerfunction=h$update,...)## not setting this now, it breaks some stuff   httpheader=c("Content-Type" = "application/json"),...)
             close(f)
             ## check http status here
             ## if unsuccessful, delete the file from the cache first, after checking if there's any useful info in the file body
