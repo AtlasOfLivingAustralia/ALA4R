@@ -60,7 +60,7 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
                     return(on_redirect(xstatus))
                 } else {
                     ## just issue a warning for now
-                    warning("ALA4R: HTTP status code ",xstatus," received.\nIf there are problems, please notify the package maintainers.")
+                    warning("ALA4R: HTTP status code ",xstatus," received.\nThis may be OK: if there are problems, please notify the package maintainers.")
                     return(1)
                 }
             },
@@ -71,7 +71,7 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
                     assert_that(is.function(on_client_error))
                     return(on_client_error(xstatus))
                 } else {
-                    diag_msg="  Either there was an error with your request, or an error in the ALA4R package."
+                    diag_msg="  Either there was an error with your request, in the ALA4R package, or the ALA servers are down. Please try again later and notify the package maintainers if you still have problems."
                     if (was_full_response) {
                         x=jsonlite::fromJSON(content(x,type="text"))
                         if (!is.null(x$message)) {
@@ -90,7 +90,7 @@ check_status_code=function(x,on_redirect=NULL,on_client_error=NULL,on_server_err
                     assert_that(is.function(on_server_error))
                     return(on_server_error(xstatus))
                 } else {
-                    diag_msg="  Either there was an error with the request, or the ALA service may be down (try again later)."
+                    diag_msg="  Either there was an error with the request, or the ALA service may be down (try again later). Notify the package maintainers if you still have problems."
                     if (was_full_response) {
                         x=jsonlite::fromJSON(content(x,type="text"))
                         if (!is.null(x$message)) {
