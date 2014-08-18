@@ -35,7 +35,7 @@
 
 search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort_by,sort_dir) {
     output_format=match.arg(tolower(output_format),c("simple","complete"))
-    base_url="http://bie.ala.org.au/ws/search.json"
+    base_url=paste(ala_config()$base_url_bie,"search.json",sep="")
     this_url=parse_url(base_url)
     this_query=list()
     if (!missing(query)) {
@@ -77,12 +77,26 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     x=as.list(x)
     
     ## reformat data into a more concise structure
+    ## for newer jsonlite (> something like 0.9.5) there is a top-level x$searchResults and other parts of the structure differ slightly
+    is_old_jsonlite=TRUE
+    if (identical(names(x),"searchResults")) {
+        x=x$searchResults
+        is_old_jsonlite=FALSE
+    }    
     ## x is a named list. Each component of that list is itself a named list with a single element "searchResults".
     ## first collate the metadata, which is everything except "results" and "facetResults" elements
     out=list(meta=x[!names(x) %in% c("results","facetResults")])
-    ## collapse the singleton "searchResults" structures
-    out$meta=lapply(out$meta,function(z)z$searchResults)
-    out$data=x$results$searchResults
+    if (is_old_jsonlite) {
+        ## collapse the singleton "searchResults" structures
+        out$meta=lapply(out$meta,function(z)z$searchResults)
+        out$data=x$results$searchResults
+    } else {
+        out$data=x$results
+    }
+    if (! is.data.frame(out$data)) {
+        ## something wrong
+        stop("structure of json not as expected, please notify ALA4R package maintainers")
+    }
     if (is.list(out$data) & length(out$data)<1) {
         ## no results
         if (ala_config()$warn_on_empty) {
