@@ -6,7 +6,8 @@
 #'
 #' This function allows the user to sample environmental/contextual layers at arbitrary locations. It complements 
 #' the \code{\link{occurrences}} function, which allows values of the same set of layers to be downloaded at 
-#' species occurrence locations. NOTE: large requests may be slow. A single point (even with a large number of layers) will generally be OK; a large number of points may be very slow. Be warned.
+#' species occurrence locations.
+#' NOTE: batch requests (multiple points) are currently processed in a *single queue* on the ALA servers. Processing times may be slow if there are many requests in the queue. Note also that the actual processing of batch requests is inherently slow: a large number of points may take quite some time. Be warned.
 #' @param pnts numeric: vector of latitude/longitude pairs, or a 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 100000.
 #' @param layers string vector: ids of layers to be intersected. The list of possible layers is available from \code{ala_fields("layers")}. Names can be passed as full layer names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Note: if more than one location has been provided in \code{pnts}, the number of layers must be less than 700.
 #' @param SPdata.frame logical: should the output should be returned as a SpatialPointsDataFrame of the sp package or simply as a data.frame?
@@ -75,6 +76,14 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     }
     
     ##download the data
+    
+    ## workaround for POST problems. First test url length, if it's short enough, use GET
+    url_str = paste(base_url,'intersect/batch?fids=',layers_str,'&points=',pnts_str,sep='') #define the url string
+    url_str=URLencode(url_str) ## should not be needed, but do it anyway
+    if (nchar(url_str)<8000) {
+        use_post=FALSE
+    }
+    
     if (bulk) { #get the results if it is a bulk request
         if (use_post) {
             url_str=paste(base_url,"intersect/batch",sep="")

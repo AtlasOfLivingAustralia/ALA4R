@@ -66,10 +66,12 @@ This function allows the user to sample
 environmental/contextual layers at arbitrary locations. It
 complements the \code{\link{occurrences}} function, which
 allows values of the same set of layers to be downloaded at
-species occurrence locations. NOTE: large requests may be
-slow. A single point (even with a large number of layers)
-will generally be OK; a large number of points may be very
-slow. Be warned.
+species occurrence locations. NOTE: batch requests
+(multiple points) are currently processed in a *single
+queue* on the ALA servers. Processing times may be slow if
+there are many requests in the queue. Note also that the
+actual processing of batch requests is inherently slow: a
+large number of points may take quite some time. Be warned.
 }
 \seealso{
 \code{\link{ala_config}}
