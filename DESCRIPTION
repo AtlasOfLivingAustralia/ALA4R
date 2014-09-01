@@ -22,7 +22,7 @@ Imports:
 Suggests:
     data.table,
     R.rsp
-License: Mozilla MPL 1.1
+License: MPL-1.1
 URL: \url{http://rforge.net/ALA4R/}
 LazyLoad: yes
 LazyData: yes
