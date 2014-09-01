@@ -5,7 +5,7 @@
 \usage{
 ala_fields(fields_type = "occurrence", as_is = FALSE)
 
-field_info(field_id)
+field_info(field_id, maxrows = 50, record_count_only = FALSE)
 }
 \arguments{
   \item{fields_type}{text: one of the following \itemize{
@@ -27,10 +27,25 @@ field_info(field_id)
   layer field for which to look up information Prepend "el"
   for "environmental" (gridded) layers and "cl" for
   "contextual" (polygonal) layers}
+
+  \item{maxrows}{integer: maximum number of records to
+  download. Some contextual layers (those with
+  \code{field_id}s starting with "cl") have a very large
+  number of records and attempting to download the full set
+  can cause R to crash. Specifying -1 for maxrows will
+  download the full set of records for that field}
+
+  \item{record_count_only}{logical: if TRUE, return just
+  the count of records that would be downloaded, but don't
+  download them. This really only makes sense for
+  contextual layers, because environmental layers have only
+  one record per layer}
 }
 \value{
-A data frame containing the field names and various
-attributes; NULL is returned if no match is found.
+If \code{record_count_only} is TRUE, the number of records
+is returned as numeric. Otherwise, a data frame containing
+the field name and various attributes; an empty data frame
+is returned if no match is found
 }
 \description{
 Retrieves a list of all field names that can be used with

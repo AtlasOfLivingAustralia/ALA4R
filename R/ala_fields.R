@@ -18,7 +18,9 @@
 #' leave the field names as they are returned from the ALA web service
 #' @param field_id text: id of environmental/contextual layer field for which to look up information
 #' Prepend "el" for "environmental" (gridded) layers and "cl" for "contextual" (polygonal) layers
-#' @return A data frame containing the field names and various attributes; NULL is returned if no match is found.
+#' @param maxrows integer: maximum number of records to download. Some contextual layers (those with \code{field_id}s starting with "cl") have a very large number of records and attempting to download the full set can cause R to crash. Specifying -1 for maxrows will download the full set of records for that field
+#' @param record_count_only logical: if TRUE, return just the count of records that would be downloaded, but don't download them. This really only makes sense for contextual layers, because environmental layers have only one record per layer
+#' @return If \code{record_count_only} is TRUE, the number of records is returned as numeric. Otherwise, a data frame containing the field name and various attributes; an empty data frame is returned if no match is found
 #' @examples
 #' l=ala_fields("layers")
 #' l[,4]
@@ -74,11 +76,17 @@ ala_fields=function(fields_type="occurrence",as_is=FALSE) {
 
 #' @rdname ala_fields
 #' @export
-field_info = function(field_id) {
+field_info = function(field_id,maxrows=50,record_count_only=FALSE) {
     assert_that(is.string(field_id))
+    assert_that(is.count(maxrows) || maxrows==-1)
+    assert_that(is.flag(record_count_only))
+    if (record_count_only) {
+        ## override maxrows setting
+        maxrows=0
+    }
     field_id=fields_name_to_id(fields=field_id,fields_type="layers")
     base_url = paste(ala_config()$base_url_spatial,"field",sep="")
-    out = cached_get(url=paste(base_url,field_id,sep='/'),type="json")
+    out = cached_get(url=paste(base_url,"/",field_id,"?pageSize=",maxrows,sep=""),type="json") ## retrieve a max of 50 objects by default
     if (is.null(out)) {
         ## un-matched field name, return an empty data frame
         if (ala_config()$warn_on_empty) {
@@ -87,8 +95,18 @@ field_info = function(field_id) {
         data.frame()
     } else {
         if (substr(field_id,1,2) == 'cl') {
+            if (record_count_only) {
+                return(out$number_of_objects)
+            } else if (nrow(out$objects)<out$number_of_objects) {
+                ## we retrieved a subset of the full record set for this field, so let the user know
+                warning("field_info retrieved ",nrow(out$objects)," rows out of a total of ",out$number_of_objects," for this field. You may wish to increase the maxrows parameter, but be aware that a very large number of rows may crash R")
+            }
             out = out$objects #keep only the content
         } else if (substr(field_id,1,2) == 'el') {
+            if (record_count_only) {
+                ## user has asked for number of rows, which is always 1 for el layers
+                return(1)
+            }
             out = as.data.frame(rbind(out)) #bind the data as a dataframe	
             rownames(out) = NULL #reset the row names
         }
