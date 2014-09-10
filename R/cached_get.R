@@ -74,7 +74,7 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
                 thisfile
             } else {
                 ## should not be here! did we add an allowed type to the arguments without adding handler code down here?
-                stop(sprintf("unrecognized type %s in cached_post",type))
+                stop(sprintf("unrecognized type %s in cached_get",type))
             }
         }
     }
