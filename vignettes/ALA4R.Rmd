@@ -5,7 +5,7 @@ output: html_document
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{ALA4R}
 -->
-<!-- To build this vignette, open this file in RStudio and knit to HTML, then move the HTML file to the vignettes directory -->
+<!-- To build this vignette, open this file in RStudio and knit to HTML -->
 
 # ALA4R
 
@@ -21,24 +21,26 @@ This project enables the R community to directly access data and resources hoste
 
 ## Installing
 
-### Windows
+### Stable version
 
-First, install some packages from CRAN that are required by our package (CRAN is a network of ftp and web servers around the world that store identical, up-to-date, versions of code and documentation for R):
+Most users will want this.
+
+#### Windows
+
+In R:
+
 ```{r eval=FALSE}
-install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp"))
+install.packages("ALA4R")
 ```
 
 If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
 ```{r eval=FALSE}
-install.packages(c("data.table"))
+install.packages("data.table")
 ```
 
-Then install the ALA4R package itself from RForge:
-```{r eval=FALSE}
-install.packages("ALA4R",repos="http://rforge.net/",type="source")
-```
 
-### Linux
+
+#### Linux
 
 First, ensure that `libcurl` is installed on your system --- e.g. on Ubuntu, open a terminal and do:
 ```
@@ -47,21 +49,61 @@ sudo apt-get install libcurl4-openssl-dev
 
 or install `libcurl4-openssl-dev` via the Software Centre.
 
-Then, fire up R and install the dependencies that we need:
+Then, in R:
+
+```{r eval=FALSE}
+install.packages("ALA4R")
+```
+
+If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
+```{r eval=FALSE}
+install.packages("data.table")
+```
+
+### Development version
+
+The development version is hosted on rforge.net. It is more up-to-date than the stable version, and may have additional functionality, but may also have unresolved issues.
+
+#### Windows
+
+Install the dependencies first from CRAN:
 ```{r eval=FALSE}
 install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp"))
 ```
 
 If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
 ```{r eval=FALSE}
-install.packages(c("data.table"))
+install.packages("data.table")
+```
+
+Then the ALA4R package itself:
+```{r eval=FALSE}
+install.packages("ALA4R",repos="http://rforge.net/",type="source")
+```
+
+#### Linux
+
+First, ensure that `libcurl` is installed on your system --- e.g. on Ubuntu, open a terminal and do:
+```
+sudo apt-get install libcurl4-openssl-dev
+```
+
+or install `libcurl4-openssl-dev` via the Software Centre.
+
+Then, fire up R and install the required dependencies from CRAN:
+```{r eval=FALSE}
+install.packages(c("httr","stringr","plyr","digest","RCurl","jsonlite","assertthat","sp"))
+```
+
+If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
+```{r eval=FALSE}
+install.packages("data.table")
 ```
 
 Then the ALA4R package itself:
 ```{r eval=FALSE}
 install.packages("ALA4R",repos="http://rforge.net/")
 ```
-
 
 
 ## Using
