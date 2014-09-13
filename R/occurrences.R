@@ -236,11 +236,13 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
             if (ala_config()$warn_on_empty) {
                 warning("no matching records were returned")
             }
-            wkt_ok=check_wkt(wkt)
-            if (is.na(wkt_ok)) {
-                warning("WKT string may not be valid: ",wkt)
-            } else if (!wkt_ok) {
-                warning("WKT string appears to be invalid: ",wkt)
+            if (!missing(wkt)) {
+                wkt_ok=check_wkt(wkt)
+                if (is.na(wkt_ok)) {
+                    warning("WKT string may not be valid: ",wkt)
+                } else if (!wkt_ok) {
+                    warning("WKT string appears to be invalid: ",wkt)
+                }
             }
             xc=NULL
         }
