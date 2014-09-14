@@ -17,6 +17,8 @@ library(devtools)
 install_github("AtlasOfLivingAustralia/ALA4R")
 ```
 
+You may see a warning about the `Rtools` package: you don't need to install this. You may also be asked about a location for the `R.cache` directory --- choose whatever you prefer here, ALA4R does not use `R.cache`.
+
 If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
 ```{r}
 install.packages("data.table")
