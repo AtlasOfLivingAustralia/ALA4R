@@ -64,51 +64,21 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <p>This project enables the R community to directly access data and resources hosted by the Atlas of Living Australia (ALA: <a href="http://ala.org.au/">http://ala.org.au/</a>). Our goal is to enable outputs (e.g. observations of species) to be queried and output in a range of standard formats.</p>
 <div id="installing" class="section level2">
 <h2>Installing</h2>
-<div id="stable-version" class="section level3">
-<h3>Stable version</h3>
-<p>Most users will want this.</p>
-<div id="windows" class="section level4">
-<h4>Windows</h4>
+<div id="windows" class="section level3">
+<h3>Windows</h3>
 <p>In R:</p>
-<pre class="r"><code>install.packages(&quot;ALA4R&quot;)</code></pre>
+<pre class="r"><code>install.packages(&quot;devtools&quot;)
+library(devtools)
+install_github(&quot;AtlasOfLivingAustralia/ALA4R&quot;)</code></pre>
 <p>If you wish to use the <code>data.table</code> package for potentially faster loading of data matrices (optional), also do:</p>
 <pre class="r"><code>install.packages(&quot;data.table&quot;)</code></pre>
 </div>
-<div id="linux" class="section level4">
-<h4>Linux</h4>
+<div id="linux" class="section level3">
+<h3>Linux</h3>
 <p>First, ensure that <code>libcurl</code> is installed on your system — e.g. on Ubuntu, open a terminal and do:</p>
 <pre><code>sudo apt-get install libcurl4-openssl-dev</code></pre>
 <p>or install <code>libcurl4-openssl-dev</code> via the Software Centre.</p>
-<p>Then, in R:</p>
-<pre class="r"><code>install.packages(&quot;ALA4R&quot;)</code></pre>
-<p>If you wish to use the <code>data.table</code> package for potentially faster loading of data matrices (optional), also do:</p>
-<pre class="r"><code>install.packages(&quot;data.table&quot;)</code></pre>
-</div>
-</div>
-<div id="development-version" class="section level3">
-<h3>Development version</h3>
-<p>The development version is hosted on rforge.net. It is more up-to-date than the stable version, and may have additional functionality, but may also have unresolved issues.</p>
-<div id="windows-1" class="section level4">
-<h4>Windows</h4>
-<p>Install the dependencies first from CRAN:</p>
-<pre class="r"><code>install.packages(c(&quot;httr&quot;,&quot;stringr&quot;,&quot;plyr&quot;,&quot;digest&quot;,&quot;RCurl&quot;,&quot;jsonlite&quot;,&quot;assertthat&quot;,&quot;sp&quot;))</code></pre>
-<p>If you wish to use the <code>data.table</code> package for potentially faster loading of data matrices (optional), also do:</p>
-<pre class="r"><code>install.packages(&quot;data.table&quot;)</code></pre>
-<p>Then the ALA4R package itself:</p>
-<pre class="r"><code>install.packages(&quot;ALA4R&quot;,repos=&quot;http://rforge.net/&quot;,type=&quot;source&quot;)</code></pre>
-</div>
-<div id="linux-1" class="section level4">
-<h4>Linux</h4>
-<p>First, ensure that <code>libcurl</code> is installed on your system — e.g. on Ubuntu, open a terminal and do:</p>
-<pre><code>sudo apt-get install libcurl4-openssl-dev</code></pre>
-<p>or install <code>libcurl4-openssl-dev</code> via the Software Centre.</p>
-<p>Then, fire up R and install the required dependencies from CRAN:</p>
-<pre class="r"><code>install.packages(c(&quot;httr&quot;,&quot;stringr&quot;,&quot;plyr&quot;,&quot;digest&quot;,&quot;RCurl&quot;,&quot;jsonlite&quot;,&quot;assertthat&quot;,&quot;sp&quot;))</code></pre>
-<p>If you wish to use the <code>data.table</code> package for potentially faster loading of data matrices (optional), also do:</p>
-<pre class="r"><code>install.packages(&quot;data.table&quot;)</code></pre>
-<p>Then the ALA4R package itself:</p>
-<pre class="r"><code>install.packages(&quot;ALA4R&quot;,repos=&quot;http://rforge.net/&quot;)</code></pre>
-</div>
+<p>Then follow the instructions for Windows, above.</p>
 </div>
 </div>
 <div id="using" class="section level2">
