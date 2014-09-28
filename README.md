@@ -100,16 +100,19 @@ ala_config(verbose=TRUE)
 ```
 
 ##Examples
+First, check that we have some additional packages that we'll use in the examples, and install them if necessary.
+```R
+to_install=c("plyr","jpeg","phytools","ape","leafletR","vegan","mgcv","geosphere","maps","mapdata","maptools")
+to_install=setdiff(to_install,installed.packages()[,"Package"])
+if(length(to_install)) install.packages(to_install)
+```
+
 We’ll use the `plyr` package throughout these examples, so load that now:
 ```R
 library(plyr) 
 ```
+
 ###Example 1: Name searching and taxonomic trees
-You may need to install these packages first using `R install.packages(c("ape","phytools"))`:
-```R
-library(ape)
-library(phytools)
-```
 We want to look at the taxonomic tree of penguins, but we don’t know what the correct scientific name is, so let’s search for it:
 ```R
 sx=search_fulltext("penguins")
@@ -404,7 +407,7 @@ plot(cl) ## plot dendrogram
 grp=cutree(cl,20) ## extract group labels at the 20-group level
 ## coalesce small (outlier) groups into a single catch-all group
 sing=which(table(grp)<5)
-grp[grp %in% sing]=21 ## singletons to new combined group
+grp[grp %in% sing]=21 ## put these in a new combined group
 grp=sapply(grp,function(z)which(unique(grp)==z)) ## renumber groups
 ## plot
 with(xgridded,plot(longitude,latitude,pch=21,col=grp,bg=grp))
@@ -418,7 +421,7 @@ library(maps)
 library(mapdata)
 map("worldHires","Australia", xlim=c(105,155), ylim=c(-45,-10), col="gray90", fill=TRUE)
 thiscol=c("#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b",
-  "#e377c2","#7f7f7f","#bcbd22","#17becf") ## colours for cluster
+  "#e377c2","#7f7f7f","#bcbd22","#17becf") ## colours for clusters
 with(xgridded,points(longitude,latitude,pch=21,col=thiscol[grp],bg=thiscol[grp],cex=0.75))
 ```
 
