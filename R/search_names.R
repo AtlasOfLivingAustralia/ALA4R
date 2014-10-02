@@ -103,7 +103,8 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
     x
 }
 
-#' @S3method print search_names
+#' @method print search_names
+#' @export
 "print.search_names" <- function(x, ...)
 {
     if (any(class(x)=="list")) {

@@ -48,7 +48,7 @@ NULL
 
 #' @rdname occurrences_s3
 #' @method summary occurrences
-#' @S3method summary occurrences
+#' @export
 "summary.occurrences" <- function(object, ...) {
     ## names are a little problematic at the moment: sometimes scientificName doesn't come back (being resolved in web service I hope)
     if ("scientificName" %in% names(object$data)) {
@@ -74,7 +74,7 @@ NULL
 
 #' @rdname occurrences_s3
 #' @method unique occurrences
-#' @S3method unique occurrences
+#' @export
 "unique.occurrences" <- function(x, incomparables=FALSE, spatial=0, temporal=NULL, na.rm=FALSE, ...) {
     assert_that(is.numeric(spatial)) #ensure unique.spatial is numeric
     if (!is.null(temporal)) {
@@ -108,7 +108,7 @@ NULL
 
 #' @rdname occurrences_s3
 #' @method subset occurrences
-#' @S3method subset occurrences
+#' @export
 "subset.occurrences" = function(x, remove.fatal=TRUE, exclude.spatial='error', exclude.temporal='error', 
 	exclude.taxonomic='error', max.spatial.uncertainty, keep.missing.spatial.uncertainty=TRUE, ...) 
 {
