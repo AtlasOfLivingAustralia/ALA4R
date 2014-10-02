@@ -24,7 +24,7 @@
 #' 
 #' @export
 search_partial_name=function(taxon,geo_only=FALSE,output_format="simple",index_type,limit) {
-    assert_that(is.string(taxon))
+    assert_that(is.notempty.string(taxon))
     output_format=match.arg(tolower(output_format),c("simple","complete"))
     taxon = clean_string(taxon) #clean up the taxon name
     taxon = gsub(' ','+',taxon) #replace spaces with + to force both terms in the search

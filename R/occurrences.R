@@ -62,12 +62,12 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     this_query=list()
     ## have we specified a taxon?
     if (!missing(taxon)) {
-        assert_that(is.string(taxon))
+        assert_that(is.notempty.string(taxon))
         this_query$q=taxon
     }
     ## wkt string
     if (!missing(wkt)) {
-        assert_that(is.string(wkt))
+        assert_that(is.notempty.string(wkt))
         this_query$wkt=wkt
     }
     if (!missing(fq)) {

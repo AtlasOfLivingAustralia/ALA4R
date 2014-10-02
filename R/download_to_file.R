@@ -6,7 +6,7 @@
 
 
 download_to_file=function(url,outfile,binary_file=FALSE,caching=ala_config()$caching,verbose=ala_config()$verbose,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL,...) {
-    assert_that(is.string(url))
+    assert_that(is.notempty.string(url))
     ## download from a URL using RCurl to a file
     ## we do this directly using RCurl to file, rather than reading into R memory and then dumping to file
     if (missing(outfile)) {

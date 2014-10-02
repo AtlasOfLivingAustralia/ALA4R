@@ -2,6 +2,12 @@
 
 ##----------------------------------------------------------------------------------------------
 
+is.notempty.string=function(x) {
+    is.string(x) && !is.na(x) && nchar(x)>0
+}
+
+##----------------------------------------------------------------------------------------------
+
 ## internal function for converting chr data types to numeric or logical
 convert_dt=function(x,test_numeric=TRUE) {
     ## set test_numeric to FALSE to skip checking for numeric columns - might be a little faster if not needed

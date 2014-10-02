@@ -32,8 +32,8 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
     ##todo setup output structure and class
     ##todo api movingaveragesize is unnecessary... consider removing...
     ## check input parms are sensible
-    assert_that(is.string(taxon))
-    assert_that(is.string(wkt))
+    assert_that(is.notempty.string(taxon))
+    assert_that(is.notempty.string(wkt))
     assert_that(is.numeric(gridsize), gridsize>0)
     assert_that(is.flag(SPdata.frame))
     assert_that(is.flag(verbose))
@@ -84,7 +84,11 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
         if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
     }
     out = read.csv(unz(this_cache_file,'SitesBySpecies.csv'),as.is=TRUE,skip=4) #read in the csv data from the zip file; omit the first 4 header rows
-
+    ## also read the species guids
+    ## commented out temporarily, BR
+##    guids = read.csv(unz(this_cache_file,'SitesBySpecies.csv'),as.is=TRUE,nrows=1,header=FALSE)
+##    guids=as.character(guids)
+##    guids[1:3]="" ## first 3 cols will be species lon lat
     ## drop the "Species" column, which appears to be a site identifier (but just constructed from the longitude and latitude, so is not particularly helpful
     out=out[,!names(out)=="Species"]
     
@@ -97,6 +101,7 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
     }
     ## rename variables
     names(out)=rename_variables(names(out),type="other")
+##    attr(out,"column_guids")=guids
     ## warn about empty results if appropriate
     if (nrow(out)<1 && ala_config()$warn_on_empty) {
         warning("no occurrences found")

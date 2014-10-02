@@ -24,12 +24,12 @@
 specieslist=function(taxon,wkt,fq) {
     this_query=list()
     if (!missing(taxon)) {
-        assert_that(is.string(taxon))
+        assert_that(is.notempty.string(taxon))
         # taxon = clean_string(taxon) ## clean up the taxon name ## no, don't: this can be of the form index:value
         this_query$q=taxon
     }
     if (!missing(wkt)) {
-        assert_that(is.string(wkt))
+        assert_that(is.notempty.string(wkt))
         wkt_ok=check_wkt(wkt)
         if (is.na(wkt_ok) || !wkt_ok) {
             warning("WKT string appears to be invalid: ",wkt)

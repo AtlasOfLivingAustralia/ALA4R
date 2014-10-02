@@ -77,7 +77,7 @@ ala_fields=function(fields_type="occurrence",as_is=FALSE) {
 #' @rdname ala_fields
 #' @export
 field_info = function(field_id,maxrows=50,record_count_only=FALSE) {
-    assert_that(is.string(field_id))
+    assert_that(is.notempty.string(field_id))
     assert_that(is.count(maxrows) || maxrows==-1)
     assert_that(is.flag(record_count_only))
     if (record_count_only) {

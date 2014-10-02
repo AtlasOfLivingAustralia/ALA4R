@@ -34,7 +34,7 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 	if (!any(class(x)=='occurrences')) stop('check_assertions must have an object of class occurrences from e.g., occurrences() in the ALA4R package')
         assert_that(is.string(taxon_level))
         taxon_level=match.arg(tolower(taxon_level),c("species","genus","family","order"))
-	assert_that(is.string(filename))
+	assert_that(is.notempty.string(filename))
 	if (substr(filename,nchar(filename)-2,nchar(filename))!='pdf') filename=paste(filename,'.pdf',sep='') #append a pdf suffix to filename
 	assert_that(is.flag(grouped))
 	assert_that(is.character(qa))

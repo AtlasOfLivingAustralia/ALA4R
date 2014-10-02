@@ -6,7 +6,7 @@ check_wkt=function(wkt,silent=TRUE) {
     ##try({ readWKT(wkt);wkt_OK=TRUE },silent=TRUE)
     
     ## instead we do some lightweight WKT checking here, and rely on the error message from the server to identify more subtle errors in the WKT string
-    if (nchar(wkt)<1) {
+    if (nchar(wkt)<1 || is.na(wkt)) {
         ## empty string: treat as invalid wkt
         return(FALSE)
     }

@@ -1,11 +1,18 @@
 Package: ALA4R
 Type: Package
 Title: Atlas of Living Australia (ALA) data and resources in R
-Version: 1.01
-Date: 2014-09-14
+Version: 1.02
+Date: 2014-10-02
 Author: Atlas of Living Australia, Ben Raymond, Jeremy VanDerWal, Lee Belbin
 Maintainer: Atlas of Living Australia <support@ala.org.au>
-Description: The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from \url{http://ala.org.au/}. ALA4R provides a subset of the tools to be directly used within R. It enables the R community to directly access data and resources hosted by the ALA. Our goal is to enable outputs (e.g. observations of species) to be queried and output in a range of standard formats.
+Description: The Atlas of Living Australia (ALA) provides tools to enable users
+    of biodiversity information to find, access, combine and visualise data on
+    Australian plants and animals; these have been made available from
+    \url{http://ala.org.au/}. ALA4R provides a subset of the tools to be
+    directly used within R. It enables the R community to directly access data
+    and resources hosted by the ALA. Our goal is to enable outputs (e.g.
+    observations of species) to be queried and output in a range of standard
+    formats.
 Imports:
     stringr,
     httr,

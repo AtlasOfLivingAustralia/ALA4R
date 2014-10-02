@@ -105,7 +105,7 @@ ala_config=function(...) {
                 }
                 ## any other specific checks ...
                 if (identical(this_option_name,"cache_directory")) {
-                    if (!see_if(is.string(user_options[[i]]))) {
+                    if (!see_if(is.notempty.string(user_options[[i]]))) {
                         stop("cache_directory should be a string")
                     }
                     ## strip trailing file separator, if there is one

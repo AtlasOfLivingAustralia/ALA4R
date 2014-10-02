@@ -19,7 +19,7 @@
 
 
 cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,content_type,...) {
-    assert_that(is.string(url))
+    assert_that(is.notempty.string(url))
     assert_that(is.string(body))
     assert_that(is.string(type))
     type=match.arg(tolower(type),c("text","json","filename","binary_filename"))

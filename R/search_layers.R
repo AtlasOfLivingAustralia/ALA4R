@@ -18,7 +18,7 @@ search_layers = function(query,type="all",output_format="simple") {
     assert_that(is.string(type))
     type=match.arg(tolower(type),c("all","grids","shapes"))
     if (!missing(query)) {
-        assert_that(is.string(query))
+        assert_that(is.notempty.string(query))
     }
     assert_that(is.character(output_format))
     output_format=match.arg(tolower(output_format),c("simple","complete"))    
