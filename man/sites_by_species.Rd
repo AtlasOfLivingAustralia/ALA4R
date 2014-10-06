@@ -18,7 +18,7 @@ sites_by_species(taxon, wkt, gridsize = 0.1, SPdata.frame = FALSE,
 \item{verbose}{logical: show additional progress information? [default is set by ala_config()]}
 }
 \value{
-A dataframe or a SpatialPointsDataFrame containing the species by sites data. Columns will include longitude, latitude, and each species present. Values for species are record counts (i.e. number of recorded occurrences of that taxon in each grid cell)
+A dataframe or a SpatialPointsDataFrame containing the species by sites data. Columns will include longitude, latitude, and each species present. Values for species are record counts (i.e. number of recorded occurrences of that taxon in each grid cell). The \code{guid} attribute of the data frame gives the guids of the species (columns) as a named character vector
 }
 \description{
 A data.frame is returned as grid cells by species with values in each cell being the number of occurrences of each species. No null (all zero) species should be returned. The coordinates returned are the TOP-LEFT corner of the grid cell.
@@ -29,6 +29,8 @@ A data.frame is returned as grid cells by species with values in each cell being
 ss=sites_by_species(taxon='genus:Eucalyptus',wkt='POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))',gridsize=0.1,verbose=TRUE)
 ss[,1:6]
 # equivalent direct webservice call: POST http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Eucalyptus&qname=data&area=POLYGON((144\%20-43,148\%20-43,148\%20-40,144\%20-40,144\%20-43))&bs=http://biocache.ala.org.au/ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1
+## get the guid of the first species (which is the third column of the data frame, since the first two columns are longitude and latitude)
+attr(ss,"guid")[1]
 }
 }
 \author{

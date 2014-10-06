@@ -13,7 +13,7 @@
 #' @param gridsize numeric: size of output grid cells in decimal degrees. E.g. 0.1 (=~10km)
 #' @param SPdata.frame logical: should the output be returned as a SpatialPointsDataFrame of the sp package?
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
-#' @return A dataframe or a SpatialPointsDataFrame containing the species by sites data. Columns will include longitude, latitude, and each species present. Values for species are record counts (i.e. number of recorded occurrences of that taxon in each grid cell) 
+#' @return A dataframe or a SpatialPointsDataFrame containing the species by sites data. Columns will include longitude, latitude, and each species present. Values for species are record counts (i.e. number of recorded occurrences of that taxon in each grid cell). The \code{guid} attribute of the data frame gives the guids of the species (columns) as a named character vector
 #'
 #' @examples
 #' \dontrun{
@@ -21,6 +21,8 @@
 #' ss=sites_by_species(taxon='genus:Eucalyptus',wkt='POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))',gridsize=0.1,verbose=TRUE)
 #' ss[,1:6]
 #' # equivalent direct webservice call: POST http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Eucalyptus&qname=data&area=POLYGON((144%20-43,148%20-43,148%20-40,144%20-40,144%20-43))&bs=http://biocache.ala.org.au/ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1
+#' ## get the guid of the first species (which is the third column of the data frame, since the first two columns are longitude and latitude)
+#' attr(ss,"guid")[1]
 #' }
 
 # TODO need way to better check input species query
@@ -84,14 +86,8 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
         if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
     }
     out = read.csv(unz(this_cache_file,'SitesBySpecies.csv'),as.is=TRUE,skip=4) #read in the csv data from the zip file; omit the first 4 header rows
-    ## also read the species guids
-    ## commented out temporarily, BR
-##    guids = read.csv(unz(this_cache_file,'SitesBySpecies.csv'),as.is=TRUE,nrows=1,header=FALSE)
-##    guids=as.character(guids)
-##    guids[1:3]="" ## first 3 cols will be species lon lat
     ## drop the "Species" column, which appears to be a site identifier (but just constructed from the longitude and latitude, so is not particularly helpful
-    out=out[,!names(out)=="Species"]
-    
+    out=out[,!names(out)=="Species"]    
     ##deal with SpatialPointsDataFrame
     if (SPdata.frame) { #if output is requested as a SpatialPointsDataFrame
         ## coerce to SpatialPointsDataFrame class
@@ -101,7 +97,12 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
     }
     ## rename variables
     names(out)=rename_variables(names(out),type="other")
-##    attr(out,"column_guids")=guids
+    ## also read the species guids
+    guids = read.csv(unz(this_cache_file,'SitesBySpecies.csv'),stringsAsFactors=FALSE,nrows=1,header=FALSE)
+    guids=guids[-1:-3] ## first 3 cols will be species lon lat
+    guids=as.character(guids)
+    names(guids)=names(out)[-2:-1]
+    attr(out,"guid")=guids
     ## warn about empty results if appropriate
     if (nrow(out)<1 && ala_config()$warn_on_empty) {
         warning("no occurrences found")
