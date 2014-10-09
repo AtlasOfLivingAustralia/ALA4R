@@ -69,14 +69,14 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     ##format the layers string
     layers=fields_name_to_id(fields=layers,fields_type="layers") ## replace long names with ids
     if (bulk) { if (length(layers)>(num_layers_limit-1)) stop('the number of layers must be <',num_layers_limit,' if intersecting more than a single location') } #ensure no more than 300 layers when bulk
-	valid_layers = ala_fields('layers')$id #get a list of valid fields
-	unknown = setdiff(layers, valid_layers) #get the different layers
-	if (length(unknown)>0) { 
-		warning(paste(paste(unknown,collapse=', '),'are invalid layer ids')) #warn user of bad layer ids
-		layers = layers[-which(layers %in% unknown)] #remove offending layers
-	}
-	if (length(layers)==0) stop('all layer ids provided were invalid') #nothing returned if no valid IDs provided
-	if (length(layers)>1) {
+    valid_layers = ala_fields('layers')$id #get a list of valid fields
+    unknown = setdiff(layers, valid_layers) #get the different layers
+    if (length(unknown)>0) { 
+        warning(paste(paste(unknown,collapse=', '),'are invalid layer ids')) #warn user of bad layer ids
+        layers = layers[-which(layers %in% unknown)] #remove offending layers
+    }
+    if (length(layers)==0) stop('all layer ids provided were invalid') #nothing returned if no valid IDs provided
+    if (length(layers)>1) {
         layers_str = paste(layers,collapse=',',sep='')
     } else {
         layers_str = layers
@@ -112,19 +112,19 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
             }
             data_url=cached_get(status_url,type="json",caching="off") #get the data url
             while (data_url$status != 'finished') { #keep checking the status until finished
-				if (data_url$status == "error" ) { stop('ALA batch intersect has returned an error; please check your inputs but if the issue continues, please contact package author.') }
+                if (data_url$status == "error" ) { stop('ALA batch intersect has returned an error; please check your inputs but if the issue continues, please contact package author.') }
                 if (verbose) {
-					if (data_url$status == 'waiting') {
-						if (data_url$waiting == "In queue") {
-							cat('your job is in queue... please wait \n')
-						} else {
-							cat('your job is processing... please be patient \n')
-						}
-					} else {
-						cat('your job is still processing... please be patient \n')
-					}
-				}
-				Sys.sleep(5)
+                    if (data_url$status == 'waiting') {
+                        if (data_url$waiting == "In queue") {
+                            cat('your job is in queue... please wait \n')
+                        } else {
+                            cat('your job is processing... please be patient \n')
+                        }
+                    } else {
+                        cat('your job is still processing... please be patient \n')
+                    }
+                }
+                Sys.sleep(5)
                 data_url=cached_get(status_url,type="json",caching="off") #get the data url
             }
             download_to_file(data_url$downloadUrl,outfile=this_cache_file,binary_file=TRUE)
@@ -134,9 +134,11 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
         }
         ## wrap this file read in a a tryCatch block, so that we can avoid warnings about "incomplete final line"
         ##  (which is just due to a missing final line break on some files - but the file reads OK anyway)
-        tryCatch(out<-read.csv(unz(this_cache_file,'sample.csv'),as.is=TRUE), #read in the csv data from the zip file
-                 warning=function(w) { if (!str_detect(as.character(w),"incomplete final line")) warning(w) })
-	} else { #get results if just a single location
+        ## commented out temporarily - does not assign out in case of warning
+        ##tryCatch(
+            out<-read.csv(unz(this_cache_file,'sample.csv'),as.is=TRUE)#, #read in the csv data from the zip file
+                 ##warning=function(w) { if (!str_detect(as.character(w),"incomplete final line")) warning(w) })
+    } else { #get results if just a single location
         url_str = paste(base_url,'intersect/',layers_str,'/',pnts_str,sep='') #define the url string
         url_str=URLencode(url_str) ## should not be needed, but do it anyway
         out = cached_get(url_str,type="json") #get the data
@@ -150,13 +152,13 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
             out=SpatialPointsDataFrame(coords=out[,c("longitude","latitude")],proj4string=CRS("+proj=longlat +ellps=WGS84"),data=out)
         }
     }
-	###final formatting before return
+    ##final formatting before return
     if (use_layer_names) {
         names(out)=make.names(fields_id_to_name(names(out),"layers"))
     }
     names(out)=rename_variables(names(out),type="layers") ## rename vars for consistency
-	out[out=='n/a'] = NA
-	
+    out[out=='n/a'] = NA
+    
     ##return the output
     out
 }
