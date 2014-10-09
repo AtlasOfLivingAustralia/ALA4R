@@ -132,12 +132,17 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
             ## we are using the existing cached file
             if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
         }
-        ## wrap this file read in a a tryCatch block, so that we can avoid warnings about "incomplete final line"
+        ## read in the csv data from the zip file but suppress warnings about "incomplete final line"
         ##  (which is just due to a missing final line break on some files - but the file reads OK anyway)
-        ## commented out temporarily - does not assign out in case of warning
-        ##tryCatch(
-            out<-read.csv(unz(this_cache_file,'sample.csv'),as.is=TRUE)#, #read in the csv data from the zip file
-                 ##warning=function(w) { if (!str_detect(as.character(w),"incomplete final line")) warning(w) })
+        read_warnings=NULL
+        w_handler=function(w) { if (!grepl("incomplete final line",as.character(w),ignore.case=TRUE))
+                                    read_warnings <<- c(read_warnings,list(w))
+                                invokeRestart("muffleWarning")
+                            }
+        out=withCallingHandlers({ read.csv(unz(this_cache_file,'sample.csv'),as.is=TRUE) }, warning=w_handler)
+        ## now throw any warnings that got collected, because they weren't about a final missing line break
+        for (w in read_warnings) warning(w)
+        
     } else { #get results if just a single location
         url_str = paste(base_url,'intersect/',layers_str,'/',pnts_str,sep='') #define the url string
         url_str=URLencode(url_str) ## should not be needed, but do it anyway
