@@ -139,7 +139,7 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
                                     read_warnings <<- c(read_warnings,list(w))
                                 invokeRestart("muffleWarning")
                             }
-        out=withCallingHandlers({ read.csv(unz(this_cache_file,'sample.csv'),as.is=TRUE) }, warning=w_handler)
+        out=withCallingHandlers({ read.csv(unz(this_cache_file,'sample.csv'),as.is=TRUE,na.strings=c("NA","n/a")) }, warning=w_handler)
         ## now throw any warnings that got collected, because they weren't about a final missing line break
         for (w in read_warnings) warning(w)
         
