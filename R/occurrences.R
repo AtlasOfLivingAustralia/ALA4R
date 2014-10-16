@@ -57,8 +57,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     ## check input parms are sensible
     assert_that(is.flag(record_count_only))    
     #taxon = clean_string(taxon) ## clean up the taxon name # no - because this can be an indexed query like field1:value1
-    base_url=paste(ala_config()$base_url_biocache,"occurrences/index/download",sep="")
-  
+    base_url=build_url_with_path(ala_config()$base_url_biocache,"occurrences","index","download")
     this_query=list()
     ## have we specified a taxon?
     if (!missing(taxon)) {
@@ -88,7 +87,8 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         temp_query=this_query
         temp_query$pageSize=0
         temp_query$facet="off"
-        this_url=parse_url(paste(ala_config()$base_url_biocache,"occurrences/search",sep=""))
+        this_url=parse_url(ala_config()$base_url_biocache)
+        this_url$path=clean_path(this_url$path,"occurrences","search")
         this_url$query=temp_query
         this_url=build_url(this_url)
         # ## don't need to check number of records if caching is on and we already have the file
@@ -149,12 +149,12 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     this_query$esc="\\" ## force backslash-escaping of quotes rather than double-quote escaping
     this_query$sep="\t" ## tab-delimited
     this_query$file="data" ## to ensure that file is named "data.csv" within the zip file
-    
     this_url=parse_url(base_url)
     this_url$query=this_query
-  
+    this_url=build_url(this_url)
+    
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
-    thisfile=cached_get(url=build_url(this_url),type="binary_filename",verbose=verbose)
+    thisfile=cached_get(url=this_url,type="binary_filename",verbose=verbose)
     if (!(file.info(thisfile)$size>0)) {
         ## empty file
         x=NULL

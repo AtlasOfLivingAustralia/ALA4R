@@ -35,7 +35,7 @@
 
 search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort_by,sort_dir) {
     output_format=match.arg(tolower(output_format),c("simple","complete"))
-    base_url=paste(ala_config()$base_url_bie,"search.json",sep="")
+    base_url=build_url_with_path(ala_config()$base_url_bie,"search.json")
     this_url=parse_url(base_url)
     this_query=list()
     if (!missing(query)) {

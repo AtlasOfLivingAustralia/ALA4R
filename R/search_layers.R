@@ -22,7 +22,7 @@ search_layers = function(query,type="all",output_format="simple") {
     }
     assert_that(is.character(output_format))
     output_format=match.arg(tolower(output_format),c("simple","complete"))    
-    base_url=paste0(ala_config()$base_url_spatial,"layers")
+    base_url=build_url_with_path(ala_config()$base_url_spatial,"layers")
     if (type %in% c("grids","shapes")) {
         base_url=paste(base_url,type,sep='/')
     }

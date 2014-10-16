@@ -29,7 +29,7 @@ search_partial_name=function(taxon,geo_only=FALSE,output_format="simple",index_t
     taxon = clean_string(taxon) #clean up the taxon name
     taxon = gsub(' ','+',taxon) #replace spaces with + to force both terms in the search
 	
-    base_url=paste(ala_config()$base_url_bie,"search/auto.json",sep="") #define the base URL string
+    base_url=build_url_with_path(ala_config()$base_url_bie,"search","auto.json")
     this_query=list(q=taxon)
     if (!missing(limit)) {
         assert_that(is.count(limit))  #check limit is integer >0 and single value
@@ -46,8 +46,9 @@ search_partial_name=function(taxon,geo_only=FALSE,output_format="simple",index_t
     }
     this_url=parse_url(base_url)
     this_url$query=this_query
-        	
-    out = cached_get(url=build_url(this_url),type="json") #get the data
+    this_url=build_url(this_url)
+    
+    out = cached_get(url=this_url,type="json") #get the data
     out = out[[1]] #looking at the data
 	
     if (length(out)<1) {

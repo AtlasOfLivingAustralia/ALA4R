@@ -82,24 +82,19 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
         layers_str = layers
     }
     ##download the data
-    
-    ## workaround for POST problems. First test url length, if it's short enough, use GET
-    ##url_str = paste(base_url,'intersect/batch?fids=',layers_str,'&points=',pnts_str,sep='') #define the url string
-    ##url_str=URLencode(url_str) ## should not be needed, but do it anyway
-    ##if (nchar(url_str)<8000) {
-    ##    use_post=FALSE
-    ##}
-    
     if (bulk) { #get the results if it is a bulk request
+        ## define the URL if we were using GET (we need this for both GET and POST operations)
+        GET_url_str=parse_url(base_url)
+        GET_url_str$path=clean_path(GET_url_str$path,"intersect","batch")
+        GET_url_str$query=list(fids=layers_str,points=pnts_str)
+        GET_url_str=build_url(GET_url_str)
         if (use_post) {
-            url_str=paste(base_url,"intersect/batch",sep="")
+            url_str=build_url_with_path(base_url,"intersect","batch")
             ## we are POSTing, so the fids and points parms don't form part of the URL string
             ## make sure these are accounted for in the cache file name, though, by using the GET version of the URL to construct our cache file name
-            this_cache_file=ala_cache_filename(URLencode(paste(base_url,'intersect/batch?fids=',layers_str,'&points=',pnts_str,sep='')))
-            
+            this_cache_file=ala_cache_filename(GET_url_str)
         } else {
-            url_str = paste(base_url,'intersect/batch?fids=',layers_str,'&points=',pnts_str,sep='') #define the url string
-            url_str=URLencode(url_str) ## should not be needed, but do it anyway
+            url_str=GET_url_str
             this_cache_file=ala_cache_filename(url_str) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
         }
         if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(this_cache_file))) {
@@ -144,8 +139,7 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
         for (w in read_warnings) warning(w)
         
     } else { #get results if just a single location
-        url_str = paste(base_url,'intersect/',layers_str,'/',pnts_str,sep='') #define the url string
-        url_str=URLencode(url_str) ## should not be needed, but do it anyway
+        url_str=build_url_with_path(base_url,"intersect",layers_str,pnts_str)
         out = cached_get(url_str,type="json") #get the data
         tt = t(out$value); colnames(tt) = out$field 
         out = data.frame(latitude=pnts[1],longitude=pnts[2],tt) # define the output the same as the bulk output

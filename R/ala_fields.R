@@ -41,20 +41,28 @@ ala_fields=function(fields_type="occurrence",as_is=FALSE) {
     assert_that(is.flag(as_is))
     fields_type=match.arg(tolower(fields_type),c("occurrence","general","layers","assertions"))
     switch(fields_type,
-           "general"={base_url=paste(ala_config()$base_url_bie,"admin/indexFields",sep="")},
-           "occurrence"={base_url=paste(ala_config()$base_url_biocache,"index/fields",sep="")},
-           "layers"={base_url=paste(ala_config()$base_url_spatial,"fields",sep="")},
-           "assertions"={base_url=paste(ala_config()$base_url_biocache,"assertions/codes",sep="")}
+           "general"={
+               this_url=build_url_with_path(ala_config()$base_url_bie,"admin","indexFields")
+           },
+           "occurrence"={
+               this_url=build_url_with_path(ala_config()$base_url_biocache,"index","fields")
+           },
+           "layers"={
+               this_url=build_url_with_path(ala_config()$base_url_spatial,"fields")
+           },
+           "assertions"={
+               this_url=build_url_with_path(ala_config()$base_url_biocache,"assertions","codes")
+           }
            )
-
-    x=cached_get(base_url,type="json")
+    
+    x=cached_get(this_url,type="json")
     ## we have a list of unwanted columns that get removed from results
     ## since this function returns a list of field names, also remove the unwanted fields from the results list
     x=x[!x$name %in% unwanted_columns(fields_type),]
     
     ## for "layers", shorter, more manageable names are provided from http://spatial.ala.org.au/ws/layers in API. Add these as an extra column: shortName
     if (identical(fields_type,"layers")) {
-        more_x=cached_get(url=paste(ala_config()$base_url_spatial,"layers",sep=""),type="json")
+        more_x=cached_get(url=build_url_with_path(ala_config()$base_url_spatial,"layers"),type="json")
         ## just pull out the bits that we want and construct ids here that match the field names in x
         more_x$id=paste(substr(tolower(more_x$type),1,1),"l",more_x$id,sep="")
         more_x=more_x[,c("name","id")]
@@ -85,8 +93,12 @@ field_info = function(field_id,maxrows=50,record_count_only=FALSE) {
         maxrows=0
     }
     field_id=fields_name_to_id(fields=field_id,fields_type="layers")
-    base_url = paste(ala_config()$base_url_spatial,"field",sep="")
-    out = cached_get(url=paste(base_url,"/",field_id,"?pageSize=",maxrows,sep=""),type="json") ## retrieve a max of 50 objects by default
+
+    this_url=parse_url(ala_config()$base_url_spatial)
+    this_url$path=clean_path(this_url$path,"field",field_id)
+    this_url$query=list(pageSize=maxrows)
+    this_url=build_url(this_url)
+    out = cached_get(url=this_url,type="json") ## retrieve a max of 50 objects by default
     if (is.null(out)) {
         ## un-matched field name, return an empty data frame
         if (ala_config()$warn_on_empty) {

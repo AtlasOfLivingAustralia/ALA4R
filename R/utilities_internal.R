@@ -174,3 +174,15 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
 	#return the varnames
     varnames
 }
+
+## construct url path, taking care to remove multiple forward slashes
+clean_path=function(...,sep="/") {
+    gsub("[/]+","/",paste(...,sep=sep))
+}
+
+## convenience function for building simple url consisting only of base URL and path
+build_url_with_path=function(base_url,...) {
+    this_url=parse_url(base_url)
+    this_url$path=clean_path(this_url$path,...)
+    build_url(this_url)
+}

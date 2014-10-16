@@ -48,18 +48,18 @@ specieslist=function(taxon,wkt,fq) {
         names(fq)=rep("fq",length(fq))
         this_query=c(this_query,fq)
     }
-    base_url=paste(ala_config()$base_url_biocache,"occurrences/facets/download",sep="")
     this_query$facets="taxon_concept_lsid" ## or "species_guid" to avoid genus and higher records
     this_query$lookup="true" ## "set to true if you would like the download include the scientific names and higher classification for the supplied guids. Downloads that include this param will take extra time as a lookup need to be performed"
     this_query$count="true"
     
-    this_url=parse_url(base_url)
+    this_url=parse_url(build_url_with_path(ala_config()$base_url_biocache,"occurrences","facets","download"))
     this_url$query=this_query
+    this_url=build_url(this_url)
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
-    thisfile=cached_get(url=build_url(this_url),type="filename")
+    thisfile=cached_get(url=this_url,type="filename")
     ## check for zero-sized file
     if (file.info(thisfile)$size>0) {
-        x=read.table(thisfile,sep=",",header=TRUE,comment.char="")
+        x=read.table(thisfile,sep=",",header=TRUE,comment.char="",stringsAsFactors=FALSE)
         ## rename "X..Occurrences" (which was "# Occurrences" in the csv file), or "Number.of.records" (later webservice) or "count" (current web service!)
         names(x)[names(x) %in% c("count","X..Occurrences","Number.of.records")]="occurrenceCount"
         names(x)=rename_variables(names(x),type="occurrence")

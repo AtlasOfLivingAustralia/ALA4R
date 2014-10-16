@@ -32,7 +32,6 @@
 
 taxinfo_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_table=TRUE) {
     assert_that(is.flag(use_data_table))
-    base_url=paste(ala_config()$base_url_bie,"download",sep="")
     this_query=list()
     ## have we specified a query?
     if (!missing(query)) {
@@ -62,11 +61,13 @@ taxinfo_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_
         this_query$fields=str_c(fields,collapse=",")
     }
     
+    base_url=build_url_with_path(ala_config()$base_url_bie,"download")
     this_url=parse_url(base_url)
     this_url$query=this_query
+    this_url=build_url(this_url)
     
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
-    thisfile=cached_get(url=build_url(this_url),type="binary_filename",verbose=verbose)
+    thisfile=cached_get(url=this_url,type="binary_filename",verbose=verbose)
 
     if (!(file.info(thisfile)$size>0)) {
         ## empty file
