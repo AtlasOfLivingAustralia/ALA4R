@@ -141,8 +141,8 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     } else { #get results if just a single location
         url_str=build_url_with_path(base_url,"intersect",layers_str,pnts_str)
         out = cached_get(url_str,type="json") #get the data
-        tt = t(out$value); colnames(tt) = out$field 
-        out = data.frame(latitude=pnts[1],longitude=pnts[2],tt) # define the output the same as the bulk output
+        tt = t(out$value); colnames(tt) = out$field
+        out = data.frame(latitude=pnts[1],longitude=pnts[2],tt,stringsAsFactors=FALSE) # define the output the same as the bulk output
     }
     ##deal with SpatialPointsDataFrame
     if (SPdata.frame) { #if output is requested as a SpatialPointsDataFrame
