@@ -48,12 +48,19 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
     url_str = paste(url_str,'&movingaveragesize=1',sep='') #append hte moving window average value (1 = 1 cell, which means that no moving average applied)
     url_str = paste(url_str,'&gridsize=',gridsize,sep='') #append hte grid size
     url_str = paste(url_str,'&sitesbyspecies=1',sep='') #define the type
+
+    ## somehow this doesn't work: not sure why. Leave for now
+    #this_url=parse_url(build_url_with_path(ala_config()$base_url_alaspatial,"sitesbyspecies"))
+    #this_url$query=list(speciesq=taxon,qname="data",area=wkt,bs=ala_config()$base_url_biocache,movingaveragesize=1,gridsize=gridsize,sitesbyspecies=1)
+    ##moving window average value (1 = 1 cell, which means that no moving average applied)
+    #url_str=build_url(this_url)
     
     this_cache_file=ala_cache_filename(url_str) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
     if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(this_cache_file))) {
         pid = cached_post(URLencode(url_str),'',caching='off',verbose=verbose) #should simply return a pid
         if (pid=="") { stop("there has been an issue with this service. Please try again but if the issue persists, contact support@@ala.org.au") } #catch for these missing pid issues
-        status_url = paste('http://spatial.ala.org.au/alaspatial/ws/job?pid=',pid,sep='')
+        status_url=paste0(ala_config()$base_url_alaspatial,"job","?pid=",pid)
+        ##status_url=paste0(build_url_with_path(ala_config()$base_url_alaspatial,"job"),"?pid=",pid)
         if(verbose) { cat("  ALA4R: waiting for sites-by-species results to become available: ") }
         status=cached_get(URLencode(status_url),type="json",caching="off",verbose=verbose)#get the data url
         while (status$state != "SUCCESSFUL") {
@@ -80,7 +87,8 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
             } 
             Sys.sleep(2)
         }; cat('\n')
-        download_to_file(paste('http://spatial.ala.org.au/alaspatial/ws/download/',pid,sep=''),outfile=this_cache_file,binary_file=TRUE,verbose=verbose)
+        download_to_file(paste0(ala_config()$base_url_alaspatial,"download/",pid),outfile=this_cache_file,binary_file=TRUE,verbose=verbose)
+        ##download_to_file(build_url_with_path(ala_config()$base_url_alaspatial,"download",pid),outfile=this_cache_file,binary_file=TRUE,verbose=verbose)
     } else {
         ## we are using the existing cached file
         if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
