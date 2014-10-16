@@ -45,11 +45,12 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     
     base_url=ala_config()$base_url_spatial #get the base url
     bulk = FALSE #set the default to not bulk
+    force_bulk=TRUE ## force to use the bulk method even if only one point provided (avoids some type problems with json parsing under single-point method, also ensures that output always consistent between the two methods)
 
     ##check and format the points
     if (class(pnts) %in% c('data.frame','matrix')) { #convert to a vector if a data.frame or matrix and setup the string for the url
         if (dim(pnts)[2] !=2) stop('data.frame or matrix of points must have 2 columns ordered lat,lon') #check the dimensions
-        if (nrow(pnts)==1) { #this is for a single coordinate pair
+        if (!force_bulk && (nrow(pnts)==1)) { #this is for a single coordinate pair
             pnts_str = paste(pnts[1,],collapse='/',sep='') #setup the points str for the url
         } else { #this is for the bulk intersect process where there is more than 1 coordinate pairs
             if (nrow(pnts)>(num_points_limit+1)) stop('number of locations checked must be less than ',num_points_limit) #ensure maximum limit is not breached
@@ -58,7 +59,7 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
         }
     } else { #format the vector as a string for the url
         if (length(pnts) %% 2 == 1) stop('vector of points must be paired locations... the length of this vector must be even') #check that the length of this is even 
-        if (length(pnts) == 2) { #this is for the single coordinate pair
+        if (!force_bulk && (length(pnts) == 2)) { #this is for the single coordinate pair
             pnts_str = paste(pnts,collapse='/',sep='') #setup the points str for the url
         } else {  #this is for the bulk intersect process where there is more than 1 coordinate pairs
             if (length(pnts)>(num_points_limit*2+1)) stop('number of locations checked must be less than ',num_points_limit) #ensure maximum limit is not breached
