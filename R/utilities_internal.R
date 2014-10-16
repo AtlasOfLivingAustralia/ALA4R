@@ -175,17 +175,26 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
     varnames
 }
 
-## construct url path, taking care to remove multiple forward slashes
+## construct url path, taking care to remove multiple forward slashes, leading slash
 clean_path=function(...,sep="/") {
-    gsub("[/]+","/",paste(...,sep=sep))
+    path1=sapply(list(...),FUN=function(z)paste(z,sep=sep,collapse=sep)) ## collapse individual arguments
+    path=gsub(paste0("[",sep,"]+"),sep,paste(path1,sep=sep,collapse=sep)) ## paste parts together and remove multiple slashes
+    sub(paste0("^",sep),"",path) ## remove leading slash
 }
 
-## convenience function for building simple url consisting only of base URL and path
-build_url_with_path=function(base_url,...) {
+## convenience function for building urls
+## pass path in one of several ways
+##  as single string: build_url_from_parts(base_url,"path/to/thing")
+##  as a character vector or list: build_url_from_parts(base_url,c("path","to","thing"))
+##  or a combination
+build_url_from_parts=function(base_url,path=NULL,query=list()) {
     this_url=parse_url(base_url)
-    this_url$path=clean_path(this_url$path,...)
+    this_url$path=clean_path(this_url$path,path)
+    if (length(query)>0) {
+        this_url$query=query
+    }
     build_url(this_url)
-}
+}    
 
 
 ## wrapper around read.csv but suppressing "incomplete final line" warning

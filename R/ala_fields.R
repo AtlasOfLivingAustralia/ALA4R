@@ -42,16 +42,16 @@ ala_fields=function(fields_type="occurrence",as_is=FALSE) {
     fields_type=match.arg(tolower(fields_type),c("occurrence","general","layers","assertions"))
     switch(fields_type,
            "general"={
-               this_url=build_url_with_path(ala_config()$base_url_bie,"admin","indexFields")
+               this_url=build_url_from_parts(ala_config()$base_url_bie,c("admin","indexFields"))
            },
            "occurrence"={
-               this_url=build_url_with_path(ala_config()$base_url_biocache,"index","fields")
+               this_url=build_url_from_parts(ala_config()$base_url_biocache,c("index","fields"))
            },
            "layers"={
-               this_url=build_url_with_path(ala_config()$base_url_spatial,"fields")
+               this_url=build_url_from_parts(ala_config()$base_url_spatial,"fields")
            },
            "assertions"={
-               this_url=build_url_with_path(ala_config()$base_url_biocache,"assertions","codes")
+               this_url=build_url_from_parts(ala_config()$base_url_biocache,c("assertions","codes"))
            }
            )
     
@@ -62,7 +62,7 @@ ala_fields=function(fields_type="occurrence",as_is=FALSE) {
     
     ## for "layers", shorter, more manageable names are provided from http://spatial.ala.org.au/ws/layers in API. Add these as an extra column: shortName
     if (identical(fields_type,"layers")) {
-        more_x=cached_get(url=build_url_with_path(ala_config()$base_url_spatial,"layers"),type="json")
+        more_x=cached_get(url=build_url_from_parts(ala_config()$base_url_spatial,"layers"),type="json")
         ## just pull out the bits that we want and construct ids here that match the field names in x
         more_x$id=paste(substr(tolower(more_x$type),1,1),"l",more_x$id,sep="")
         more_x=more_x[,c("name","id")]
@@ -94,10 +94,7 @@ field_info = function(field_id,maxrows=50,record_count_only=FALSE) {
     }
     field_id=fields_name_to_id(fields=field_id,fields_type="layers")
 
-    this_url=parse_url(ala_config()$base_url_spatial)
-    this_url$path=clean_path(this_url$path,"field",field_id)
-    this_url$query=list(pageSize=maxrows)
-    this_url=build_url(this_url)
+    this_url=build_url_from_parts(ala_config()$base_url_spatial,c("field",field_id),query=list(pageSize=maxrows))
     out = cached_get(url=this_url,type="json") ## retrieve a max of 50 objects by default
     if (is.null(out)) {
         ## un-matched field name, return an empty data frame

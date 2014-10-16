@@ -45,7 +45,7 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
         }
         guid=guid[[1]]
     }
-    this_url=build_url_with_path(ala_config()$base_url_bie,"species",paste0(guid,".json"))
+    this_url=build_url_from_parts(ala_config()$base_url_bie,c("species",paste0(guid,".json")))
     out=cached_get(URLencode(this_url),type="json",verbose=verbose)
     if (is.null(out)) {
         ## invalid guids will give NULL here, catch them now

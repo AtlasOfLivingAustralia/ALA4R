@@ -35,8 +35,6 @@
 
 search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort_by,sort_dir) {
     output_format=match.arg(tolower(output_format),c("simple","complete"))
-    base_url=build_url_with_path(ala_config()$base_url_bie,"search.json")
-    this_url=parse_url(base_url)
     this_query=list()
     if (!missing(query)) {
         this_query$q=query
@@ -71,8 +69,9 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
         sort_dir=match.arg(tolower(sort_dir),c("asc","desc"))
         this_query$dir=sort_dir
     }
-    this_url$query=this_query
-    this_url=build_url(this_url)
+    
+    this_url=build_url_from_parts(ala_config()$base_url_bie,"search.json",query=this_query)
+    
     x=cached_get(url=this_url,type="json")
     x=as.list(x)
     

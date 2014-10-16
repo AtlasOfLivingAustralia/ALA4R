@@ -61,10 +61,7 @@ taxinfo_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_
         this_query$fields=str_c(fields,collapse=",")
     }
     
-    base_url=build_url_with_path(ala_config()$base_url_bie,"download")
-    this_url=parse_url(base_url)
-    this_url$query=this_query
-    this_url=build_url(this_url)
+    this_url=build_url_from_parts(ala_config()$base_url_bie,"download",this_query)
     
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
     thisfile=cached_get(url=this_url,type="binary_filename",verbose=verbose)

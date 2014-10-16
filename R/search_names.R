@@ -53,12 +53,12 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
     if (any(nchar(taxa)<1)) {
         stop("input contains empty string after cleaning (did the input name contain only non-alphabetic characters?)")
     }    
-    base_url=build_url_with_path(ala_config()$base_url_bie,"species","lookup","bulk")
+    this_url=build_url_from_parts(ala_config()$base_url_bie,c("species","lookup","bulk"))
     temp=jsonlite::toJSON(list(names=taxa,vernacular=vernacular))
     ## toJSON puts vernacular as a single-element array, which causes failures. Need to convert to scalar logical
     temp=str_replace(temp,"\\[[ ]*false[ ]*\\]","false")
     temp=str_replace(temp,"\\[[ ]*true[ ]*\\]","true")
-    x=cached_post(url=base_url,body=temp,type="json",content_type="application/json")
+    x=cached_post(url=this_url,body=temp,type="json",content_type="application/json")
     if (identical(x,NA)) {
         ## if a single non-matched name is supplied, we get NA back
         x=NULL

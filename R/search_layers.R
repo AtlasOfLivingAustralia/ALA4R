@@ -22,11 +22,10 @@ search_layers = function(query,type="all",output_format="simple") {
     }
     assert_that(is.character(output_format))
     output_format=match.arg(tolower(output_format),c("simple","complete"))    
-    base_url=build_url_with_path(ala_config()$base_url_spatial,"layers")
-    if (type %in% c("grids","shapes")) {
-        base_url=paste(base_url,type,sep='/')
-    }
-    out = cached_get(url=base_url,type="json") ## download all data
+    
+    mypath=ifelse(type %in% c("grids","shapes"),c("layers",type),"layers")
+    this_url=build_url_from_parts(ala_config()$base_url_spatial,mypath)
+    out = cached_get(url=this_url,type="json") ## download all data
     if (!missing(query)) {
         out=out[grepl(query,out$name,ignore.case=TRUE) | grepl(query,out$description,ignore.case=TRUE),]
     }

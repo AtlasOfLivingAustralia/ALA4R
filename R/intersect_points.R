@@ -85,12 +85,9 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     ##download the data
     if (bulk) { #get the results if it is a bulk request
         ## define the URL if we were using GET (we need this for both GET and POST operations)
-        GET_url_str=parse_url(base_url)
-        GET_url_str$path=clean_path(GET_url_str$path,"intersect","batch")
-        GET_url_str$query=list(fids=layers_str,points=pnts_str)
-        GET_url_str=build_url(GET_url_str)
+        GET_url_str=build_url_from_parts(base_url,c("intersect","batch"),query=list(fids=layers_str,points=pnts_str))
         if (use_post) {
-            url_str=build_url_with_path(base_url,"intersect","batch")
+            url_str=build_url_from_parts(base_url,c("intersect","batch"))
             ## we are POSTing, so the fids and points parms don't form part of the URL string
             ## make sure these are accounted for in the cache file name, though, by using the GET version of the URL to construct our cache file name
             this_cache_file=ala_cache_filename(GET_url_str)
@@ -133,7 +130,7 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
         out=read_csv_quietly(unz(this_cache_file,'sample.csv'),as.is=TRUE,na.strings=c("NA","n/a"))
         
     } else { #get results if just a single location
-        url_str=build_url_with_path(base_url,"intersect",layers_str,pnts_str)
+        url_str=build_url_from_parts(base_url,c("intersect",layers_str,pnts_str))
         out = cached_get(url_str,type="json") #get the data
         tt = t(out$value)
         colnames(tt) = out$field
