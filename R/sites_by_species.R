@@ -91,7 +91,7 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
         ## we are using the existing cached file
         if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
     }
-    out = read.csv(unz(this_cache_file,'SitesBySpecies.csv'),as.is=TRUE,skip=4) #read in the csv data from the zip file; omit the first 4 header rows
+    out = read_csv_quietly(unz(this_cache_file,'SitesBySpecies.csv'),as.is=TRUE,skip=4) #read in the csv data from the zip file; omit the first 4 header rows. use read_csv_quietly to avoid warnings about incomplete final line
     ## drop the "Species" column, which appears to be a site identifier (but just constructed from the longitude and latitude, so is not particularly helpful
     out=out[,!names(out)=="Species"]    
     ##deal with SpatialPointsDataFrame

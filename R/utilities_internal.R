@@ -186,3 +186,17 @@ build_url_with_path=function(base_url,...) {
     this_url$path=clean_path(this_url$path,...)
     build_url(this_url)
 }
+
+
+## wrapper around read.csv but suppressing "incomplete final line" warning
+read_csv_quietly=function(...) {
+    read_warnings=NULL
+    w_handler=function(w) { if (!grepl("incomplete final line",as.character(w),ignore.case=TRUE))
+                                read_warnings <<- c(read_warnings,list(w))
+                            invokeRestart("muffleWarning")
+                        }
+    out=withCallingHandlers({ read.csv(...) }, warning=w_handler)
+    ## now throw any warnings that got collected, because they weren't about a final missing line break
+    for (w in read_warnings) warning(w)
+    out
+}

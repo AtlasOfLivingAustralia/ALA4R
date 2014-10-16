@@ -129,19 +129,13 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
         }
         ## read in the csv data from the zip file but suppress warnings about "incomplete final line"
         ##  (which is just due to a missing final line break on some files - but the file reads OK anyway)
-        read_warnings=NULL
-        w_handler=function(w) { if (!grepl("incomplete final line",as.character(w),ignore.case=TRUE))
-                                    read_warnings <<- c(read_warnings,list(w))
-                                invokeRestart("muffleWarning")
-                            }
-        out=withCallingHandlers({ read.csv(unz(this_cache_file,'sample.csv'),as.is=TRUE,na.strings=c("NA","n/a")) }, warning=w_handler)
-        ## now throw any warnings that got collected, because they weren't about a final missing line break
-        for (w in read_warnings) warning(w)
+        out=read_csv_quietly(unz(this_cache_file,'sample.csv'),as.is=TRUE,na.strings=c("NA","n/a"))
         
     } else { #get results if just a single location
         url_str=build_url_with_path(base_url,"intersect",layers_str,pnts_str)
         out = cached_get(url_str,type="json") #get the data
-        tt = t(out$value); colnames(tt) = out$field
+        tt = t(out$value)
+        colnames(tt) = out$field
         out = data.frame(latitude=pnts[1],longitude=pnts[2],tt,stringsAsFactors=FALSE) # define the output the same as the bulk output
     }
     ##deal with SpatialPointsDataFrame
