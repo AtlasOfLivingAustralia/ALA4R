@@ -92,16 +92,15 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     } else {
         out$data=x$results
     }
-    if (! is.data.frame(out$data)) {
-        ## something wrong
-        stop("structure of json not as expected, please notify ALA4R package maintainers")
-    }
     if (is.list(out$data) & length(out$data)<1) {
         ## no results
         if (ala_config()$warn_on_empty) {
             warning("no matching records were returned")
         }
         out$data=data.frame()
+    } else if (! is.data.frame(out$data)) {
+        ## something wrong
+        stop("structure of json not as expected, please notify ALA4R package maintainers")
     } else {
         ## rename some columns
         names(out$data)[names(out$data)=="classs"]="class"
