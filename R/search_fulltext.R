@@ -49,7 +49,7 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     }
     if (!missing(start)) {
         assert_that(is.count(start))
-        this_query$start=start
+        this_query$start=start-1 ## server-side is zero-based count, so subtract 1
     }
     if (!missing(page_size)) {
         assert_that(is.count(page_size))
