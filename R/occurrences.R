@@ -169,7 +169,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
                 unzip(thisfile,files=c("data.csv"),junkpaths=TRUE,exdir=tempsubdir)
                 ## first check if file is empty
                 if (file.info(file.path(tempsubdir,"data.csv"))$size>0) {
-                    x=fread(file.path(tempsubdir,"data.csv"),stringsAsFactors=FALSE,header=TRUE,verbose=verbose)
+                    x=fread(file.path(tempsubdir,"data.csv"),stringsAsFactors=FALSE,header=TRUE,verbose=verbose,sep="\t")
                     ## make sure names of x are valid, as per data.table
                     setnames(x,make.names(names(x)))
                     ## now coerce it back to data.frame (for now at least, unless we decide to not do this!)
