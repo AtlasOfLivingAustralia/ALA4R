@@ -9,7 +9,6 @@ check_fq=function(fq,type) {
     field_names=str_split(temp,"\\s+") ## split on spaces
     field_names=unlist(str_extract_all(unlist(field_names),perl("^[^\\:]+(?=\\:)"))) ## extract "field" in field:value
     field_names=gsub("^\\-","",field_names) ## remove leading "-" characters which can be used to negate fq queries
-    cat(str(field_names))
     valid_fields=ala_fields(type)
     invalid_fields=setdiff(field_names,valid_fields$name)
     if (length(invalid_fields)>0) {
