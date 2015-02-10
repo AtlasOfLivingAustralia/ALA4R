@@ -30,10 +30,14 @@ convert_dt=function(x,test_numeric=TRUE) {
 ##----------------------------------------------------------------------------------------------
 
 clean_string <- function(x) {
-	x = gsub("[^[:alpha:]\\. ]", "", x) #remove anything but alpha characters
-	x = str_trim(x) ## remove leading and trailing whitespaces
-	x = gsub('\\s+',' ',x) ## replace multiple whitespaces with single
-	x
+    ## only used in search_names and search_partial_name
+
+    ##x = gsub("[^[:alpha:]\\. ]", "", x) #remove anything but alpha characters
+    ## removed this: scientific names can't contain hyphens or diacriticals but common names can; removing these
+    ## characters causes problems with hyphenated names and seems likely not to behave well with internationalisation anyway
+    x = str_trim(x) ## remove leading and trailing whitespaces
+    x = gsub('\\s+',' ',x) ## replace multiple whitespaces with single
+    x
 }
 
 ##----------------------------------------------------------------------------------------------
