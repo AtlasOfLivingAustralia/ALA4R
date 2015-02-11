@@ -4,6 +4,7 @@ check_fq=function(fq,type) {
     assert_that(is.character(fq))
     assert_that(is.string(type))
     type=match.arg(tolower(type),c("general","occurrence","layers"))
+    if (identical(type,"occurrence")) { type="occurrence_indexed" }
     temp=paste("",fq,collapse=" ") ## with leading space
     temp=gsub("[\\(\\)]+"," ",temp) ## drop all brackets (we don't care about the logic, just the field names that are present) and replace with spaces
     field_names=str_split(temp,"\\s+") ## split on spaces

@@ -67,7 +67,7 @@ tocamel = function (x, delim = "[^[:alnum:]]", upper = FALSE, sep = "") {
 
 ## define column names that we will remove from the results because we don't think they will be useful in the ALA4R context
 unwanted_columns=function(type) {
-    type=match.arg(tolower(type),c("general","layers","occurrence","occurrence_stored","assertions"))
+    type=match.arg(tolower(type),c("general","layers","occurrence","occurrence_stored","occurrence_indexed","assertions"))
     switch(type,
            "general"=c("rawRank","rawRankString","rankId","rankID","left","right","idxType","highlight","linkIdentifier","isExcluded"),
              ## rawRank appears to be a duplicate of rank or rankString
@@ -80,6 +80,7 @@ unwanted_columns=function(type) {
              ## spid is redundant with id
              ## no idea what sid,sname, or sdesc are, but don't look particularly useful in our context
            "occurrence_stored"=,
+           "occurrence_indexed"=,
            "occurrence"=c("lft","rgt","rankId"),
              ## lft and rgt look the same as left and right in general fields
            c("")
@@ -95,7 +96,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
     }
     assert_that(is.character(varnames))
     assert_that(is.string(type))
-    type=match.arg(tolower(type),c("general","layers","occurrence","occurrence_stored","assertions","other")) ## use "other" to make no variable name substtutions, just enforce case/separator conventions
+    type=match.arg(tolower(type),c("general","layers","occurrence","occurrence_stored","occurrence_indexed","assertions","other")) ## use "other" to make no variable name substtutions, just enforce case/separator conventions
     if (FALSE) {
         ## just return the names as-is, but enforce validity as variable names
         varnames=make.names(varnames)
@@ -138,7 +139,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
             }
         } else if (type=="layers") {
             varnames[varnames=="desc"]="description"
-        } else if (type %in% c("occurrence","occurrence_stored")) {
+        } else if (type %in% c("occurrence","occurrence_stored","occurrence_indexed")) {
             ## "scientificName" is actually scientificNameOriginal
             varnames[varnames=="scientificName"]="scientificNameOriginal"
             ## and "matchedScientificName" will get changed to "scientificName" below
@@ -160,7 +161,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
         }
         ## do this again, it may have been lost in the processing: enforce first letter lowercase
         varnames=paste(tolower(substr(varnames,1,1)),substring(varnames,2),sep="")
-        if (type %in% c("layers","occurrence","occurrence_stored")) {
+        if (type %in% c("layers","occurrence","occurrence_stored","occurrence_indexed")) {
             ## but some acronyms in layer names should remain all-uppercase
             ## currently this list is: c("iBRA","iMCRA","aCTTAMS","gER","nZ","nSW","lGA","nRM","rAMSAR","nDVI","nPP","aSRI","gEOMACS")
             ## but since these all occur at the start of variable names, we can catch them with a regular expression and not need to hard-code a list

@@ -14,7 +14,7 @@ occurrences(taxon, wkt, fq, fields, extra, qa,
 \item{wkt}{string: (optional) a WKT (well-known text) string providing a spatial polygon within which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.131 -26,140 -37))"}
 
 \item{fq}{string: (optional) character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi".
-See \code{ala_fields("occurrence")} for all the fields that are queryable.
+See \code{ala_fields("occurrence_indexed")} for all the fields that are queryable.
 NOTE that fq matches are case-sensitive, but sometimes the entries in the fields are
 not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA").
 fq matches are ANDed by default (e.g. c("field1:abc","field2:def") will match records that have
