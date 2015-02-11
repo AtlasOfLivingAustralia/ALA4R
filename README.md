@@ -25,6 +25,8 @@ If you see an error about a missing package, you will need to install it manuall
 ```R
 install.packages(c("stringr","sp"))
 ```
+and then `install_github("AtlasOfLivingAustralia/ALA4R")` again.
+
 
 If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
 ```R
@@ -54,6 +56,8 @@ If you see an error about a missing package, you will need to install it manuall
 ```R
 install.packages(c("stringr","sp"))
 ```
+and then `install_github("AtlasOfLivingAustralia/ALA4R")` again.
+
 
 If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
 ```R

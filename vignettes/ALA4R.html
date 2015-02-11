@@ -71,6 +71,9 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 library(devtools)
 install_github(&quot;AtlasOfLivingAustralia/ALA4R&quot;)</code></pre>
 <p>You may see a warning about the <code>Rtools</code> package: you don’t need to install this. You may also be asked about a location for the <code>R.cache</code> directory — choose whatever you prefer here, ALA4R does not use <code>R.cache</code>.</p>
+<p>If you see an error about a missing package, you will need to install it manually, e.g.:</p>
+<pre class="r"><code>install.packages(c(&quot;stringr&quot;,&quot;sp&quot;))</code></pre>
+<p>and then <code>install_github("AtlasOfLivingAustralia/ALA4R")</code> again.</p>
 <p>If you wish to use the <code>data.table</code> package for potentially faster loading of data matrices (optional), also do:</p>
 <pre class="r"><code>install.packages(&quot;data.table&quot;)</code></pre>
 </div>
