@@ -22,9 +22,9 @@ field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form
 OR field2:def")}
 
 \item{fields}{string vector: (optional) a vector of field names to return. Note that the columns of the returned data frame
-are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence")} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")}
+are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence_stored")} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")}
 
-\item{extra}{string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence")} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")}
+\item{extra}{string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence_stored")} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")}
 
 \item{qa}{string vector: (optional) list of record issues to include in the download. See \code{ala_fields("assertions")} for valid values, or use "none" to include no record issues}
 
@@ -50,7 +50,7 @@ Retrieve ALA occurrence data via the "occurrence download" web service. At least
 x=occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE) ## count of records from this data provider
 x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10) ## download records, with standard fields
 \dontrun{
-x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence")$name) ## download records, with all fields
+x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence_stored")$name) ## download records, with all fields
 x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),download_reason_id=10) ## download records, with specified fields
 x=occurrences(taxon="macropus",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",download_reason_id=10,qa="none") ## download records in polygon, with no quality assertion information
 

@@ -1,4 +1,6 @@
 #' Retrieves a list of all field names that can be used with data retrieval functions
+#'
+#' Note for occurrence searching: fields that are indexed in the ALA database can be queried (e.g. used in the \code{fq} parameter in \code{\link{occurrences}}. This is almost all of the fields: see the \code{indexed} column in \code{ala_fields("occurrence")}. However, only fields that are stored in the database can be returned as part of an \code{occurrences} call. These fields are identified by the \code{stored} column in \code{ala_fields("occurrence")}. The calling syntax \code{ala_fields("occurrence_stored")} is for convenience, and is equivalent to \code{subset(ala_fields("occurrence"),stored)}.
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \itemize{
@@ -10,6 +12,7 @@
 #' \itemize{
 #' \item "general" - for searching taxa, datasets, layers, and collections metadata
 #' \item "occurrence" - for searching species occurrence records
+#' \item "occurrence_stored" - can be returned as part of a species occurrence record search
 #' \item "layers" - fields associated with the environmental and contextual layers. For additional information 
 #' on layers, including metadata and licensing, see \code{\link{search_layers}}
 #' \item "assertions" - potential issues flagged on one or more occurrence record fields
@@ -39,11 +42,12 @@
 ala_fields=function(fields_type="occurrence",as_is=FALSE) {
     assert_that(is.string(fields_type))
     assert_that(is.flag(as_is))
-    fields_type=match.arg(tolower(fields_type),c("occurrence","general","layers","assertions"))
+    fields_type=match.arg(tolower(fields_type),c("occurrence","occurrence_stored","general","layers","assertions"))
     switch(fields_type,
            "general"={
                this_url=build_url_from_parts(ala_config()$base_url_bie,c("admin","indexFields"))
            },
+           "occurrence_stored"=,
            "occurrence"={
                this_url=build_url_from_parts(ala_config()$base_url_biocache,c("index","fields"))
            },
@@ -71,6 +75,8 @@ ala_fields=function(fields_type="occurrence",as_is=FALSE) {
         x$type[x$type=="c"]="Contextual"
         x$type[x$type=="b"]="Contextual" ## there is an errant "b" here that should be "c"
         x$type[x$type=="e"]="Environmental" ## for consistency with search_layers
+    } else if (identical(fields_type,"occurrence_stored")) {
+        x=subset(x,stored)
     }
     if (!as_is) {
         names(x)=rename_variables(names(x),type=fields_type)
