@@ -36,6 +36,9 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
     if (identical(class(taxa),"list")) {
         taxa=unlist(taxa)
     }
+    if (is.factor(taxa)) {
+        taxa=as.character(taxa)
+    }
     assert_that(is.character(taxa))
     if (any(nchar(taxa)<1)) {
         stop("input contains empty string")

@@ -60,6 +60,9 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     this_query=list()
     ## have we specified a taxon?
     if (!missing(taxon)) {
+        if (is.factor(taxon)) {
+            taxon=as.character(taxon)
+        }
         assert_that(is.notempty.string(taxon))
         this_query$q=taxon
     }

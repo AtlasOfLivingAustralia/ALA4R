@@ -35,6 +35,9 @@ taxinfo_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_
     this_query=list()
     ## have we specified a query?
     if (!missing(query)) {
+        if (is.factor(query)) {
+            query=as.character(query)
+        }
         assert_that(is.notempty.string(query))
         this_query$q=query
     }

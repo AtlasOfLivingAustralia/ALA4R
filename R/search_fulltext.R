@@ -37,6 +37,10 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     output_format=match.arg(tolower(output_format),c("simple","complete"))
     this_query=list()
     if (!missing(query)) {
+        if (is.factor(query)) {
+            query=as.character(query)
+        }
+        assert_that(is.character(query))
         this_query$q=query
     }
     if (!missing(fq)) {

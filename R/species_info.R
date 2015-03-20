@@ -23,6 +23,9 @@
 
 species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
     if (!missing(scientificname)) {
+        if (is.factor(scientificname)) {
+            scientificname=as.character(scientificname)
+        }
         assert_that(is.notempty.string(scientificname))
     }
     if (!missing(guid)) {
