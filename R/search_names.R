@@ -10,7 +10,7 @@
 #' @param vernacular logical: if TRUE, match on common names as well as scientific names, otherwise match only on scientific names
 #' @param guids_only logical: if TRUE, a named list of GUIDs will be returned. Otherwise, a data frame with more comprehensive information for each name will be returned.
 #' @param output_format string: controls the print method for the returned object (only applicable when guids_only is FALSE). Either "complete" (the complete data structure is displayed), or "simple" (a simplified version is displayed). Note that the complete data structure exists in both cases: this option only controls what is displayed when the object is printed to the console. The default output format is "simple"
-#' @return A data frame of results, or named list of GUIDs if \code{guids_only} is TRUE
+#' @return A data frame of results, or named list of GUIDs if \code{guids_only} is TRUE. The results should include one entry (i.e. one data.frame row or one list element) per input name
 #' 
 #' @examples
 #' 
@@ -77,11 +77,11 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
             if (ala_config()$warn_on_empty) {
                 warning("no records found");
             }
-            x=list()
+            x=as.list(rep(NA,length(taxa_original)))
         } else {
             x=as.list(x$guid)
-            names(x)=make.names(taxa_original)
         }
+        names(x)=make.names(taxa_original)
     } else {
         if (! is.data.frame(x)) {
             ## if we pass multiple names and none of them match, we get a vector of NAs back
@@ -109,7 +109,7 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
             if (ala_config()$warn_on_empty) {
                 warning("no records found");
             }
-            x=data.frame()
+            x=data.frame(searchTerm=taxa_original,name=NA,commonName=NA,rank=NA,guid=NA)
             attr(x,"output_format")=output_format
         }
     }
