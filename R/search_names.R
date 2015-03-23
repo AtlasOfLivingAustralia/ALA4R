@@ -77,6 +77,12 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
             names(x)=make.names(taxa_original)
         }
     } else {
+        if (! is.data.frame(x)) {
+            ## if we pass multiple names and none of them match, we get a vector of NAs back
+            if (!is.null(x) && all(is.na(x))) {
+                x=data.frame()
+            }
+        }
         if (! empty(x)) {
             ## column names within the data matrix are returned as camelCase
             ## add searchTerm, so user can more easily see what each original query was
