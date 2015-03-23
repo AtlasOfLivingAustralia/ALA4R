@@ -67,6 +67,12 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
         x=NULL
     }
     if (guids_only) {
+        if (! is.data.frame(x)) {
+            ## if we pass multiple names and none of them match, we get a vector of NAs back
+            if (!is.null(x) && all(is.na(x))) {
+                x=data.frame()
+            }
+        }
         if (empty(x)) {
             if (ala_config()$warn_on_empty) {
                 warning("no records found");
