@@ -31,7 +31,7 @@ str(s3)
 Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://api.ala.org.au/}
+Associated ALA web service: \url{http://api.ala.org.au/#ws80}
 }
 \seealso{
 \code{\link{ala_config}}

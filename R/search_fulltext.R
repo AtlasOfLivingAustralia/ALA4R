@@ -3,7 +3,7 @@
 #' Performs a search across all objects, and selects the closest matches. Generally, the user will provide the search term via the \code{query} parameter, with optional filtering via \code{fq}.
 #'
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
-#' @references \url{http://api.ala.org.au/}
+#' @references Associated ALA web service: \url{http://api.ala.org.au/#ws1}
 #'  
 #' @param query string: the search term
 #' @param fq string: (optional) character string or vector of strings, specifying filters to be applied to the 

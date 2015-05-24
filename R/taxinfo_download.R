@@ -1,7 +1,7 @@
 #' Download taxonomic data
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
-#' @references \url{http://api.ala.org.au/}
+#' @references Associated ALA web service: \url{http://api.ala.org.au/#ws2}
 #' 
 #' @param query string: (optional) query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")
 #' @param fq string: character string or vector of strings, specifying filters to be applied to the original query. 

@@ -1,7 +1,7 @@
 #' Fetch a taxon profile given a scientific name or LSID (GUID)
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
-#' @references \url{http://api.ala.org.au/}
+#' @references Associated ALA web service: \url{http://api.ala.org.au/#ws80}
 #' 
 #' @param scientificname string: scientific name of the taxon of interest (species, genus, family etc) 
 #' @param guid string: The Life Science Identifier of the taxon of interest

@@ -68,7 +68,8 @@ Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
 \itemize{
-\item \url{http://api.ala.org.au/}
+\item Associated ALA web service for record counts: \url{http://api.ala.org.au/#ws3}
+\item Associated ALA web service for occurence downloads: \url{http://api.ala.org.au/#ws4}
 \item Field definitions: \url{https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc}
 \item WKT reference: \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 }

@@ -3,8 +3,8 @@
 #' Retrieve a list of taxa matching a search query, within a spatial search area, or both
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
-#' @references \url{http://api.ala.org.au/} 
-#' \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
+#' @references Associated ALA web service: \url{http://api.ala.org.au/#ws98}
+#' @references \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' 
 #' @param taxon string: Text of taxon, e.g. "Macropus rufus" or "macropodidae"
 #' @param wkt string: WKT (well-known text) defining a polygon within which to limit taxon search, e.g. "POLYGON((140 -37,151 -37,151 -26,140 -26,140 -37))"

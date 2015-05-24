@@ -39,7 +39,7 @@ s2
 Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://api.ala.org.au/}
+Associated ALA web service: \url{http://api.ala.org.au/#ws25}
 }
 \seealso{
 \code{\link{search_names}} for searching known scientific or common taxonomic names

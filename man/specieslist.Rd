@@ -30,7 +30,8 @@ x=specieslist(wkt="POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42
 Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://api.ala.org.au/}
+Associated ALA web service: \url{http://api.ala.org.au/#ws98}
+
 \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 }
 \seealso{

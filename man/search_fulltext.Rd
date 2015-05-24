@@ -47,7 +47,7 @@ Performs a search across all objects, and selects the closest matches. Generally
 Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://api.ala.org.au/}
+Associated ALA web service: \url{http://api.ala.org.au/#ws1}
 }
 \seealso{
 \code{\link{ala_fields}}

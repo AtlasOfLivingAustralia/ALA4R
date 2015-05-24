@@ -29,6 +29,8 @@ str(l)
 Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://api.ala.org.au/} \url{http://spatial.ala.org.au/layers}
+Associated ALA web services: \url{http://api.ala.org.au/#ws11} \url{http://api.ala.org.au/#ws12} \url{http://api.ala.org.au/#ws13}
+
+Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/})
 }
 
