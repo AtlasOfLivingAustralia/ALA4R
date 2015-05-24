@@ -4,7 +4,7 @@
 #' Case-insensitive but otherwise exact matches are used.
 #'
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
-#' @references \url{http://api.ala.org.au/}
+#' @references The associated ALA web service: \url{http://api.ala.org.au/#ws87}
 #' 
 #' @param taxa string: a single name or vector of names
 #' @param vernacular logical: if TRUE, match on common names as well as scientific names, otherwise match only on scientific names

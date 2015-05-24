@@ -3,9 +3,11 @@
 #' Note for occurrence fields: only fields that are indexed in the ALA database can be queried (e.g. used in the \code{fq} parameter in \code{\link{occurrences}}. These fields are identified by the \code{indexed} column in \code{ala_fields("occurrence")}. Only fields that are stored in the database can be returned as part of an \code{occurrences} call. These fields are identified by the \code{stored} column in \code{ala_fields("occurrence")}. The calling syntaxes \code{ala_fields("occurrence_stored")} and \code{ala_fields("occurrence_indexed")} are for convenience, and are equivalent to \code{subset(ala_fields("occurrence"),stored)} and \code{subset(ala_fields("occurrence"),indexed)}.
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
-#' @references \itemize{
-#' \item ALA web service API: \url{http://api.ala.org.au/}
-#' \item Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/}
+#' @references Relevant ALA web services: \itemize{
+#' \item for `fields_type` "occurrence": http://api.ala.org.au/#ws72
+#' \item for `fields_type` "general": http://api.ala.org.au/#ws88
+#' \item for `fields_type` "layers": http://api.ala.org.au/#ws11 (see also descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/})
+#' \item for `fields_type` "assertions": http://api.ala.org.au/#ws81
 #' }
 #' @seealso \code{\link{search_layers}} to search for spatial layers
 #' @param fields_type text: one of the following
