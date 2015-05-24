@@ -1,8 +1,8 @@
 #' Intersect environmental or contextual layers at a given a set of points (coordinates)
 #' 
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
-#' @references \url{http://api.ala.org.au/}
-#' @references \url{http://spatial.ala.org.au/layers/}
+#' @references The associated ALA web service: \url{http://api.ala.org.au/#ws84}
+#' @references Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/}
 #'
 #' This function allows the user to sample environmental/contextual layers at arbitrary locations. It complements 
 #' the \code{\link{occurrences}} function, which allows values of the same set of layers to be downloaded at 

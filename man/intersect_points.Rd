@@ -42,9 +42,9 @@ intersect_points(pnts,layers)
 Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
-\url{http://api.ala.org.au/}
+The associated ALA web service: \url{http://api.ala.org.au/#ws84}
 
-\url{http://spatial.ala.org.au/layers/}
+Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/}
 
 This function allows the user to sample environmental/contextual layers at arbitrary locations. It complements
 the \code{\link{occurrences}} function, which allows values of the same set of layers to be downloaded at
