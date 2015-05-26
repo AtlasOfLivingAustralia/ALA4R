@@ -47,6 +47,10 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
             return(list())
         }
         guid=guid[[1]]
+        if (is.na(guid)) {
+            warning("No valid GUID found for scientificname",scientificname)
+            return(list())
+        }
     }
     this_url=build_url_from_parts(ala_config()$base_url_bie,c("species",paste0(guid,".json")))
     out=cached_get(URLencode(this_url),type="json",verbose=verbose)
