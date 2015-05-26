@@ -84,10 +84,17 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
     ## taxonName
     names(out$taxonName)=rename_variables(names(out$taxonName),type="general")
     ## classification
-    tempcols=setdiff(names(out$classification),unwanted_columns(type="general"))
-    out$classification=subset(out$classification,select=tempcols)
-    names(out$classification)=str_replace_all(names(out$classification),"^clazz","class")
-    names(out$classification)=rename_variables(names(out$classification),type="general")
+    ## for taxa with improper classification (e.g. species_info(guid='ALA_Caladenia_cardiochila')) this is just a string
+    if (is.data.frame(out$classification)) {
+        tempcols=setdiff(names(out$classification),unwanted_columns(type="general"))
+        out$classification=subset(out$classification,select=tempcols)
+        names(out$classification)=str_replace_all(names(out$classification),"^clazz","class")
+        names(out$classification)=rename_variables(names(out$classification),type="general")
+    } else if (is.character(out$classification)) {
+        ## leave as is
+    } else {
+        warning("the structure of the $classification object was unexpected - please notify the ALA4R maintainers by lodging an issue at https://github.com/AtlasOfLivingAustralia/ALA4R/issues/ or emailing support@ala.org.au")
+    }
     ## identifiers is a list - is OK
     ## commonNames - just the dud_cols above
     #tempcols=setdiff(names(out$commonNames),c("infoSourceId","documentId"))
