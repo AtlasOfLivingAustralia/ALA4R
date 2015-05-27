@@ -47,8 +47,10 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
             return(list())
         }
         guid=guid[[1]]
-        if (is.na(guid) & ala_config()$warn_on_empty) {
-            warning("No valid GUID found for scientificname",scientificname)
+        if (is.na(guid)) {
+            if (ala_config()$warn_on_empty) {
+                warning("No valid GUID found for scientificname",scientificname)
+            }
             return(list())
         }
     }
