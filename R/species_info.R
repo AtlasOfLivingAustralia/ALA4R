@@ -73,9 +73,9 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
     ## some columns consistently used across these child objects but seem to be internal identifiers and of little use here
     dud_cols=c("id","parentId","infoSourceId","documentId")
     for (k in 1:length(out)) {
-        if (class(out[[k]])=="data.frame") {
+        if (is.data.frame(out[[k]])) {
             tempcols=setdiff(names(out[[k]]),dud_cols)
-            out[[k]]=out[[k]][,tempcols]
+            out[[k]]=out[[k]][,tempcols,drop=FALSE]
         }
     }
     ## taxonConcept
