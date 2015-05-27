@@ -46,7 +46,12 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
         ##x=content(x,as="text")
         
         if (identical(type,"json")) {
-            x=jsonlite::fromJSON(x) ## do text-then-conversion, rather than content(as="parsed") to avoid httr's default use of RJSONIO::fromJSON
+            if (nchar(x)<1) {
+                ## empty string, fromJSON will throw error, so just return NULL
+                x=NULL
+            } else {
+                x=jsonlite::fromJSON(x) ## do text-then-conversion, rather than content(as="parsed") to avoid httr's default use of RJSONIO::fromJSON
+            }
         }
         x
     } else {
