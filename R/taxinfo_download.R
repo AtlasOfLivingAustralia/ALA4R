@@ -75,12 +75,11 @@ taxinfo_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_
     } else {
         ## if data.table is available, first try using this
         read_ok=FALSE
-        if (use_data_table & is.element('data.table', installed.packages()[,1])) { ## if data.table package is available
-            require(data.table) ## load it
+        if (use_data_table & requireNamespace("data.table",quietly=TRUE)) { ## if data.table package is available
             tryCatch({
-                x=fread(thisfile,stringsAsFactors=FALSE,header=TRUE,verbose=verbose)
+                x=data.table::fread(thisfile,stringsAsFactors=FALSE,header=TRUE,verbose=verbose)
                 ## make sure names of x are valid, as per data.table
-                setnames(x,make.names(names(x)))
+                data.table::setnames(x,make.names(names(x)))
                 ## now coerce it back to data.frame (for now at least, unless we decide to not do this!)
                 x=as.data.frame(x)
                 if (!empty(x)) {

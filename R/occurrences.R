@@ -160,8 +160,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     } else {
         ## if data.table is available, first try using this
         read_ok=FALSE
-        if (use_data_table & is.element('data.table', installed.packages()[,1])) { ## if data.table package is available
-            require(data.table) ## load it
+        if (use_data_table & requireNamespace("data.table",quietly=TRUE)) { ## if data.table package is available
             tryCatch({
                 ## first need to extract data.csv from the zip file
                 ## this may end up making fread() slower than direct read.table() ... needs testing
@@ -173,9 +172,9 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
                 unzip(thisfile,files=c("data.csv"),junkpaths=TRUE,exdir=tempsubdir)
                 ## first check if file is empty
                 if (file.info(file.path(tempsubdir,"data.csv"))$size>0) {
-                    x=fread(file.path(tempsubdir,"data.csv"),stringsAsFactors=FALSE,header=TRUE,verbose=verbose,sep="\t")
+                    x=data.table::fread(file.path(tempsubdir,"data.csv"),stringsAsFactors=FALSE,header=TRUE,verbose=verbose,sep="\t")
                     ## make sure names of x are valid, as per data.table
-                    setnames(x,make.names(names(x)))
+                    data.table::setnames(x,make.names(names(x)))
                     ## now coerce it back to data.frame (for now at least, unless we decide to not do this!)
                     x=as.data.frame(x)
                     if (!empty(x)) {
