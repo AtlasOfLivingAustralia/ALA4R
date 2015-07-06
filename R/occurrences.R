@@ -228,7 +228,9 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
             x=subset(x,select=xcols)
             ## also read the citation info
             ## this file won't exist if there are no rows in the data.csv file, so only do it if nrow(x)>0
-            xc=read.table(unz(thisfile,"citation.csv"),header=TRUE,comment.char="",as.is=TRUE)
+            ## also wrap it in a try(...), so that it won't cause the function to fail if the citation.csv file isn't present
+            xc="No citation information was returned, try again later"
+            try(xc<-read.table(unz(thisfile,"citation.csv"),header=TRUE,comment.char="",as.is=TRUE),silent=!ala_config()$warn_on_empty)
         } else {
             if (ala_config()$warn_on_empty) {
                 warning("no matching records were returned")
