@@ -13,7 +13,7 @@ check_fq=function(fq,type) {
     valid_fields=ala_fields(type)
     invalid_fields=setdiff(field_names,valid_fields$name)
     if (length(invalid_fields)>0) {
-        stop("invalid fields in fq: ",paste(invalid_fields,collapse=", "),". See ala_fields(\"",type,"\")")
+        warning("there may be invalid fields in fq: ",paste(invalid_fields,collapse=", "),". See ala_fields(\"",type,"\")")
     }
 }
     
