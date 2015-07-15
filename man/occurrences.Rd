@@ -20,7 +20,7 @@ NOTE that fq matches are case-sensitive, but sometimes the entries in the fields
 not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA").
 fq matches are ANDed by default (e.g. c("field1:abc","field2:def") will match records that have
 field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form c("field1:abc
-OR field2:def")}
+OR field2:def"). See e.g. \url{http://wiki.apache.org/solr/CommonQueryParameters} for more information about filter queries}
 
 \item{fields}{string vector: (optional) a vector of field names to return. Note that the columns of the returned data frame
 are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence_stored")} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")}
