@@ -5,15 +5,22 @@ check_fq=function(fq,type) {
     assert_that(is.string(type))
     type=match.arg(tolower(type),c("general","occurrence","layers"))
     if (identical(type,"occurrence")) { type="occurrence_indexed" }
-    temp=paste("",fq,collapse=" ") ## with leading space
-    temp=gsub("[\\(\\)]+"," ",temp) ## drop all brackets (we don't care about the logic, just the field names that are present) and replace with spaces
-    field_names=str_split(temp,"\\s+") ## split on spaces
-    field_names=unlist(str_extract_all(unlist(field_names),perl("^[^\\:]+(?=\\:)"))) ## extract "field" in field:value
-    field_names=gsub("^\\-","",field_names) ## remove leading "-" characters which can be used to negate fq queries
-    valid_fields=ala_fields(type)
-    invalid_fields=setdiff(field_names,valid_fields$name)
-    if (length(invalid_fields)>0) {
-        warning("there may be invalid fields in fq: ",paste(invalid_fields,collapse=", "),". See ala_fields(\"",type,"\")")
+    ## pick out field names as anything after a separator character (e.g. space|bracket|+|-), and followed by a colon
+    ## see https://wiki.apache.org/solr/CommonQueryParameters for syntax form
+    sepchars=paste0("[:space:]",paste0("",strsplit("+)(-}{","")[[1]],collapse="\\"))
+    field_names=paste("",fq,collapse=" ") ## collapse into single string and add leading space
+    ## need to drop anything inside square brackets: these indicate ranges and can cause problems when pulling out field names
+    field_names=str_replace_all(field_names,"\\[.*?\\]","range")
+    field_names=str_match_all(field_names,paste0("[",sepchars,"]([^:",sepchars,"]+?)[[:space:]]*:"))[[1]]
+    if (is.null(dim(field_names))) {
+        ## no matches, so somehow fq doesn't match our expected syntax
+        warning("fq may be invalid. See ala_fields(\"",type,"\") for valid fields and help(\"occurrences\" for general help on fq syntax")
+    } else {
+        valid_fields=ala_fields(type)
+        invalid_fields=setdiff(tolower(field_names[,2]),tolower(valid_fields$name))
+        if (length(invalid_fields)>0) {
+            warning("there may be invalid fields in fq: ",paste(invalid_fields,collapse=", "),". See ala_fields(\"",type,"\")")
+        }
     }
 }
     
