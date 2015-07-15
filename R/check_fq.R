@@ -14,7 +14,7 @@ check_fq=function(fq,type) {
     field_names=str_match_all(field_names,paste0("[",sepchars,"]([^:",sepchars,"]+?)[[:space:]]*:"))[[1]]
     if (is.null(dim(field_names))) {
         ## no matches, so somehow fq doesn't match our expected syntax
-        warning("fq may be invalid. See ala_fields(\"",type,"\") for valid fields and help(\"occurrences\" for general help on fq syntax")
+        warning("fq may be invalid. See ala_fields(\"",type,"\") for valid fields and help(\"occurrences\") for general help on fq syntax")
     } else {
         valid_fields=ala_fields(type)
         invalid_fields=setdiff(tolower(field_names[,2]),tolower(valid_fields$name))
