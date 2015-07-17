@@ -5,13 +5,7 @@ check_fq=function(fq,type) {
     assert_that(is.string(type))
     type=match.arg(tolower(type),c("general","occurrence","layers"))
     if (identical(type,"occurrence")) { type="occurrence_indexed" }
-    ## pick out field names as anything after a separator character (e.g. space|bracket|+|-), and followed by a colon
-    ## see https://wiki.apache.org/solr/CommonQueryParameters for syntax form
-    sepchars=paste0("[:space:]",paste0("",strsplit("+)(-}{","")[[1]],collapse="\\"))
-    field_names=paste("",fq,collapse=" ") ## collapse into single string and add leading space
-    ## need to drop anything inside square brackets: these indicate ranges and can cause problems when pulling out field names
-    field_names=str_replace_all(field_names,"\\[.*?\\]","range")
-    field_names=str_match_all(field_names,paste0("[",sepchars,"]([^:",sepchars,"]+?)[[:space:]]*:"))[[1]]
+    field_names=extract_fq_fieldnames(fq)
     if (is.null(dim(field_names))) {
         ## no matches, so somehow fq doesn't match our expected syntax
         warning("fq may be invalid. See ala_fields(\"",type,"\") for valid fields and help(\"occurrences\") for general help on fq syntax")
@@ -24,3 +18,14 @@ check_fq=function(fq,type) {
     }
 }
     
+
+extract_fq_fieldnames=function(fq) {
+    assert_that(is.character(fq))
+    ## pick out field names as anything after a separator character (e.g. space|bracket|+|-), and followed by a colon
+    ## see https://wiki.apache.org/solr/CommonQueryParameters for syntax form
+    sepchars=paste0("[:space:]",paste0("",strsplit("+)(-}{","")[[1]],collapse="\\"))
+    field_names=paste("",fq,collapse=" ") ## collapse into single string and add leading space
+    ## need to drop anything inside square brackets: these indicate ranges and can cause problems when pulling out field names
+    field_names=str_replace_all(field_names,"\\[.*?\\]","range")
+    str_match_all(field_names,paste0("[",sepchars,"]([^:",sepchars,"]+?)[[:space:]]*:"))[[1]]   
+}
