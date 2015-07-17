@@ -6,12 +6,12 @@ check_fq=function(fq,type) {
     type=match.arg(tolower(type),c("general","occurrence","layers"))
     if (identical(type,"occurrence")) { type="occurrence_indexed" }
     field_names=extract_fq_fieldnames(fq)
-    if (is.null(dim(field_names))) {
+    if (is.null(field_names)) {
         ## no matches, so somehow fq doesn't match our expected syntax
         warning("fq may be invalid. See ala_fields(\"",type,"\") for valid fields and help(\"occurrences\") for general help on fq syntax")
     } else {
         valid_fields=ala_fields(type)
-        invalid_fields=setdiff(tolower(field_names[,2]),tolower(valid_fields$name))
+        invalid_fields=setdiff(tolower(field_names),tolower(valid_fields$name))
         if (length(invalid_fields)>0) {
             warning("there may be invalid fields in fq: ",paste(invalid_fields,collapse=", "),". See ala_fields(\"",type,"\")")
         }
@@ -27,5 +27,10 @@ extract_fq_fieldnames=function(fq) {
     field_names=paste("",fq,collapse=" ") ## collapse into single string and add leading space
     ## need to drop anything inside square brackets: these indicate ranges and can cause problems when pulling out field names
     field_names=str_replace_all(field_names,"\\[.*?\\]","range")
-    str_match_all(field_names,paste0("[",sepchars,"]([^:",sepchars,"]+?)[[:space:]]*:"))[[1]]   
+    field_names=str_match_all(field_names,paste0("[",sepchars,"]([^:",sepchars,"]+?)[[:space:]]*:"))[[1]]   
+    if (is.null(dim(field_names))) {
+        NULL
+    } else {
+        field_names[,2]
+    }
 }
