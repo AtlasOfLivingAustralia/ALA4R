@@ -25,7 +25,7 @@ test_that("check_fq extracts field names correctly", {
     expect_equal(extract_fq_fieldnames("occurrence_year:[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]"),c("occurrence_year"))
     expect_null(check_fq("occurrence_year:[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]","occurrence"))
 
-    expect_null(extract_fq_fieldnames("occurrence_year[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]"),c("occurrence_year"))    
+    expect_null(extract_fq_fieldnames("occurrence_year[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]"))
     expect_warning(check_fq("occurrence_year[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]","occurrence"))
     
     expect_equal(extract_fq_fieldnames(c("month:12","family:something AND longitude:[60 TO *]")),c("month","family","longitude"))
