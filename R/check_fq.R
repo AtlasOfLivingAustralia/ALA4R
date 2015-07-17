@@ -27,8 +27,8 @@ extract_fq_fieldnames=function(fq) {
     field_names=paste("",fq,collapse=" ") ## collapse into single string and add leading space
     ## need to drop anything inside square brackets: these indicate ranges and can cause problems when pulling out field names
     field_names=str_replace_all(field_names,"\\[.*?\\]","range")
-    field_names=str_match_all(field_names,paste0("[",sepchars,"]([^:",sepchars,"]+?)[[:space:]]*:"))[[1]]   
-    if (is.null(dim(field_names))) {
+    field_names=str_match_all(field_names,paste0("[",sepchars,"]([^:",sepchars,"]+?)[[:space:]]*:"))[[1]]    
+    if (nrow(field_names)<1) {
         NULL
     } else {
         field_names[,2]
