@@ -62,9 +62,9 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     if (!missing(sort_by)) {
         assert_that(is.string(sort_by))
         ## check that this is a valid field
-        valid_fields=ala_fields("general")$name
+        valid_fields=ala_fields("general",as_is=TRUE)$name
         if (! sort_by %in% valid_fields) {
-            stop(sort_by," is not a valid field for sort_by. See ala_fields(\"general\")")
+            stop(sort_by," is not a valid field for sort_by. See ala_fields(\"general\",as_is=TRUE)")
         }
         this_query$sort=sort_by
     }

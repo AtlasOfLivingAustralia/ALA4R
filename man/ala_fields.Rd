@@ -5,7 +5,7 @@
 \alias{field_info}
 \title{Retrieves a list of all field names that can be used with data retrieval functions}
 \usage{
-ala_fields(fields_type = "occurrence", as_is = FALSE)
+ala_fields(fields_type = "occurrence", as_is = TRUE)
 
 field_info(field_id, maxrows = 50, record_count_only = FALSE)
 }
@@ -21,8 +21,8 @@ on layers, including metadata and licensing, see \code{\link{search_layers}}
 \item "assertions" - potential issues flagged on one or more occurrence record fields
 }}
 
-\item{as_is}{logical: if FALSE, apply ALA4R's renaming of fields for consistency across functions. If TRUE,
-leave the field names as they are returned from the ALA web service}
+\item{as_is}{logical: if TRUE, leave the field names as they are returned from the ALA web services. Arguments that are passed
+directly to the ALA's web services (e.g. parameter \code{fq} in \code{\link{occurrences}}) should use field names in this format. If \code{as_is} is FALSE, the returned $names entries will be modified to make them consistent with the corresponding column names in R data.frames returned by e.g. \code{\link{occurrences}}. \code{as_is=FALSE} has no effect when \code{fields_type} is "layers". Note that prior to v1.20, \code{as_is=FALSE} did not work correctly.}
 
 \item{field_id}{text: id of environmental/contextual layer field for which to look up information
 Prepend "el" for "environmental" (gridded) layers and "cl" for "contextual" (polygonal) layers}

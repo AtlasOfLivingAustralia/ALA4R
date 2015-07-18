@@ -177,7 +177,8 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
         varnames=str_replace_all(varnames,"seaWIFS","SeaWIFS")
     }        
 
-    if (type=="assertions") { ###hardcoded assertion variable name changes	
+    if (type=="assertions") { ###hardcoded assertion variable name changes
+        ## these assertions come back from the ALA service with the wrong names
         if ("coordinatesAreOutOfRangeForSpecies" %in% varnames) varnames[varnames=="coordinatesAreOutOfRangeForSpecies"] = "coordinatesOutOfRange"
         if ("collectionDateMissing" %in% varnames) varnames[varnames=="collectionDateMissing"] = "missingCollectionDate"
         if ("coordinateUncertaintyNotSpecified" %in% varnames) varnames[varnames=="coordinateUncertaintyNotSpecified"] = "uncertaintyNotSpecified"

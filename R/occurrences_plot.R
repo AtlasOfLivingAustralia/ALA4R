@@ -58,7 +58,7 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 			valid_fields=ass$occurColnames ## valid entries for qa
 			unknown=setdiff(qa,valid_fields)
 			if (length(unknown)>0) {
-				warning("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"assertions\")")
+				warning("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"assertions\",as_is=TRUE)")
 			}
 			tt = intersect(qa,valid_fields)
 		}

@@ -20,8 +20,8 @@
 #' on layers, including metadata and licensing, see \code{\link{search_layers}}
 #' \item "assertions" - potential issues flagged on one or more occurrence record fields
 #' }
-#' @param as_is logical: if FALSE, apply ALA4R's renaming of fields for consistency across functions. If TRUE, 
-#' leave the field names as they are returned from the ALA web service
+#' @param as_is logical: if TRUE, leave the field names as they are returned from the ALA web services. Arguments that are passed
+#' directly to the ALA's web services (e.g. parameter \code{fq} in \code{\link{occurrences}}) should use field names in this format. If \code{as_is} is FALSE, the returned $names entries will be modified to make them consistent with the corresponding column names in R data.frames returned by e.g. \code{\link{occurrences}}. \code{as_is=FALSE} has no effect when \code{fields_type} is "layers". Note that prior to v1.20, \code{as_is=FALSE} did not work correctly. 
 #' @param field_id text: id of environmental/contextual layer field for which to look up information
 #' Prepend "el" for "environmental" (gridded) layers and "cl" for "contextual" (polygonal) layers
 #' @param maxrows integer: maximum number of records to download. Some contextual layers (those with \code{field_id}s starting with "cl") have a very large number of records and attempting to download the full set can cause R to crash. Specifying -1 for maxrows will download the full set of records for that field
@@ -42,7 +42,7 @@
 # ids from http://spatial.ala.org.au/ws/layers are NUMERIC but lookup prepends "el" and "cl"! 
 
 
-ala_fields=function(fields_type="occurrence",as_is=FALSE) {
+ala_fields=function(fields_type="occurrence",as_is=TRUE) {
     assert_that(is.string(fields_type))
     assert_that(is.flag(as_is))
     fields_type=match.arg(tolower(fields_type),c("occurrence","occurrence_stored","occurrence_indexed","general","layers","assertions"))
@@ -85,11 +85,19 @@ ala_fields=function(fields_type="occurrence",as_is=FALSE) {
         x=subset(x,indexed)
     }
     if (!as_is) {
-        names(x)=rename_variables(names(x),type=fields_type)
-        ## drop unwanted columns
-        xcols=setdiff(names(x),unwanted_columns(fields_type))
-        x=subset(x,select=xcols)
+        ## old code ## names(x)=rename_variables(names(x),type=fields_type)
+        ## Nooooo! this should have been applied to x$name not names(x)
+        ## as_is now defaults to TRUE (v1.20) to keep default behaviour the same as with previous versions
+        if (! fields_type %in% c("layers")) {
+            ## don't apply when fields_type is layers, because we want name left as full name 
+            x$name=rename_variables(x$name,type=fields_type)
+        }
     }
+    ## some other hard-coded name changes
+    names(x)[tolower(names(x))=="desc"]="description"
+    ## drop unwanted columns
+    xcols=setdiff(names(x),unwanted_columns(fields_type))
+    x=subset(x,select=xcols)
     x
 }
 

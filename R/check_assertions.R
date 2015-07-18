@@ -22,7 +22,7 @@ check_assertions = function(x) {
         stop('check_assertions must have an object of class occurrences from e.g., occurrences() in the ALA4R package')
     }
     cois = colnames(x$data) #get the column names
-    ass = ala_fields('assertions') #get the assertions
+    ass = ala_fields('assertions',as_is=TRUE) #get the assertions
     ass$occurColnames = NA
     temp_description=rename_variables(ass$description,type="assertions")
     for(coi in cois) {

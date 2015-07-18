@@ -8,12 +8,12 @@ check_fq=function(fq,type) {
     field_names=extract_fq_fieldnames(fq)
     if (is.null(field_names)) {
         ## no matches, so somehow fq doesn't match our expected syntax
-        warning("fq may be invalid. See ala_fields(\"",type,"\") for valid fields and help(\"occurrences\") for general help on fq syntax")
+        warning("fq may be invalid. See ala_fields(\"",type,"\",as_is=TRUE) for valid fields and help(\"occurrences\") for general help on fq syntax")
     } else {
-        valid_fields=ala_fields(type)
+        valid_fields=ala_fields(type,as_is=TRUE)
         invalid_fields=setdiff(tolower(field_names),tolower(valid_fields$name))
         if (length(invalid_fields)>0) {
-            warning("there may be invalid fields in fq: ",paste(invalid_fields,collapse=", "),". See ala_fields(\"",type,"\")")
+            warning("there may be invalid fields in fq: ",paste(invalid_fields,collapse=", "),". See ala_fields(\"",type,"\",as_is=TRUE)")
         }
     }
 }

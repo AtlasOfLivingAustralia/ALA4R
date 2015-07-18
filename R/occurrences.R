@@ -12,16 +12,16 @@
 #' @param taxon string: (optional) taxonomic query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")
 #' @param wkt string: (optional) a WKT (well-known text) string providing a spatial polygon within which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.131 -26,140 -37))"
 #' @param fq string: (optional) character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". 
-#' See \code{ala_fields("occurrence_indexed")} for all the fields that are queryable. 
+#' See \code{ala_fields("occurrence_indexed",as_is=TRUE)} for all the fields that are queryable. 
 #' NOTE that fq matches are case-sensitive, but sometimes the entries in the fields are 
 #' not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA"). 
 #' fq matches are ANDed by default (e.g. c("field1:abc","field2:def") will match records that have 
 #' field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form c("field1:abc 
 #' OR field2:def"). See e.g. \url{http://wiki.apache.org/solr/CommonQueryParameters} for more information about filter queries
 #' @param fields string vector: (optional) a vector of field names to return. Note that the columns of the returned data frame 
-#' are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence_stored")} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")
-#' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence_stored")} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")
-#' @param qa string vector: (optional) list of record issues to include in the download. See \code{ala_fields("assertions")} for valid values, or use "none" to include no record issues
+#' are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")
+#' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")
+#' @param qa string vector: (optional) list of record issues to include in the download. See \code{ala_fields("assertions",as_is=TRUE)} for valid values, or use "none" to include no record issues
 #' @param download_reason_id numeric or string: (required unless record_count_only is TRUE) a reason code for the download, either as a numeric ID (currently 0--11) or a string (see \code{\link{ala_reasons}} for a list of valid ID codes and names). The download_reason_id can be passed directly to this function, or alternatively set using \code{ala_config(download_reason_id=...)}
 #' @param reason string: (optional) user-supplied description of the reason for the download. Providing this information is optional but will help the ALA to better support users by building a better understanding of user communities and their data requests
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
@@ -35,7 +35,7 @@
 #' x=occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE) ## count of records from this data provider
 #' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10) ## download records, with standard fields
 #' \dontrun{ 
-#' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence_stored")$name) ## download records, with all fields
+#' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence_stored",as_is=TRUE)$name) ## download records, with all fields
 #' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),download_reason_id=10) ## download records, with specified fields
 #' x=occurrences(taxon="macropus",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",download_reason_id=10,qa="none") ## download records in polygon, with no quality assertion information
 #' 
@@ -48,7 +48,7 @@
 #' }
 #' @export occurrences
 
-## NOTE - the all-fields example caused a segfault on rforge, so don't take it out of the dontrun block [this one: x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence_stored")$name) ## download records, with all fields]
+## NOTE - the all-fields example caused a segfault on rforge, so don't take it out of the dontrun block [this one: x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence_stored",as_is=TRUE)$name) ## download records, with all fields]
 
 ## TODO document fq alone as a query
 ## TODO: more extensive testing, particularly of the csv-conversion process
@@ -115,29 +115,29 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         assert_that(is.character(fields))
         ## user has specified some fields
         fields=fields_name_to_id(fields=fields,fields_type="occurrence") ## replace long names with ids
-        valid_fields=ala_fields(fields_type="occurrence_stored")
+        valid_fields=ala_fields(fields_type="occurrence_stored",as_is=TRUE)
         unknown=setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
-            stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"occurrence_stored\")")
+            stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"occurrence_stored\",as_is=TRUE)")
         }
         this_query$fields=str_c(fields,collapse=",")
     }
     if (!missing(extra)) {
         assert_that(is.character(extra))
         extra=fields_name_to_id(fields=extra,fields_type="occurrence") ## replace long names with ids
-        valid_fields=ala_fields(fields_type="occurrence_stored")
+        valid_fields=ala_fields(fields_type="occurrence_stored",as_is=TRUE)
         unknown=setdiff(extra,valid_fields$name)
         if (length(unknown)>0) {
-            stop("invalid extra fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"occurrence_stored\")")
+            stop("invalid extra fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"occurrence_stored\",as_is=TRUE)")
         }
         this_query$extra=str_c(extra,collapse=",")
     }
     if (!missing(qa)) {
         assert_that(is.character(qa))
-        valid_fields=c("none",ala_fields(fields_type="assertions")$name) ## valid entries for qa
+        valid_fields=c("none",ala_fields(fields_type="assertions",as_is=TRUE)$name) ## valid entries for qa
         unknown=setdiff(qa,valid_fields)
         if (length(unknown)>0) {
-            stop("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"assertions\")")
+            stop("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"assertions\",as_is=TRUE)")
         }
         this_query$qa=str_c(qa,collapse=",")
     }
