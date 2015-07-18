@@ -33,7 +33,7 @@
 
 search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="simple") {
     ## input argument checks
-    if (identical(class(taxa),"list")) {
+    if (is.list(taxa)) {
         taxa=unlist(taxa)
     }
     if (is.factor(taxa)) {
@@ -122,7 +122,7 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
 #' @export
 "print.search_names" <- function(x, ...)
 {
-    if (any(class(x)=="list")) {
+    if (inherits(x,"list")) {
         ## from guids_only seach
         print(format(x))
     } else {

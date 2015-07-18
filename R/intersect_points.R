@@ -48,7 +48,8 @@ intersect_points = function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE,
     force_bulk=TRUE ## force to use the bulk method even if only one point provided (avoids some type problems with json parsing under single-point method, also ensures that output always consistent between the two methods)
 
     ##check and format the points
-    if (class(pnts) %in% c('data.frame','matrix')) { #convert to a vector if a data.frame or matrix and setup the string for the url
+    if (is.data.frame(pnts) | is.matrix(pnts)) {
+        ## convert to a vector if a data.frame or matrix and setup the string for the url
         if (dim(pnts)[2] !=2) stop('data.frame or matrix of points must have 2 columns ordered lat,lon') #check the dimensions
         if (!force_bulk && (nrow(pnts)==1)) { #this is for a single coordinate pair
             pnts_str = paste(pnts[1,],collapse='/',sep='') #setup the points str for the url

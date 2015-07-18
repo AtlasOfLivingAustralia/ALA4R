@@ -31,7 +31,7 @@
 #' @export occurrences_plot
 occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), grouped=FALSE, taxon_level='species', pch, cex=0.75, ...) 
 {
-	if (!any(class(x)=='occurrences')) stop('check_assertions must have an object of class occurrences from e.g., occurrences() in the ALA4R package')
+	if (! inherits(x,"occurrences")) stop('check_assertions must have an object of class occurrences from e.g., occurrences() in the ALA4R package')
         assert_that(is.string(taxon_level))
         taxon_level=match.arg(tolower(taxon_level),c("species","genus","family","order"))
 	assert_that(is.notempty.string(filename))
