@@ -18,3 +18,9 @@ test_that("occurrences summary works when no qa are present", {
 test_that("occurrences summary gives something sensible", {
     expect_output(summary(occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)),"^number of names")
 })
+
+test_that("occurrences retrieves the fields specified", {
+    expect_equal(sort(names(occurrences(taxon="Eucalyptus gunnii",fields=c("latitude","longitude"),qa="none",fq="basis_of_record:LivingSpecimen",download_reason_id=10)$data)),c("latitude","longitude"))
+    expect_error(occurrences(taxon="Eucalyptus gunnii",fields=c("blahblahblah"),download_reason_id=10))
+})
+
