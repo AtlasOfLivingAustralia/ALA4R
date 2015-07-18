@@ -97,96 +97,93 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
     assert_that(is.character(varnames))
     assert_that(is.string(type))
     type=match.arg(tolower(type),c("general","layers","occurrence","occurrence_stored","occurrence_indexed","assertions","other")) ## use "other" to make no variable name substtutions, just enforce case/separator conventions
-    if (FALSE) {
-        ## just return the names as-is, but enforce validity as variable names
-        varnames=make.names(varnames)
-     } else {
-        ## change all to camelCase
-        varnames=tocamel(make.names(varnames))
-        ## try to convert some all-lowercase names to camel, e.g. environmentalvaluemax minlatitude minlongitude
-        for (kw in c("longitude","latitude","value","units")) {
-            varnames=str_replace_all(varnames,kw,paste(toupper(substring(kw,1,1)),substring(kw,2),sep=""))
-        }
-        ## some that only seem to appear at the ends of variable names, so be conservative with these replacements
-        for (kw in c("min","max","path")) {
-            varnames=str_replace_all(varnames,paste(kw,"$",sep=""),paste(toupper(substr(kw,1,1)),substring(kw,2),sep=""))
-        }        
-        ## enforce first letter lowercase
-        varnames=paste(tolower(substr(varnames,1,1)),substring(varnames,2),sep="")
-        ## some global re-naming by data type
-        if (type=="general") {
-            ## general names, from e.g. name searching
-            varnames[varnames=="occCount"]="occurrenceCount"
-            varnames[varnames=="vernacularName"]="commonName" ## taxinfo_download provides "vernacularName", others "commonName"
-            varnames=str_replace_all(varnames,"conservationStatusInAustralia","conservationStatusAUS")
-            varnames=str_replace_all(varnames,"conservationStatusIn","conservationStatus")
-            varnames=str_replace_all(varnames,"scientificNameForAcceptedConcept","acceptedConceptName") ## taxinfo_download returns the former, but should be the latter for consistency elsewhere
-
-            if (any(varnames=="rank") & any(varnames=="rankString")) {
-                if (verbose) {
-                    warning("data contains both \"rank\" and \"rankString\" columns, not renaming \"rankString\"")
-                }
-            } else {
-                varnames[varnames=="rankString"]="rank" ## returned as "rank" by some services and "rankString" by others
-            }
-            ## ditto for taxonRank
-            if (any(varnames=="rank") & any(varnames=="taxonRank")) {
-                if (verbose) {
-                    warning("data contains both \"rank\" and \"taxonRank\" columns, not renaming \"taxonRank\"")
-                }
-            } else {
-                varnames[varnames=="taxonRank"]="rank" ## returned as "Taxon.Rank" (camelcased to "taxonRank") by taxinfo_download
-            }
-        } else if (type=="layers") {
-            varnames[varnames=="desc"]="description"
-        } else if (type %in% c("occurrence","occurrence_stored","occurrence_indexed")) {
-            ## "scientificName" is actually scientificNameOriginal
-            varnames[varnames=="scientificName"]="scientificNameOriginal"
-            ## and "matchedScientificName" will get changed to "scientificName" below
-            varnames[varnames=="recordID"]="id"
-            varnames[varnames=="xVersion"]="version" ## is actually "_version_" in web service
-            if (as.numeric(substr(packageVersion("stringr"),1,1))<1) {
-                varnames=str_replace_all(varnames,ignore.case("axonconceptguid"),"axonConceptLsid") ## occurrences currently returns "MatchTaxonConceptGUID" but the valid field name uses LSID
-            } else {
-                ## ignore_case syntax changed in stringr 1.0
-                varnames=str_replace_all(varnames,regex("axonconceptguid",ignore_case=TRUE),"axonConceptLsid")                
-            }
-            varnames=str_replace_all(varnames,"vernacularName","commonName")
-            varnames=str_replace_all(varnames,"taxonRank","rank")
-            ## rawSomething to somethingOriginal
-            varnames=str_replace_all(varnames,"^raw(.*)$","\\1Original") ## first-letter lowercase will be lost here but gets fixed below
-            ## dump "matched", "processed", and "parsed"
-            if (as.numeric(substr(packageVersion("stringr"),1,1))<1) {
-                varnames=str_replace_all(varnames,ignore.case("(matched|processed|parsed)"),"")
-            } else {
-                varnames=str_replace_all(varnames,regex("(matched|processed|parsed)",ignore_case=TRUE),"")
-            }
-        } else if (type=="assertions") {
-            a=ala_fields("assertions",as_is=TRUE)
-            ## want all assertion field names to match those in a$name
-            ## but some may be camelCased versions of the description
-            a$description=rename_variables(a$description,type="other") ## use "other" here to avoid this renaming code block, just apply camelCasing etc
-            varnames=sapply(varnames,function(z){ifelse(z %in% a$name,z,ifelse(sum(z==a$description)==1,a$name[a$description==z],z))})
-        }
-        ## do this again, it may have been lost in the processing: enforce first letter lowercase
-        varnames=paste(tolower(substr(varnames,1,1)),substring(varnames,2),sep="")
-        if (type %in% c("layers","occurrence","occurrence_stored","occurrence_indexed")) {
-            ## but some acronyms in layer names should remain all-uppercase
-            ## currently this list is: c("iBRA","iMCRA","aCTTAMS","gER","nZ","nSW","lGA","nRM","rAMSAR","nDVI","nPP","aSRI","gEOMACS")
-            ## but since these all occur at the start of variable names, we can catch them with a regular expression and not need to hard-code a list
-            idx=str_detect(varnames,"^[a-z][A-Z]")
-            temp=varnames[idx]
-            varnames[idx]=paste(toupper(substr(temp,1,1)),substring(temp,2),sep="")
-            ## "seaWIFS" to "SeaWIFS"
-            varnames=str_replace_all(varnames,"seaWIFS","SeaWIFS")
-        }        
+    
+    ## change all to camelCase
+    varnames=tocamel(make.names(varnames))
+    ## try to convert some all-lowercase names to camel, e.g. environmentalvaluemax minlatitude minlongitude
+    for (kw in c("longitude","latitude","value","units")) {
+        varnames=str_replace_all(varnames,kw,paste(toupper(substring(kw,1,1)),substring(kw,2),sep=""))
     }
-	if (type=="assertions") { ###hardcoded assertion variable name changes	
-		if ("coordinatesAreOutOfRangeForSpecies" %in% varnames) varnames[which(varnames=="coordinatesAreOutOfRangeForSpecies")] = "coordinatesOutOfRange"
-		if ("collectionDateMissing" %in% varnames) varnames[which(varnames=="collectionDateMissing")] = "missingCollectionDate"
-		if ("coordinateUncertaintyNotSpecified" %in% varnames) varnames[which(varnames=="coordinateUncertaintyNotSpecified")] = "uncertaintyNotSpecified"
-	}	
-	#return the varnames
+    ## some that only seem to appear at the ends of variable names, so be conservative with these replacements
+    for (kw in c("min","max","path")) {
+        varnames=str_replace_all(varnames,paste(kw,"$",sep=""),paste(toupper(substr(kw,1,1)),substring(kw,2),sep=""))
+    }        
+    ## enforce first letter lowercase
+    varnames=paste(tolower(substr(varnames,1,1)),substring(varnames,2),sep="")
+    ## some global re-naming by data type
+    if (type=="general") {
+        ## general names, from e.g. name searching
+        varnames[varnames=="occCount"]="occurrenceCount"
+        varnames[varnames=="vernacularName"]="commonName" ## taxinfo_download provides "vernacularName", others "commonName"
+        varnames=str_replace_all(varnames,"conservationStatusInAustralia","conservationStatusAUS")
+        varnames=str_replace_all(varnames,"conservationStatusIn","conservationStatus")
+        varnames=str_replace_all(varnames,"scientificNameForAcceptedConcept","acceptedConceptName") ## taxinfo_download returns the former, but should be the latter for consistency elsewhere
+        
+        if (any(varnames=="rank") & any(varnames=="rankString")) {
+            if (verbose) {
+                warning("data contains both \"rank\" and \"rankString\" columns, not renaming \"rankString\"")
+            }
+        } else {
+            varnames[varnames=="rankString"]="rank" ## returned as "rank" by some services and "rankString" by others
+        }
+        ## ditto for taxonRank
+        if (any(varnames=="rank") & any(varnames=="taxonRank")) {
+            if (verbose) {
+                warning("data contains both \"rank\" and \"taxonRank\" columns, not renaming \"taxonRank\"")
+            }
+        } else {
+            varnames[varnames=="taxonRank"]="rank" ## returned as "Taxon.Rank" (camelcased to "taxonRank") by taxinfo_download
+        }
+    } else if (type=="layers") {
+        varnames[varnames=="desc"]="description"
+    } else if (type %in% c("occurrence","occurrence_stored","occurrence_indexed")) {
+        ## "scientificName" is actually scientificNameOriginal
+        varnames[varnames=="scientificName"]="scientificNameOriginal"
+        ## and "matchedScientificName" will get changed to "scientificName" below
+        varnames[varnames=="recordID"]="id"
+        varnames[varnames=="xVersion"]="version" ## is actually "_version_" in web service
+        if (as.numeric(substr(packageVersion("stringr"),1,1))<1) {
+            varnames=str_replace_all(varnames,ignore.case("axonconceptguid"),"axonConceptLsid") ## occurrences currently returns "MatchTaxonConceptGUID" but the valid field name uses LSID
+        } else {
+            ## ignore_case syntax changed in stringr 1.0
+            varnames=str_replace_all(varnames,regex("axonconceptguid",ignore_case=TRUE),"axonConceptLsid")                
+        }
+        varnames=str_replace_all(varnames,"vernacularName","commonName")
+        varnames=str_replace_all(varnames,"taxonRank","rank")
+        ## rawSomething to somethingOriginal
+        varnames=str_replace_all(varnames,"^raw(.*)$","\\1Original") ## first-letter lowercase will be lost here but gets fixed below
+        ## dump "matched", "processed", and "parsed"
+        if (as.numeric(substr(packageVersion("stringr"),1,1))<1) {
+            varnames=str_replace_all(varnames,ignore.case("(matched|processed|parsed)"),"")
+        } else {
+            varnames=str_replace_all(varnames,regex("(matched|processed|parsed)",ignore_case=TRUE),"")
+        }
+    } else if (type=="assertions") {
+        a=ala_fields("assertions",as_is=TRUE)
+        ## want all assertion field names to match those in a$name
+        ## but some may be camelCased versions of the description
+        a$description=rename_variables(a$description,type="other") ## use "other" here to avoid this renaming code block, just apply camelCasing etc
+        varnames=sapply(varnames,function(z){ifelse(z %in% a$name,z,ifelse(sum(z==a$description)==1,a$name[a$description==z],z))})
+    }
+    ## do this again, it may have been lost in the processing: enforce first letter lowercase
+    varnames=paste(tolower(substr(varnames,1,1)),substring(varnames,2),sep="")
+    if (type %in% c("layers","occurrence","occurrence_stored","occurrence_indexed")) {
+        ## but some acronyms in layer names should remain all-uppercase
+        ## currently this list is: c("iBRA","iMCRA","aCTTAMS","gER","nZ","nSW","lGA","nRM","rAMSAR","nDVI","nPP","aSRI","gEOMACS")
+        ## but since these all occur at the start of variable names, we can catch them with a regular expression and not need to hard-code a list
+        idx=str_detect(varnames,"^[a-z][A-Z]")
+        temp=varnames[idx]
+        varnames[idx]=paste(toupper(substr(temp,1,1)),substring(temp,2),sep="")
+        ## "seaWIFS" to "SeaWIFS"
+        varnames=str_replace_all(varnames,"seaWIFS","SeaWIFS")
+    }        
+
+    if (type=="assertions") { ###hardcoded assertion variable name changes	
+        if ("coordinatesAreOutOfRangeForSpecies" %in% varnames) varnames[which(varnames=="coordinatesAreOutOfRangeForSpecies")] = "coordinatesOutOfRange"
+        if ("collectionDateMissing" %in% varnames) varnames[which(varnames=="collectionDateMissing")] = "missingCollectionDate"
+        if ("coordinateUncertaintyNotSpecified" %in% varnames) varnames[which(varnames=="coordinateUncertaintyNotSpecified")] = "uncertaintyNotSpecified"
+    }	
+    ##return the varnames
     varnames
 }
 
