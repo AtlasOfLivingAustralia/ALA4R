@@ -36,8 +36,7 @@ clean_string <- function(x) {
     ## removed this: scientific names can't contain hyphens or diacriticals but common names can; removing these
     ## characters causes problems with hyphenated names and seems likely not to behave well with internationalisation anyway
     x = str_trim(x) ## remove leading and trailing whitespaces
-    x = gsub('\\s+',' ',x) ## replace multiple whitespaces with single
-    x
+    gsub('\\s+',' ',x) ## replace multiple whitespaces with single
 }
 
 ##----------------------------------------------------------------------------------------------
@@ -179,9 +178,9 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
     }        
 
     if (type=="assertions") { ###hardcoded assertion variable name changes	
-        if ("coordinatesAreOutOfRangeForSpecies" %in% varnames) varnames[which(varnames=="coordinatesAreOutOfRangeForSpecies")] = "coordinatesOutOfRange"
-        if ("collectionDateMissing" %in% varnames) varnames[which(varnames=="collectionDateMissing")] = "missingCollectionDate"
-        if ("coordinateUncertaintyNotSpecified" %in% varnames) varnames[which(varnames=="coordinateUncertaintyNotSpecified")] = "uncertaintyNotSpecified"
+        if ("coordinatesAreOutOfRangeForSpecies" %in% varnames) varnames[varnames=="coordinatesAreOutOfRangeForSpecies"] = "coordinatesOutOfRange"
+        if ("collectionDateMissing" %in% varnames) varnames[varnames=="collectionDateMissing"] = "missingCollectionDate"
+        if ("coordinateUncertaintyNotSpecified" %in% varnames) varnames[varnames=="coordinateUncertaintyNotSpecified"] = "uncertaintyNotSpecified"
     }	
     ##return the varnames
     varnames
