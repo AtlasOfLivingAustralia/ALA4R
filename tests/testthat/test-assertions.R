@@ -13,3 +13,10 @@ test_that("check_assertions checks class of input correctly", {
     expect_null(check_assertions(temp))
 })
 
+test_that("check_assertions gets all assertions in occurrences object", {
+    x=occurrences(taxon="Amblyornis newtonianus",download_reason_id=10,qa=ala_fields("assertions",as_is=TRUE)$name)    
+    expect_equal(length(setdiff(ala_fields("assertions",as_is=TRUE)$name,check_assertions(x)$name)),0)
+    x=occurrences(taxon="Amblyornis newtonianus",download_reason_id=10,qa="none")
+    expect_null(check_assertions(x)$name)
+})
+
