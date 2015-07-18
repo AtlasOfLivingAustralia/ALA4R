@@ -1,5 +1,7 @@
 context("Test that variables are renamed correctly")
 
+ala_config(caching="off")
+
 test_that("acronyms remain uppercase", {
     expect_equal(rename_variables("IMCRA","assertions"),"iMCRA")
     expect_equal(rename_variables("IMCRA","occurrence"),"IMCRA")

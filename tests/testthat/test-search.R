@@ -1,5 +1,7 @@
 context("Test searching functions")
 
+ala_config(caching="off")
+
 test_that("search_fulltext generally functions as expected", {
     expect_that(search_fulltext("red kangaroo"),has_names(c("meta","data")))
     expect_that(nrow(search_fulltext("bilbobaggins")$data),equals(0)) ## query that should not match anything

@@ -1,5 +1,7 @@
 context("Test field-related functions")
 
+ala_config(caching="off")
+
 ## ala_fields
 test_that("ala_fields works as expected", {
     expect_that(nrow(ala_fields(fields_type="occurrence")),is_more_than(570))
@@ -22,7 +24,6 @@ test_that("field_info on layers copes with all possible layers", {
     ## this test quite slow
     tt = ala_fields('layers')
     for (ii in tt$id) {
-        cat(ii,"\n")
         expect_that(nrow(field_info(ii)),is_more_than(0)) ## this fails where JSON file too large
     }
 })

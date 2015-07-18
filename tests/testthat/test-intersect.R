@@ -1,5 +1,7 @@
 context("Test intersection of points with environmental values")
 
+ala_config(caching="off")
+
 ## intersect_points
 test_that("intersect_points gives errors or warning for invalid field names", {
     layers = c('clxx')

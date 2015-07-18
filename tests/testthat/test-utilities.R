@@ -1,5 +1,7 @@
 context("Testing utility functions")
 
+ala_config(caching="off")
+
 test_that("url builder works correctly", {
     expect_that(build_url_from_parts("http://a.b",""),equals("http://a.b/"))
     expect_that(build_url_from_parts("http://a.b"),equals("http://a.b/"))

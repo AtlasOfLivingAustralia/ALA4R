@@ -1,5 +1,7 @@
 context("Check assertion-related functions")
 
+ala_config(caching="off")
+
 test_that("NULL returned when no assertions present in input", {
     temp=data.frame()
     class(temp)=c("occurrences",class(temp))

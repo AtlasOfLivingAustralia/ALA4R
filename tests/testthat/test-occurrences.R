@@ -1,5 +1,7 @@
 context("Testing occurrence-related functions")
 
+ala_config(caching="off")
+
 ## ala_reasons
 test_that("ala_reasons works as expected", {
     expect_that(ala_reasons(),has_names(c("rkey","name","id")))

@@ -1,5 +1,7 @@
 context("Test species information functions")
 
+ala_config(caching="off")
+
 ## Not tested yet: species_by_site
 
 ## Not tested yet: taxinfo_download
