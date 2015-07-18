@@ -8,7 +8,7 @@ ala_config(caching="off")
 
 test_that("species_info generally works as expected", {
     expect_that(species_info("Grevillea humilis subsp. maritima"),is_a("list"))
-    expect_that(species_info("Grevillea humilis subsp. maritima",verbose=TRUE),is_a("list"))
+    expect_output(species_info("Grevillea humilis subsp. maritima",verbose=TRUE),"ALA4R: GETting")
     expect_error(species_info("Grevillea humilis subsp. maritima",verbose="yes"))
     expect_equal(species_info("Grevillea humilis subsp. maritima"),species_info(factor("Grevillea humilis subsp. maritima")))
     expect_true(all(names(species_info("Grevillea humilis subsp. maritima")) %in% c("taxonConcept","taxonName","classification","identifiers","synonyms","commonNames","childConcepts","parentConcepts","sameAsConcepts","pestStatuses","conservationStatuses","simpleProperties","images","distributionImages","screenshotImages","extantStatuses","habitats","regionTypes","references","publicationReference","identificationKeys","specimenHolding","categories","isAustralian","linkIdentifier","extantStatusus")))
