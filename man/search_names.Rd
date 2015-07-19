@@ -35,6 +35,8 @@ ss=search_names("Grevillea",vernacular=FALSE) ## should return the genus Grevill
 str(ss)
 sv=search_names("Grevillea",vernacular=TRUE) ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
 str(sv) ## see the complete data structure
+search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"),occurrence_count=TRUE) ## occurrence counts for matched names
+search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"),occurrence_count=TRUE,guids_only=TRUE) ## no occurrence counts because guids_only is TRUE
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
