@@ -19,8 +19,6 @@
 #' 
 #' @export species_info
 
-# TODO: support multiple names or guids passed as a vector? (LB:low priority)
-
 species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
     if (!missing(scientificname)) {
         if (is.factor(scientificname)) {

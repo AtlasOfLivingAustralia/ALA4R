@@ -19,8 +19,6 @@
 #' }
 #' @export specieslist
 
-## TODO? use data.table if available, similarly to occurrences()
-
 specieslist=function(taxon,wkt,fq) {
     this_query=list()
     if (!missing(taxon)) {

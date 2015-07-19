@@ -48,9 +48,6 @@
 #' }
 #' @export occurrences
 
-## NOTE - the all-fields example caused a segfault on rforge, so don't take it out of the dontrun block [this one: x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence_stored",as_is=TRUE)$name) ## download records, with all fields]
-
-## TODO document fq alone as a query
 ## TODO: more extensive testing, particularly of the csv-conversion process
 ## TODO LATER: add params: lat, lon, radius (for specifying a search circle)
 
@@ -215,7 +212,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
                 warning("Only 500000 data rows were returned from the ALA server: this might not be the full data set you need. Contact support@ala.org.au")
             }
             names(x)=str_replace_all(names(x),"^(el|cl)\\.([0-9]+)","\\1\\2") ## change e.g. el.xxx to elxxx
-            ## TODO WTF is "cl.1050.b" etc?
+            ## TODO what is "cl.1050.b" etc?
             if (use_layer_names) {
                 names(x)=make.names(fields_id_to_name(names(x),fields_type="layers"))
             } else {

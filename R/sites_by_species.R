@@ -25,14 +25,11 @@
 #' attr(ss,"guid")[1]
 #' }
 
-# TODO need way to better check input species query
-# TODO precheck of taxon
+# TODO need way to better check input species query. If the query is incorrect, the call will fail with message along the lines of: "Error in sites_by_species(taxon = "gen:Eucalyptus", wkt = "POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))",  :   Error processing your Sites By Species request. Please try again or if problem persists, contact the Administrator."
+
 
 #' @export
 sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=ala_config()$verbose) {
-    ##TODO data checks
-    ##todo setup output structure and class
-    ##todo api movingaveragesize is unnecessary... consider removing...
     ## check input parms are sensible
     assert_that(is.notempty.string(taxon))
     assert_that(is.notempty.string(wkt))
@@ -45,7 +42,7 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
     url_str = paste(base_url,'sitesbyspecies?speciesq=',taxon,'&qname=data',sep='') #setup the base url string 
     url_str = paste(url_str,'&area=',wkt,sep='') #append the area info
     url_str = paste(url_str,'&bs=',ala_config()$base_url_biocache,sep='') # append hte biocache URL string
-    url_str = paste(url_str,'&movingaveragesize=1',sep='') #append hte moving window average value (1 = 1 cell, which means that no moving average applied)
+    url_str = paste(url_str,'&movingaveragesize=1',sep='') ## append moving window average value (1 = 1 cell, which means that no moving average applied). API seems to require movingaverage to be supplied, even if it is a value of 1
     url_str = paste(url_str,'&gridsize=',gridsize,sep='') #append hte grid size
     url_str = paste(url_str,'&sitesbyspecies=1',sep='') #define the type
 
@@ -90,7 +87,7 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
         ## we are using the existing cached file
         if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
     }
-    out = read_csv_quietly(unz(this_cache_file,'SitesBySpecies.csv'),as.is=TRUE,skip=4) #read in the csv data from the zip file; omit the first 4 header rows. use read_csv_quietly to avoid warnings about incomplete final line
+    out=read_csv_quietly(unz(this_cache_file,'SitesBySpecies.csv'),as.is=TRUE,skip=4) ## read in the csv data from the zip file; omit the first 4 header rows. use read_csv_quietly to avoid warnings about incomplete final line
     ## drop the "Species" column, which appears to be a site identifier (but just constructed from the longitude and latitude, so is not particularly helpful
     out=out[,!names(out)=="Species"]    
     ##deal with SpatialPointsDataFrame
@@ -112,6 +109,5 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
     if (nrow(out)<1 && ala_config()$warn_on_empty) {
         warning("no occurrences found")
     }
-    ##return the output
     out
 }
