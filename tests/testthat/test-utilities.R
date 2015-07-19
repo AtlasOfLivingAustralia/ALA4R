@@ -1,4 +1,4 @@
-context("Testing utility functions")
+context("Test utility functions")
 
 ala_config(caching="off")
 

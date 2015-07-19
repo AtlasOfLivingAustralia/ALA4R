@@ -1,4 +1,4 @@
-context("Testing occurrence-related functions")
+context("Test occurrence-related functions")
 
 ala_config(caching="off")
 
