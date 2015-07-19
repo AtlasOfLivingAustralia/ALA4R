@@ -1,8 +1,10 @@
 # ALA4R 1.20
 
-* `as_is` behaviour in `ala_fields()`.
+* fixed `as_is` behaviour in `ala_fields()`.
 
 * usage of stringr functions now compatible with stringr v1.0.
+
+* parameter `occurrence_count` added to `search_names()`.
 
 * tests added to tests/testthat.
 
