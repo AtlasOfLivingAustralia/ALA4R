@@ -50,6 +50,21 @@ test_that("search_names can cope with all-unrecogized names", {
     expect_true(all(is.na(search_names(c("fljkhdlsi","sdkhfowbiu"))$guid)))
 })
 
+test_that("unexpected case-related behaviour in search_names has not changed", {
+    expect_equal(search_names("Gallirallus australis")$name,"Gallirallus australis")
+    expect_equal(search_names("Gallirallus Australis")$name,"Gallirallus australis")
+    expect_equal(search_names("Gallirallus australi")$name,NA)
+    expect_equal(search_names("Gallirallus Australi")$name,"Gallirallus")
+})
+
+test_that("search_names returns occurrence counts when asked", {
+    expect_false(is.na(search_names("Grevillea",occurrence_count=TRUE)$occurrenceCount))
+    expect_equal(is.na(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=TRUE)$occurrenceCount),c(FALSE,TRUE))
+    expect_output(print(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=TRUE)),"occurrenceCount")
+    expect_null(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=FALSE)$occurrenceCount)
+    expect_equal(length(grep("occurrenceCount",capture.output(print(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=FALSE))))),0) ## "occurrenceCount" should not appear in the print(...) output
+})
+
 ## not tested yet: S3method(print,search_names)
           
 

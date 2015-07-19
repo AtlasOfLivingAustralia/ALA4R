@@ -9,7 +9,9 @@
 #' @param taxa string: a single name or vector of names
 #' @param vernacular logical: if TRUE, match on common names as well as scientific names, otherwise match only on scientific names
 #' @param guids_only logical: if TRUE, a named list of GUIDs will be returned. Otherwise, a data frame with more comprehensive information for each name will be returned.
-#' @param output_format string: controls the print method for the returned object (only has an effect when guids_only is FALSE). Either "complete" (the complete data structure is displayed), or "simple" (a simplified version is displayed). Note that the complete data structure exists in both cases: this option only controls what is displayed when the object is printed to the console. The default output format is "simple"
+#' @param occurrence_count logical: if TRUE (and if \code{guids_only} is FALSE) then also return the number of occurrences of each matched name.
+#' Note that this requires one extra web call for each name, and so may be slow. Only applicable if \code{guids_only} is FALSE.
+#' @param output_format string: controls the print method for the returned object (only has an effect when \code{guids_only} is FALSE). Either "complete" (the complete data structure is displayed), or "simple" (a simplified version is displayed). Note that the complete data structure exists in both cases: this option only controls what is displayed when the object is printed to the console. The default output format is "simple"
 #' @return A data frame of results, or named list of GUIDs if \code{guids_only} is TRUE. The results should include one entry (i.e. one data.frame row or one list element) per input name. The columns in the data.frame output may vary depending on the results returned by the ALA server, but should include searchTerm, name, rank, and guid.
 #' 
 #' @examples
@@ -31,7 +33,7 @@
 # "Gallirallus australis" matches this species, "Gallirallus australi" matches nothing, yet "Gallirallus Australi" matches Gallirallus genus
 
 
-search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="simple") {
+search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,occurrence_count=FALSE,output_format="simple") {
     ## input argument checks
     if (is.list(taxa)) {
         taxa=unlist(taxa)
@@ -48,6 +50,10 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
     }
     assert_that(is.flag(vernacular))
     assert_that(is.flag(guids_only))
+    assert_that(is.flag(occurrence_count))
+    ## if (occurrence_count & guids_only) {
+    ##    warning("ignoring occurrence_count=TRUE because guids_only is TRUE")
+    ## }
     assert_that(is.character(output_format))
     output_format=match.arg(tolower(output_format),c("simple","complete"))
     taxa_original=taxa
@@ -102,9 +108,8 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
             ## reorder columns, for minor convenience
             firstcols=intersect(c("searchTerm","name","commonName","guid","rank"),xcols)
             xcols=c(firstcols,setdiff(xcols,firstcols))
-            x=subset(x,select=xcols)
-            attr(x,"output_format")=output_format
-            
+            x=subset(x,select=xcols)            
+            attr(x,"output_format")=output_format            
         } else {
             if (ala_config()$warn_on_empty) {
                 warning("no records found");
@@ -114,6 +119,12 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
         }
     }
     names(x)=rename_variables(names(x),type="general")
+    if (occurrence_count & !guids_only) {
+        ## do this after renaming variables, so that column name guid is predictable
+        x$occurrenceCount=NA
+        non_na=!is.na(x$guid)
+        x$occurrenceCount[non_na]=sapply(x$guid[non_na],function(z) occurrences(taxon=paste0("lsid:",z),record_count_only=TRUE))
+    }
     class(x)=c("search_names",class(x)) ## add the search_names class
     x
 }
@@ -128,7 +139,7 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,output_format="
     } else {
         cols=names(x)
         if (identical(attr(x,"output_format"),"simple")) {
-            cols=intersect(c("searchTerm","name","commonName","rank","guid"),cols)
+            cols=intersect(c("searchTerm","name","commonName","rank","guid","occurrenceCount"),cols)
         }
         print(format.data.frame(x[,cols],na.encode=FALSE))
     }
