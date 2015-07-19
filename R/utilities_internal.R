@@ -141,7 +141,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
         ## and "matchedScientificName" will get changed to "scientificName" below
         varnames[varnames=="recordID"]="id"
         varnames[varnames=="xVersion"]="version" ## is actually "_version_" in web service
-        if (as.numeric(substr(packageVersion("stringr"),1,1))<1) {
+        if (packageVersion("stringr")<"1.0") {
             varnames=str_replace_all(varnames,ignore.case("axonconceptguid"),"axonConceptLsid") ## occurrences currently returns "MatchTaxonConceptGUID" but the valid field name uses LSID
         } else {
             ## ignore_case syntax changed in stringr 1.0
@@ -152,7 +152,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
         ## rawSomething to somethingOriginal
         varnames=str_replace_all(varnames,"^raw(.*)$","\\1Original") ## first-letter lowercase will be lost here but gets fixed below
         ## dump "matched", "processed", and "parsed"
-        if (as.numeric(substr(packageVersion("stringr"),1,1))<1) {
+        if (packageVersion("stringr")<"1.0") {
             varnames=str_replace_all(varnames,ignore.case("(matched|processed|parsed)"),"")
         } else {
             varnames=str_replace_all(varnames,regex("(matched|processed|parsed)",ignore_case=TRUE),"")
