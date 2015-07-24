@@ -9,7 +9,7 @@
 #' \item Field definitions: \url{https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc}
 #' \item WKT reference: \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' }
-#' @param taxon string: (optional) taxonomic query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")
+#' @param taxon string: (optional) query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")
 #' @param wkt string: (optional) a WKT (well-known text) string providing a spatial polygon within which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.131 -26,140 -37))"
 #' @param fq string: (optional) character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". 
 #' See \code{ala_fields("occurrence_indexed",as_is=TRUE)} for all the fields that are queryable. 
@@ -20,7 +20,7 @@
 #' OR field2:def"). See e.g. \url{http://wiki.apache.org/solr/CommonQueryParameters} for more information about filter queries
 #' @param fields string vector: (optional) a vector of field names to return. Note that the columns of the returned data frame 
 #' are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")
-#' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")
+#' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Note that \code{extra="all"} is equivalent to \code{extra=ala_fields("occurrence_stored",as_is=TRUE)$name}
 #' @param qa string vector: (optional) list of record issues to include in the download. See \code{ala_fields("assertions",as_is=TRUE)} for valid values, or use "none" to include no record issues
 #' @param download_reason_id numeric or string: (required unless record_count_only is TRUE) a reason code for the download, either as a numeric ID (currently 0--11) or a string (see \code{\link{ala_reasons}} for a list of valid ID codes and names). The download_reason_id can be passed directly to this function, or alternatively set using \code{ala_config(download_reason_id=...)}
 #' @param reason string: (optional) user-supplied description of the reason for the download. Providing this information is optional but will help the ALA to better support users by building a better understanding of user communities and their data requests
@@ -121,6 +121,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     }
     if (!missing(extra)) {
         assert_that(is.character(extra))
+        if (identical(tolower(extra),"all")) { extra=ala_fields("occurrence_stored",as_is=TRUE)$name }
         extra=fields_name_to_id(fields=extra,fields_type="occurrence") ## replace long names with ids
         valid_fields=ala_fields(fields_type="occurrence_stored",as_is=TRUE)
         unknown=setdiff(extra,valid_fields$name)

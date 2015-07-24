@@ -10,7 +10,7 @@ occurrences(taxon, wkt, fq, fields, extra, qa,
   use_layer_names = TRUE, use_data_table = TRUE)
 }
 \arguments{
-\item{taxon}{string: (optional) taxonomic query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")}
+\item{taxon}{string: (optional) query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")}
 
 \item{wkt}{string: (optional) a WKT (well-known text) string providing a spatial polygon within which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.131 -26,140 -37))"}
 
@@ -25,7 +25,7 @@ OR field2:def"). See e.g. \url{http://wiki.apache.org/solr/CommonQueryParameters
 \item{fields}{string vector: (optional) a vector of field names to return. Note that the columns of the returned data frame
 are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")}
 
-\item{extra}{string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")}
+\item{extra}{string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Note that \code{extra="all"} is equivalent to \code{extra=ala_fields("occurrence_stored",as_is=TRUE)$name}}
 
 \item{qa}{string vector: (optional) list of record issues to include in the download. See \code{ala_fields("assertions",as_is=TRUE)} for valid values, or use "none" to include no record issues}
 
