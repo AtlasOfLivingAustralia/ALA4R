@@ -38,7 +38,7 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
             ## do we have any useful diagnostic info in x?
             diag_message=get_diag_message(x)
         }
-        check_status_code(h$value()[["status"]],extra_info=diag_message)
+        check_status_code(h$value()[["status"]],extra_info=diag_message,on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error)
 
         ## else use httr
         ##x=GET(url=url,user_agent(ala_config()$user_agent)) ## use httr's GET wrapper around RCurl
