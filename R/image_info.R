@@ -45,7 +45,7 @@ extract_image_detail=function(html,property_name_regex) {
         ## For stringr version < 1, elements will be empty character matrices if there are no matches
         out=lapply(out,function(z) if (length(dim(z))<2) matrix(as.character(NA),nrow=1,ncol=3) else z)
     } else {
-        out=str_match_all(html,regex(regex_str,ignore_case=TRUE))
+        out=str_match_all(html,regex(regex_str,ignore_case=TRUE,dotall=TRUE))
     }
     ## out is a list, where each element is a character matrix where nrows = number of matches to property_name_regex and ncols=3
     ##  if image ID was invalid, then nrows=1 and each entry is NA
