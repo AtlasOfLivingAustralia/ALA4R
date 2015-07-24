@@ -43,7 +43,7 @@ extract_image_detail=function(html,property_name_regex) {
     if (packageVersion("stringr")<"1.0") {
         out=str_match_all(html,ignore.case(regex_str))
         ## For stringr version < 1, elements will be empty character matrices if there are no matches
-        out=lapply(out,function(z) if (length(dim(z))<2) matrix("",nrow=0,ncol=3) else z)
+        out=lapply(out,function(z) if (length(dim(z))<2) matrix(as.character(NA),nrow=1,ncol=3) else z)
     } else {
         out=str_match_all(html,regex(regex_str,ignore_case=TRUE))
     }
@@ -51,7 +51,7 @@ extract_image_detail=function(html,property_name_regex) {
     ##  if image ID was invalid, then nrows=1 and each entry is NA
     ldply(out,function(z) {
         if (nrow(z)==1 && is.na(z[,3])) {
-            data.frame(imageURL=NA)
+            data.frame(imageIdentifier=NA,imageURL=NA)
         } else {
             this=as.data.frame(t(str_trim(z[,3])),stringsAsFactors=FALSE)
             names(this)=rename_variables(z[,2],type="occurrence")
