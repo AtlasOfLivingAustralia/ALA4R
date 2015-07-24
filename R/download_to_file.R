@@ -55,9 +55,9 @@ download_to_file=function(url,outfile,binary_file=FALSE,caching=ala_config()$cac
 
 get_diag_message=function(jsonfile) {
     ## attempt to extract message field from JSON-encoded file
-    suppressWarnings(thing<-readLines(jsonfile))
     diag_message=""
-    try(diag_message <- jsonlite::fromJSON(thing)$message, silent=TRUE)
+    try({ suppressWarnings(thing<-readLines(jsonfile))
+          diag_message <- jsonlite::fromJSON(thing)$message }, silent=TRUE)
     if (is.null(diag_message)) { diag_message="" }
     diag_message
 }
