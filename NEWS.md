@@ -1,3 +1,9 @@
+# ALA4R 1.21
+
+* added `image_info()` function
+
+* added `extra="all"` option to `occurrences()`
+
 # ALA4R 1.20
 
 * fixed `as_is` behaviour in `ala_fields()`.
