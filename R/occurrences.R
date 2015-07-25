@@ -20,8 +20,8 @@
 #' OR field2:def"). See e.g. \url{http://wiki.apache.org/solr/CommonQueryParameters} for more information about filter queries
 #' @param fields string vector: (optional) a vector of field names to return. Note that the columns of the returned data frame 
 #' are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")
-#' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Note that \code{extra="all"} is equivalent to \code{extra=ala_fields("occurrence_stored",as_is=TRUE)$name}
-#' @param qa string vector: (optional) list of record issues to include in the download. See \code{ala_fields("assertions",as_is=TRUE)} for valid values, or use "none" to include no record issues
+#' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Use \code{extra="all"} to include all available fields
+#' @param qa string vector: (optional) list of record issues to include in the download. Use \code{qa="all"} to include all available issues, or \code{qa="none"} to include none. Otherwise see \code{ala_fields("assertions",as_is=TRUE)} for valid values
 #' @param download_reason_id numeric or string: (required unless record_count_only is TRUE) a reason code for the download, either as a numeric ID (currently 0--11) or a string (see \code{\link{ala_reasons}} for a list of valid ID codes and names). The download_reason_id can be passed directly to this function, or alternatively set using \code{ala_config(download_reason_id=...)}
 #' @param reason string: (optional) user-supplied description of the reason for the download. Providing this information is optional but will help the ALA to better support users by building a better understanding of user communities and their data requests
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
@@ -132,6 +132,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
     }
     if (!missing(qa)) {
         assert_that(is.character(qa))
+        if (identical(tolower(qa),"all")) { qa=ala_fields("assertions",as_is=TRUE)$name }
         valid_fields=c("none",ala_fields(fields_type="assertions",as_is=TRUE)$name) ## valid entries for qa
         unknown=setdiff(qa,valid_fields)
         if (length(unknown)>0) {

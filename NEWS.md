@@ -2,7 +2,9 @@
 
 * added `image_info()` function
 
-* added `extra="all"` option to `occurrences()`
+* added `occurrence_details()` function
+
+* added `extra="all"` and `qa="all"` options to `occurrences()`
 
 # ALA4R 1.20
 
