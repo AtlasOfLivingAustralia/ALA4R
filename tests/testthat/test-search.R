@@ -1,26 +1,30 @@
 context("Test searching functions")
 
-ala_config(caching="off")
+thischeck=function() {
+    test_that("search_fulltext generally functions as expected", {
+        expect_that(search_fulltext("red kangaroo"),has_names(c("meta","data")))
+        expect_that(nrow(search_fulltext("bilbobaggins")$data),equals(0)) ## query that should not match anything
+        expect_that(nrow(search_fulltext("red",page_size=20)$data),equals(20))
+        expect_that(search_fulltext("red kangaroo",output_format="complete"),has_names(c("meta","data")))
+        expect_that(search_fulltext("kingdom:Fungi",output_format="complete"),has_names(c("meta","data")))
+    })
+}
+check_caching(thischeck)
 
-test_that("search_fulltext generally functions as expected", {
-    expect_that(search_fulltext("red kangaroo"),has_names(c("meta","data")))
-    expect_that(nrow(search_fulltext("bilbobaggins")$data),equals(0)) ## query that should not match anything
-    expect_that(nrow(search_fulltext("red",page_size=20)$data),equals(20))
-    expect_that(search_fulltext("red kangaroo",output_format="complete"),has_names(c("meta","data")))
-    expect_that(search_fulltext("kingdom:Fungi",output_format="complete"),has_names(c("meta","data")))
-})
-
-test_that("search_fulltext start parm works as expected", {
-    x1=search_fulltext("red",page_size=10)
-    x2=search_fulltext("red",page_size=10,start=2)
-    ## so row 1 of x2$data should equal row 2 of x1$data ... but columns may actually be different!
-    temp=intersect(names(x1$data),names(x2$data))
-    x1=x1$data[2,c(temp)]
-    x2=x2$data[1,c(temp)]
-    rownames(x1)=""
-    rownames(x2)=""
-    expect_equal(x1,x2)
-})
+thischeck=function() {
+    test_that("search_fulltext start parm works as expected", {
+        x1=search_fulltext("red",page_size=10)
+        x2=search_fulltext("red",page_size=10,start=2)
+        ## so row 1 of x2$data should equal row 2 of x1$data ... but columns may actually be different!
+        temp=intersect(names(x1$data),names(x2$data))
+        x1=x1$data[2,c(temp)]
+        x2=x2$data[1,c(temp)]
+        rownames(x1)=""
+        rownames(x2)=""
+        expect_equal(x1,x2)
+    })
+}
+check_caching(thischeck)
 
 #test_that("search_fulltext sort_by parm works as expected", {
 #    expect_error(search_fulltext("red",page_size=10,sort_by="blurg"))
@@ -31,39 +35,55 @@ test_that("search_fulltext start parm works as expected", {
 
 ## not tested yet: S3method(print,search_fulltext)
 
-test_that("search_layers generally works as expected", {
-    expect_that(search_layers(type="all"),is_a('data.frame'))
-    expect_that(search_layers(type="all",output_format="complete"),is_a('data.frame'))
-    expect_that(nrow(search_layers(type="all")),is_more_than(400))
-    expect_that(nrow(search_layers(type="all",query="bilbobaggins")),equals(0))
-    expect_error(search_layers(type="bilbobaggins"))
-})
+thischeck=function() {
+    test_that("search_layers generally works as expected", {
+        expect_that(search_layers(type="all"),is_a('data.frame'))
+        expect_that(search_layers(type="all",output_format="complete"),is_a('data.frame'))
+        expect_that(nrow(search_layers(type="all")),is_more_than(400))
+        expect_that(nrow(search_layers(type="all",query="bilbobaggins")),equals(0))
+        expect_error(search_layers(type="bilbobaggins"))
+    })
+}
+check_caching(thischeck)
+
 ## not tested yet: S3method(print,search_layers)
 
-test_that("search_names can cope with factor inputs", {
-    expect_equal(search_names(factor("Grevillea humilis")),search_names("Grevillea humilis"))
-})
+thischeck=function() {
+    test_that("search_names can cope with factor inputs", {
+        expect_equal(search_names(factor("Grevillea humilis")),search_names("Grevillea humilis"))
+    })
+}
+check_caching(thischeck)
 
-test_that("search_names can cope with all-unrecogized names", {
-    expect_equal(nrow(search_names("fljkhdlsi")),1)
-    expect_equal(nrow(search_names(c("fljkhdlsi","sdkhfowbiu"))),2)
-    expect_true(all(is.na(search_names(c("fljkhdlsi","sdkhfowbiu"))$guid)))
-})
+thischeck=function() {
+    test_that("search_names can cope with all-unrecogized names", {
+        expect_equal(nrow(search_names("fljkhdlsi")),1)
+        expect_equal(nrow(search_names(c("fljkhdlsi","sdkhfowbiu"))),2)
+        expect_true(all(is.na(search_names(c("fljkhdlsi","sdkhfowbiu"))$guid)))
+    })
+}
+check_caching(thischeck)
 
-test_that("unexpected case-related behaviour in search_names has not changed", {
-    expect_equal(search_names("Gallirallus australis")$name,"Gallirallus australis")
-    expect_equal(search_names("Gallirallus Australis")$name,"Gallirallus australis")
-    expect_equal(search_names("Gallirallus australi")$name,NA)
-    expect_equal(search_names("Gallirallus Australi")$name,"Gallirallus")
-})
+thischeck=function() {
+    test_that("unexpected case-related behaviour in search_names has not changed", {
+        expect_equal(search_names("Gallirallus australis")$name,"Gallirallus australis")
+        expect_equal(search_names("Gallirallus Australis")$name,"Gallirallus australis")
+        expect_equal(search_names("Gallirallus australi")$name,NA)
+        expect_equal(search_names("Gallirallus Australi")$name,"Gallirallus")
+    })
+}
+check_caching(thischeck)
 
-test_that("search_names returns occurrence counts when asked", {
-    expect_false(is.na(search_names("Grevillea",occurrence_count=TRUE)$occurrenceCount))
-    expect_equal(is.na(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=TRUE)$occurrenceCount),c(FALSE,TRUE))
-    expect_output(print(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=TRUE)),"occurrenceCount")
-    expect_null(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=FALSE)$occurrenceCount)
-    expect_equal(length(grep("occurrenceCount",capture.output(print(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=FALSE))))),0) ## "occurrenceCount" should not appear in the print(...) output
-})
+thischeck=function() {
+    test_that("search_names returns occurrence counts when asked", {
+        expect_false(is.na(search_names("Grevillea",occurrence_count=TRUE)$occurrenceCount))
+        expect_equal(is.na(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=TRUE)$occurrenceCount),c(FALSE,TRUE))
+        expect_output(print(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=TRUE)),"occurrenceCount")
+        expect_null(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=FALSE)$occurrenceCount)
+        expect_equal(length(grep("occurrenceCount",capture.output(print(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=FALSE))))),0) ## "occurrenceCount" should not appear in the print(...) output
+    })
+}
+check_caching(thischeck)
 
 ## not tested yet: S3method(print,search_names)
           

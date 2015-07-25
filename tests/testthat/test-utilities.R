@@ -21,6 +21,14 @@ test_that("ala_cache_filename works as expected", {
     expect_error(ala_cache_filename(letters[1:26]))
 })
 
+test_that("caching messages change as expected ", {
+    ala_config(caching="off")
+    expect_output(species_info("Grevillea humilis subsp. maritima",verbose=TRUE),"ALA4R: GETting URL")
+    ala_config(caching="refresh")
+    expect_output(species_info("Grevillea humilis subsp. maritima",verbose=TRUE),"ALA4R: caching")
+    ala_config(caching="on")
+    expect_output(species_info("Grevillea humilis subsp. maritima",verbose=TRUE),"ALA4R: using cached file")
+})
 
 thischeck=function() {
     test_that("check_fq extracts field names correctly", {
@@ -40,7 +48,6 @@ thischeck=function() {
         expect_warning(check_fq(" notafield:something ","occurrence"))
     })
 }
-
 check_caching(thischeck)
 
 ## not tested yet: ala_config

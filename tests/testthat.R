@@ -1,6 +1,5 @@
 library(testthat)
 library(ALA4R)
-ala_config(caching="off")
 
 ## run each test with and without caching
 check_caching=function(f) {
