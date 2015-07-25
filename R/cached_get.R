@@ -56,7 +56,7 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
         x
     } else {
         ## use caching
-        thisfile=download_to_file(url,binary_file=identical(type,"binary_filename"),on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error)
+        thisfile=download_to_file(url,binary_file=identical(type,"binary_filename"),verbose=verbose,on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error)
         if (!file.exists(thisfile)) {
             ## file does not exist
             NULL
