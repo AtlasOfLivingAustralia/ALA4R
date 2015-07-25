@@ -15,11 +15,11 @@ occurrence_details(uuid, verbose = ala_config()$verbose)
 A named list (named by uuid), each element of which is a list containing the details for that uuid. This inner list will be empty if no match is found for the supplied uuid
 }
 \description{
-Retrieve the full details of occurrence records
+Note that this makes a separate web request for each occurrence uuid, and so may not be wise to use on a large number of uuids.
 }
 \examples{
 s1=occurrence_details("f259c5ce-200c-41a2-b73a-e36a91f748f7")
-str(s1)
+str(s1,max.level=3)
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
