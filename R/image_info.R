@@ -15,7 +15,7 @@
 
 image_info=function(id,verbose=ala_config()$verbose) {
     if (missing(id)) {
-        return(data.frame())
+        stop("image id must be provided")
     }
     assert_that(is.character(id))
     assert_that(is.flag(verbose))
