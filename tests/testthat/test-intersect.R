@@ -26,3 +26,13 @@ thischeck=function() {
     })
 }
 check_caching(thischeck)
+
+thischeck=function() {
+    test_that("intersect_points works for largeish number of points", {
+        layers = c('el773','cl22')
+        pnts=cbind(lat = runif(1000, -40, -12), long = runif(1000, 115, 148))
+        out1<-intersect_points(pnts,layers)
+        expect_that(out1$waterSurplusMonthMax,is_a("numeric"))
+    })
+}
+check_caching(thischeck)
