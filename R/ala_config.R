@@ -30,6 +30,8 @@
 #'   \item base_url_bie string: the base url for BIE web services (default="http://bie.ala.org.au/ws/")
 #'   \item base_url_biocache string: the base url for biocache web services (default="http://biocache.ala.org.au/ws/")
 #'   \item base_url_alaspatial string: the base url for older ALA spatial services (default="http://spatial.ala.org.au/alaspatial/ws/")
+#'   \item base_url_images string: the base url for the images database (default="http://images.ala.org.au/"). Set to NULL or empty string if not available
+#'   \item base_url_logger string: the base url for usage logging webservices (default="http://logger.ala.org.au/service/logger/")
 #' }
 #' 
 #' @return For ala_config(), a list of all options. When ala_config(...) is
@@ -57,8 +59,8 @@ ala_config=function(...) {
     user_agent_string=paste("ALA4R ",version_string," (",R.Version()$version.string,"/",R.Version()$platform,")",sep="")
 
     ## set default options
-    default_options=list(caching="on",cache_directory=tempdir(),user_agent=user_agent_string,download_reason_id=NA,verbose=FALSE,warn_on_empty=FALSE,base_url_spatial="http://spatial.ala.org.au/ws/",base_url_bie="http://bie.ala.org.au/ws/",base_url_biocache="http://biocache.ala.org.au/ws/",base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/")
-
+    default_options=list(caching="on",cache_directory=tempdir(),user_agent=user_agent_string,download_reason_id=NA,verbose=FALSE,warn_on_empty=FALSE,base_url_spatial="http://spatial.ala.org.au/ws/",base_url_bie="http://bie.ala.org.au/ws/",base_url_biocache="http://biocache.ala.org.au/ws/",base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/",base_url_images="http://images.ala.org.au/",base_url_logger="http://logger.ala.org.au/service/logger/")
+    
     ## define allowed options, for those that have restricted values
     allowed_options=list(caching=c("on","off","refresh"),download_reason_id=c(1:10))
     ## ideally, the valid download_reason_id values should be populated dynamically from the ala_reasons() function. However if that is called (from here) before the AL4R_config option has been set, then we get infinite recursion. To be addressed later ...
@@ -150,7 +152,7 @@ ala_config=function(...) {
 ala_reasons=function() {
     ## return list of valid "reasons for use" codes
     
-    ## Values at 6-Feb-2014:
+    ## Values at 8-Nov-2015:
     ##[{"id":0,"name":"conservation management/planning","rkey":"logger.download.reason.conservation"},
     ##{"id":1,"name":"biosecurity management, planning","rkey":"logger.download.reason.biosecurity"},
     ##{"id":2,"name":"environmental impact, site assessment","rkey":"logger.download.reason.environmental"},
@@ -162,7 +164,7 @@ ala_reasons=function() {
     ##{"id":8,"name":"systematic research","rkey":"logger.download.reason.systematic.research"},
     ##{"id":9,"name":"other scientific research","rkey":"logger.download.reason.other.scientific.research"},
     ##{"id":10,"name":"testing","rkey":"logger.download.reason.testing"}]
-    cached_get("http://logger.ala.org.au/service/logger/reasons",type="json")
+    cached_get(build_url_from_parts(ala_config()$base_url_logger,path="reasons"),type="json")
 }
 
 

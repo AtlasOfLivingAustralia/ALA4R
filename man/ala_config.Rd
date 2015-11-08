@@ -32,6 +32,8 @@ ala_reasons()
   \item base_url_bie string: the base url for BIE web services (default="http://bie.ala.org.au/ws/")
   \item base_url_biocache string: the base url for biocache web services (default="http://biocache.ala.org.au/ws/")
   \item base_url_alaspatial string: the base url for older ALA spatial services (default="http://spatial.ala.org.au/alaspatial/ws/")
+  \item base_url_images string: the base url for the images database (default="http://images.ala.org.au/"). Set to NULL or empty string if not available
+  \item base_url_logger string: the base url for usage logging webservices (default="http://logger.ala.org.au/service/logger/")
 }}
 }
 \value{

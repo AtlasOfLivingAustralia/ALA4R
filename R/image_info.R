@@ -19,9 +19,12 @@ image_info=function(id,verbose=ala_config()$verbose) {
     }
     assert_that(is.character(id))
     assert_that(is.flag(verbose))
+    if (is.null(ala_config()$base_url_images) || ala_config()$base_url_images=="") {
+        stop("No URL to the image database has been configured: see base_url_images in ala_config()")
+    }
     non_empty=nchar(id)>0 & !is.na(id)
     ## grab each image info web page
-    this_url=paste0("http://images.ala.org.au/image/details?imageId=",id[non_empty])
+    this_url=paste0(ala_config()$base_url_images,"image/details?imageId=",id[non_empty])
     ## we get a 500 error if we ask for a non-existent image ID, so catch these errors with the on_server_error parm
     pages=sapply(this_url,function(z) paste0(cached_get(URLencode(z),type="text",verbose=verbose,on_server_error=function(z)NULL),collapse=" "))
     ## keep only the table from each, which has the actual image details
