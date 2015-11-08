@@ -14,6 +14,15 @@ convert_dt=function(x,test_numeric=TRUE) {
     assert_that(is.flag(test_numeric))
     if (see_if(is.character(x))) {
         ux=unique(x)
+        ## non-valid encoding of strings here will cause failure
+        encoding_ok=function(s) {
+            temp=try({nchar(s); TRUE}, silent=TRUE) ## will be TRUE if successful, or an error message if not
+            is.logical(temp) && temp
+        }
+        if (!encoding_ok(ux)) {
+            x=enc2utf8(x) ## force to utf8
+            ux=unique(x)
+        }
         if (all(nchar(ux)<1)) {
             ## all empty strings - leave as is
         } else if (all(ux %in% c("true","false","TRUE","FALSE","","NA"))) {
