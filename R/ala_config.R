@@ -59,7 +59,20 @@ ala_config=function(...) {
     user_agent_string=paste("ALA4R ",version_string," (",R.Version()$version.string,"/",R.Version()$platform,")",sep="")
 
     ## set default options
-    default_options=list(caching="on",cache_directory=tempdir(),user_agent=user_agent_string,download_reason_id=NA,verbose=FALSE,warn_on_empty=FALSE,base_url_spatial="http://spatial.ala.org.au/ws/",base_url_bie="http://bie.ala.org.au/ws/",base_url_biocache="http://biocache.ala.org.au/ws/",base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/",base_url_images="http://images.ala.org.au/",base_url_logger="http://logger.ala.org.au/service/logger/")
+    default_options=list(
+        caching="on",
+        cache_directory=tempdir(),
+        user_agent=user_agent_string,
+        download_reason_id=NA,
+        verbose=FALSE,
+        warn_on_empty=FALSE,
+        base_url_spatial="http://spatial.ala.org.au/ws/",
+        base_url_bie="http://bie.ala.org.au/ws/",
+        base_url_biocache="http://biocache.ala.org.au/ws/",
+        base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/",
+        base_url_images="http://images.ala.org.au/",
+        base_url_logger="http://logger.ala.org.au/service/logger/"
+    )
     
     ## define allowed options, for those that have restricted values
     allowed_options=list(caching=c("on","off","refresh"),download_reason_id=c(1:10))
