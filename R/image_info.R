@@ -5,6 +5,7 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' 
 #' @param id character: IDs of images (e.g. as returned by \code{\link{occurrences}}  in the imageUrl column). Each ID will be of a format something like "84654e14-dc35-4486-9e7c-40eb2f8d3faa"
+#' @param image_number character or numeric: ID numbers of images (e.g. as returned by ALA's image search at \url{http://images.ala.org.au/}. Each image_number will be of a format something like 122218480
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
 #' @return A data.frame with one row per \code{id}, and at least the columns imageIdentifier and imageURL
 #' @seealso \code{\link{ala_config}} \code{\link{occurrences}}
@@ -13,18 +14,28 @@
 #'
 #' @export image_info
 
-image_info=function(id,verbose=ala_config()$verbose) {
-    if (missing(id)) {
-        stop("image id must be provided")
+image_info=function(id,image_number,verbose=ala_config()$verbose) {
+    if (missing(id) & missing(image_number)) {
+        stop("image id or number must be provided")
     }
-    assert_that(is.character(id))
+    if (!missing(id)) { assert_that(is.character(id)) }
+    if (!missing(image_number)) { assert_that(is.character(image_number) | is.numeric(image_number)) }
     assert_that(is.flag(verbose))
     if (is.null(ala_config()$base_url_images) || ala_config()$base_url_images=="") {
         stop("No URL to the image database has been configured: see base_url_images in ala_config()")
     }
-    non_empty=nchar(id)>0 & !is.na(id)
     ## grab each image info web page
-    this_url=paste0(ala_config()$base_url_images,"image/details?imageId=",id[non_empty])
+    if (!missing(id)) {
+        non_empty=nchar(id)>0 & !is.na(id)
+        this_url=paste0(ala_config()$base_url_images,"image/details?imageId=",id[non_empty])
+    } else if (!missing(image_number)) {
+        if (is.character(image_number)) {
+            non_empty=nchar(image_number)>0 & !is.na(image_number)
+        } else {
+            non_empty=1:length(image_number)
+        }
+        this_url=paste0(ala_config()$base_url_images,"image/details/",image_number[non_empty])
+    }        
     ## we get a 500 error if we ask for a non-existent image ID, so catch these errors with the on_server_error parm
     pages=sapply(this_url,function(z) paste0(cached_get(URLencode(z),type="text",verbose=verbose,on_server_error=function(z)NULL),collapse=" "))
     ## keep only the table from each, which has the actual image details
@@ -36,7 +47,8 @@ image_info=function(id,verbose=ala_config()$verbose) {
         
     out=extract_image_detail(pages,".*?")
     ## this will have NA values for imageIdentifier where id was not valid (because the imageIdentifier value comes from the scraped HTML, which won't exist for invalid id). Replace with input ids
-    out$imageIdentifier=id
+    if (!missing(id)) { out$imageIdentifier=id }
+    if (!missing(image_number)) { out$image_number=image_number }
     out
 }
 

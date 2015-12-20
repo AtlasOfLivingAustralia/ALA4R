@@ -4,10 +4,12 @@
 \alias{image_info}
 \title{Fetch information about an image, given its image ID}
 \usage{
-image_info(id, verbose = ala_config()$verbose)
+image_info(id, image_number, verbose = ala_config()$verbose)
 }
 \arguments{
 \item{id}{character: IDs of images (e.g. as returned by \code{\link{occurrences}}  in the imageUrl column). Each ID will be of a format something like "84654e14-dc35-4486-9e7c-40eb2f8d3faa"}
+
+\item{image_number}{character or numeric: ID numbers of images (e.g. as returned by ALA's image search at \url{http://images.ala.org.au/}. Each image_number will be of a format something like 122218480}
 
 \item{verbose}{logical: show additional progress information? [default is set by ala_config()]}
 }

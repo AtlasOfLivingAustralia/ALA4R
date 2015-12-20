@@ -1,3 +1,7 @@
+# ALA4R 1.23
+
+* added `image_number` parameter to `image_info()`
+
 # ALA4R 1.21
 
 * added `image_info()` and `occurrence_details()` functions
