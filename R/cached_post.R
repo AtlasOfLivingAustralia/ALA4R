@@ -1,7 +1,7 @@
 # HTTP POST with caching
-# 
+#
 # Convenience wrapper for web POST operations. Caching, setting the user-agent string, and basic checking of the result are handled.
-# 
+#
 # @param url string: the url of the page to retrieve
 # @param body string: the body to POST
 # @param type string: the expected content type. Either "text" (default), "json", or "filename" (this caches the content directly to a file and returns the filename without attempting to read it in)
@@ -18,7 +18,7 @@
 # out = cached_post(url="http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Macropus&qname=Macropus&area=POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))&bs=http://biocache.ala.org.au/ws&gridsize=0.1&movingaveragesize=9&sitesbyspecies=1",body="")
 
 
-cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,content_type,...) {
+cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,content_type,encoding=ala_config()$text_encoding,...) {
     assert_that(is.notempty.string(url))
     assert_that(is.string(body))
     assert_that(is.string(type))
@@ -32,7 +32,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
 
     if (FALSE) {
         ## this is breaking, for some reason. As a workaround use the caching code by default
-        
+
     ##if (identical(caching,"off") && !(type %in% c("filename","binary_filename"))) {
         ## if we are not caching, retrieve our page directly without saving to file at all
         if (verbose) { cat(sprintf("  ALA4R: POSTing URL %s\n",url)) }
@@ -75,22 +75,23 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
                     if (is.null(diag_message)) { diag_message="" }
                 }
                 unlink(thisfile)
-            }            
+            }
             check_status_code(h$value()[["status"]],extra_info=diag_message)
         } else {
             if (verbose) { cat(sprintf("  ALA4R: using cached file %s for POST to %s\n",thisfile,url)) }
-        }            
+        }
         ## now return whatever is appropriate according to type
         if (type %in% c("json","text")) {
             if (!(file.info(thisfile)$size>0)) {
                 NULL
             } else {
-                fid=file(thisfile, "rt")
-                out=readLines(fid,warn=FALSE)
-                close(fid)
-                if (identical(type,"json")) {
-                    jsonlite::fromJSON(out)
+                if (type=="json") {
+                    ## convert directly from file - this also allows jsonlite to handle encoding issues
+                    jsonlite::fromJSON(thisfile)
                 } else {
+                    fid=file(thisfile, "rt")
+                    out=readLines(fid,warn=FALSE,encoding=encoding)
+                    close(fid)
                     out
                 }
             }

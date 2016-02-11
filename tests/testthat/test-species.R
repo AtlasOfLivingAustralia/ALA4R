@@ -16,6 +16,10 @@ thischeck=function() {
         expect_that(species_info(guid="ALA_Pterostylis_squamata")$classification,is_a("data.frame")) ## taxon with improper classification
         expect_equal(species_info(guid="ALA_Pterostylis_squamata")$classification[[1]],"ORCHIDACEAE") ## taxon with improper classification
     })
+    test_that("text encoding works as expected",{
+        expect_equal(search_names("Simoselaps fasciolatus")$name,"Simoselaps fasciolatus (Günther, 1872)") ## uses POST
+        expect_equal(species_info('Simoselaps fasciolatus')$taxonConcept$author,"(Günther, 1872)") ## uses GET
+    })
 }
 check_caching(thischeck)
 

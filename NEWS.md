@@ -1,3 +1,7 @@
+# ALA4R 1.24
+
+* better handling of text encoding (https://github.com/AtlasOfLivingAustralia/ALA4R/issues/15)
+
 # ALA4R 1.23
 
 * added `image_number` parameter to `image_info()`

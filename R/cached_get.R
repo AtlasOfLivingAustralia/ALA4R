@@ -1,7 +1,7 @@
 # HTTP GET with caching
-# 
+#
 # Convenience wrapper for web GET operations. Caching, setting the user-agent string, and basic checking of the result are handled.
-# 
+#
 # @param url string: the url of the page to retrieve
 # @param type string: the expected content type. Either "text" (default), "json", or "filename" (this caches the content directly to a file and returns the filename without attempting to read it in)
 # @param caching string: caching behaviour, by default from ala_config()$caching
@@ -13,9 +13,9 @@
 # @examples
 #
 # out = cached_get(url="http://biocache.ala.org.au/ws/index/fields",type="json")
-# 
+#
 
-cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL) {
+cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL,encoding=ala_config()$text_encoding) {
     assert_that(is.notempty.string(url))
     assert_that(is.string(type))
     type=match.arg(tolower(type),c("text","json","filename","binary_filename"))
@@ -25,11 +25,11 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
 
     ## strip newlines or multiple spaces from url: these seem to cause unexpected behaviour
     url=str_replace_all(url,"[\r\n ]+"," ")
-    
+
     if (identical(caching,"off") && !(type %in% c("filename","binary_filename"))) {
         ## if we are not caching, get this directly without saving to file at all
         if (verbose) { cat(sprintf("  ALA4R: GETting URL %s\n",url)) }
-        
+
         ## if use RCurl directly
         h=basicHeaderGatherer()
         x=getURL(url=url,useragent=ala_config()$user_agent,header=FALSE,headerfunction=h$update)
@@ -44,7 +44,7 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
         ##x=GET(url=url,user_agent(ala_config()$user_agent)) ## use httr's GET wrapper around RCurl
         ##check_status_code(x,on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error)
         ##x=content(x,as="text")
-        
+
         if (identical(type,"json")) {
             if (nchar(x)<1) {
                 ## empty string, fromJSON will throw error, so just return NULL
@@ -62,16 +62,17 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
             NULL
         } else {
             if (type %in% c("json","text")) {
-                ## for json, read directly as string first, then pass this to fromJSON. This is compatible with either RJSON's or rjsonlite's version of fromJSON (only RJSON's version can take a filename directly)
                 if (!(file.info(thisfile)$size>0)) {
                     NULL
                 } else {
-                    fid=file(thisfile, "rt")
-                    out=readLines(fid,warn=FALSE)
-                    close(fid)
-                    if (identical(type,"json")) {
-                        jsonlite::fromJSON(out)
+                    ## for json, previously we read as string first, then passed this to fromJSON. This was compatible with either RJSON's or rjsonlite's version of fromJSON (only RJSON's version can take a filename directly). However, it introduced issues with readLines and handling of encoding. Now we pass the file directly to jsonlite::fromJSON
+                    if (type=="json") {
+                        ## convert directly from file - this also allows jsonlite to handle encoding issues
+                        jsonlite::fromJSON(thisfile)
                     } else {
+                        fid=file(thisfile, "rt")
+                        out=readLines(fid,warn=FALSE,encoding=encoding)
+                        close(fid)
                         out
                     }
                 }
