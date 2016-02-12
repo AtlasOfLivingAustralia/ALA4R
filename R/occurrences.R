@@ -145,6 +145,7 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
         this_query$reason=reason
     }
     this_query$reasonTypeId=download_reason_id
+    this_query$sourceTypeId=ala_sourcetypeid()
     this_query$esc="\\" ## force backslash-escaping of quotes rather than double-quote escaping
     this_query$sep="\t" ## tab-delimited
     this_query$file="data" ## to ensure that file is named "data.csv" within the zip file
