@@ -182,6 +182,18 @@ ala_reasons=function() {
     cached_get(build_url_from_parts(ala_config()$base_url_logger,path="reasons"),type="json")
 }
 
+## internal function, used to define the ALA4R sourceTypeId parameter value, passed by occurrences download and possibly other functions
+ala_sourcetypeid=function() {
+    this_url=build_url_from_parts(ala_config()$base_url_logger,path="sources")
+    sids=cached_get(this_url,type="json")
+    if ("ALA4R" %in% sids$name) {
+        sids$id[sids$name=="ALA4R"]
+    } else {
+        warning("could not retrieve ALA4R source type from ",this_url,". If this problem persists please notify the ALA4R maintainers by lodging an issue at https://github.com/AtlasOfLivingAustralia/ALA4R/issues/ or emailing support@ala.org.au")
+        2001 ## default value
+    }
+}
+    
 
 convert_reason=function(reason) {
     ## unexported function to convert string reason to numeric id
