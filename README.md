@@ -226,8 +226,9 @@ lonlat=lonlat[c(temp,temp[1]),]
 ## create WKT string
 wkt=paste("POLYGON((",paste(apply(lonlat,1,function(z)
   paste(z,collapse=" ")),collapse=","),"))",sep="")
+```
 Now extract the species list in this polygon:
-
+```
 x=specieslist(wkt=wkt,fq="state_conservation:*")
 (head(arrange(x,desc(occurrenceCount)),20))
 ```
