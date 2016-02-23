@@ -113,6 +113,23 @@ If things aren’t working as expected, more detail (particularly about web requ
 ala_config(verbose=TRUE)
 ```
 
+### Setting the download reason
+ALA requires that you provide a reason when downloading occurrence data (via the ALA4R `occurrences()` function). You can provide this as a parameter directly to each call of `occurrences()`, or you can set it once per session using:
+
+```R
+ala_config(download_reason_id=your_reason_id)
+```
+
+(See `ala_reasons()` for valid download reasons)
+
+
+### Other options
+If you make a request that returns an empty result set (e.g. an un-matched name), by default you will simply get an empty data structure returned to you without any special notification. If you would like to be warned about empty result sets, you can use:
+
+```R
+ala_config(warn_on_empty=TRUE)
+```
+
 ##Examples
 First, check that we have some additional packages that we'll use in the examples, and install them if necessary.
 ```R
@@ -127,6 +144,12 @@ library(plyr)
 ```
 
 ###Example 1: Name searching and taxonomic trees
+
+```R
+library(ape)
+library(phytools)
+```
+
 We want to look at the taxonomic tree of penguins, but we don’t know what the correct scientific name is, so let’s search for it:
 ```R
 sx=search_fulltext("penguins")
@@ -212,7 +235,7 @@ shape=readShapePoly(file.path(ala_config()$cache_directory,
 ## extract just the Morialta Conservation Park polygon
 shape=shape[shape$RESNAME=="Morialta",]
 ```
-We could create the WKT string using the rgeos library:
+We could create the WKT string using the `rgeos` library:
 ```R
 library(rgeos)
 wkt=writeWKT(shape)
