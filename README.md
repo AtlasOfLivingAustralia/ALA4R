@@ -204,7 +204,7 @@ First download an example shapefile of South Australian conservation reserve bou
 ```R
 library(maptools)
 shape_filename=ALA4R:::cached_get(
-  "http://www.naturemaps.sa.gov.au/files/CONSERVATION_Npwsa_Reserves_shp.zip",
+  "https://data.environment.sa.gov.au/NatureMaps/Documents/CONSERVATION_Npwsa_Reserves_shp.zip",
   type="binary_filename")
 unzip(shape_filename,exdir=ala_config()$cache_directory) ## unzip this file
 shape=readShapePoly(file.path(ala_config()$cache_directory,
