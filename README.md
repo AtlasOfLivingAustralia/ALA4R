@@ -204,7 +204,7 @@ First download an example shapefile of South Australian conservation reserve bou
 ```R
 library(maptools)
 shape_filename=ALA4R:::cached_get(
-  "http://www.naturemaps.sa.gov.au/files/CONSERVATION_Npwsa_Reserves_shp.zip",
+  "https://data.environment.sa.gov.au/NatureMaps/Documents/CONSERVATION_Npwsa_Reserves_shp.zip",
   type="binary_filename")
 unzip(shape_filename,exdir=ala_config()$cache_directory) ## unzip this file
 shape=readShapePoly(file.path(ala_config()$cache_directory,
@@ -226,8 +226,9 @@ lonlat=lonlat[c(temp,temp[1]),]
 ## create WKT string
 wkt=paste("POLYGON((",paste(apply(lonlat,1,function(z)
   paste(z,collapse=" ")),collapse=","),"))",sep="")
+```
 Now extract the species list in this polygon:
-
+```R
 x=specieslist(wkt=wkt,fq="state_conservation:*")
 (head(arrange(x,desc(occurrenceCount)),20))
 ```
