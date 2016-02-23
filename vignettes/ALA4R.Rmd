@@ -15,7 +15,7 @@ opts_chunk$set(out.extra='style="display:block; margin: auto"', fig.align="cente
 ```
 
 
-The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from http://ala.org.au/. Here we provide a subset of the tools to be directly used within R.
+The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from http://www.ala.org.au/. Here we provide a subset of the tools to be directly used within R.
 
 ALA4R enables the R community to directly access data and resources hosted by the ALA. Our goal is to enable outputs (e.g. observations of species) to be queried and output in a range of standard formats.
 
@@ -216,7 +216,7 @@ First download an example shapefile of South Australian conservation reserve bou
 
 ```{r eval=FALSE}
 library(maptools)
-shape_filename=ALA4R:::cached_get("http://www.naturemaps.sa.gov.au/files/CONSERVATION_Npwsa_Reserves_shp.zip", type="binary_filename")
+shape_filename=ALA4R:::cached_get("https://data.environment.sa.gov.au/NatureMaps/Documents/CONSERVATION_Npwsa_Reserves_shp.zip", type="binary_filename")
 unzip(shape_filename,exdir=ala_config()$cache_directory) ## unzip this file
 shape=readShapePoly(file.path(ala_config()$cache_directory, "CONSERVATION_NpwsaReserves.shp"))
 ## extract just the Morialta Conservation Park polygon
@@ -257,7 +257,7 @@ x=specieslist(wkt=wkt,fq="state_conservation:*")
 
 ### Example 3: Quality assertions
 
-Download occurrence data for the golden bowerbird:
+Data quality assertions are a suite of fields that are the result of a set of tests peformed on ALA data. Download occurrence data for the golden bowerbird:
 
 ```{r}
 x=occurrences(taxon="Amblyornis newtonianus", download_reason_id=10)
