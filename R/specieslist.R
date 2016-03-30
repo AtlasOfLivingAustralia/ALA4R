@@ -28,10 +28,9 @@ specieslist=function(taxon,wkt,fq) {
     }
     if (!missing(wkt)) {
         assert_that(is.notempty.string(wkt))
-        wkt_ok=check_wkt(wkt)
-        if (is.na(wkt_ok) || !wkt_ok) {
-            warning("WKT string appears to be invalid: ",wkt)
-        }
+        ## don't bother checking the validity of the WKT string here, because
+        ## it's not clear that we can do it reliably and
+        ## the server will provide this diagnostic info anyway
         this_query$wkt=wkt
     }    
     if (length(this_query)==0) {
