@@ -80,9 +80,9 @@ ala_fields=function(fields_type="occurrence",as_is=TRUE) {
         x$type[x$type=="b"]="Contextual" ## there is an errant "b" here that should be "c"
         x$type[x$type=="e"]="Environmental" ## for consistency with search_layers
     } else if (identical(fields_type,"occurrence_stored")) {
-        x=subset(x,stored)
+        x=x[x$stored,]
     } else if (identical(fields_type,"occurrence_indexed")) {
-        x=subset(x,indexed)
+        x=x[x$indexed,]
     }
     if (!as_is) {
         ## old code ## names(x)=rename_variables(names(x),type=fields_type)
@@ -97,8 +97,7 @@ ala_fields=function(fields_type="occurrence",as_is=TRUE) {
     names(x)[tolower(names(x))=="desc"]="description"
     ## drop unwanted columns
     xcols=setdiff(names(x),unwanted_columns(fields_type))
-    x=subset(x,select=xcols)
-    x
+    x[,xcols]
 }
 
 
