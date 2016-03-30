@@ -67,7 +67,7 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
     }
     	
 	###note this will ideally be states
-	data("aus") #load('data/aus') #load the data
+	data("aus",envir = environment())
 	
 	###plot function to be used
 	tplot = function(xx,Main,coi,pch) {
