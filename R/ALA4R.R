@@ -11,4 +11,5 @@
 #' @docType package
 #' @references \url{http://api.ala.org.au/}
 #' @import stringr httr plyr digest RCurl jsonlite assertthat sp
+#' @importFrom wellknown lint
 NULL
