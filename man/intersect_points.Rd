@@ -29,7 +29,8 @@ Intersect environmental or contextual layers at a given a set of points (coordin
 layers = c('cl22','cl23','el773')
 pnts = c(-23.1,149.1)
 intersect_points(pnts,layers)
-# equivalent direct web service call: http://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  
+# equivalent direct web service call:
+#  http://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  
 \dontrun{
 ## multiple points as a grid sampling multiple layers
 ## not run here because it's pretty slow

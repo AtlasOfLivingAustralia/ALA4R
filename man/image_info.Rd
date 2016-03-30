@@ -20,7 +20,9 @@ A data.frame with one row per \code{id}, and at least the columns imageIdentifie
 Note that there is currently no web service that provides image information, and so we are scraping results from pages of the form http://images.ala.org.au/image/details?imageId=id. This web scraping may be fragile, and will be replaced by a web-service-based function when one becomes available.
 }
 \examples{
-image_info(c("84654e14-dc35-4486-9e7c-40eb2f8d3faa","39836d30-0761-473d-bac2-9ed9494fd37e","this-is-an-invalid-image-id"))
+image_info(c("84654e14-dc35-4486-9e7c-40eb2f8d3faa",
+  "39836d30-0761-473d-bac2-9ed9494fd37e",
+  "this-is-an-invalid-image-id"))
 
 }
 \author{

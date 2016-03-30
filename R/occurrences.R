@@ -32,19 +32,31 @@
 #' @return Data frame of occurrence results, with one row per occurrence record. The columns of the dataframe will depend on the requested fields
 #' @seealso \code{\link{ala_reasons}} for download reasons; \code{\link{ala_config}}
 #' @examples
-#' x=occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE) ## count of records from this data provider
-#' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10) ## download records, with standard fields
-#' \dontrun{ 
-#' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,fields=ala_fields("occurrence_stored",as_is=TRUE)$name) ## download records, with all fields
-#' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name","taxon_name","el807"),download_reason_id=10) ## download records, with specified fields
-#' x=occurrences(taxon="macropus",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",download_reason_id=10,qa="none") ## download records in polygon, with no quality assertion information
+#' ## count of records from this data provider
+#' x=occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE)
+#' ## download records, with standard fields
+#' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10)
+#' \dontrun{
+#' ## download records, with all fields
+#' x=occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,
+#'   fields=ala_fields("occurrence_stored",as_is=TRUE)$name) 
+#' ## download records, with specified fields
+#' x=occurrences(taxon="macropus",fields=c("longitude","latitude","common_name",
+#'   "taxon_name","el807"),download_reason_id=10)
+#'  ## download records in polygon, with no quality assertion information
+#' x=occurrences(taxon="macropus",
+#'   wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",
+#'   download_reason_id=10,qa="none")
 #' 
 #' y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10)
 #' str(y)
-#' # equivalent direct webservice call: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Alaba%20vibex&fields=latitude,longitude,el874&qa=none
+#' # equivalent direct webservice call:
+#' # http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Alaba%20vibex&fields=latitude,longitude,el874&qa=none
 #'
-#' occurrences(taxon="Eucalyptus gunnii",fields=c("latitude","longitude"),qa="none",fq="basis_of_record:LivingSpecimen",download_reason_id=10)
-#' # equivalent direct webservice call: http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Eucalyptus%20gunnii&fields=latitude,longitude&qa=none&fq=basis_of_record:LivingSpecimen
+#' occurrences(taxon="Eucalyptus gunnii",fields=c("latitude","longitude"),
+#'   qa="none",fq="basis_of_record:LivingSpecimen",download_reason_id=10)
+#' # equivalent direct webservice call:
+#' # http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Eucalyptus%20gunnii&fields=latitude,longitude&qa=none&fq=basis_of_record:LivingSpecimen
 #' }
 #' @export occurrences
 

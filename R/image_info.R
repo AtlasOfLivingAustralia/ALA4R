@@ -10,7 +10,9 @@
 #' @return A data.frame with one row per \code{id}, and at least the columns imageIdentifier and imageURL
 #' @seealso \code{\link{ala_config}} \code{\link{occurrences}}
 #' @examples
-#' image_info(c("84654e14-dc35-4486-9e7c-40eb2f8d3faa","39836d30-0761-473d-bac2-9ed9494fd37e","this-is-an-invalid-image-id"))
+#' image_info(c("84654e14-dc35-4486-9e7c-40eb2f8d3faa",
+#'   "39836d30-0761-473d-bac2-9ed9494fd37e",
+#'   "this-is-an-invalid-image-id"))
 #'
 #' @export image_info
 
