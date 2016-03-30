@@ -54,7 +54,16 @@ sites_by_species = function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=al
     this_cache_file=ala_cache_filename(url_str) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
     if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(this_cache_file))) {
         pid = cached_post(URLencode(url_str),'',caching='off',verbose=verbose) #should simply return a pid
-        if (pid=="") { stop("there has been an issue with this service. Please try again but if the issue persists, contact support@@ala.org.au") } #catch for these missing pid issues
+        if (is.null(pid) || pid=="") {
+            ## error - but note that we may still get a STATUS 200 from the server in this case
+            ## Check the WKT string, maybe that was the problem
+            if (!missing(wkt)) {
+                wkt_ok=check_wkt(wkt)
+                if (is.na(wkt_ok) || !wkt_ok) {
+                    warning("WKT string may not be valid: ",wkt)
+                }
+            }
+            stop("there has been an issue with this service. Please try again but if the issue persists, contact support@@ala.org.au") } #catch for these missing pid issues
         status_url=build_url_from_parts(ala_config()$base_url_alaspatial,"job",list(pid=pid))
         if(verbose) { cat("  ALA4R: waiting for sites-by-species results to become available: ") }
         status=cached_get(URLencode(status_url),type="json",caching="off",verbose=verbose)#get the data url
