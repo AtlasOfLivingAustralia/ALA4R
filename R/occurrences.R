@@ -241,8 +241,21 @@ occurrences=function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config(
             ## also read the citation info
             ## this file won't exist if there are no rows in the data.csv file, so only do it if nrow(x)>0
             ## also wrap it in a try(...), so that it won't cause the function to fail if the citation.csv file isn't present
-            xc="No citation information was returned, try again later"
-            try(xc<-read.table(unz(thisfile,"citation.csv"),header=TRUE,comment.char="",as.is=TRUE),silent=!ala_config()$warn_on_empty)
+            xc <- "No citation information was returned, try again later"
+            found_citation <- FALSE
+            try({
+                suppressWarnings(xc <- read.table(unz(thisfile,"citation.csv"),header=TRUE,comment.char="",as.is=TRUE))
+                found_citation <- TRUE},
+                silent=TRUE)
+            if (!found_citation) {
+                ## as of around July 2016 the citation.csv file appears to have been replaced by README.html
+                try({
+                    suppressWarnings(xc <- scan(unz(thisfile,"README.html"),what="character",sep="$",quiet=TRUE))
+                    xc <- data.frame(citation=paste(xc,collapse=""))
+                    found_citation <- TRUE},
+                    silent=TRUE)
+            }
+            if (!found_citation & nrow(x)>0) warning("citation file not found within downloaded zip file")
         } else {
             if (ala_config()$warn_on_empty) {
                 warning("no matching records were returned")
