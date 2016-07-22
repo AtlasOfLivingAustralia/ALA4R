@@ -12,4 +12,8 @@
 #' @references \url{http://api.ala.org.au/}
 #' @import stringr httr plyr digest RCurl jsonlite assertthat sp
 #' @importFrom wellknown lint
+#' @importFrom grDevices dev.off pdf rainbow
+#' @importFrom graphics image legend points title
+#' @importFrom stats aggregate na.omit
+#' @importFrom utils URLencode data packageVersion read.csv read.table unzip
 NULL
