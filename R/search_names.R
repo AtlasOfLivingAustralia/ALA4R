@@ -16,16 +16,23 @@
 #' 
 #' @examples
 #' 
-#' s1=search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"))
+#' s1=search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
+#'   "Macropus","Thisisnot aname"))
 #' str(s1)
-#' s2=search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"),guids_only=TRUE)
+#' s2=search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
+#'   "Macropus","Thisisnot aname"),guids_only=TRUE)
 #' str(s2)
 #' ss=search_names("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
 #' str(ss)
-#' sv=search_names("Grevillea",vernacular=TRUE) ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
-#' str(sv) ## see the complete data structure
-#' search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"),occurrence_count=TRUE) ## occurrence counts for matched names
-#' search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima","Macropus","Thisisnot aname"),occurrence_count=TRUE,guids_only=TRUE) ## no occurrence counts because guids_only is TRUE
+#' ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
+#' sv=search_names("Grevillea",vernacular=TRUE)
+#' str(sv)
+#' ## occurrence counts for matched names
+#' search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
+#'   "Macropus","Thisisnot aname"),occurrence_count=TRUE)
+#' ## no occurrence counts because guids_only is TRUE
+#' search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
+#'   "Macropus","Thisisnot aname"),occurrence_count=TRUE,guids_only=TRUE)
 #' 
 #' @export search_names
 

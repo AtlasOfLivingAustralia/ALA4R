@@ -51,12 +51,14 @@
 #' y=occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10)
 #' str(y)
 #' # equivalent direct webservice call:
-#' # http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Alaba%20vibex&fields=latitude,longitude,el874&qa=none
+#' # http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Alaba%20vibex&
+#' #    fields=latitude,longitude,el874&qa=none
 #'
 #' occurrences(taxon="Eucalyptus gunnii",fields=c("latitude","longitude"),
 #'   qa="none",fq="basis_of_record:LivingSpecimen",download_reason_id=10)
 #' # equivalent direct webservice call:
-#' # http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Eucalyptus%20gunnii&fields=latitude,longitude&qa=none&fq=basis_of_record:LivingSpecimen
+#' # http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Eucalyptus%20gunnii&
+#' #    fields=latitude,longitude&qa=none&fq=basis_of_record:LivingSpecimen
 #' }
 #' @export occurrences
 

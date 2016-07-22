@@ -36,9 +36,12 @@ Download taxonomic data
 \examples{
 \dontrun{
 # Download data for Fabaceae
-x=taxinfo_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class","bioOrder","family","genus","nameComplete"))
-## note that requesting "nameComplete" gives the scientific name but requesting "scientificName" will not --- bug to be fixed in ALA's web service
-# equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,kingdom,phylum,class,bioOrder,family,genus,nameComplete&q=family:Fabaceae
+x=taxinfo_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phylum","class",
+  "bioOrder","family","genus","nameComplete"))
+## note that requesting "nameComplete" gives the scientific name but requesting "scientificName"
+## will not --- bug to be fixed in ALA's web service
+# equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,kingdom,phylum,
+#    class,bioOrder,family,genus,nameComplete&q=family:Fabaceae
 }
 }
 \author{
