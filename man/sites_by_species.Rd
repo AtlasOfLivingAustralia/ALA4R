@@ -27,10 +27,16 @@ A data.frame is returned as grid cells by species with values in each cell being
 \examples{
 \dontrun{
 # Eucalyptus in Tasmania based on a 0.1 degree grid
-ss=sites_by_species(taxon='genus:Eucalyptus',wkt='POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))',gridsize=0.1,verbose=TRUE)
+ss=sites_by_species(taxon='genus:Eucalyptus',wkt='POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))',
+  gridsize=0.1,verbose=TRUE)
 ss[,1:6]
-# equivalent direct webservice call: POST http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Eucalyptus&qname=data&area=POLYGON((144\%20-43,148\%20-43,148\%20-40,144\%20-40,144\%20-43))&bs=http://biocache.ala.org.au/ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1
-## get the guid of the first species (which is the third column of the data frame, since the first two columns are longitude and latitude)
+# equivalent direct POST webservice call:
+# http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Eucalyptus&qname=data&
+#  area=POLYGON((144\%20-43,148\%20-43,148\%20-40,144\%20-40,144\%20-43))&bs=http://biocache.ala.org.au/
+#  ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1
+
+## get the guid of the first species (which is the third column of the data frame, since the
+##  first two columns are longitude and latitude)
 attr(ss,"guid")[1]
 }
 }

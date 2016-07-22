@@ -23,8 +23,8 @@ Retrieve a list of taxa matching a search query, within a spatial search area, o
 \dontrun{
 x=specieslist(taxon="macropus",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
 
-x=specieslist(wkt="POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,147.62 -42.83))",
-  fq="rank:species")
+x=specieslist(wkt="POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,
+  147.62 -42.83))",fq="rank:species")
 }
 }
 \author{
