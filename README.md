@@ -193,7 +193,7 @@ ax=as.phylo(~genus/scientificName,data=temp)
 tr=plotTree(ax,type="fan",fsize=0.7) ## plot it
 ```
 
-![Alt text](./doc/images/figure-00.png?raw=true "plot of chunk unnamed-chunk-18")
+![Alt text](./vignettes/images/figure-00.png?raw=true "plot of chunk unnamed-chunk-18")
 
 We can also plot the tree with images of the different penguin species. We’ll first extract a species profile for each species identifier (guid) in our results:
 ```R
@@ -220,7 +220,7 @@ for (k in which(nchar(imfiles)>0)) {
 }
 ```
 
-![Alt text](./doc/images/figure-01.png?raw=true "plot of chunk unnamed-chunk-21")
+![Alt text](./vignettes/images/figure-01.png?raw=true "plot of chunk unnamed-chunk-21")
 
 ###Example 2: Area report: what listed species exist in a given area?
 First download an example shapefile of South Australian conservation reserve boundaries: see http://data.sa.gov.au/dataset/conservation-reserve-boundaries. We use the ALA4R’s caching mechanism here, but you could equally download this file directly.
@@ -408,7 +408,7 @@ plot(xgridded$longitude,apply(xgridded[,-c(1:2)],1,sum),ylab="Richness",
   xlab="Longitude",pch=20,col="grey25")
 ```
 
-![Alt text](./doc/images/figure-02.png?raw=true "plot of chunk unnamed-chunk-36")
+![Alt text](./vignettes/images/figure-02.png?raw=true "plot of chunk unnamed-chunk-36")
 
 The number of species is highest at the eastern end of the transect (the Sydney/Blue Mountains area). This probably reflects both higher species richness as well as greater sampling effort in this area compared to the western end of the transect.
 
@@ -431,7 +431,7 @@ fitp=predict(fit,newdata=data.frame(tp=tpp))
 lines(tpp,fitp,col=1)
 ```
 
-![Alt text](./doc/images/figure-03.png?raw=true "plot of chunk unnamed-chunk-37")
+![Alt text](./vignettes/images/figure-03.png?raw=true "plot of chunk unnamed-chunk-37")
 
 Clustering:
 ```R
@@ -439,7 +439,7 @@ cl=hclust(D,method="ave") ## UPGMA clustering
 plot(cl) ## plot dendrogram
 ```
 
-![Alt text](./doc/images/figure-04.png?raw=true "plot of chunk unnamed-chunk-38")
+![Alt text](./vignettes/images/figure-04.png?raw=true "plot of chunk unnamed-chunk-38")
 
 ```R
 grp=cutree(cl,20) ## extract group labels at the 20-group level
@@ -451,7 +451,7 @@ grp=sapply(grp,function(z)which(unique(grp)==z)) ## renumber groups
 with(xgridded,plot(longitude,latitude,pch=21,col=grp,bg=grp))
 ```
 
-![Alt text](./doc/images/figure-05.png?raw=true "plot of chunk unnamed-chunk-38")
+![Alt text](./vignettes/images/figure-05.png?raw=true "plot of chunk unnamed-chunk-38")
 
 ```R
 ## or slightly nicer map plot
@@ -463,4 +463,4 @@ thiscol=c("#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b",
 with(xgridded,points(longitude,latitude,pch=21,col=thiscol[grp],bg=thiscol[grp],cex=0.75))
 ```
 
-![Alt text](./doc/images/figure-06.png?raw=true "plot of chunk unnamed-chunk-38")
+![Alt text](./vignettes/images/figure-06.png?raw=true "plot of chunk unnamed-chunk-38")
