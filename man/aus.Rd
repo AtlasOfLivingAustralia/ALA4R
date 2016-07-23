@@ -3,12 +3,15 @@
 \docType{data}
 \name{aus}
 \alias{aus}
-\title{Basic Australia raster for visualization}
+\title{Basic Australia raster for visualization
+A basic raster dataset in SpatialGridDataFrame (package sp) representing
+Australia at 0.05 degree (~5km) resolution.}
 \format{SpatialGridDataFrame (package sp)}
 \usage{
 data(aus)
 }
 \description{
+Basic Australia raster for visualization
 A basic raster dataset in SpatialGridDataFrame (package sp) representing
 Australia at 0.05 degree (~5km) resolution.
 }

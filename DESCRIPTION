@@ -1,7 +1,7 @@
 Package: ALA4R
 Type: Package
 Title: Atlas of Living Australia (ALA) Data and Resources in R
-Version: 1.26.01
+Version: 1.26.02
 Date: 2016-07-23
 Author: Ben Raymond, Jeremy VanDerWal, Lee Belbin
 Maintainer: Ben Raymond <ben_ala@untan.gl>
