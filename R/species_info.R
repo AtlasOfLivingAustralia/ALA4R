@@ -12,7 +12,7 @@
 #' 
 #' s1=species_info("Grevillea humilis subsp. maritima")
 #' str(s1)
-#' s2=species_info(guid="urn:lsid:biodiversity.org.au:apni.taxon:248651")
+#' s2=species_info(guid="http://id.biodiversity.org.au/node/apni/2890970")
 #' str(s2)
 #' s3=species_info("Alaba",verbose=TRUE)
 #' str(s3)
@@ -64,7 +64,12 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
     ## restructure any list children of out to be data.frames
     for (k in 1:length(out)) {
         if (is.list(out[[k]])) {
-            out[[k]]=as.data.frame(out[[k]],stringsAsFactors=FALSE)
+            was_ok <- FALSE
+            try({out[[k]] <- as.data.frame(out[[k]],stringsAsFactors=FALSE); was_ok=TRUE },silent=TRUE)
+            ## that will fail if any children are NULL
+            if (!was_ok) {
+                try(out[[k]] <- as.data.frame(lapply(out[[1]],function(z)if(is.null(z)) NA else z)),silent=TRUE)
+            }
         }
     }
     ## weed out unwanted columns and rename variables in each child object

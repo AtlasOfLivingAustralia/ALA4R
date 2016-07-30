@@ -41,7 +41,9 @@ Performs a search across all objects, and selects the closest matches. Generally
  search_fulltext("urn:lsid:biodiversity.org.au:afd.taxon:31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae")
 
  # find genus names like "Oenanthe"
+\dontrun{
  search_fulltext("oenanthe",sort_by="kingdom",fq="rank:genus")
+}
 
 }
 \author{
