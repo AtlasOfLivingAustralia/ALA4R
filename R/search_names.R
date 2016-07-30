@@ -73,7 +73,7 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,occurrence_coun
     temp=str_replace(temp,"\\[[ ]*false[ ]*\\]","false")
     temp=str_replace(temp,"\\[[ ]*true[ ]*\\]","true")
     x=cached_post(url=this_url,body=temp,type="json",content_type="application/json")
-    if (identical(x,NA)) {
+    if (identical(x,NA) || identical(x,as.character(NA))) {
         ## if a single non-matched name is supplied, we get NA back
         x=NULL
     }
