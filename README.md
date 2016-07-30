@@ -1,7 +1,7 @@
 # ALA4R
 
 ----
-*NOTE July 2016* --- the ALA's taxonomic infrastructure was recently updated (see http://www.ala.org.au/blogs-news/major-ala-upgrade/), which may cause some issues with ALA4R. In particular, some field names may have changed. We are working to resolve these issues.
+*NOTE July 2016* --- the ALA's taxonomic infrastructure was recently updated (see http://www.ala.org.au/blogs-news/major-ala-upgrade/), which may cause some issues with ALA4R. In particular, some field names may have changed, and name searching may behave differently to previously. We are working to resolve these issues.
 
 ----
 
