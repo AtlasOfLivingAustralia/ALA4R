@@ -53,7 +53,9 @@ species_info=function(scientificname,guid,verbose=ala_config()$verbose) {
         }
     }
     this_url=build_url_from_parts(ala_config()$base_url_bie,c("species",paste0(guid,".json")))
-    out=cached_get(URLencode(this_url),type="json",verbose=verbose)
+    ## July 2016: invalid GUIDs now return 404 errors. Catch these and return a list()
+    out <- tryCatch(cached_get(URLencode(this_url),type="json",verbose=verbose),
+              error=function(e) if (grepl("code 404 received",e$message)) NULL else stop(e))
     if (is.null(out)) {
         ## invalid guids will give NULL here, catch them now
         if (ala_config()$warn_on_empty) {
