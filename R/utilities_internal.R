@@ -199,7 +199,11 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
 ## construct url path, taking care to remove multiple forward slashes, leading slash
 clean_path=function(...,sep="/") {
     path1=sapply(list(...),FUN=function(z)paste(z,sep=sep,collapse=sep)) ## collapse individual arguments
-    path=gsub(paste0("[",sep,"]+"),sep,paste(path1,sep=sep,collapse=sep)) ## paste parts together and remove multiple slashes
+    ## workaround to avoid replacing "http://" with "http:/", since this is now used in GUID strings (July 2016)
+    path <- paste(path1,sep=sep,collapse=sep) ## paste parts together
+    path <- gsub("http://","http:@@",path,fixed=TRUE)
+    path <- gsub(paste0("[",sep,"]+"),sep,path) ## remove multiple slashes
+    path <- gsub("http:@@","http://",path,fixed=TRUE)
     sub(paste0("^",sep),"",path) ## remove leading slash
 }
 
