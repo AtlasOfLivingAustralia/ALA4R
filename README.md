@@ -1,5 +1,11 @@
 # ALA4R
 
+----
+*NOTE July 2016* --- the ALA's taxonomic infrastructure was recently updated (see http://www.ala.org.au/blogs-news/major-ala-upgrade/), which may cause some issues with ALA4R. In particular, some field names may have changed. We are working to resolve these issues.
+
+----
+
+
 The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from http://www.ala.org.au/. Here we provide a subset of the tools to be directly used within R.
 
 ALA4R enables the R community to directly access data and resources hosted by the ALA. Our goal is to enable outputs (e.g. observations of species) to be queried and output in a range of standard formats.
