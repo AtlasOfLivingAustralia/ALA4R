@@ -94,7 +94,7 @@ search_guids <- function(guids=c(),occurrence_count=FALSE,output_format="simple"
     } else {
         cols <- names(x)
         if (identical(attr(x,"output_format"),"simple")) {
-            cols <- intersect(c("searchTerm","name","commonNameSingle","rank","guid","occurrenceCount"),cols)
+            cols <- intersect(c("searchTerm","name","commonName","rank","guid","occurrenceCount"),cols)
         }
         print(format.data.frame(x[,cols],na.encode=FALSE))
     }

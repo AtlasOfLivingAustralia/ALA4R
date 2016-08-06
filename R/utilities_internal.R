@@ -123,6 +123,7 @@ rename_variables=function(varnames,type,verbose=ala_config()$verbose) {
         ## general names, from e.g. name searching
         varnames[varnames=="occCount"]="occurrenceCount"
         varnames[varnames=="vernacularName"]="commonName" ## taxinfo_download provides "vernacularName", others "commonName"
+        varnames[varnames=="commonNameSingle"] <- "commonName" ## search_guids provides "commonNameSingle", others "commonName"
         varnames=str_replace_all(varnames,"conservationStatusInAustralia","conservationStatusAUS")
         varnames=str_replace_all(varnames,"conservationStatusIn","conservationStatus")
         varnames=str_replace_all(varnames,"scientificNameForAcceptedConcept","acceptedConceptName") ## taxinfo_download returns the former, but should be the latter for consistency elsewhere
