@@ -128,7 +128,7 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,occurrence_coun
         ## do this after renaming variables, so that column name guid is predictable
         x$occurrenceCount=NA
         non_na=!is.na(x$guid)
-        x$occurrenceCount[non_na]=sapply(x$guid[non_na],function(z) occurrences(taxon=paste0("lsid:",z),record_count_only=TRUE))
+        if (any(non_na)) x$occurrenceCount[non_na]=sapply(x$guid[non_na],function(z) occurrences(taxon=paste0("lsid:",z),record_count_only=TRUE))
     }
     class(x)=c("search_names",class(x)) ## add the search_names class
     x

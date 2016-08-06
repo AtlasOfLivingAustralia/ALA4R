@@ -82,6 +82,14 @@ thischeck=function() {
         expect_output(print(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=TRUE)),"occurrenceCount")
         expect_null(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=FALSE)$occurrenceCount)
         expect_equal(length(grep("occurrenceCount",capture.output(print(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=FALSE))))),0) ## "occurrenceCount" should not appear in the print(...) output
+
+        expect_false(is.list(search_names(c("blahblah"),occurrence_count=TRUE)$occurrenceCount))
+        expect_false(is.list(search_names(c("blahblah","jdfhsdjk"),occurrence_count=TRUE)$occurrenceCount))
+        expect_false(is.list(search_names(c("Pachyptila turtur","blahblah","jdfhsdjk"),occurrence_count=TRUE)$occurrenceCount))
+        expect_false(is.list(search_names(c("Pachyptila turtur","Grevillea"),occurrence_count=TRUE)$occurrenceCount))
+        expect_false(is.list(search_names(c("Grevillea"),occurrence_count=TRUE)$occurrenceCount))
+
+        
     })
 }
 check_caching(thischeck)
