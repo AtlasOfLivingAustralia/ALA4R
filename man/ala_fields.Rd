@@ -38,14 +38,16 @@ If \code{record_count_only} is TRUE, the number of records is returned as numeri
 Note for occurrence fields: only fields that are indexed in the ALA database can be queried (e.g. used in the \code{fq} parameter in \code{\link{occurrences}}. These fields are identified by the \code{indexed} column in \code{ala_fields("occurrence")}. Only fields that are stored in the database can be returned as part of an \code{occurrences} call. These fields are identified by the \code{stored} column in \code{ala_fields("occurrence")}. The calling syntaxes \code{ala_fields("occurrence_stored")} and \code{ala_fields("occurrence_indexed")} are for convenience, and are equivalent to \code{subset(ala_fields("occurrence"),stored)} and \code{subset(ala_fields("occurrence"),indexed)}.
 }
 \examples{
-l <- ala_fields("layers")
-l[,4]
-o <- ala_fields("occurrence")
-o[1:13,]
-a <- ala_fields("assertions")
-a$description
-field_info("cl22")
-field_info("el773")
+\dontrun{
+ l <- ala_fields("layers")
+ l[,4]
+ o <- ala_fields("occurrence")
+ o[1:13,]
+ a <- ala_fields("assertions")
+ a$description
+ field_info("cl22")
+ field_info("el773")
+}
 }
 \author{
 Atlas of Living Australia \email{support@ala.org.au}
