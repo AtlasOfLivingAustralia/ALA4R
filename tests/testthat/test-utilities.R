@@ -14,7 +14,7 @@ test_that("url builder works correctly", {
 
 test_that("ala_cache_filename works as expected", {
     ## basic example
-    temp=ala_cache_filename("http://biocache.ala.org.au/ws/index/fields")
+    temp <- ala_cache_filename("http://biocache.ala.org.au/ws/index/fields")
     expect_that(sub(".*/","",temp),equals("b2fa59b0f3a1de10b06a17d8a1616059"))
     ## field ordering should not matter
     expect_equal(ala_cache_filename("abcdef?b=2&a=1"),ala_cache_filename("abcdef?a=1&b=2"))
@@ -32,7 +32,7 @@ test_that("caching messages change as expected ", {
     expect_output(species_info("Grevillea humilis subsp. maritima",verbose=TRUE),"ALA4R: using cached file")
 })
 
-thischeck=function() {
+thischeck <- function() {
     test_that("check_fq extracts field names correctly", {
         expect_equal(extract_fq_fieldnames("occurrence_year:[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]"),c("occurrence_year"))
         expect_null(check_fq("occurrence_year:[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]","occurrence"))
