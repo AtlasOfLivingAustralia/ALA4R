@@ -12,29 +12,26 @@
 #'
 #' @examples
 #' #download species data with all possible assertions
-#' x <- occurrences(taxon="golden bowerbird",download_reason_id=10,qa=ala_fields("assertions")$name)
-#' asserts <- check_assertions(x) #data.frame of assertions, their description and column names
-#' asserts$description # List out descriptions of all (current) assertions
+#' \dontrun{
+#'  x <- occurrences(taxon="golden bowerbird",download_reason_id=10,qa=ala_fields("assertions")$name)
+#'  asserts <- check_assertions(x) #data.frame of assertions, their description and column names
+#'  asserts$description # List out descriptions of all (current) assertions
 #'
-#' tmp <- x$data[,names(x$data) %in% asserts$name] ## assertion columns from data
-#' which(colSums(tmp)>0) ## discard those not seen in the data
-#' 
+#'  tmp <- x$data[,names(x$data) %in% asserts$name] ## assertion columns from data
+#'  which(colSums(tmp)>0) ## discard those not seen in the data
+#' }
 #' @export
 check_assertions <- function(x) {
     if (! inherits(x,"occurrences")) {
         stop("check_assertions must have an object of class occurrences from e.g., occurrences() in the ALA4R package")
     }
-    cois <- colnames(x$data) #get the column names
-    ass <- ala_fields("assertions",as_is=TRUE) #get the assertions
+    ass <- ala_fields("assertions",as_is=TRUE) ## get all assertion fields
     ass$occurColnames <- NA
     temp_description <- rename_variables(ass$description,type="assertions")
-    for(coi in cois) {
+    for (coi in colnames(x$data)) {
         tt <- which(coi==ass$name | coi==temp_description)
-        if (length(tt)==0) {
-            next
-        } else {
+        if (length(tt)>0)
             ass$occurColnames[tt[1]] <- coi #place the colname
-        }
     }
     ass <- na.omit(ass)
     if (nrow(ass)==0) {
