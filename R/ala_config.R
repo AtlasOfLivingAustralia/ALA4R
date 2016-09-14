@@ -179,7 +179,25 @@ ala_reasons=function() {
     ##{"id":8,"name":"systematic research","rkey":"logger.download.reason.systematic.research"},
     ##{"id":9,"name":"other scientific research","rkey":"logger.download.reason.other.scientific.research"},
     ##{"id":10,"name":"testing","rkey":"logger.download.reason.testing"}]
-    cached_get(build_url_from_parts(ala_config()$base_url_logger,path="reasons"),type="json")
+
+    ## values at 14-Sep-2016
+    ##                                              rkey                             name id
+    ## 1             logger.download.reason.conservation conservation management/planning  0
+    ## 2              logger.download.reason.biosecurity  biosecurity management/planning  1
+    ## 3            logger.download.reason.environmental         environmental assessment  2
+    ## 4                logger.download.reason.education                        education  3
+    ## 5                 logger.download.reason.research              scientific research  4
+    ## 6          logger.download.reason.collection.mgmt            collection management  5
+    ## 7                    logger.download.reason.other                            other  6
+    ## 8      logger.download.reason.ecological.research              ecological research  7
+    ## 9      logger.download.reason.systematic.research     systematic research/taxonomy  8
+    ## 10                 logger.download.reason.testing                          testing 10
+    ## 11         logger.download.reason.citizen.science                  citizen science 11
+    ## 12 logger.download.reason.restoration.remediation          restoration/remediation 12
+    
+    out <- cached_get(build_url_from_parts(ala_config()$base_url_logger,path="reasons"),type="json")
+    if (any(names(out)=="deprecated")) out <- out[!out$deprecated,]
+    out[,!names(out)=="deprecated"]
 }
 
 ## internal function, used to define the ALA4R sourceTypeId parameter value, passed by occurrences download and possibly other functions
