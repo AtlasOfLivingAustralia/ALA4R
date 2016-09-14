@@ -16,6 +16,8 @@ test_that("ala_cache_filename works as expected", {
     ## basic example
     temp=ala_cache_filename("http://biocache.ala.org.au/ws/index/fields")
     expect_that(sub(".*/","",temp),equals("b2fa59b0f3a1de10b06a17d8a1616059"))
+    ## field ordering should not matter
+    expect_equal(ala_cache_filename("abcdef?b=2&a=1"),ala_cache_filename("abcdef?a=1&b=2"))
     ## test weird inputs
     expect_error(ala_cache_filename(TRUE))
     expect_error(ala_cache_filename(letters[1:26]))
