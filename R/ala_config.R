@@ -39,13 +39,13 @@
 #' called with arguments, nothing is returned but the configuration is set.
 #'
 #' @examples
-#'
-#' ala_config()
-#' ala_config(caching="off")
-#' ala_reasons()
-#' ala_config(download_reason_id=9,verbose=TRUE)
-#' ala_config("reset")
-#'
+#' \dontrun{
+#'  ala_config()
+#'  ala_config(caching="off")
+#'  ala_reasons()
+#'  ala_config(download_reason_id=0,verbose=TRUE)
+#'  ala_config("reset")
+#' }
 #' @export ala_config
 #'
 ala_config <- function(...) {
