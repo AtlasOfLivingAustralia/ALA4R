@@ -41,11 +41,7 @@ image_info=function(id,image_number,verbose=ala_config()$verbose) {
     ## we get a 500 error if we ask for a non-existent image ID, so catch these errors with the on_server_error parm
     pages=sapply(this_url,function(z) paste0(cached_get(URLencode(z),type="text",verbose=verbose,on_server_error=function(z)NULL),collapse=" "))
     ## keep only the table from each, which has the actual image details
-    if (packageVersion("stringr")<"1.0") {    
-        pages=sapply(pages,function(z) { if (nrow(str_locate(z,"<table"))==1) str_extract(z,"<table.*</table>") else stop("image information page in unexpected format: please notify the ALA4R maintainers") })
-    } else {
-        pages=sapply(pages,function(z) { if (nrow(str_locate(z,"<table"))==1) str_extract(z,regex("<table.*</table>",dotall=TRUE)) else stop("image information page in unexpected format: please notify the ALA4R maintainers") })
-    }        
+    pages=sapply(pages,function(z) { if (nrow(str_locate(z,"<table"))==1) str_extract(z,regex("<table.*</table>",dotall=TRUE)) else stop("image information page in unexpected format: please notify the ALA4R maintainers") })
         
     out=extract_image_detail(pages,".*?")
     ## this will have NA values for imageIdentifier where id was not valid (because the imageIdentifier value comes from the scraped HTML, which won't exist for invalid id). Replace with input ids
@@ -57,13 +53,7 @@ image_info=function(id,image_number,verbose=ala_config()$verbose) {
 ## helper function to extract detail from the scraped html pages
 extract_image_detail=function(html,property_name_regex) {
     regex_str=paste0("<td[^>]*>(",property_name_regex,")</td>\\s*<td[^>]*>(.*?)</t[rd]")
-    if (packageVersion("stringr")<"1.0") {
-        out=str_match_all(html,ignore.case(regex_str))
-        ## For stringr version < 1, elements will be empty character matrices if there are no matches
-        out=lapply(out,function(z) if (length(dim(z))<2) matrix(as.character(NA),nrow=1,ncol=3) else z)
-    } else {
-        out=str_match_all(html,regex(regex_str,ignore_case=TRUE,dotall=TRUE))
-    }
+    out=str_match_all(html,regex(regex_str,ignore_case=TRUE,dotall=TRUE))
     ## out is a list, where each element is a character matrix where nrows = number of matches to property_name_regex and ncols=3
     ##  if image ID was invalid, then nrows=1 and each entry is NA
     ldply(out,function(z) {

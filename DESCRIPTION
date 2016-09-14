@@ -14,7 +14,7 @@ Description: The Atlas of Living Australia (ALA) provides tools to enable users
     observations of species) to be queried and output in a range of standard
     formats.
 Imports:
-    stringr,
+    stringr (>= 1.0.0),
     httr,
     plyr,
     wellknown,
