@@ -48,19 +48,19 @@
 #'
 #' @export ala_config
 #'
-ala_config=function(...) {
+ala_config <- function(...) {
     ## get or set options that control ALA4R behaviour
     ## options are stored as a global option with the name defined in ala_option_name
-    ala_option_name="ALA4R_config"
-    user_options=list(...) ## the options passed by the user
+    ala_option_name <- "ALA4R_config"
+    user_options <- list(...) ## the options passed by the user
 
     ## default user-agent string
-    version_string="version unknown"
+    version_string <- "version unknown"
     suppressWarnings(try(version_string<-utils::packageDescription('ALA4R')[["Version"]],silent=TRUE)) ## get the ALA4R version, if we can
-    user_agent_string=paste("ALA4R ",version_string," (",R.Version()$version.string,"/",R.Version()$platform,")",sep="")
+    user_agent_string <- paste("ALA4R ",version_string," (",R.Version()$version.string,"/",R.Version()$platform,")",sep="")
 
     ## set default options
-    default_options=list(
+    default_options <- list(
         caching="on",
         cache_directory=tempdir(),
         user_agent=user_agent_string,
@@ -77,42 +77,42 @@ ala_config=function(...) {
     )
 
     ## define allowed options, for those that have restricted values
-    allowed_options=list(caching=c("on","off","refresh"),download_reason_id=c(1:10))
+    allowed_options <- list(caching=c("on","off","refresh"),download_reason_id=c(0:8,10:12))
     ## ideally, the valid download_reason_id values should be populated dynamically from the ala_reasons() function. However if that is called (from here) before the AL4R_config option has been set, then we get infinite recursion. To be addressed later ...
 
     ## has the user asked to reset options to defaults?
     if (identical(tolower(user_options),"reset")) {
-        temp=list(default_options)
-        names(temp)=ala_option_name
+        temp <- list(default_options)
+        names(temp) <- ala_option_name
         options(temp)
     } else {
-        names(user_options)=tolower(names(user_options))
+        names(user_options) <- tolower(names(user_options))
         ## has the user specified something we don't recognize?
-        known_options=names(default_options)
-        unknown=setdiff(names(user_options),known_options)
+        known_options <- names(default_options)
+        unknown <- setdiff(names(user_options),known_options)
         if (length(unknown)>0) {
             stop("unknown ALA4R options: ", str_c(unknown,collapse=", "))
         }
 
-        current_options=getOption(ala_option_name)
+        current_options <- getOption(ala_option_name)
         if (is.null(current_options)) {
             ## ALA4R options have not been set yet, so set them to the defaults
-            current_options=default_options;
+            current_options <- default_options
             ## set the global option
-            temp=list(current_options)
-            names(temp)=ala_option_name
+            temp <- list(current_options)
+            names(temp) <- ala_option_name
             options(temp)
         }
 
         ## convert reason from char to numeric if needed
         if (!is.null(user_options$download_reason_id)) {
-            user_options$download_reason_id=convert_reason(user_options$download_reason_id)
+            user_options$download_reason_id <- convert_reason(user_options$download_reason_id)
         }
 
         ## override any defaults with user-specified options
         if (length(user_options)>0) {
             for (i in 1:length(user_options)) {
-                this_option_name=names(user_options)[i]
+                this_option_name <- names(user_options)[i]
                 if (! is.null(allowed_options[[this_option_name]])) {
                     ## there are restrictions on the allowed values for this option
                     ## could use match.arg here but the output is a bit obscure
@@ -126,7 +126,7 @@ ala_config=function(...) {
                         stop("cache_directory should be a string")
                     }
                     ## strip trailing file separator, if there is one
-                    user_options[[i]]=sub("[/\\]+$","",user_options[[i]])
+                    user_options[[i]] <- sub("[/\\]+$","",user_options[[i]])
                     if (! (file.exists(user_options[[i]]) && file.info(user_options[[i]])$isdir)) {
                         ## cache directory does not exist. We could create it, but this is probably better left to the user to manage
                         stop("cache directory ",user_options[[i]]," does not exist");
@@ -148,11 +148,11 @@ ala_config=function(...) {
                     }
                 }
 
-                current_options[this_option_name]=user_options[[i]]
+                current_options[this_option_name] <- user_options[[i]]
             }
             ## set the global option
-            temp=list(current_options)
-            names(temp)=ala_option_name
+            temp <- list(current_options)
+            names(temp) <- ala_option_name
             options(temp)
         } else {
             ## no user options were provided, so user is asking for current options to be returned
@@ -164,7 +164,7 @@ ala_config=function(...) {
 
 #' @rdname ala_config
 #' @export
-ala_reasons=function() {
+ala_reasons <- function() {
     ## return list of valid "reasons for use" codes
 
     ## Values at 8-Nov-2015:
@@ -201,9 +201,9 @@ ala_reasons=function() {
 }
 
 ## internal function, used to define the ALA4R sourceTypeId parameter value, passed by occurrences download and possibly other functions
-ala_sourcetypeid=function() {
-    this_url=build_url_from_parts(ala_config()$base_url_logger,path="sources")
-    sids=cached_get(this_url,type="json")
+ala_sourcetypeid <- function() {
+    this_url <- build_url_from_parts(ala_config()$base_url_logger,path="sources")
+    sids <- cached_get(this_url,type="json")
     if ("ALA4R" %in% sids$name) {
         sids$id[sids$name=="ALA4R"]
     } else {
@@ -213,10 +213,10 @@ ala_sourcetypeid=function() {
 }
     
 
-convert_reason=function(reason) {
+convert_reason <- function(reason) {
     ## unexported function to convert string reason to numeric id
     if (is.character(reason)) {
-        valid_reasons=ala_reasons()
+        valid_reasons <- ala_reasons()
         tryCatch({ reason<-match.arg(tolower(reason),valid_reasons$name)
                    reason<-valid_reasons$id[valid_reasons$name==reason]
                },
