@@ -29,6 +29,7 @@ check_assertions <- function(x) {
     ass$occurColnames <- NA
     temp_description <- rename_variables(ass$description,type="assertions")
     for (coi in colnames(x$data)) {
+        ## match on either name or description
         tt <- which(coi==ass$name | coi==temp_description)
         if (length(tt)>0)
             ass$occurColnames[tt[1]] <- coi #place the colname
