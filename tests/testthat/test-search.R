@@ -3,6 +3,7 @@ context("Test searching functions")
 thischeck=function() {
     test_that("search_fulltext generally functions as expected", {
         expect_that(search_fulltext("red kangaroo"),has_names(c("meta","data")))
+        expect_true(all(c("guid","name","commonName","rank","author","occurrenceCount") %in% names(search_fulltext("red kangaroo")$data))) ## "score" and "isAustralian" also used to be present, but are no longer
         expect_that(nrow(search_fulltext("bilbobaggins")$data),equals(0)) ## query that should not match anything
         expect_that(nrow(search_fulltext("red",page_size=20)$data),equals(20))
         expect_that(search_fulltext("red kangaroo",output_format="complete"),has_names(c("meta","data")))
