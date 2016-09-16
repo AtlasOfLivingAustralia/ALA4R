@@ -27,15 +27,15 @@ Intersect environmental or contextual layers at a given a set of points (coordin
 \examples{
 \dontrun{
  #single point with multiple layers
- layers = c('cl22','cl23','el773')
- pnts = c(-23.1,149.1)
+ layers <- c('cl22','cl23','el773')
+ pnts <- c(-23.1,149.1)
  intersect_points(pnts,layers)
  # equivalent direct web service call:
  # http://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  
 
  ## multiple points as a grid sampling multiple layers
- layers = c('cl22','cl23','el773')
- pnts = data.frame(expand.grid(lat=seq(-29,-19,2.0),lon=seq(130.0,140.0,2.0)))
+ layers <- c('cl22','cl23','el773')
+ pnts <- data.frame(expand.grid(lat=seq(-29,-19,2.0),lon=seq(130.0,140.0,2.0)))
  intersect_points(pnts,layers)
 }
 }

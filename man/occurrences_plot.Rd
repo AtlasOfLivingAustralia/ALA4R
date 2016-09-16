@@ -38,9 +38,9 @@ an Australian basemap and colours the occurrence records dots according to param
 \examples{
 \dontrun{ 
 #download some observations
-x=occurrences(taxon="Eucalyptus gunnii",download_reason_id=10)
+x <- occurrences(taxon="Eucalyptus gunnii",download_reason_id=10)
 occurrences_plot(x)
-x=occurrences(taxon="Cider Gum",download_reason_id=10)
+x <- occurrences(taxon="Cider Gum",download_reason_id=10)
 occurrences_plot(x,"alaPlot.pdf",qa="fatal",grouped=FALSE, taxon_level="species",pch='+')
 }
 }
