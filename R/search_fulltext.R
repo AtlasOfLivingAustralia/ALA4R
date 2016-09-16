@@ -7,7 +7,7 @@
 #'  
 #' @param query string: the search term
 #' @param fq string: (optional) character string or vector of strings, specifying filters to be applied to the 
-#' original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". 
+#' original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "rk_kingdom:Fungi". 
 #' See \code{ala_fields("general")} for all the fields that are queryable. 
 #' NOTE that fq matches are case-sensitive, but sometimes the entries in the fields are 
 #' not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA"). 
@@ -31,8 +31,6 @@
 #'  search_fulltext("oenanthe",sort_by="rk_kingdom",fq="rank:genus")
 #' 
 #' @export
-# TODO: if columns are renamed, check the documentation "minimal columns" list (expect "name" might change)
-
 search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort_by,sort_dir) {
     output_format <- match.arg(tolower(output_format),c("simple","complete"))
     this_query <- list()
@@ -78,7 +76,7 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     
     x <- cached_get(url=this_url,type="json")
     x <- as.list(x)
-    
+
     ## reformat data into a more concise structure
     ## for newer jsonlite (> something like 0.9.5) there is a top-level x$searchResults and other parts of the structure differ slightly
     is_old_jsonlite <- TRUE
@@ -115,6 +113,7 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
         xcols <- setdiff(xcols,c("hasChildren","image","thumbnail"))
         ## hasChildren seems always to be false, even for taxa that ought to have children (e.g. Macropus)
         ## image and thumbnail appear to be internal paths, not full URLs
+        ## 2016-09-16 - these don't seem to be returned now, but leave this code in place anyway
         out$data <- subset(out$data,select=xcols)
     }
     out$facets <- x$facetResults$searchResults    

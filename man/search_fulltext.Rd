@@ -11,7 +11,7 @@ search_fulltext(query, fq, output_format = "simple", start, page_size,
 \item{query}{string: the search term}
 
 \item{fq}{string: (optional) character string or vector of strings, specifying filters to be applied to the 
-original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". 
+original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "rk_kingdom:Fungi". 
 See \code{ala_fields("general")} for all the fields that are queryable. 
 NOTE that fq matches are case-sensitive, but sometimes the entries in the fields are 
 not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA"). 
@@ -24,12 +24,12 @@ field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form
 
 \item{page_size}{numeric: (optional) (positive integer) maximum number of records to return. Defaults to the server-side value - currently 10}
 
-\item{sort_by}{string: (optional) field to sort on}
+\item{sort_by}{string: (optional) field to sort on. See \code{ala_fields("general")} for valid field names}
 
 \item{sort_dir}{string: (optional) sort direction, either "asc" or "desc"}
 }
 \value{
-a named list with the components "meta" (search metadata), "facets" (search facet results), and "data" (the search results, in the form of a dataframe). The contents (column names) of the data frame will vary depending on the details of the search and the results, but should contain at least the columns \code{guid}, \code{name}, \code{score}, \code{commonName}, \code{rank}, \code{author}, \code{isAustralian}, and \code{occurrenceCount}.
+a named list with the components "meta" (search metadata), "facets" (search facet results), and "data" (the search results, in the form of a data frame). The contents (column names) of the data frame will vary depending on the details of the search and the results, but should contain at least the columns \code{guid}, \code{name}, \code{commonName}, \code{rank}, \code{author}, and \code{occurrenceCount}.
 }
 \description{
 Performs a search across all objects, and selects the closest matches. Generally, the user will provide the search term via the \code{query} parameter, with optional filtering via \code{fq}.
@@ -41,9 +41,7 @@ Performs a search across all objects, and selects the closest matches. Generally
  search_fulltext("urn:lsid:biodiversity.org.au:afd.taxon:31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae")
 
  # find genus names like "Oenanthe"
-\dontrun{
- search_fulltext("oenanthe",sort_by="kingdom",fq="rank:genus")
-}
+ search_fulltext("oenanthe",sort_by="rk_kingdom",fq="rank:genus")
 
 }
 \author{
