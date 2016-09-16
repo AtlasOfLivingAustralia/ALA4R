@@ -225,3 +225,8 @@ convert_reason <- function(reason) {
     }
     reason
 }
+
+## internal function, returns some behaviours and settings of the ALA servers and setup
+ala_server_settings <- function() {
+    list(max_occurrence_records=500000)
+}
