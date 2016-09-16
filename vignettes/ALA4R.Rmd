@@ -384,7 +384,7 @@ lines(tpp,fitp,col=1)
 ```
 
 Clustering:
-```{r}
+```{r fig.width=6,fig.height=6}
 cl <- hclust(D,method="ave") ## UPGMA clustering
 plot(cl) ## plot dendrogram
 grp <- cutree(cl,20) ## extract group labels at the 20-group level
