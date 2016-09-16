@@ -20,7 +20,12 @@ check_caching(thischeck)
 
 thischeck <- function() {
     test_that("occurrences summary gives something sensible", {
-        expect_output(summary(occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)),"^number of names")
+        occ <- occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)
+        expect_output(summary(occ),"^number of original names")
+        ## check that names required for summary.occurrences method are present
+        expect_true(all(c("scientificName","scientificNameOriginal") %in% names(occ$data)) || all(c("taxonName","taxonNameOriginal") %in% names(occ$data)))
+        ## check that names required for unique.occurrences method are present
+        expect_true(all(c("scientificName","longitude","latitude","eventDate","month","year") %in% names(occ$data)))
     })
 }
 check_caching(thischeck)
