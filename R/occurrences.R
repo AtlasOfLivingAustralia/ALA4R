@@ -224,7 +224,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
         }
 
         if (!empty(x)) {
-            max_records <- ala_server_settings$max_occurrence_records
+            max_records <- ala_server_settings()$max_occurrence_records
             if (nrow(x)==max_records) {
                 warning("Only ",max_records," data rows were returned from the ALA server: this might not be the full data set you need. Contact support@ala.org.au")
             }
