@@ -52,10 +52,12 @@ NULL
 "summary.occurrences" <- function(object, ...) {
     ## names are a little problematic at the moment: sometimes scientificName doesn't come back (being resolved in web service I hope)
     if ("scientificName" %in% names(object$data)) {
-        cat('number of names:',length(unique(object$data$scientificNameOriginal)),'\n')
+        if ("scientificNameOriginal" %in% names(object$data))
+            cat('number of original names:',length(unique(object$data$scientificNameOriginal)),'\n')
         cat('number of taxonomically corrected names:',length(unique(object$data$scientificName)),'\n')
     } else if ("taxonName" %in% names(object$data)) {
-        cat('number of names:',length(unique(object$data$taxonNameOriginal)),'\n')
+        if ("taxonNameOriginal" %in% names(object$data))
+            cat('number of original names:',length(unique(object$data$taxonNameOriginal)),'\n')
         cat('number of taxonomically corrected names:',length(unique(object$data$taxonName)),'\n')
     }
     cat('number of observation records:',nrow(object$data),'\n')
