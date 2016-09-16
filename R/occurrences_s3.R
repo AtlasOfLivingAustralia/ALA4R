@@ -76,12 +76,19 @@ NULL
 #' @method unique occurrences
 #' @export
 "unique.occurrences" <- function(x, incomparables=FALSE, spatial=0, temporal=NULL, na.rm=FALSE, ...) {
+    ## helper function to make sure names are present
+    check_names_present <- function(nms) {
+        if (!all(nms %in% names(x$data))) stop(sprintf("expecting columns '%s' in occurrences data. Contact the ALA4R maintainers if this error persists.",paste(setdiff(nms,names(x)),collapse="','")))
+        invisible(TRUE)
+    }
     assert_that(is.numeric(spatial)) #ensure unique.spatial is numeric
     if (!is.null(temporal)) {
         if (!temporal %in% c('year','month', 'yearmonth','full')) stop('temporal value must be NULL, "year", "month", "yearmonth" or "full"')
     }
+    check_names_present("scientificName")
     cois <- list(scientificName=x$data$scientificName) #start defining the columns of interest to do the "unique" by
     if (spatial>=0) {
+        check_names_present(c("longitude","latitude"))
         if (spatial>0) { #round the data to the spatial accuracy of interest
             x$data$latitude <- round(x$data$latitude / spatial) * spatial
             x$data$longitude <- round(x$data$longitude / spatial) * spatial
@@ -90,8 +97,10 @@ NULL
     }
     if (!is.null(temporal)) {
         if (temporal=='full') {
+            check_names_present("eventDate")
             cois$eventDate <- x$data$eventDate #add the full date to cois
         } else {
+            check_names_present(c("month","year"))
             if (length(grep('month',temporal))>0) cois$month <- x$data$month
             if (length(grep('year',temporal))>0) cois$year <- x$data$year
         }
