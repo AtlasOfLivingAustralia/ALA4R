@@ -23,47 +23,47 @@
 #' @examples
 #' \dontrun{ 
 #' #download some observations
-#' x=occurrences(taxon="Eucalyptus gunnii",download_reason_id=10)
+#' x <- occurrences(taxon="Eucalyptus gunnii",download_reason_id=10)
 #' occurrences_plot(x)
-#' x=occurrences(taxon="Cider Gum",download_reason_id=10)
+#' x <- occurrences(taxon="Cider Gum",download_reason_id=10)
 #' occurrences_plot(x,"alaPlot.pdf",qa="fatal",grouped=FALSE, taxon_level="species",pch='+')
 #' }
 #' @export occurrences_plot
-occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), grouped=FALSE, taxon_level='species', pch, cex=0.75, ...) 
+occurrences_plot <- function(x, filename='Rplots.pdf', qa=c('fatal','error'), grouped=FALSE, taxon_level='species', pch, cex=0.75, ...) 
 {
 	if (! inherits(x,"occurrences")) stop('check_assertions must have an object of class occurrences from e.g., occurrences() in the ALA4R package')
         assert_that(is.string(taxon_level))
-        taxon_level=match.arg(tolower(taxon_level),c("species","genus","family","order"))
+        taxon_level <- match.arg(tolower(taxon_level),c("species","genus","family","order"))
 	assert_that(is.notempty.string(filename))
-	if (substr(filename,nchar(filename)-2,nchar(filename))!='pdf') filename=paste(filename,'.pdf',sep='') #append a pdf suffix to filename
+	if (substr(filename,nchar(filename)-2,nchar(filename))!='pdf') filename <- paste(filename,'.pdf',sep='') #append a pdf suffix to filename
 	assert_that(is.flag(grouped))
 	assert_that(is.character(qa))
         assert_that(is.scalar(cex))
 	if (missing('pch')) {
-		pch=19
+		pch <- 19
 	} else {
-		if (length(pch)>1) { pch=pch[1]; warning('only using first element of supplied pch vector') }
-		if (nchar(pch)>1) { pch=substr(pch,1,1); warning('only using first character of supplied pch text') }
+		if (length(pch)>1) { pch <- pch[1]; warning('only using first element of supplied pch vector') }
+		if (nchar(pch)>1) { pch <- substr(pch,1,1); warning('only using first character of supplied pch text') }
 	}
-	ass = check_assertions(x)
+	ass <- check_assertions(x)
 	if ('none' %in% qa) { 
-		qa = NULL
+		qa <- NULL
 	} else {
-		tt = NULL
-		if ('all' %in% qa) tt = c(tt,ass$occurColnames)
-		if ('error' %in% qa) tt = c(tt,ass$occurColnames[which(ass$category=='error')])
-		if ('warning' %in% qa) tt = c(tt,ass$occurColnames[which(ass$category=='warning')])
-		if ('fatal' %in% qa) tt = c(tt,ass$occurColnames[which(as.logical(ass$fatal)==TRUE)])
+		tt <- NULL
+		if ('all' %in% qa) tt <- c(tt,ass$occurColnames)
+		if ('error' %in% qa) tt <- c(tt,ass$occurColnames[which(ass$category=='error')])
+		if ('warning' %in% qa) tt <- c(tt,ass$occurColnames[which(ass$category=='warning')])
+		if ('fatal' %in% qa) tt <- c(tt,ass$occurColnames[which(as.logical(ass$fatal)==TRUE)])
 		if (any(qa %in% colnames(x$data))) {
-			valid_fields=ass$occurColnames ## valid entries for qa
-			unknown=setdiff(qa,valid_fields)
+			valid_fields <- ass$occurColnames ## valid entries for qa
+			unknown <- setdiff(qa,valid_fields)
 			if (length(unknown)>0) {
 				warning("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"assertions\",as_is=TRUE)")
 			}
-			tt = intersect(qa,valid_fields)
+			tt <- intersect(qa,valid_fields)
 		}
-		tt = intersect(tt,colnames(x$data))
-		if (length(tt)>0) { qa = tt } else { qa = NULL }
+		tt <- intersect(tt,colnames(x$data))
+		if (length(tt)>0) { qa <- tt } else { qa <- NULL }
     }
 
         ## load aus map data
@@ -76,7 +76,7 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
         aus <- load_obj(system.file("data/aus.RData",package="ALA4R"))        
 	
 	###plot function to be used
-	tplot = function(xx,Main,coi,pch) {
+	tplot <- function(xx,Main,coi,pch) {
 		image(aus,col='grey') #draw the base australia
 		title(main=Main)
 		degAxis(1); degAxis(2) #add on the axis
@@ -84,13 +84,13 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 		if (is.null(coi)) {
 			legend('bottomleft',legend='assumed good',pch=pch,col='black',bty='n',cex=cex)
 		} else {
-			legend.cols = rainbow(length(coi)) #define the legend colors
-			c2use = NULL #define columns to keep because they had issues
+			legend.cols <- rainbow(length(coi)) #define the legend colors
+			c2use <- NULL #define columns to keep because they had issues
 			for (ii in 1:length(coi)) {
-				roi = which(as.logical(xx[,coi[ii]])==TRUE) #define the points that have the issue
+				roi <- which(as.logical(xx[,coi[ii]])==TRUE) #define the points that have the issue
 				if (length(roi) > 0) {
 					points(xx$longitude[roi],xx$latitude[roi],pch=pch,col=legend.cols[ii])
-					c2use = c(c2use,ii)
+					c2use <- c(c2use,ii)
 				}				
 			}
 			if (is.null(c2use)) {
@@ -109,9 +109,9 @@ occurrences_plot = function(x, filename='Rplots.pdf', qa=c('fatal','error'), gro
 				tplot(x$data,Main='all species',coi=qa,pch)
 			} else {
 				cat('this is plotting',length(unique(x$data[,taxon_level])),taxon_level,'maps... names will act as status bar\n')
-				spp_count=0
+				spp_count <- 0
 				for (spp in unique(x$data[,taxon_level])) {
-					spp_count=spp_count+1
+					spp_count <- spp_count+1
 					cat(spp_count,'.\t',spp,'\n',sep="")
 					if (spp!="") { 
 						tplot(x$data[which(x$data[,taxon_level]==spp),],Main=spp,coi=qa,pch)
