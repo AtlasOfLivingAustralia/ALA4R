@@ -12,7 +12,9 @@ vignette: >
 %\VignetteIndexEntry{ALA4R}
 -->
 <!-- Knit this vignette manually, e.g. open this file in RStudio and knit to HTML -->
-<!-- It is not built automatically as part of the package because of all of the additional -->
+<!-- create PDF using -->
+<!-- then use tools::compactPDF(system.file("vignettes/ALA4R.pdf",package="ALA4R"),gs_quality="ebook")-->
+<!-- The vignette is not built automatically as part of the package because of all of the additional -->
 <!-- packages required here. -->
 
 # ALA4R
