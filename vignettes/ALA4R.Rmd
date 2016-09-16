@@ -72,7 +72,7 @@ Then follow the instructions for Windows, above.
 
 The ALA4R package must be loaded for each new R session:
 
-```{r eval=FALSE}
+```{r}
 library(ALA4R)
 ```
 
@@ -187,7 +187,7 @@ We can make a taxonomic tree plot using the `phytools` package:
 temp <- colwise(factor, c("genus","scientificName"))(tx)
 ## create phylo object of Scientific.Name nested within Genus
 ax <- as.phylo(~genus/scientificName,data=temp)
-tr <- plotTree(ax,type="fan",fsize=0.7) ## plot it
+plotTree(ax,type="fan",fsize=0.7) ## plot it
 ```
 
 We can also plot the tree with images of the different penguin species. We'll first extract a species profile for each species identifier (guid) in our results:
@@ -198,22 +198,19 @@ s <- search_guids(tx$guid)
 And for each of those species profiles, download the thumbnail image and store it in our data cache:
 
 ```{r}
-imfiles <- sapply(s,function(z){ 
-  ifelse(!is.na(z$thumbnailUrl),ALA4R:::cached_get(z$thumbnailUrl,type="binary_filename"),"") 
+imfiles <- sapply(s$thumbnailUrl,function(z){ 
+  ifelse(!is.na(z),ALA4R:::cached_get(z,type="binary_filename"),"") 
 })
 ```
 
 And finally, plot the tree:
 ```{r results='hide', dev.args=list(png=list(colortype="pseudo.cube"))}
-tr <- plotTree(ax,type="fan",ftype="off") ## plot tree without labels
+plotTree(ax,type="fan",ftype="off") ## plot tree without labels
+tr <- get("last_plot.phylo",envir = .PlotPhyloEnv) ## get the tree plot object
 ## add each image
 library(jpeg)
-for (k in which(nchar(imfiles)>0)) {
-    tryCatch({ 
-        im <- readJPEG(imfiles[k])
-        rasterImage(im,tr$xx[k]-1/10,tr$yy[k]-1/10,tr$xx[k]+1/10,tr$yy[k]+1/10) },
-             error=function(e){invisible(1)})
-}
+for (k in which(nchar(imfiles)>0))
+        rasterImage(readJPEG(imfiles[k]),tr$xx[k]-1/10,tr$yy[k]-1/10,tr$xx[k]+1/10,tr$yy[k]+1/10)
 ```
 
 ### Example 2: Area report: what listed species exist in a given area?
