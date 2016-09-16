@@ -1,8 +1,12 @@
 ---
 title: "ALA4R"
 author: "Ben Raymond"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+date: '`r Sys.Date()`'
+output:
+  pdf_document:
+    latex_engine: xelatex
+  html_vignette:
+    toc: false
 vignette: >
   %\VignetteEncoding{UTF-8}
 ---
@@ -11,8 +15,9 @@ vignette: >
 %\VignetteEngine{knitr::rmarkdown}
 %\VignetteIndexEntry{ALA4R}
 -->
-<!-- Knit this vignette manually, e.g. open this file in RStudio and knit to HTML -->
-<!-- create PDF using -->
+<!-- Knit this vignette to HTML and PDF manually: -->
+<!-- rmarkdown::render(system.file("vignettes/ALA4R.Rmd"),package="ALA4R"),output_format = "html_vignette") -->
+<!-- rmarkdown::render(system.file("vignettes/ALA4R.Rmd"),package="ALA4R"),output_format = "pdf_document") -->
 <!-- then use tools::compactPDF(system.file("vignettes/ALA4R.pdf",package="ALA4R"),gs_quality="ebook")-->
 <!-- The vignette is not built automatically as part of the package because of all of the additional -->
 <!-- packages required here. -->
@@ -21,7 +26,9 @@ vignette: >
 
 ```{r setup, include=FALSE}
 library(knitr)
-opts_chunk$set(out.extra='style="display:block; margin: auto"', fig.align="center")
+## center images: this only works for html output format
+if (grepl("html",opts_knit$get("rmarkdown.pandoc.to")))
+    opts_chunk$set(out.extra='style="display:block; margin: auto"', fig.align="center")
 ```
 
 
