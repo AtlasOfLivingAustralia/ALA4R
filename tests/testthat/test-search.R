@@ -71,12 +71,20 @@ thischeck=function() {
     test_that("unexpected case-related behaviour in search_names has not changed", {
         expect_equal(search_names("Gallirallus australis")$name,"Gallirallus australis")
         expect_equal(search_names("Gallirallus Australis")$name,"Gallirallus australis")
-        expect_equal(search_names("Gallirallus australi")$name,NA)
-        expect_equal(search_names("Gallirallus Australi")$name,"Gallirallus")
+        expect_equal(search_names("Gallirallus australi")$name,as.character(NA))
+        expect_equal(search_names("Gallirallus Australi")$name,as.character(NA))
     })
 }
-## skip this one, these now match to Gallirallus australis australis
-##check_caching(thischeck)
+check_caching(thischeck)
+
+thischeck=function() {
+    test_that("nonbreaking spaces not present in names", {
+        expect_false(any(colSums(apply(search_fulltext("Gallirallus australis")$data,2,function(z)grepl("\ua0",z)))>0))
+        expect_false(grepl("\ua0",search_names("Gallirallus australis")$name))
+    })
+}
+check_caching(thischeck)
+
 
 thischeck=function() {
     test_that("search_names returns occurrence counts when asked", {
