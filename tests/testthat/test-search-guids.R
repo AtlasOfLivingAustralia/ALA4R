@@ -5,6 +5,13 @@ thischeck=function() {
 }
 check_caching(thischeck)
 
+thischeck=function() {
+    test_that("search_guids can cope with mixed recognized/unrecogized guids", {
+        expect_equal(is.na(search_guids(c("urn:lsid:biodiversity.org.au:afd.taxon:95773568-053d-44de-a624-5699f0ac4a59","http://id.biodiversity.org.au/node/apni/2890970","this_is_not_a_valid_guid"))$guid),c(FALSE,FALSE,TRUE))
+    })
+}
+check_caching(thischeck)
+
 
 thischeck=function() {
     test_that("search_guids can cope with all-unrecogized guids", {
