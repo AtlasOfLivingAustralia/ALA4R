@@ -115,11 +115,11 @@ search_names <- function(taxa=c(),vernacular=FALSE,guids_only=FALSE,occurrence_c
             x <- data.frame(searchTerm=taxa_original,name=NA,commonName=NA,rank=NA,guid=NA)
             attr(x,"output_format") <- output_format
         }
+        ## some names have non-breaking spaces
+        for (n in intersect(names(x),c("name","nameComplete","acceptedConceptName")))
+            x[,n] <- replace_nonbreaking_spaces(x[,n])
     }
     names(x) <- rename_variables(names(x),type="general")
-    ## some names have non-breaking spaces
-    for (n in intersect(names(x),c("name","nameComplete","acceptedConceptName")))
-        x[,n] <- replace_nonbreaking_spaces(x[,n])
     if (occurrence_count & !guids_only) {
         ## do this after renaming variables, so that column name guid is predictable
         x$occurrenceCount <- NA
