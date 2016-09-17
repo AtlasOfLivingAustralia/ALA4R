@@ -28,19 +28,20 @@ Case-insensitive but otherwise exact matches are used.
 }
 \examples{
 
-s1 <- search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
+search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
   "Macropus","Thisisnot aname"))
-str(s1)
-s2 <- search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
+
+search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
   "Macropus","Thisisnot aname"),guids_only=TRUE)
-str(s2)
-ss <- search_names("kookaburra",vernacular=FALSE) ## should return the genus Grevillea
-str(ss)
-sv <- search_names("kookaburra",vernacular=TRUE)
-str(sv)
+
+search_names("kookaburra",vernacular=FALSE)
+
+search_names("kookaburra",vernacular=TRUE)
+
 ## occurrence counts for matched names
 search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
   "Macropus","Thisisnot aname"),occurrence_count=TRUE)
+
 ## no occurrence counts because guids_only is TRUE
 search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
   "Macropus","Thisisnot aname"),occurrence_count=TRUE,guids_only=TRUE)
