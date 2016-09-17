@@ -44,9 +44,6 @@ Performs a search across all objects, and selects the closest matches. Generally
  search_fulltext("oenanthe",sort_by="rk_kingdom",fq="rank:genus")
 
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 Associated ALA web service: \url{http://api.ala.org.au/#ws1}
 }

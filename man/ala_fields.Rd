@@ -49,9 +49,6 @@ Note for occurrence fields: only fields that are indexed in the ALA database can
  field_info("el773")
 }
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 Relevant ALA web services: \itemize{
 \item for fields_type "occurrence": http://api.ala.org.au/#ws72

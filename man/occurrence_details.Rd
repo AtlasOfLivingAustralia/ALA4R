@@ -23,9 +23,6 @@ s1 <- occurrence_details("f259c5ce-200c-41a2-b73a-e36a91f748f7")
 str(s1,max.level=3)
 
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 Associated ALA web service: \url{http://api.ala.org.au/#ws102}
 }

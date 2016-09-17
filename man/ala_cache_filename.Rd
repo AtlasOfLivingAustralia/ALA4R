@@ -21,9 +21,6 @@ may not actually exist, this function just provides the mapping from URL to file
 ala_cache_filename("http://biocache.ala.org.au/ws/index/fields")
 
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 \url{http://api.ala.org.au/}
 }

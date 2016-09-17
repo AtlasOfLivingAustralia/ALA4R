@@ -2,7 +2,6 @@
 #' 
 #' Provides names, taxonomic classification, and other information for a list of GUIDs.
 #'
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references The associated ALA web service: \url{http://api.ala.org.au/#ws87}
 #' 
 #' @param guids string: a single GUID or vector of GUIDs

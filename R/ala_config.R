@@ -1,6 +1,5 @@
 #' Get or set configuration options that control ALA4R behaviour
 #'
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' @references \url{http://spatial.ala.org.au/layers-service/} this will eventually move to the api link
 #'

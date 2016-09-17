@@ -3,7 +3,6 @@
 #' Set of S3 methods to summarize, filter and get unique occurrence data retrieved using \code{\link{occurrences}}.
 #' This uses information based on selections of assertions (quality assurance issues ALA has identified), spatial and temporal data.
 #' 
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' @references \url{http://stat.ethz.ch/R-manual/R-devel/library/methods/html/Methods.html}
 #' 

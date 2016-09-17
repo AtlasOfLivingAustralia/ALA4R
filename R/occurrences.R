@@ -2,7 +2,6 @@
 #' 
 #' Retrieve ALA occurrence data via the "occurrence download" web service. At least one of \code{taxon}, \code{wkt}, or \code{fq} must be supplied for a valid query. Note that the current service is limited to a maximum of 500000 records per request.
 #' 
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \itemize{
 #' \item Associated ALA web service for record counts: \url{http://api.ala.org.au/#ws3}
 #' \item Associated ALA web service for occurence downloads: \url{http://api.ala.org.au/#ws4}

@@ -53,9 +53,6 @@ Get or set configuration options that control ALA4R behaviour
  ala_config("reset")
 }
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 \url{http://api.ala.org.au/}
 

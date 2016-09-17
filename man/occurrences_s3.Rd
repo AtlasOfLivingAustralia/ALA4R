@@ -71,9 +71,6 @@ tt <- subset(x)
 summary(tt)
 
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 \url{http://api.ala.org.au/}
 

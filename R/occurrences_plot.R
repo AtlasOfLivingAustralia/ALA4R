@@ -3,7 +3,6 @@
 #' Generates a plot of occurrence data retrieved using \code{\link{occurrences}}.The plot uses
 #' an Australian basemap and colours the occurrence records dots according to parameters
 #' 
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' 
 #' @param x list: a list object that has been downloaded using \code{\link{occurrences}}

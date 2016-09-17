@@ -44,9 +44,6 @@ x <- occurrences(taxon="Cider Gum",download_reason_id=10)
 occurrences_plot(x,"alaPlot.pdf",qa="fatal",grouped=FALSE, taxon_level="species",pch='+')
 }
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 \url{http://api.ala.org.au/}
 }

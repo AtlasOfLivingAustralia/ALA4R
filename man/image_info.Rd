@@ -25,9 +25,6 @@ image_info(c("84654e14-dc35-4486-9e7c-40eb2f8d3faa",
   "this-is-an-invalid-image-id"))
 
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \seealso{
 \code{\link{ala_config}} \code{\link{occurrences}}
 }

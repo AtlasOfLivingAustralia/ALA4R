@@ -10,7 +10,6 @@
 # @param ... additional arguments passed to curlPerform
 # @return for type=="text" the content is returned as text. For type=="json", the content is parsed using jsonlite::fromJSON. For "filename", the name of the stored file is returned.
 # @details Depending on the value of caching, the page is either retrieved from the cache or from the url, and stored in the cache if appropriate. The user-agent string is set according to ala_config()$user_agent. The returned response (if not from cached file) is also passed to check_status_code().
-# @author Atlas of Living Australia \email{support@@ala.org.au}
 # @references \url{http://api.ala.org.au/}
 # @examples
 #

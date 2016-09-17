@@ -44,9 +44,6 @@ x=taxinfo_download("family:Fabaceae",fields=c("guid","parentGuid","kingdom","phy
 #    class,bioOrder,family,genus,nameComplete&q=family:Fabaceae
 }
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 Associated ALA web service: \url{http://api.ala.org.au/#ws2}
 }

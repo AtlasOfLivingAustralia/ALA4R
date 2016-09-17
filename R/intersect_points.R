@@ -1,6 +1,5 @@
 #' Intersect environmental or contextual layers at a given a set of points (coordinates)
 #' 
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references The associated ALA web service: \url{http://api.ala.org.au/#ws84}
 #' @references Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/}
 #'

@@ -29,9 +29,6 @@ s3=species_info("Alaba",verbose=TRUE)
 str(s3)
 
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 Associated ALA web service: \url{http://api.ala.org.au/#ws80}
 }

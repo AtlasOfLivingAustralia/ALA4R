@@ -9,7 +9,6 @@
 # @param extra_info string: additional diagnostic info that will be shown to the user for 4xx or 5xx codes, where x is not a full response object
 # @return integer: simplified status code (0=success (2xx codes), 1=warning (3xx codes))
 # @references \url{http://www.w3.org/Protocols/HTTP/HTRESP.html}
-# @author Atlas of Living Australia \email{support@@ala.org.au}
 # @examples
 # \dontrun{
 # require(httr)

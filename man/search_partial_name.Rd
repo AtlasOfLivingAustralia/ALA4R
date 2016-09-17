@@ -36,9 +36,6 @@ s2=search_partial_name("Gallaba",geo_only=TRUE)
 s2
 
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 Associated ALA web service: \url{http://api.ala.org.au/#ws25}
 }

@@ -39,9 +39,6 @@ Intersect environmental or contextual layers at a given a set of points (coordin
  intersect_points(pnts,layers)
 }
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 The associated ALA web service: \url{http://api.ala.org.au/#ws84}
 

@@ -40,9 +40,6 @@ ss[,1:6]
 attr(ss,"guid")[1]
 }
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 \url{http://api.ala.org.au/ws}
 

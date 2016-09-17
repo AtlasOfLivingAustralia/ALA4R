@@ -1,7 +1,4 @@
 # Internal function used to download results to a file 
-# 
-# @author Atlas of Living Australia \email{support@@ala.org.au}
-# 
 # @references \itemize{ \item ALA web service API: \url{http://api.ala.org.au/}
 
 

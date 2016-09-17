@@ -2,7 +2,6 @@
 #'
 #' Note that this makes a separate web request for each occurrence uuid, and so may not be wise to use on a large number of uuids.
 #' 
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references Associated ALA web service: \url{http://api.ala.org.au/#ws102}
 #' 
 #' @param uuid string: one or more record ids, as returned by \code{\link{occurrences}} (in the \code{data$id} column)

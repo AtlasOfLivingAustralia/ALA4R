@@ -2,7 +2,6 @@
 #'
 #' This provides a data.frame detailing the assertions that are found in a dataset returned from \code{\link{occurrences}}.
 #'
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references \url{http://api.ala.org.au/}
 #' @references \url{http://biocache.ala.org.au/ws/assertions/codes}
 #'  

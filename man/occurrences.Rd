@@ -77,9 +77,6 @@ occurrences(taxon="Eucalyptus gunnii",fields=c("latitude","longitude"),
 #    fields=latitude,longitude&qa=none&fq=basis_of_record:LivingSpecimen
 }
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 \itemize{
 \item Associated ALA web service for record counts: \url{http://api.ala.org.au/#ws3}

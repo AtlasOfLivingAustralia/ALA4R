@@ -26,9 +26,6 @@ This provides a data.frame detailing the assertions that are found in a dataset 
  which(colSums(tmp)>0) ## discard those not seen in the data
 }
 }
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
-}
 \references{
 \url{http://api.ala.org.au/}
 

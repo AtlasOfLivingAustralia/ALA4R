@@ -2,7 +2,6 @@
 #'
 #' Retrieve a list of taxa matching a search query, within a spatial search area, or both
 #' 
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references Associated ALA web service: \url{http://api.ala.org.au/#ws98}
 #' @references \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' 
