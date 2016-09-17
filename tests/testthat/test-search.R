@@ -43,6 +43,8 @@ thischeck=function() {
         expect_that(nrow(search_layers(type="all")),is_more_than(400))
         expect_that(nrow(search_layers(type="all",query="bilbobaggins")),equals(0))
         expect_error(search_layers(type="bilbobaggins"))
+        tmp <- search_layers(type="shapes",query="coral sea conservation")
+        expect_lt(nchar(tmp$shortName),nchar(tmp$name))
     })
 }
 check_caching(thischeck)
