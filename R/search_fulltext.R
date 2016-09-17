@@ -116,6 +116,8 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
         ## 2016-09-16 - these don't seem to be returned now, but leave this code in place anyway
         out$data <- subset(out$data,select=xcols)
     }
+    for (n in intersect(names(out$data),c("name","nameComplete","scientificName","species")))
+        out$data[,n] <- replace_nonbreaking_spaces(out$data[,n])
     out$facets <- x$facetResults$searchResults    
     class(out) <- "search_fulltext"
     attr(out,"output_format") <- output_format
