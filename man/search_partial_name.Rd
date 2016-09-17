@@ -26,14 +26,10 @@ A partial-name search for species names & identifiers used at the ALA. If search
 }
 \examples{
 # find any names containing "allaba"
-s1 = search_partial_name("allaba",output_format="simple")
-str(s1)
-# show all information stored in the object
-as.matrix(s1)
+search_partial_name("allaba",output_format="simple")
 
 # retrieve only species that have geolocated occurrence records
-s2=search_partial_name("Gallaba",geo_only=TRUE)
-s2
+search_partial_name("Gallaba",geo_only=TRUE)
 
 }
 \references{
