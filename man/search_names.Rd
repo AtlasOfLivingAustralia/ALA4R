@@ -34,10 +34,9 @@ str(s1)
 s2 <- search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
   "Macropus","Thisisnot aname"),guids_only=TRUE)
 str(s2)
-ss <- search_names("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
+ss <- search_names("kookaburra",vernacular=FALSE) ## should return the genus Grevillea
 str(ss)
-## should return the species Grevillea banksii, because it has the common name ``Grevillea"
-sv <- search_names("Grevillea",vernacular=TRUE)
+sv <- search_names("kookaburra",vernacular=TRUE)
 str(sv)
 ## occurrence counts for matched names
 search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
