@@ -28,16 +28,16 @@ Case-insensitive but otherwise exact matches are used.
 }
 \examples{
 
-s1=search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
+s1 <- search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
   "Macropus","Thisisnot aname"))
 str(s1)
-s2=search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
+s2 <- search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
   "Macropus","Thisisnot aname"),guids_only=TRUE)
 str(s2)
-ss=search_names("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
+ss <- search_names("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
 str(ss)
 ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
-sv=search_names("Grevillea",vernacular=TRUE)
+sv <- search_names("Grevillea",vernacular=TRUE)
 str(sv)
 ## occurrence counts for matched names
 search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
@@ -46,9 +46,6 @@ search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
 search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
   "Macropus","Thisisnot aname"),occurrence_count=TRUE,guids_only=TRUE)
 
-}
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
 The associated ALA web service: \url{http://api.ala.org.au/#ws87}
