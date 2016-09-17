@@ -123,6 +123,9 @@ search_names <- function(taxa=c(),vernacular=FALSE,guids_only=FALSE,occurrence_c
         }
     }
     names(x) <- rename_variables(names(x),type="general")
+    ## some names have non-breaking spaces
+    for (n in c("name","nameComplete","acceptedConceptName"))
+        x[,n] <- replace_nonbreaking_spaces(x[,n])
     if (occurrence_count & !guids_only) {
         ## do this after renaming variables, so that column name guid is predictable
         x$occurrenceCount <- NA
