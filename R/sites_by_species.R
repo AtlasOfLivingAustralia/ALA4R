@@ -2,8 +2,7 @@
 #' 
 #' A data.frame is returned as grid cells by species with values in each cell being the number of occurrences of each species. No null (all zero) species should be returned. The coordinates returned are the TOP-LEFT corner of the grid cell.
 #'
-#' @references \url{http://api.ala.org.au/ws}
-#' @references \url{http://spatial.ala.org.au/ws}
+#' @references Associated web services: \url{http://spatial.ala.org.au/ws}
 #' @references \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' 
 #' @param taxon string: the identifier to get the species data from the ala biocache. E.g. "genus:Macropus".
