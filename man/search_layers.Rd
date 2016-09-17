@@ -22,11 +22,8 @@ Search for environmental and contextual data layers
 \examples{
 search_layers(type="all")
 search_layers(type="grids",query="income")
-l=search_layers(type="shapes",query="coral",output_format="simple")
+l <- search_layers(type="shapes",query="coral",output_format="simple")
 str(l)
-}
-\author{
-Atlas of Living Australia \email{support@ala.org.au}
 }
 \references{
 Associated ALA web services: \url{http://api.ala.org.au/#ws11} \url{http://api.ala.org.au/#ws12} \url{http://api.ala.org.au/#ws13}

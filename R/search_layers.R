@@ -1,6 +1,5 @@
 #' Search for environmental and contextual data layers
 #' 
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references Associated ALA web services: \url{http://api.ala.org.au/#ws11} \url{http://api.ala.org.au/#ws12} \url{http://api.ala.org.au/#ws13}
 #' @references Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/})
 #'
@@ -12,43 +11,43 @@
 #' @examples
 #' search_layers(type="all")
 #' search_layers(type="grids",query="income")
-#' l=search_layers(type="shapes",query="coral",output_format="simple")
+#' l <- search_layers(type="shapes",query="coral",output_format="simple")
 #' str(l)
 #' @export
-search_layers = function(query,type="all",output_format="simple") {
+search_layers <- function(query,type="all",output_format="simple") {
     assert_that(is.string(type))
-    type=match.arg(tolower(type),c("all","grids","shapes"))
+    type <- match.arg(tolower(type),c("all","grids","shapes"))
     if (!missing(query)) {
         assert_that(is.notempty.string(query))
     }
     assert_that(is.character(output_format))
-    output_format=match.arg(tolower(output_format),c("simple","complete"))    
+    output_format <- match.arg(tolower(output_format),c("simple","complete"))    
     
-    mypath=ifelse(type %in% c("grids","shapes"),c("layers",type),"layers")
-    this_url=build_url_from_parts(ala_config()$base_url_spatial,mypath)
-    out = cached_get(url=this_url,type="json") ## download all data
+    mypath <- ifelse(type %in% c("grids","shapes"),c("layers",type),"layers")
+    this_url <- build_url_from_parts(ala_config()$base_url_spatial,mypath)
+    out <- cached_get(url=this_url,type="json") ## download all data
     if (!missing(query)) {
-        out=out[grepl(query,out$name,ignore.case=TRUE) | grepl(query,out$description,ignore.case=TRUE),]
+        out <- out[grepl(query,out$name,ignore.case=TRUE) | grepl(query,out$description,ignore.case=TRUE),]
     }
     ## change id from numeric to "elxxx" or "clxxx" as appropriate for environmental/contextual
     if (!empty(out)) {
-        out$id=paste(substr(tolower(out$type),1,1),"l",out$id,sep="")
+        out$id <- paste(substr(tolower(out$type),1,1),"l",out$id,sep="")
     }
     ## change variable names for consistency
-    names(out)=rename_variables(names(out),type="layers")
+    names(out) <- rename_variables(names(out),type="layers")
     ## change "name" to "shortName", "displayname" to "name" so as to match ala_fields("layers")
-    names(out)[names(out)=="name"]="shortName"
-    names(out)[names(out)=="displayname"]="name"    
+    names(out)[names(out)=="name"] <- "shortName"
+    names(out)[names(out)=="displayname"] <- "name"    
     ## remove some columns that are unlikely to be of value here
-    xcols=setdiff(names(out),unwanted_columns("layers"))
-    out=subset(out,select=xcols)
+    xcols <- setdiff(names(out),unwanted_columns("layers"))
+    out <- subset(out,select=xcols)
     ## reorder columns, for minor convenience
-    xcols=names(out)
-    firstcols=intersect(c("name","id","type","description"),xcols)
-    xcols=c(firstcols,setdiff(xcols,firstcols))
-    out=subset(out,select=xcols)
-    attr(out,"output_format")=output_format
-    class(out)=c("search_layers",class(out)) ## add the search_names class
+    xcols <- names(out)
+    firstcols <- intersect(c("name","id","type","description"),xcols)
+    xcols <- c(firstcols,setdiff(xcols,firstcols))
+    out <- subset(out,select=xcols)
+    attr(out,"output_format") <- output_format
+    class(out) <- c("search_layers",class(out)) ## add the search_names class
     if (empty(out) && ala_config()$warn_on_empty) {
         warning("no matching records were returned")
     }
@@ -59,11 +58,11 @@ search_layers = function(query,type="all",output_format="simple") {
 #' @export
 "print.search_layers" <- function(x, ...)
 {
-    cols=names(x)
+    cols <- names(x)
     if (identical(attr(x,"output_format"),"simple")) {
-        cols=intersect(c("name","id","description","type","notes","environmentalvalueunits","licence_notes","licence_link","notes"),cols)
+        cols <- intersect(c("name","id","description","type","notes","environmentalvalueunits","licence_notes","licence_link","notes"),cols)
     }
-    m=as.matrix(format.data.frame(x[,cols],na.encode=FALSE))
+    m <- as.matrix(format.data.frame(x[,cols],na.encode=FALSE))
     print(m)
     invisible(x)
 }
