@@ -56,8 +56,6 @@ search_guids <- function(guids=c(),occurrence_count=FALSE,output_format="simple"
             ## column names within the data matrix are returned as camelCase
             ## add searchTerm, so user can more easily see what each original query was
             x$searchTerm <- guids
-            ## rename some columns
-            names(x)[names(x)=="classs"] <- "class"
             ## remove some columns that are unlikely to be of value here
             xcols <- setdiff(names(x),unwanted_columns("general"))
             ## reorder columns, for minor convenience
