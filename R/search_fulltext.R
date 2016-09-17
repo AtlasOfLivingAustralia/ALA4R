@@ -75,6 +75,8 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     
     x <- cached_get(url=this_url,type="json")
     x <- as.list(x)
+    ## server may return a message saying e.g. "400 error"
+    if (any(names(x)=="error")) stop("Error. The message from the server was: ",x$error)
 
     ## reformat data into a more concise structure
     ## for newer jsonlite (> something like 0.9.5) there is a top-level x$searchResults and other parts of the structure differ slightly
