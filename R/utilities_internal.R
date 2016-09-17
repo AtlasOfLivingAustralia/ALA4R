@@ -229,3 +229,6 @@ read_csv_quietly <- function(...) {
     for (w in read_warnings) warning(w)
     out
 }
+
+replace_nonbreaking_spaces <- function(s)
+    gsub("\ua0"," ",s)
