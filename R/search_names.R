@@ -3,7 +3,6 @@
 #' Provides GUID, taxonomic classification, and other information for a list of names. 
 #' Case-insensitive but otherwise exact matches are used.
 #'
-#' @author Atlas of Living Australia \email{support@@ala.org.au}
 #' @references The associated ALA web service: \url{http://api.ala.org.au/#ws87}
 #' 
 #' @param taxa string: a single name or vector of names
@@ -16,16 +15,16 @@
 #' 
 #' @examples
 #' 
-#' s1=search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
+#' s1 <- search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
 #'   "Macropus","Thisisnot aname"))
 #' str(s1)
-#' s2=search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
+#' s2 <- search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
 #'   "Macropus","Thisisnot aname"),guids_only=TRUE)
 #' str(s2)
-#' ss=search_names("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
+#' ss <- search_names("Grevillea",vernacular=FALSE) ## should return the genus Grevillea
 #' str(ss)
 #' ## should return the species Grevillea banksii, because it has the common name ``Grevillea"
-#' sv=search_names("Grevillea",vernacular=TRUE)
+#' sv <- search_names("Grevillea",vernacular=TRUE)
 #' str(sv)
 #' ## occurrence counts for matched names
 #' search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
@@ -41,13 +40,13 @@
 # "Gallirallus australis" matches this species, "Gallirallus australi" matches nothing, yet "Gallirallus Australi" matches Gallirallus genus
 
 
-search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,occurrence_count=FALSE,output_format="simple") {
+search_names <- function(taxa=c(),vernacular=FALSE,guids_only=FALSE,occurrence_count=FALSE,output_format="simple") {
     ## input argument checks
     if (is.list(taxa)) {
-        taxa=unlist(taxa)
+        taxa <- unlist(taxa)
     }
     if (is.factor(taxa)) {
-        taxa=as.character(taxa)
+        taxa <- as.character(taxa)
     }
     assert_that(is.character(taxa))
     if (any(nchar(taxa)<1)) {
@@ -60,77 +59,77 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,occurrence_coun
     assert_that(is.flag(guids_only))
     assert_that(is.flag(occurrence_count))
     assert_that(is.character(output_format))
-    output_format=match.arg(tolower(output_format),c("simple","complete"))
-    taxa_original=taxa
-    taxa = sapply(taxa,clean_string,USE.NAMES=FALSE) ## clean up the taxon name
+    output_format <- match.arg(tolower(output_format),c("simple","complete"))
+    taxa_original <- taxa
+    taxa <- sapply(taxa,clean_string,USE.NAMES=FALSE) ## clean up the taxon name
     ## re-check names, since clean_string may have changed them
     if (any(nchar(taxa)<1)) {
         stop("input contains empty string after cleaning (did the input name contain only non-alphabetic characters?)")
     }    
-    this_url=build_url_from_parts(ala_config()$base_url_bie,c("species","lookup","bulk"))
-    temp=jsonlite::toJSON(list(names=taxa,vernacular=vernacular))
+    this_url <- build_url_from_parts(ala_config()$base_url_bie,c("species","lookup","bulk"))
+    temp <- jsonlite::toJSON(list(names=taxa,vernacular=vernacular))
     ## toJSON puts vernacular as a single-element array, which causes failures. Need to convert to scalar logical
-    temp=str_replace(temp,"\\[[ ]*false[ ]*\\]","false")
-    temp=str_replace(temp,"\\[[ ]*true[ ]*\\]","true")
-    x=cached_post(url=this_url,body=temp,type="json",content_type="application/json")
+    temp <- str_replace(temp,"\\[[ ]*false[ ]*\\]","false")
+    temp <- str_replace(temp,"\\[[ ]*true[ ]*\\]","true")
+    x <- cached_post(url=this_url,body=temp,type="json",content_type="application/json")
     if (identical(x,NA) || identical(x,as.character(NA))) {
         ## if a single non-matched name is supplied, we get NA back
-        x=NULL
+        x <- NULL
     }
     if (guids_only) {
         if (! is.data.frame(x)) {
             ## if we pass multiple names and none of them match, we get a vector of NAs back
             if (!is.null(x) && all(is.na(x))) {
-                x=data.frame()
+                x <- data.frame()
             }
         }
         if (empty(x)) {
             if (ala_config()$warn_on_empty) {
                 warning("no records found");
             }
-            x=as.list(rep(NA,length(taxa_original)))
+            x <- as.list(rep(NA,length(taxa_original)))
         } else {
-            x=as.list(x$guid)
+            x <- as.list(x$guid)
         }
-        names(x)=make.names(taxa_original)
+        names(x) <- make.names(taxa_original)
     } else {
         if (! is.data.frame(x)) {
             ## if we pass multiple names and none of them match, we get a vector of NAs back
             if (!is.null(x) && all(is.na(x))) {
-                x=data.frame()
+                x <- data.frame()
             }
         }
         if (! empty(x)) {
             ## column names within the data matrix are returned as camelCase
             ## add searchTerm, so user can more easily see what each original query was
-            x$searchTerm=taxa_original
+            x$searchTerm <- taxa_original
             ## rename some columns
-            names(x)[names(x)=="classs"]="class"
+            names(x)[names(x)=="classs"] <- "class"
             ## remove some columns that are unlikely to be of value here
-            xcols=setdiff(names(x),unwanted_columns("general"))
+            xcols <- setdiff(names(x),unwanted_columns("general"))
             ## also remove hasChildren, since it always seems to be false
-            xcols=setdiff(xcols,c("hasChildren"))
+            xcols <- setdiff(xcols,c("hasChildren"))
             ## reorder columns, for minor convenience
-            firstcols=intersect(c("searchTerm","name","commonName","guid","rank"),xcols)
-            xcols=c(firstcols,setdiff(xcols,firstcols))
-            x=subset(x,select=xcols)            
-            attr(x,"output_format")=output_format            
+            firstcols <- intersect(c("searchTerm","name","commonName","guid","rank"),xcols)
+            xcols <- c(firstcols,setdiff(xcols,firstcols))
+            x <- subset(x,select=xcols)            
+            attr(x,"output_format") <- output_format            
         } else {
             if (ala_config()$warn_on_empty) {
                 warning("no records found");
             }
-            x=data.frame(searchTerm=taxa_original,name=NA,commonName=NA,rank=NA,guid=NA)
-            attr(x,"output_format")=output_format
+            x <- data.frame(searchTerm=taxa_original,name=NA,commonName=NA,rank=NA,guid=NA)
+            attr(x,"output_format") <- output_format
         }
     }
-    names(x)=rename_variables(names(x),type="general")
+    names(x) <- rename_variables(names(x),type="general")
     if (occurrence_count & !guids_only) {
         ## do this after renaming variables, so that column name guid is predictable
-        x$occurrenceCount=NA
-        non_na=!is.na(x$guid)
-        if (any(non_na)) x$occurrenceCount[non_na]=sapply(x$guid[non_na],function(z) occurrences(taxon=paste0("lsid:",z),record_count_only=TRUE))
+        x$occurrenceCount <- NA
+        non_na <- !is.na(x$guid)
+        if (any(non_na)) x$occurrenceCount[non_na] <- sapply(x$guid[non_na],function(z) occurrences(taxon=paste0("lsid:",z),record_count_only=TRUE))
     }
-    class(x)=c("search_names",class(x)) ## add the search_names class
+    class(x) <- c("search_names",class(x)) ## add the search_names class
     x
 }
 
@@ -142,9 +141,10 @@ search_names=function(taxa=c(),vernacular=FALSE,guids_only=FALSE,occurrence_coun
         ## from guids_only seach
         print(format(x))
     } else {
-        cols=names(x)
+        cols <- names(x)
         if (identical(attr(x,"output_format"),"simple")) {
-            cols=intersect(c("searchTerm","name","commonName","rank","guid","occurrenceCount"),cols)
+            cnn <- if ("commonNameSingle" %in% cols) "commonNameSingle" else "commonName"
+            cols <- intersect(c("searchTerm","name",cnn,"rank","guid","occurrenceCount"),cols)
         }
         print(format.data.frame(x[,cols],na.encode=FALSE))
     }
