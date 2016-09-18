@@ -2,25 +2,12 @@
 title: "ALA4R"
 author: "Ben Raymond"
 date: '`r Sys.Date()`'
-output:
-  pdf_document:
-    latex_engine: xelatex
-  html_vignette:
-    toc: false
+output: rmarkdown::html_vignette
 vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
-<!--
-%\VignetteEngine{knitr::rmarkdown}
-%\VignetteIndexEntry{ALA4R}
--->
-<!-- Knit this vignette to HTML and PDF manually: -->
-<!-- rmarkdown::render(system.file("vignettes/ALA4R.Rmd"),package="ALA4R"),output_format = "html_vignette") -->
-<!-- rmarkdown::render(system.file("vignettes/ALA4R.Rmd"),package="ALA4R"),output_format = "pdf_document") -->
-<!-- then use tools::compactPDF(system.file("vignettes/ALA4R.pdf",package="ALA4R"),gs_quality="ebook")-->
-<!-- The vignette is not built automatically as part of the package because of all of the additional -->
-<!-- packages required here. -->
 
 # ALA4R
 

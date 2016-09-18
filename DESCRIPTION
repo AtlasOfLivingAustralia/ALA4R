@@ -27,10 +27,20 @@ Suggests:
     data.table,
     testthat,
     covr,
-    R.rsp
+    knitr,
+    jpeg,
+    phytools,
+    ape,
+    leafletR,
+    vegan,
+    mgcv,
+    geosphere,
+    maps,
+    mapdata,
+    maptools
 License: MPL-1.1
 URL: \url{https://github.com/AtlasOfLivingAustralia/ALA4R}
 LazyLoad: yes
 LazyData: yes
-VignetteBuilder: R.rsp
+VignetteBuilder: knitr
 RoxygenNote: 5.0.1.9000
