@@ -24,6 +24,7 @@
 #' \code{unique} will give the min value for all columns that are not used in the aggregation.
 #' 
 #' @examples
+#' \dontrun{
 #' #download some observations
 #' x <- occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)
 #' 
@@ -41,7 +42,7 @@
 #' #keep only information for which fatal or "error" assertions do not exist
 #' tt <- subset(x)
 #' summary(tt)
-#' 
+#' }
 #' @name occurrences_s3
 NULL
 

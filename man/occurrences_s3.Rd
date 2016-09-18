@@ -52,6 +52,7 @@ This uses information based on selections of assertions (quality assurance issue
 \code{unique} will give the min value for all columns that are not used in the aggregation.
 }
 \examples{
+\dontrun{
 #download some observations
 x <- occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)
 
@@ -69,7 +70,7 @@ summary(tt)
 #keep only information for which fatal or "error" assertions do not exist
 tt <- subset(x)
 summary(tt)
-
+}
 }
 \references{
 \url{http://api.ala.org.au/}
