@@ -26,6 +26,7 @@ Imports:
 Suggests:
     data.table,
     testthat,
+    covr,
     R.rsp
 License: MPL-1.1
 URL: \url{https://github.com/AtlasOfLivingAustralia/ALA4R}
