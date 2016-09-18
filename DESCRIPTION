@@ -28,6 +28,7 @@ Suggests:
     testthat,
     covr,
     knitr,
+    rmarkdown,
     jpeg,
     phytools,
     ape,
