@@ -25,3 +25,14 @@ thischeck=function() {
 }
 check_caching(thischeck)
 
+
+thischeck=function() {
+    test_that("species_info gives resolvable guids for known species", {
+        rsp <- httr::GET(as.character(species_info("Grevillea humilis subsp. maritima")$taxonConcept$guid))
+        expect_equal(rsp$status_code,200)
+        
+        rsp <- httr::GET("http://id.biodiversity.org.au/node/apni/blahblahblah")
+        expect_equal(rsp$status_code,404)
+    })
+}
+check_caching(thischeck)
