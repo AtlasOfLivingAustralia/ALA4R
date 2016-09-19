@@ -20,14 +20,11 @@ A species profile in the form of a named list, each element of which is generall
 Fetch a taxon profile given a scientific name or LSID (GUID)
 }
 \examples{
-
-s1=species_info("Grevillea humilis subsp. maritima")
-str(s1)
-s2=species_info(guid="http://id.biodiversity.org.au/node/apni/2890970")
-str(s2)
-s3=species_info("Alaba",verbose=TRUE)
-str(s3)
-
+\dontrun{
+ species_info("Grevillea humilis subsp. maritima")
+ species_info(guid="http://id.biodiversity.org.au/node/apni/2890970")
+ species_info("Alaba",verbose=TRUE)
+}
 }
 \references{
 Associated ALA web service: \url{http://api.ala.org.au/#ws80}
