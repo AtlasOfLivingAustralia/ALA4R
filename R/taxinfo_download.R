@@ -107,12 +107,12 @@ taxinfo_download=function(query,fq,fields,verbose=ala_config()$verbose,use_data_
             if (ala_config()$warn_on_empty) {
                 warning("no matching records were returned")
             }
-        } else {
-            xcols=setdiff(names(x),unwanted_columns(type="general"))
-            x=subset(x,select=xcols)
-            names(x)=rename_variables(names(x),type="general")
-            names(x)[tolower(names(x))=="taxonid"] <- "guid" ## temporary, until https://github.com/AtlasOfLivingAustralia/bie-index/issues/107 resolved
         }
+        ## apply column renaming, even if data.frame is empty
+        xcols=setdiff(names(x),unwanted_columns(type="general"))
+        x=subset(x,select=xcols)
+        names(x)=rename_variables(names(x),type="general")
+        names(x)[tolower(names(x))=="taxonid"] <- "guid" ## temporary, until https://github.com/AtlasOfLivingAustralia/bie-index/issues/107 resolved
     }
     #class(x) <- c('taxinfo_download',class(x)) #add the custom class
     x
