@@ -80,6 +80,7 @@ species_info <- function(scientificname,guid,verbose=ala_config()$verbose) {
         }
     }
     ## taxonConcept
+    if (!any(names(out)=="taxonConcept")) stop("The data returned by the ALA service was not as expected: contact the ALA4R maintainers if this error persists")
     tempcols <- setdiff(names(out$taxonConcept),unwanted_columns(type="general"))
     #tempcols <- setdiff(tempcols,c("id","parentId","infoSourceId"))
     out$taxonConcept <- subset(out$taxonConcept,select=tempcols)    
