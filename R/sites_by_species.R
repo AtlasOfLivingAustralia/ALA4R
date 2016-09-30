@@ -68,7 +68,7 @@ sites_by_species <- function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=a
         if (is.null(pid) || pid=="") {
             ## error - but note that we may still get a STATUS 200 from the server in this case
             ## Check the WKT string, maybe that was the problem
-            if (!missing(wkt) && !isTrue(check_wkt(wkt))) warning("WKT string may not be valid: ",wkt)
+            if (!missing(wkt) && !isTRUE(check_wkt(wkt))) warning("WKT string may not be valid: ",wkt)
             stop("there has been an issue with this service. Please try again but if the issue persists, contact support@@ala.org.au") } #catch for these missing pid issues
         status_url <- build_url_from_parts(ala_config()$base_url_alaspatial,"job",list(pid=pid))
         if(verbose) { cat("  ALA4R: waiting for sites-by-species results to become available: ") }
@@ -79,7 +79,7 @@ sites_by_species <- function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=a
             if (status$state=='FAILED') {
                 ## stop if there was an error
                 ## first check the wkt string: if it was invalid (or unrecognized by our checker) then warn the user
-                if (!missing(wkt) && !isTrue(check_wkt(wkt))) warning("WKT string may not be valid: ",wkt)
+                if (!missing(wkt) && !isTRUE(check_wkt(wkt))) warning("WKT string may not be valid: ",wkt)
                 if (str_detect(status$message,"No occurrences found")) {
                     ## don't consider "No occurrences found" to be an error
                     cat('\n')

@@ -261,7 +261,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
             if (ala_config()$warn_on_empty) {
                 warning("no matching records were returned")
             }
-            if (!missing(wkt) && !isTrue(check_wkt(wkt))) warning("WKT string may not be valid: ",wkt)
+            if (!missing(wkt) && !isTRUE(check_wkt(wkt))) warning("WKT string may not be valid: ",wkt)
             xc <- NULL
         }
         x <- list(data=x,meta=xc)
