@@ -12,26 +12,26 @@
 #' @seealso \code{\link{ala_fields}} for occurrence fields that are queryable via the \code{fq} parameter
 #' @examples
 #' \dontrun{
-#' x=specieslist(taxon="macropus",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
+#' x <- specieslist(taxon="macropus",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
 #' 
-#' x=specieslist(wkt="POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,
+#' x <- specieslist(wkt="POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,
 #'   147.62 -42.83))",fq="rank:species")
 #' }
 #' @export specieslist
 
-specieslist=function(taxon,wkt,fq) {
-    this_query=list()
+specieslist <- function(taxon,wkt,fq) {
+    this_query <- list()
     if (!missing(taxon)) {
         assert_that(is.notempty.string(taxon))
-        # taxon = clean_string(taxon) ## clean up the taxon name ## no, don't: this can be of the form index:value
-        this_query$q=taxon
+        # taxon <- clean_string(taxon) ## clean up the taxon name ## no, don't: this can be of the form index:value
+        this_query$q <- taxon
     }
     if (!missing(wkt)) {
         assert_that(is.notempty.string(wkt))
         ## don't bother checking the validity of the WKT string here, because
         ## it's not clear that we can do it reliably and
         ## the server will provide this diagnostic info anyway
-        this_query$wkt=wkt
+        this_query$wkt <- wkt
     }    
     if (length(this_query)==0) {
         ## not a valid request!
@@ -41,28 +41,29 @@ specieslist=function(taxon,wkt,fq) {
         assert_that(is.character(fq))
         ## can have multiple fq parameters, need to specify in url as fq=a:b&fq=c:d&fq=...
         check_fq(fq,type="occurrence") ## check that fq fields are valid
-        fq=as.list(fq)
-        names(fq)=rep("fq",length(fq))
-        this_query=c(this_query,fq)
+        fq <- as.list(fq)
+        names(fq) <- rep("fq",length(fq))
+        this_query <- c(this_query,fq)
     }
-    this_query$facets="taxon_concept_lsid" ## or "species_guid" to avoid genus and higher records
-    this_query$lookup="true" ## "set to true if you would like the download include the scientific names and higher classification for the supplied guids. Downloads that include this param will take extra time as a lookup need to be performed"
-    this_query$count="true"
+    this_query$facets <- "taxon_concept_lsid" ## or "species_guid" to avoid genus and higher records
+    this_query$lookup <- "true" ## "set to true if you would like the download include the scientific names and higher classification for the supplied guids. Downloads that include this param will take extra time as a lookup need to be performed"
+    this_query$count <- "true"
     
-    this_url=build_url_from_parts(ala_config()$base_url_biocache,c("occurrences","facets","download"),this_query)
+    this_url <- build_url_from_parts(ala_config()$base_url_biocache,c("occurrences","facets","download"),this_query)
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
-    thisfile=cached_get(url=this_url,type="filename")
+    thisfile <- cached_get(url=this_url,type="filename")
     ## check for zero-sized file
     if (file.info(thisfile)$size>0) {
-        x=read.table(thisfile,sep=",",header=TRUE,comment.char="",stringsAsFactors=FALSE)
+        x <- read.table(thisfile,sep=",",header=TRUE,comment.char="",stringsAsFactors=FALSE)
         ## rename "X..Occurrences" (which was "# Occurrences" in the csv file), or "Number.of.records" (later webservice) or "count" (current web service!)
-        names(x)[names(x) %in% c("count","X..Occurrences","Number.of.records")]="occurrenceCount"
-        names(x)=rename_variables(names(x),type="occurrence")
+        names(x)[names(x) %in% c("count","X..Occurrences","Number.of.records")] <- "occurrenceCount"
+        names(x) <- rename_variables(names(x),type="occurrence")
     } else {
         if (ala_config()$warn_on_empty) {
             warning("no occurrences found")
         }
-        x=NULL
+        if (!missing(wkt) && !isTRUE(check_wkt(wkt))) warning("WKT string may not be valid: ",wkt)
+        x <- data.frame() ## return empty data frame, rather than NULL as in previous version
     }
     x
 }
