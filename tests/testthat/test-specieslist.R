@@ -12,5 +12,6 @@ thischeck=function() {
         expect_error(expect_warning(x <- specieslist(wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",fq="rk_genus:Macropus")))
         x <- specieslist(wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",fq="genus:Macropus")
         expect_gt(nrow(x),0)
+    })
 }
 check_caching(thischeck)
