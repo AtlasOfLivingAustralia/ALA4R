@@ -17,6 +17,9 @@ thischeck=function() {
         expect_equal(nrow(tx),0) ## expect no results here
         ## but names in data.frame should be consistent even when empty
         expect_equal(names(tx),c("guid","genus","scientificName","rank"))
+
+        ## default fields
+        expect_true(setequal(names(taxinfo_download("rk_genus:Macropus")),c("guid","rank","scientificName","establishmentMeans","genus","family","order","class","phylum","kingdom","datasetName")))
     })
 }
 check_caching(thischeck)
