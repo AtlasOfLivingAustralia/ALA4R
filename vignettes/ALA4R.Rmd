@@ -173,7 +173,7 @@ sx <- search_fulltext("penguins")
 And we can see from the first result that penguins correspond to the family Spheniscidae. Now we can download the taxonomic data (note that the search is case-sensitive, so "SPHENISCIDAE" must appear as it does in the search results above):
 
 ```{r message=FALSE}
-tx <- taxinfo_download("rk_family:SPHENISCIDAE",fields=c("guid","rk_genus","nameComplete","rank"))
+tx <- taxinfo_download("rk_family:SPHENISCIDAE",fields=c("guid","rk_genus","scientificName","rank"))
 tx <- tx[tx$rank %in% c("species","subspecies"),] ## restrict to species and subspecies
 ```
 
