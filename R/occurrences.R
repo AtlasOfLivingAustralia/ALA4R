@@ -184,11 +184,8 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
                 unzip(thisfile,files=c("data.csv"),junkpaths=TRUE,exdir=tempsubdir)
                 ## first check if file is empty
                 if (file.info(file.path(tempsubdir,"data.csv"))$size>0) {
-                    x <- data.table::fread(file.path(tempsubdir,"data.csv"),stringsAsFactors=FALSE,header=TRUE,verbose=verbose,sep="\t")
-                    ## make sure names of x are valid, as per data.table
-                    data.table::setnames(x,make.names(names(x)))
-                    ## now coerce it back to data.frame (for now at least, unless we decide to not do this!)
-                    x <- as.data.frame(x)
+                    x <- data.table::fread(file.path(tempsubdir,"data.csv"),data.table=FALSE,stringsAsFactors=FALSE,header=TRUE,verbose=verbose,sep="\t")
+                    names(x) <- make.names(names(x))
                     if (!empty(x)) {
                         ## convert column data types
                         ## ALA supplies *all* values as quoted text, even numeric, and they appear here as character type

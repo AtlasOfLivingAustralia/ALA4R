@@ -78,11 +78,8 @@ taxinfo_download <- function(query,fq,fields,verbose=ala_config()$verbose,use_da
         read_ok <- FALSE
         if (use_data_table & requireNamespace("data.table",quietly=TRUE)) { ## if data.table package is available
             tryCatch({
-                x <- data.table::fread(thisfile,stringsAsFactors=FALSE,header=TRUE,verbose=verbose)
-                ## make sure names of x are valid, as per data.table
-                data.table::setnames(x,make.names(names(x)))
-                ## now coerce it back to data.frame (for now at least, unless we decide to not do this!)
-                x <- as.data.frame(x)
+                x <- data.table::fread(thisfile,data.table=FALSE,stringsAsFactors=FALSE,header=TRUE,verbose=verbose)
+                names(x) <- make.names(names(x))
                 if (!empty(x)) {
                     ## convert column data types
                     ## ALA supplies *all* values as quoted text, even numeric, and they appear here as character type
