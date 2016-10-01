@@ -105,7 +105,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
         # if ((ala_config()$caching %in% c("off","refresh")) | (!cache_file_exists & ala_config()$caching=="on")) {
             ## check
         #    num_records=cached_get(url=this_url,type="json")$totalRecords
-        #    cat(sprintf('ALA4R occurrences: downloading dataset with %d records',num_records))
+        #    cat(sprintf('occurrences: downloading dataset with %d records',num_records))
         #}
         return(cached_get(url=this_url,type="json",caching="off",verbose=verbose)$totalRecords)
     }

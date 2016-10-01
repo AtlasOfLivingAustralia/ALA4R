@@ -80,7 +80,7 @@ species_info <- function(scientificname,guid,verbose=ala_config()$verbose) {
         }
     }
     ## taxonConcept
-    if (!any(names(out)=="taxonConcept")) stop("The data returned by the ALA service was not as expected: contact the ALA4R maintainers if this error persists")
+    if (!any(names(out)=="taxonConcept")) stop("The data returned by the server was not as expected. ",ala_constants()$notify)
     tempcols <- setdiff(names(out$taxonConcept),unwanted_columns(type="general"))
     #tempcols <- setdiff(tempcols,c("id","parentId","infoSourceId"))
     out$taxonConcept <- subset(out$taxonConcept,select=tempcols)    
@@ -97,7 +97,7 @@ species_info <- function(scientificname,guid,verbose=ala_config()$verbose) {
     } else if (is.character(out$classification)) {
         ## leave as is
     } else {
-        warning("the structure of the $classification object was unexpected - please notify the ALA4R maintainers by lodging an issue at https://github.com/AtlasOfLivingAustralia/ALA4R/issues/ or emailing support@ala.org.au")
+        warning("the structure of the $classification object was unexpected. ",ala_constants()$notify)
     }
     ## identifiers is a list - is OK
     ## commonNames - just the dud_cols above

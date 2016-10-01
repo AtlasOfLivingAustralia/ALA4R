@@ -69,9 +69,9 @@ sites_by_species <- function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=a
             ## error - but note that we may still get a STATUS 200 from the server in this case
             ## Check the WKT string, maybe that was the problem
             if (!missing(wkt) && !isTRUE(check_wkt(wkt))) warning("WKT string may not be valid: ",wkt)
-            stop("there has been an issue with this service. Please try again but if the issue persists, contact support@@ala.org.au") } #catch for these missing pid issues
+            stop("there has been an issue with this service. ",ala_constants()$notify) } #catch for these missing pid issues
         status_url <- build_url_from_parts(ala_config()$base_url_alaspatial,"job",list(pid=pid))
-        if(verbose) { cat("  ALA4R: waiting for sites-by-species results to become available: ") }
+        if(verbose) { cat("  waiting for sites-by-species results to become available: ") }
         status <- cached_get(URLencode(status_url),type="json",caching="off",verbose=verbose)#get the data url
         while (status$state != "SUCCESSFUL") {
             if(verbose) { cat('.') } #keep checking the status until finished
@@ -95,7 +95,7 @@ sites_by_species <- function(taxon,wkt,gridsize=0.1,SPdata.frame=FALSE,verbose=a
         download_to_file(build_url_from_parts(ala_config()$base_url_alaspatial,c("download",pid)),outfile=this_cache_file,binary_file=TRUE,verbose=verbose)
     } else {
         ## we are using the existing cached file
-        if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
+        if (verbose) { cat(sprintf("  using cached file %s\n",this_cache_file)) }
     }
     out <- read_csv_quietly(unz(this_cache_file,'SitesBySpecies.csv'),as.is=TRUE,skip=4) ## read in the csv data from the zip file; omit the first 4 header rows. use read_csv_quietly to avoid warnings about incomplete final line
     ## drop the "Species" column, which appears to be a site identifier (but just constructed from the longitude and latitude, so is not particularly helpful

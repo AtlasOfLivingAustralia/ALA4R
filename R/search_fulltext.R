@@ -61,7 +61,7 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
         ## check that this is a valid field
         valid_fields <- ala_fields("general",as_is=TRUE)$name
         if (! sort_by %in% valid_fields) {
-            stop(sort_by," is not a valid field for sort_by. See ala_fields(\"general\",as_is=TRUE)")
+            stop(sort_by," is not a valid field for sort_by. See ",ala_constants()$fields_function,"(\"general\",as_is=TRUE)")
         }
         this_query$sort <- sort_by
     }
@@ -103,7 +103,7 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
         out$data <- data.frame()
     } else if (! is.data.frame(out$data)) {
         ## something wrong
-        stop("structure of json not as expected, please notify ALA4R package maintainers")
+        stop("structure of json not as expected. ",ala_constants()$notify)
     } else {
         ## rename some columns
         names(out$data)[names(out$data)=="classs"] <- "class"

@@ -59,7 +59,7 @@ check_status_code <- function(x,on_redirect=NULL,on_client_error=NULL,on_server_
                     return(on_redirect(xstatus))
                 } else {
                     ## just issue a warning for now
-                    warning("ALA4R: HTTP status code ",xstatus," received.\nThis may be OK: if there are problems, please notify the package maintainers.")
+                    warning("HTTP status code ",xstatus," received.\nThis may be OK: if there are problems, please notify the package maintainers.")
                     return(1)
                 }
             },

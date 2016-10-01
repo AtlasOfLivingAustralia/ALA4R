@@ -60,7 +60,7 @@ taxinfo_download <- function(query,fq,fields,verbose=ala_config()$verbose,use_da
         valid_fields <- ala_fields(fields_type="general",as_is=TRUE)
         unknown <- setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
-            stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"general\",as_is=TRUE)")
+            stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"general\",as_is=TRUE)")
         }
         this_query$fields <- str_c(fields,collapse=",")
     }
@@ -88,7 +88,7 @@ taxinfo_download <- function(query,fq,fields,verbose=ala_config()$verbose,use_da
                 }
                 read_ok <- TRUE
             }, error=function(e) {
-                warning("ALA4R: reading of csv as data.table failed, will fall back to read.table (may be slow). The error message was: ",e)
+                warning("reading of csv as data.table failed, will fall back to read.table (may be slow). The error message was: ",e)
                 read_ok <- FALSE
             })
         }
@@ -110,7 +110,7 @@ taxinfo_download <- function(query,fq,fields,verbose=ala_config()$verbose,use_da
         xcols <- setdiff(names(x),unwanted_columns(type="general"))
         x <- subset(x,select=xcols)
         names(x) <- rename_variables(names(x),type="general")
-        names(x)[tolower(names(x))=="taxonid"] <- "guid" ## temporary, until https://github.com/AtlasOfLivingAustralia/bie-index/issues/107 resolved
+        names(x)[tolower(names(x))=="taxonid"] <- "guid" ## guid is called taxonid
     }
     #class(x) <- c('taxinfo_download',class(x)) #add the custom class
     x

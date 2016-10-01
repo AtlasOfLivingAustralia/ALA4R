@@ -64,9 +64,7 @@ search_guids <- function(guids=c(),occurrence_count=FALSE,output_format="simple"
             x <- subset(x,select=xcols)            
             attr(x,"output_format") <- output_format            
         } else {
-            if (ala_config()$warn_on_empty) {
-                warning("no records found");
-            }
+            if (ala_config()$warn_on_empty) warning("no records found")
             x <- data.frame(searchTerm=guids,name=NA,commonName=NA,rank=NA,guid=NA)
             attr(x,"output_format") <- output_format
         }
