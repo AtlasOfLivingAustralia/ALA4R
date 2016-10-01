@@ -106,7 +106,7 @@ intersect_points <- function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE
             }
             data_url <- cached_get(status_url,type="json",caching="off") #get the data url
             while (data_url$status != 'finished') { #keep checking the status until finished
-                if (data_url$status == "error" ) { stop('ALA batch intersect has returned an error; please check your inputs but if the issue continues, please contact package author.') }
+                if (data_url$status == "error" ) { stop("batch intersect has returned an error; please check your inputs. ",ala_constants()$notify) }
                 if (verbose) {
                     if (data_url$status == 'waiting') {
                         if (data_url$waiting == "In queue") {
@@ -124,7 +124,7 @@ intersect_points <- function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE
             download_to_file(data_url$downloadUrl,outfile=this_cache_file,binary_file=TRUE)
         } else {
             ## we are using the existing cached file
-            if (verbose) { cat(sprintf("  ALA4R: using cached file %s\n",this_cache_file)) }
+            if (verbose) { cat(sprintf("  using cached file %s\n",this_cache_file)) }
         }
         ## read in the csv data from the zip file but suppress warnings about "incomplete final line"
         ##  (which is just due to a missing final line break on some files - but the file reads OK anyway)

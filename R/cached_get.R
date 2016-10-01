@@ -27,7 +27,7 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
 
     if (identical(caching,"off") && !(type %in% c("filename","binary_filename"))) {
         ## if we are not caching, get this directly without saving to file at all
-        if (verbose) { cat(sprintf("  ALA4R: GETting URL %s\n",url)) }
+        if (verbose) { cat(sprintf("  GETting URL %s\n",url)) }
 
         ## if use RCurl directly
         h=basicHeaderGatherer()

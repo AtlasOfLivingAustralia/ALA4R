@@ -30,7 +30,7 @@
 #' @export occurrences_plot
 occurrences_plot <- function(x, filename='Rplots.pdf', qa=c('fatal','error'), grouped=FALSE, taxon_level='species', pch, cex=0.75, ...) 
 {
-	if (! inherits(x,"occurrences")) stop('check_assertions must have an object of class occurrences from e.g., occurrences() in the ALA4R package')
+	if (! inherits(x,"occurrences")) stop("occurrences_plot must have an object of class occurrences from e.g., ",ala_constants()$occurrences_function,"() in the ",ala_constants()$brand," package")
         assert_that(is.string(taxon_level))
         taxon_level <- match.arg(tolower(taxon_level),c("species","genus","family","order"))
 	assert_that(is.notempty.string(filename))
@@ -57,7 +57,7 @@ occurrences_plot <- function(x, filename='Rplots.pdf', qa=c('fatal','error'), gr
 			valid_fields <- ass$occurColnames ## valid entries for qa
 			unknown <- setdiff(qa,valid_fields)
 			if (length(unknown)>0) {
-				warning("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"assertions\",as_is=TRUE)")
+				warning("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"assertions\",as_is=TRUE)")
 			}
 			tt <- intersect(qa,valid_fields)
 		}

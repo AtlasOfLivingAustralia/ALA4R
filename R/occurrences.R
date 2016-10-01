@@ -118,7 +118,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
         reason_ok <- download_reason_id %in% valid_reasons$id
     }
     if (! reason_ok) {
-        stop("download_reason_id must be a valid reason_id. See ala_reasons(). Set this value directly here or through ala_config(download_reason_id=...)")
+        stop("download_reason_id must be a valid reason_id. See ",ala_constants()$reasons_function,"()")
     }
     if (!missing(fields)) {
         assert_that(is.character(fields))
@@ -127,7 +127,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
         valid_fields <- ala_fields(fields_type="occurrence_stored",as_is=TRUE)
         unknown <- setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
-            stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"occurrence_stored\",as_is=TRUE)")
+            stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"occurrence_stored\",as_is=TRUE)")
         }
         this_query$fields <- str_c(fields,collapse=",")
     }
@@ -138,7 +138,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
         valid_fields <- ala_fields(fields_type="occurrence_stored",as_is=TRUE)
         unknown <- setdiff(extra,valid_fields$name)
         if (length(unknown)>0) {
-            stop("invalid extra fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"occurrence_stored\",as_is=TRUE)")
+            stop("invalid extra fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"occurrence_stored\",as_is=TRUE)")
         }
         this_query$extra <- str_c(extra,collapse=",")
     }
@@ -148,7 +148,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
         valid_fields <- c("none",ala_fields(fields_type="assertions",as_is=TRUE)$name) ## valid entries for qa
         unknown <- setdiff(qa,valid_fields)
         if (length(unknown)>0) {
-            stop("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ala_fields(\"assertions\",as_is=TRUE)")
+            stop("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"assertions\",as_is=TRUE)")
         }
         this_query$qa <- str_c(qa,collapse=",")
     }
@@ -178,7 +178,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
                 ## this may end up making fread() slower than direct read.table() ... needs testing
                 tempsubdir <- tempfile(pattern="dir")
                 if (verbose) {
-                    cat(sprintf(" ALA4R: unzipping downloaded occurrences data.csv file into %s\n",tempsubdir))
+                    cat(sprintf(" unzipping downloaded occurrences data.csv file into %s\n",tempsubdir))
                 }
                 dir.create(tempsubdir)
                 unzip(thisfile,files=c("data.csv"),junkpaths=TRUE,exdir=tempsubdir)
@@ -199,13 +199,13 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
                 }
             }, warning=function(e) {
                 if (verbose) {
-                    warning("ALA4R: reading of csv as data.table failed, will fall back to read.table (may be slow). The warning message was: ",e)
+                    warning("reading of csv as data.table failed, will fall back to read.table (may be slow). The warning message was: ",e)
                 }
                 read_ok <- FALSE
             }
              , error=function(e) {
                 if (verbose) {
-                    warning("ALA4R: reading of csv as data.table failed, will fall back to read.table (may be slow). The error message was: ",e)
+                    warning("reading of csv as data.table failed, will fall back to read.table (may be slow). The error message was: ",e)
                 }
                 read_ok <- FALSE
             })
@@ -220,9 +220,9 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
         }
 
         if (!empty(x)) {
-            max_records <- ala_server_settings()$max_occurrence_records
+            max_records <- ala_constants()$max_occurrence_records
             if (nrow(x)==max_records) {
-                warning("Only ",max_records," data rows were returned from the ALA server: this might not be the full data set you need. Contact support@ala.org.au")
+                warning("Only ",max_records," data rows were returned from the server: this might not be the full data set you need. Contact ",ala_constants()$support_email)
             }
             names(x) <- str_replace_all(names(x),"^(el|cl)\\.([0-9]+)","\\1\\2") ## change e.g. el.xxx to elxxx
             ## TODO what is "cl.1050.b" etc?
@@ -266,4 +266,3 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
     class(x) <- c('occurrences',class(x)) #add the occurrences class
     x
 }
-

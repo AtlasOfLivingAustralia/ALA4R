@@ -118,7 +118,7 @@ field_info  <-  function(field_id,maxrows=50,record_count_only=FALSE) {
     if (is.null(out)) {
         ## un-matched field name, return an empty data frame
         if (ala_config()$warn_on_empty) {
-            warning('No information returned. Please check field_id is valid using ala_fields(\"layers\").')
+            warning("No information returned. Please check field_id is valid using ",ala_constants()$fields_function,"(\"layers\").")
         }
         data.frame()
     } else {

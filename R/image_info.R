@@ -8,10 +8,11 @@
 #' @return A data.frame with one row per \code{id}, and at least the columns imageIdentifier and imageURL
 #' @seealso \code{\link{ala_config}} \code{\link{occurrences}}
 #' @examples
+#' \dontrun{
 #' image_info(c("84654e14-dc35-4486-9e7c-40eb2f8d3faa",
 #'   "39836d30-0761-473d-bac2-9ed9494fd37e",
 #'   "this-is-an-invalid-image-id"))
-#'
+#' }
 #' @export image_info
 
 image_info <- function(id,image_number,verbose=ala_config()$verbose) {
@@ -22,7 +23,7 @@ image_info <- function(id,image_number,verbose=ala_config()$verbose) {
     if (!missing(image_number)) { assert_that(is.character(image_number) | is.numeric(image_number)) }
     assert_that(is.flag(verbose))
     if (is.null(ala_config()$base_url_images) || ala_config()$base_url_images=="") {
-        stop("No URL to the image database has been configured: see base_url_images in ala_config()")
+        stop("No URL to the image database has been configured: see base_url_images in ",ala_constants()$config_function)
     }
     ## grab each image info web page
     if (!missing(id)) {
@@ -39,7 +40,7 @@ image_info <- function(id,image_number,verbose=ala_config()$verbose) {
     ## we get a 500 error if we ask for a non-existent image ID, so catch these errors with the on_server_error parm
     pages <- sapply(this_url,function(z) paste0(cached_get(URLencode(z),type="text",verbose=verbose,on_server_error=function(z)NULL),collapse=" "))
     ## keep only the table from each, which has the actual image details
-    pages <- sapply(pages,function(z) { if (nrow(str_locate(z,"<table"))==1) str_extract(z,regex("<table.*</table>",dotall=TRUE)) else stop("image information page in unexpected format: please notify the ALA4R maintainers") })
+    pages <- sapply(pages,function(z) { if (nrow(str_locate(z,"<table"))==1) str_extract(z,regex("<table.*</table>",dotall=TRUE)) else stop("image information page in unexpected format. ",ala_constants()$notify) })
         
     out <- extract_image_detail(pages,".*?")
     ## this will have NA values for imageIdentifier where id was not valid (because the imageIdentifier value comes from the scraped HTML, which won't exist for invalid id). Replace with input ids

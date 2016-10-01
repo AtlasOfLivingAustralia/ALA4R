@@ -90,7 +90,7 @@ ala_config <- function(...) {
         known_options <- names(default_options)
         unknown <- setdiff(names(user_options),known_options)
         if (length(unknown)>0) {
-            stop("unknown ALA4R options: ", str_c(unknown,collapse=", "))
+            stop("unknown ",ala_constants()$brand," options: ", str_c(unknown,collapse=", "))
         }
 
         current_options <- getOption(ala_option_name)
@@ -206,7 +206,7 @@ ala_sourcetypeid <- function() {
     if ("ALA4R" %in% sids$name) {
         sids$id[sids$name=="ALA4R"]
     } else {
-        warning("could not retrieve ALA4R source type from ",this_url,". If this problem persists please notify the ALA4R maintainers by lodging an issue at https://github.com/AtlasOfLivingAustralia/ALA4R/issues/ or emailing support@ala.org.au")
+        warning("could not retrieve ",ala_constants()$brand," source type from ",this_url,". ",ala_constants()$notify)
         2001 ## default value
     }
 }
@@ -219,13 +219,20 @@ convert_reason <- function(reason) {
         tryCatch({ reason<-match.arg(tolower(reason),valid_reasons$name)
                    reason<-valid_reasons$id[valid_reasons$name==reason]
                },
-                 error=function(e){ stop("could not match download_reason_id string \"",reason,"\" to valid reason string: see ala_reasons()") }
+                 error=function(e){ stop("could not match download_reason_id string \"",reason,"\" to valid reason string: see ",ala_constants()$reasons_function,"()") }
                  )
     }
     reason
 }
 
 ## internal function, returns some behaviours and settings of the ALA servers and setup
-ala_server_settings <- function() {
-    list(max_occurrence_records=500000)
+ala_constants <- function() {
+    list(max_occurrence_records=500000,
+         brand="ALA4R", ## the package name that is shown to users in messages and warnings
+         notify="If this problem persists please notify the ALA4R maintainers by lodging an issue at https://github.com/AtlasOfLivingAustralia/ALA4R/issues/ or emailing support@ala.org.au", ## the string that will be displayed to users to notify the package maintainers
+         support_email="support@ala.org.au", ## contact email
+         reasons_function="ala_reasons", ## the ala_reasons or equivalent function name
+         fields_function="ala_fields", ## the ala_fields or equivalent function name
+         occurrences_function="occurrences", ## the occurrences or equivalent function name
+         config_function="ala_config") ## the ala_config or equivalent function name
 }

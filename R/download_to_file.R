@@ -1,7 +1,4 @@
 # Internal function used to download results to a file 
-# @references \itemize{ \item ALA web service API: \url{http://api.ala.org.au/}
-
-
 download_to_file <- function(url,outfile,binary_file=FALSE,caching=ala_config()$caching,verbose=ala_config()$verbose,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL,...) {
     assert_that(is.notempty.string(url))
     ## download from a URL using RCurl to a file
@@ -21,7 +18,7 @@ download_to_file <- function(url,outfile,binary_file=FALSE,caching=ala_config()$
 
     ## are we using cached results?
     if ((caching %in% c("off","refresh")) || (! file.exists(outfile))) {
-        if (verbose && (caching != "off")) { cat(sprintf("  ALA4R: caching %s to file %s\n",url,outfile)) }
+        if (verbose && (caching != "off")) { cat(sprintf("  caching %s to file %s\n",url,outfile)) }
         ## either we are not using caching, or we want to refresh the cache, or the file doesn't exist in the cache
         file_mode <- "w" ## text mode
         if (binary_file) {
@@ -45,7 +42,7 @@ download_to_file <- function(url,outfile,binary_file=FALSE,caching=ala_config()$
         ## check status code of response. Note that we execute the on_redirect etc functions, but we don't capture the output. might wish to implement this differently?
         check_status_code(h$value()[["status"]],on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error,extra_info=diag_message)
     } else {
-        if (verbose) { cat(sprintf("  ALA4R: using cached file %s for %s\n",outfile,url)) }
+        if (verbose) { cat(sprintf("  using cached file %s for %s\n",outfile,url)) }
     }
     outfile
 }

@@ -34,7 +34,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
 
     ##if (identical(caching,"off") && !(type %in% c("filename","binary_filename"))) {
         ## if we are not caching, retrieve our page directly without saving to file at all
-        if (verbose) { cat(sprintf("  ALA4R: POSTing URL %s\n",url)) }
+        if (verbose) { cat(sprintf("  POSTing URL %s\n",url)) }
         x=POST(url=url,body=body,user_agent(ala_config()$user_agent),encode="form")
         check_status_code(x)
         x=content(x,as="text")
@@ -49,7 +49,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
         ## check if file exists
         if ((caching %in% c("off","refresh")) || (! file.exists(thisfile))) {
             ## file does not exist, or we want to refresh it, so go ahead and get it and save to thisfile
-            if (verbose) { cat(sprintf("  ALA4R: caching %s POST to file %s\n",url,thisfile)) }
+            if (verbose) { cat(sprintf("  caching %s POST to file %s\n",url,thisfile)) }
             file_mode="w" ## text mode
             if (identical(type,"binary_filename")) {
                 file_mode="wb" ## if we try and download binary files without this, it will fail (but only on Windows)
@@ -77,7 +77,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
             }
             check_status_code(h$value()[["status"]],extra_info=diag_message)
         } else {
-            if (verbose) { cat(sprintf("  ALA4R: using cached file %s for POST to %s\n",thisfile,url)) }
+            if (verbose) { cat(sprintf("  using cached file %s for POST to %s\n",thisfile,url)) }
         }
         ## now return whatever is appropriate according to type
         if (type %in% c("json","text")) {
@@ -102,5 +102,3 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
         }
     }
 }
-
-
