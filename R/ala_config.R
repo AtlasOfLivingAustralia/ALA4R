@@ -72,7 +72,8 @@ ala_config <- function(...) {
         base_url_biocache="http://biocache.ala.org.au/ws/",
         base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/",
         base_url_images="http://images.ala.org.au/",
-        base_url_logger="http://logger.ala.org.au/service/logger/"
+        base_url_logger="http://logger.ala.org.au/service/logger/",
+        base_url_fieldguide="http://fieldguide.ala.org.au/"
     )
 
     ## define allowed options, for those that have restricted values
