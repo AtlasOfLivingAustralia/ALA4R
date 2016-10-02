@@ -21,6 +21,7 @@
 #' @return a named list with the components "meta" (search metadata), "facets" (search facet results), and "data" (the search results, in the form of a data frame). The contents (column names) of the data frame will vary depending on the details of the search and the results, but should contain at least the columns \code{guid}, \code{name}, \code{commonName}, \code{rank}, \code{author}, and \code{occurrenceCount}.
 #' 
 #' @examples
+#' \dontrun{
 #'  # find information ALA holds on red kangaroo
 #'  search_fulltext("red kangaroo")
 #'  search_fulltext("Macropus rufus")
@@ -28,7 +29,7 @@
 #'
 #'  # find genus names like "Oenanthe"
 #'  search_fulltext("oenanthe",sort_by="rk_kingdom",fq="rank:genus")
-#' 
+#' }
 #' @export
 search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort_by,sort_dir) {
     output_format <- match.arg(tolower(output_format),c("simple","complete"))

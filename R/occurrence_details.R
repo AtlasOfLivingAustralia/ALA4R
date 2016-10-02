@@ -9,10 +9,10 @@
 #' @return A named list (named by uuid), each element of which is a list containing the details for that uuid. This inner list will be empty if no match is found for the supplied uuid
 #' @seealso \code{\link{occurrences}} \code{\link{ala_config}}
 #' @examples
-#' 
+#' \dontrun{
 #' s1 <- occurrence_details("f259c5ce-200c-41a2-b73a-e36a91f748f7")
 #' str(s1,max.level=3)
-#' 
+#' }
 #' @export occurrence_details
 
 occurrence_details <- function(uuid,verbose=ala_config()$verbose) {

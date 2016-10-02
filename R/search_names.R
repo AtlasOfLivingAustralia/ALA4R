@@ -14,7 +14,7 @@
 #' @return A data frame of results, or named list of GUIDs if \code{guids_only} is TRUE. The results should include one entry (i.e. one data.frame row or one list element) per input name. The columns in the data.frame output may vary depending on the results returned by the ALA server, but should include searchTerm, name, rank, and guid.
 #' 
 #' @examples
-#' 
+#' \dontrun{
 #' search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
 #'   "Macropus","Thisisnot aname"))
 #' 
@@ -32,7 +32,7 @@
 #' ## no occurrence counts because guids_only is TRUE
 #' search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
 #'   "Macropus","Thisisnot aname"),occurrence_count=TRUE,guids_only=TRUE)
-#' 
+#' }
 #' @export search_names
 
 search_names <- function(taxa=c(),vernacular=FALSE,guids_only=FALSE,occurrence_count=FALSE,output_format="simple") {

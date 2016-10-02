@@ -80,38 +80,45 @@ species_info <- function(scientificname,guid,verbose=ala_config()$verbose) {
         }
     }
     ## taxonConcept
-    if (!any(names(out)=="taxonConcept")) stop("The data returned by the server was not as expected. ",ala_constants()$notify)
-    tempcols <- setdiff(names(out$taxonConcept),unwanted_columns(type="general"))
-    #tempcols <- setdiff(tempcols,c("id","parentId","infoSourceId"))
-    out$taxonConcept <- subset(out$taxonConcept,select=tempcols)    
-    names(out$taxonConcept) <- rename_variables(names(out$taxonConcept),type="general")
-    ## taxonName
-    names(out$taxonName) <- rename_variables(names(out$taxonName),type="general")
+    if (any(names(out)=="taxonConcept")) {
+        tempcols <- setdiff(names(out$taxonConcept),unwanted_columns(type="general"))
+                                        #tempcols <- setdiff(tempcols,c("id","parentId","infoSourceId"))
+        out$taxonConcept <- subset(out$taxonConcept,select=tempcols)    
+        names(out$taxonConcept) <- rename_variables(names(out$taxonConcept),type="general")
+        ## taxonName
+        names(out$taxonName) <- rename_variables(names(out$taxonName),type="general")
+    }
     ## classification
-    ## for taxa with improper classification (e.g. species_info(guid='ALA_Caladenia_cardiochila')) this is just a string
-    if (is.data.frame(out$classification)) {
-        tempcols <- setdiff(names(out$classification),unwanted_columns(type="general"))
-        out$classification <- subset(out$classification,select=tempcols)
-        names(out$classification) <- str_replace_all(names(out$classification),"^clazz","class")
-        names(out$classification) <- rename_variables(names(out$classification),type="general")
-    } else if (is.character(out$classification)) {
-        ## leave as is
-    } else {
-        warning("the structure of the $classification object was unexpected. ",ala_constants()$notify)
+    if (any(names(out)=="classification")) {
+        ## for taxa with improper classification (e.g. species_info(guid='ALA_Caladenia_cardiochila')) this is just a string
+        if (is.data.frame(out$classification)) {
+            tempcols <- setdiff(names(out$classification),unwanted_columns(type="general"))
+            out$classification <- subset(out$classification,select=tempcols)
+            names(out$classification) <- str_replace_all(names(out$classification),"^clazz","class")
+            names(out$classification) <- rename_variables(names(out$classification),type="general")
+        } else if (is.character(out$classification)) {
+            ## leave as is
+        } else {
+            warning("the structure of the $classification object was unexpected. ",ala_constants()$notify)
+        }
     }
     ## identifiers is a list - is OK
     ## commonNames - just the dud_cols above
     #tempcols <- setdiff(names(out$commonNames),c("infoSourceId","documentId"))
     #out$commonNames <- out$commonNames[,tempcols]
     ## synonyms
-    tempcols <- setdiff(names(out$synonyms),unwanted_columns(type="general"))    
-    #tempcols <- setdiff(tempcols,c("id","infoSourceId"))
-    out$synonyms <- subset(out$synonyms,select=tempcols)
-    names(out$synonyms) <- rename_variables(names(out$synonyms),type="general")
+    if (any(names(out)=="synonyms")) {
+        tempcols <- setdiff(names(out$synonyms),unwanted_columns(type="general"))    
+        ##tempcols <- setdiff(tempcols,c("id","infoSourceId"))
+        out$synonyms <- subset(out$synonyms,select=tempcols)
+        names(out$synonyms) <- rename_variables(names(out$synonyms),type="general")
+    }
     ## sameAsConcepts
-    #tempcols <- setdiff(names(out$sameAsConcepts),c("id"))
-    #out$sameAsConcepts <- out$sameAsConcepts[,tempcols]
-    names(out$sameAsConcepts) <- rename_variables(names(out$sameAsConcepts),type="general")
+    if (any(names(out)=="sameAsConcepts")) {
+        ##tempcols <- setdiff(names(out$sameAsConcepts),c("id"))
+        ##out$sameAsConcepts <- out$sameAsConcepts[,tempcols]
+        names(out$sameAsConcepts) <- rename_variables(names(out$sameAsConcepts),type="general")
+    }
     ## all other child objects seem OK at the moment
     ## we could in principle run everything through the rename/remove columns functions
     ## but let's not do so for now

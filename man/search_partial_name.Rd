@@ -25,12 +25,13 @@ A dataframe of results. The contents (column names) of the data frame will vary 
 A partial-name search for species names & identifiers used at the ALA. If searching for a taxon name, and the scientific name or common name of the taxon are known, use \code{\link{search_names}} instead.
 }
 \examples{
+\dontrun{
 # find any names containing "allaba"
 search_partial_name("allaba",output_format="simple")
 
 # retrieve only species that have geolocated occurrence records
 search_partial_name("Gallaba",geo_only=TRUE)
-
+}
 }
 \references{
 Associated ALA web service: \url{http://api.ala.org.au/#ws25}

@@ -11,12 +11,13 @@
 #' @param limit numeric: the maximum number of matches returned (defaults to the server-side value - currently 10)
 #' @return A dataframe of results. The contents (column names) of the data frame will vary depending on the details of the search and the results.
 #' @examples
+#' \dontrun{
 #' # find any names containing "allaba"
 #' search_partial_name("allaba",output_format="simple")
 #' 
 #' # retrieve only species that have geolocated occurrence records
 #' search_partial_name("Gallaba",geo_only=TRUE)
-#' 
+#' }
 #' @export
 search_partial_name <- function(taxon,geo_only=FALSE,output_format="simple",index_type,limit) {
     assert_that(is.notempty.string(taxon))

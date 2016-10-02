@@ -27,7 +27,7 @@ Provides GUID, taxonomic classification, and other information for a list of nam
 Case-insensitive but otherwise exact matches are used.
 }
 \examples{
-
+\dontrun{
 search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
   "Macropus","Thisisnot aname"))
 
@@ -45,7 +45,7 @@ search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
 ## no occurrence counts because guids_only is TRUE
 search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
   "Macropus","Thisisnot aname"),occurrence_count=TRUE,guids_only=TRUE)
-
+}
 }
 \references{
 The associated ALA web service: \url{http://api.ala.org.au/#ws87}

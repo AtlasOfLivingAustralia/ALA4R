@@ -11,10 +11,10 @@
 #' @return A data frame, which should include one entry (i.e. one data.frame row or one list element) per input GUID. The columns in the data.frame output may vary depending on the results returned by the ALA server, but should include searchTerm, name, rank, and guid.
 #' 
 #' @examples
-#' 
+#' \dontrun{
 #' search_guids(c("urn:lsid:biodiversity.org.au:afd.taxon:95773568-053d-44de-a624-5699f0ac4a59",
 #'   "http://id.biodiversity.org.au/node/apni/2890970","this_is_not_a_valid_guid"))
-#' 
+#' }
 #' 
 #' @export
 

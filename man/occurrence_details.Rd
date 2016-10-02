@@ -18,10 +18,10 @@ A named list (named by uuid), each element of which is a list containing the det
 Note that this makes a separate web request for each occurrence uuid, and so may not be wise to use on a large number of uuids.
 }
 \examples{
-
+\dontrun{
 s1 <- occurrence_details("f259c5ce-200c-41a2-b73a-e36a91f748f7")
 str(s1,max.level=3)
-
+}
 }
 \references{
 Associated ALA web service: \url{http://api.ala.org.au/#ws102}

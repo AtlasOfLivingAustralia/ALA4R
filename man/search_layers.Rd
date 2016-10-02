@@ -20,10 +20,11 @@ A data frame of results. The contents (column names) of the data frame will vary
 Search for environmental and contextual data layers
 }
 \examples{
+\dontrun{
 search_layers(type="all")
 search_layers(type="grids",query="income")
-l <- search_layers(type="shapes",query="coral",output_format="simple")
-str(l)
+search_layers(type="shapes",query="coral",output_format="simple")
+}
 }
 \references{
 Associated ALA web services: \url{http://api.ala.org.au/#ws11} \url{http://api.ala.org.au/#ws12} \url{http://api.ala.org.au/#ws13}

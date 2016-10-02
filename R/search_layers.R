@@ -9,10 +9,11 @@
 #' @return A data frame of results. The contents (column names) of the data frame will vary depending on the details of the search and the results
 #' 
 #' @examples
+#' \dontrun{
 #' search_layers(type="all")
 #' search_layers(type="grids",query="income")
-#' l <- search_layers(type="shapes",query="coral",output_format="simple")
-#' str(l)
+#' search_layers(type="shapes",query="coral",output_format="simple")
+#' }
 #' @export
 search_layers <- function(query,type="all",output_format="simple") {
     assert_that(is.string(type))
