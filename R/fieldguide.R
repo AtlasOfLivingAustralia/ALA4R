@@ -28,13 +28,13 @@ fieldguide <- function(guids,title="Field guide",filename=tempfile(fileext=".pdf
     assert_that(is.string(filename))
     if (!overwrite && file.exists(filename)) stop("file exists: delete it or specify overwrite=TRUE")
 
-    this_url <- build_url_from_parts(ala_config()$base_url_fieldguide,"generate")
+    this_url <- build_url_from_parts(ala_constants()$base_url_fieldguide,"generate")
     temp <- jsonlite::toJSON(list(title=title,guids=guids))
     x <- POST(url=this_url,body=temp,user_agent(ala_config()$user_agent),encode="json")
     ## x response should have header with Fileid: 30082011/fieldguide1314682018564.pdf
     temp <- headers(x)
     if (!is.null(headers(x)$fileid)) {
-        this_url <- build_url_from_parts(ala_config()$base_url_fieldguide,paste0("guide/",headers(x)$fileid))
+        this_url <- build_url_from_parts(ala_constants()$base_url_fieldguide,paste0("guide/",headers(x)$fileid))
         tmpfile <- cached_get(this_url,type="binary_filename")
         ok <- file.copy(tmpfile,filename,overwrite=overwrite)
         if (ok) {

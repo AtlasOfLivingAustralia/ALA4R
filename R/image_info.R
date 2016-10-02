@@ -22,20 +22,20 @@ image_info <- function(id,image_number,verbose=ala_config()$verbose) {
     if (!missing(id)) { assert_that(is.character(id)) }
     if (!missing(image_number)) { assert_that(is.character(image_number) | is.numeric(image_number)) }
     assert_that(is.flag(verbose))
-    if (is.null(ala_config()$base_url_images) || ala_config()$base_url_images=="") {
+    if (is.null(ala_constants()$base_url_images) || ala_constants()$base_url_images=="") {
         stop("No URL to the image database has been configured: see base_url_images in ",ala_constants()$config_function)
     }
     ## grab each image info web page
     if (!missing(id)) {
         non_empty <- nchar(id)>0 & !is.na(id)
-        this_url <- paste0(ala_config()$base_url_images,"image/details?imageId=",id[non_empty])
+        this_url <- paste0(ala_constants()$base_url_images,"image/details?imageId=",id[non_empty])
     } else if (!missing(image_number)) {
         if (is.character(image_number)) {
             non_empty <- nchar(image_number)>0 & !is.na(image_number)
         } else {
             non_empty <- 1:length(image_number)
         }
-        this_url <- paste0(ala_config()$base_url_images,"image/details/",image_number[non_empty])
+        this_url <- paste0(ala_constants()$base_url_images,"image/details/",image_number[non_empty])
     }        
     ## we get a 500 error if we ask for a non-existent image ID, so catch these errors with the on_server_error parm
     pages <- sapply(this_url,function(z) paste0(cached_get(URLencode(z),type="text",verbose=verbose,on_server_error=function(z)NULL),collapse=" "))

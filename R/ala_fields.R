@@ -48,18 +48,18 @@ ala_fields <- function(fields_type="occurrence",as_is=TRUE) {
     fields_type <- match.arg(tolower(fields_type),c("occurrence","occurrence_stored","occurrence_indexed","general","layers","assertions"))
     this_url <- switch(fields_type,
            "general"={
-               build_url_from_parts(ala_config()$base_url_bie,c("admin","indexFields"))
+               build_url_from_parts(ala_constants()$base_url_bie,c("admin","indexFields"))
            },
            "occurrence_indexed"=,
            "occurrence_stored"=,
            "occurrence"={
-               build_url_from_parts(ala_config()$base_url_biocache,c("index","fields"))
+               build_url_from_parts(ala_constants()$base_url_biocache,c("index","fields"))
            },
            "layers"={
-               build_url_from_parts(ala_config()$base_url_spatial,"fields")
+               build_url_from_parts(ala_constants()$base_url_spatial,"fields")
            },
            "assertions"={
-               build_url_from_parts(ala_config()$base_url_biocache,c("assertions","codes"))
+               build_url_from_parts(ala_constants()$base_url_biocache,c("assertions","codes"))
            }
            )
     
@@ -70,7 +70,7 @@ ala_fields <- function(fields_type="occurrence",as_is=TRUE) {
     
     ## for "layers", shorter, more manageable names are provided from http://spatial.ala.org.au/ws/layers in API. Add these as an extra column: shortName
     if (identical(fields_type,"layers")) {
-        more_x <- cached_get(url=build_url_from_parts(ala_config()$base_url_spatial,"layers"),type="json")
+        more_x <- cached_get(url=build_url_from_parts(ala_constants()$base_url_spatial,"layers"),type="json")
         ## just pull out the bits that we want and construct ids here that match the field names in x
         more_x$id <- paste(substr(tolower(more_x$type),1,1),"l",more_x$id,sep="")
         more_x <- more_x[,c("name","id")]
@@ -113,7 +113,7 @@ field_info  <-  function(field_id,maxrows=50,record_count_only=FALSE) {
     }
     field_id <- fields_name_to_id(fields=field_id,fields_type="layers")
 
-    this_url <- build_url_from_parts(ala_config()$base_url_spatial,c("field",field_id),query=list(pageSize=maxrows))
+    this_url <- build_url_from_parts(ala_constants()$base_url_spatial,c("field",field_id),query=list(pageSize=maxrows))
     out  <-  cached_get(url=this_url,type="json") ## retrieve a max of 50 objects by default
     if (is.null(out)) {
         ## un-matched field name, return an empty data frame

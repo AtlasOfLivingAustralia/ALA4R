@@ -26,12 +26,6 @@
 #'   \item download_reason_id numeric or string: the "download reason" required by some ALA services, either as a numeric ID (currently 0--11)
 #'   or a string (see \code{ala_reasons()} for a list of valid ID codes and names). By default this is NA. Some ALA services require a valid
 #'   download_reason_id code, either specified here or directly to the associated R function.
-#'   \item base_url_spatial string: the base url for spatial web services (default="http://spatial.ala.org.au/ws/")
-#'   \item base_url_bie string: the base url for BIE web services (default="http://bie.ala.org.au/ws/")
-#'   \item base_url_biocache string: the base url for biocache web services (default="http://biocache.ala.org.au/ws/")
-#'   \item base_url_alaspatial string: the base url for older ALA spatial services (default="http://spatial.ala.org.au/alaspatial/ws/")
-#'   \item base_url_images string: the base url for the images database (default="http://images.ala.org.au/"). Set to NULL or empty string if not available
-#'   \item base_url_logger string: the base url for usage logging webservices (default="http://logger.ala.org.au/service/logger/")
 #' }
 #'
 #' @return For ala_config(), a list of all options. When ala_config(...) is
@@ -66,14 +60,7 @@ ala_config <- function(...) {
         download_reason_id=NA,
         verbose=FALSE,
         warn_on_empty=FALSE,
-        text_encoding="UTF-8",
-        base_url_spatial="http://spatial.ala.org.au/ws/",
-        base_url_bie="http://bie.ala.org.au/ws/",
-        base_url_biocache="http://biocache.ala.org.au/ws/",
-        base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/",
-        base_url_images="http://images.ala.org.au/",
-        base_url_logger="http://logger.ala.org.au/service/logger/",
-        base_url_fieldguide="http://fieldguide.ala.org.au/"
+        text_encoding="UTF-8"
     )
 
     ## define allowed options, for those that have restricted values
@@ -195,14 +182,14 @@ ala_reasons <- function() {
     ## 11         logger.download.reason.citizen.science                  citizen science 11
     ## 12 logger.download.reason.restoration.remediation          restoration/remediation 12
     
-    out <- cached_get(build_url_from_parts(ala_config()$base_url_logger,path="reasons"),type="json")
+    out <- cached_get(build_url_from_parts(ala_constants()$base_url_logger,path="reasons"),type="json")
     if (any(names(out)=="deprecated")) out <- out[!out$deprecated,]
     out[,!names(out)=="deprecated"]
 }
 
 ## internal function, used to define the ALA4R sourceTypeId parameter value, passed by occurrences download and possibly other functions
 ala_sourcetypeid <- function() {
-    this_url <- build_url_from_parts(ala_config()$base_url_logger,path="sources")
+    this_url <- build_url_from_parts(ala_constants()$base_url_logger,path="sources")
     sids <- cached_get(this_url,type="json")
     if ("ALA4R" %in% sids$name) {
         sids$id[sids$name=="ALA4R"]
@@ -235,5 +222,19 @@ ala_constants <- function() {
          reasons_function="ala_reasons", ## the ala_reasons or equivalent function name
          fields_function="ala_fields", ## the ala_fields or equivalent function name
          occurrences_function="occurrences", ## the occurrences or equivalent function name
-         config_function="ala_config") ## the ala_config or equivalent function name
+         config_function="ala_config", ## the ala_config or equivalent function name
+         base_url_spatial="http://spatial.ala.org.au/ws/",
+         base_url_bie="http://bie.ala.org.au/ws/",
+         base_url_biocache="http://biocache.ala.org.au/ws/",
+         base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/",
+         base_url_images="http://images.ala.org.au/",
+         base_url_logger="http://logger.ala.org.au/service/logger/",
+         base_url_fieldguide="http://fieldguide.ala.org.au/"
+         )
 }
+#   \item base_url_spatial string: the base url for spatial web services (default="http://spatial.ala.org.au/ws/")
+#   \item base_url_bie string: the base url for BIE web services (default="http://bie.ala.org.au/ws/")
+#   \item base_url_biocache string: the base url for biocache web services (default="http://biocache.ala.org.au/ws/")
+#   \item base_url_alaspatial string: the base url for older ALA spatial services (default="http://spatial.ala.org.au/alaspatial/ws/")
+#   \item base_url_images string: the base url for the images database (default="http://images.ala.org.au/"). Set to NULL or empty string if not available
+#   \item base_url_logger string: the base url for usage logging webservices (default="http://logger.ala.org.au/service/logger/")

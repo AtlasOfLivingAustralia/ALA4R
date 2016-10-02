@@ -99,7 +99,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
         temp_query <- this_query
         temp_query$pageSize <- 0
         temp_query$facet <- "off"
-        this_url <- build_url_from_parts(ala_config()$base_url_biocache,c("occurrences","search"),query=temp_query)
+        this_url <- build_url_from_parts(ala_constants()$base_url_biocache,c("occurrences","search"),query=temp_query)
         # ## don't need to check number of records if caching is on and we already have the file
         # cache_file_exists=file.exists(ala_cache_filename(this_url))
         # if ((ala_config()$caching %in% c("off","refresh")) | (!cache_file_exists & ala_config()$caching=="on")) {
@@ -162,7 +162,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
     this_query$sep <- "\t" ## tab-delimited
     this_query$file <- "data" ## to ensure that file is named "data.csv" within the zip file
 
-    this_url <- build_url_from_parts(ala_config()$base_url_biocache,c("occurrences","index","download"),query=this_query)
+    this_url <- build_url_from_parts(ala_constants()$base_url_biocache,c("occurrences","index","download"),query=this_query)
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
     thisfile <- cached_get(url=this_url,type="binary_filename",verbose=verbose)
     if (!(file.info(thisfile)$size>0)) {

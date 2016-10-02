@@ -65,7 +65,7 @@ taxinfo_download <- function(query,fq,fields,verbose=ala_config()$verbose,use_da
         this_query$fields <- str_c(fields,collapse=",")
     }
     
-    this_url <- build_url_from_parts(ala_config()$base_url_bie,"download",this_query)
+    this_url <- build_url_from_parts(ala_constants()$base_url_bie,"download",this_query)
     
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
     thisfile <- cached_get(url=this_url,type="binary_filename",verbose=verbose)

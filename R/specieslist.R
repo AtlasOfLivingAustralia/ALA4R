@@ -52,7 +52,7 @@ specieslist <- function(taxon,wkt,fq) {
     this_query$lookup <- "true" ## "set to true if you would like the download include the scientific names and higher classification for the supplied guids. Downloads that include this param will take extra time as a lookup need to be performed"
     this_query$count <- "true"
     
-    this_url <- build_url_from_parts(ala_config()$base_url_biocache,c("occurrences","facets","download"),this_query)
+    this_url <- build_url_from_parts(ala_constants()$base_url_biocache,c("occurrences","facets","download"),this_query)
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
     thisfile <- cached_get(url=this_url,type="filename")
     ## check for zero-sized file
