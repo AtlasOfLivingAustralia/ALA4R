@@ -147,7 +147,7 @@ ala_config(warn_on_empty=TRUE)
 
 First, check that we have some additional packages that we'll use in the examples, and install them if necessary.
 ```{r}
-to_install <- c("plyr","jpeg","phytools","ape","leafletR","vegan","mgcv","geosphere","maps","mapdata","maptools")
+to_install <- c("plyr","jpeg","phytools","ape","vegan","mgcv","geosphere","maps","mapdata","maptools")
 to_install <- to_install[!sapply(to_install,requireNamespace,quietly=TRUE)]
 if(length(to_install)>0) install.packages(to_install)
 ```
@@ -170,7 +170,7 @@ We want to look at the taxonomic tree of penguins, but we don't know what the co
 sx <- search_fulltext("penguins")
 (sx$data[,c("name","rank","commonName")])
 ```
-And we can see from the first result that penguins correspond to the family Spheniscidae. Now we can download the taxonomic data (note that the search is case-sensitive, so "SPHENISCIDAE" must appear as it does in the search results above):
+And we can see that penguins correspond to the family Spheniscidae. Now we can download the taxonomic data (note that the search is case-sensitive, so "SPHENISCIDAE" must appear as it does in the search results above):
 
 ```{r message=FALSE}
 tx <- taxinfo_download("rk_family:SPHENISCIDAE",fields=c("guid","rk_genus","scientificName","rank"))
@@ -248,7 +248,7 @@ lonlat <- lonlat[c(temp,temp[1]),]
 wkt <- paste("POLYGON((",paste(apply(lonlat,1,function(z) paste(z,collapse=" ")),collapse=","),"))",sep="")
 ```
 
-Now extract the species list in this polygon:
+Now extract the species list in this polygon, filtering to only include those with a conservation status:
 ```{r}
 x <- specieslist(wkt=wkt,fq="state_conservation:*")
 (head(arrange(x,desc(occurrenceCount)),20))
@@ -269,43 +269,33 @@ You can see that some of the points have assertions that are considered "fatal" 
 occurrences_plot(x,qa="fatal")
 ```
 
-There are many other ways of producing spatial plots in R. The `leafletR` package provides a simple method of producing browser-based maps iwth panning, zooming, and background layers:
+There are many other ways of producing spatial plots in R. The `leaflet` package provides a simple method of producing browser-based maps iwth panning, zooming, and background layers:
 
 ```{r eval=FALSE}
-library(leafletR)
-## drop any records with missing lat/lon values: leaflet does not like them
+library(leaflet)
+## drop any records with missing lat/lon values
 x$data <- x$data[!is.na(x$data$longitude) & !is.na(x$data$latitude),] 
 xa <- check_assertions(x)
 ## columns of x corresponding to a fatal assertion
-x_afcols <- names(x$data) %in% xa$occurColnames[xa$fatal]
+x_afcols <- which(names(x$data) %in% xa$occurColnames[xa$fatal])
 ## rows of x that have a fatal assertion
 x_afrows <- apply(x$data[,x_afcols],1,any)
 ## which fatal assertions are present in this data?
 these_assertions <- names(x$data)[x_afcols]
-## start with the "clean" data (data rows without fatal assertions)
-datlist <- list(toGeoJSON(data=x$data[!x_afrows,c("latitude","longitude")],name="Am0",dest=tempdir()))
-## now for each assertion, create a geojson formatted-file of the associated data
-for (k in 1:length(these_assertions)) {
-    idx <- x$data[,which(x_afcols)[k]]
-    datlist[k+1] <- toGeoJSON(data=x$data[idx,c("latitude","longitude")],name=paste("Am",k,sep=""),dest=tempdir())
-}
-## create styles
-sty0 <- styleSingle(col="white",fill="black",fill.alpha=1)
-sty1 <- styleSingle(col="red",fill="red",fill.alpha=1)
-sty2 <- styleSingle(col="yellow",fill="yellow",fill.alpha=1)
-sty3 <- styleSingle(col="blue",fill="blue",fill.alpha=1)
-## create the leaflet map
-alamap <- leaflet(data=datlist,title="Amblyornis newtonianus",base.map="mqsat",
-  popup="mag",style=list(sty0,sty1,sty2,sty3),dest=tempdir())
+## make a link to th web page for each occurrence
+popup_link <- paste0("<a href=\"http://biocache.ala.org.au/occurrences/",x$data$id,"\">Link to occurrence record</a>")
+## colour palette
+pal <- c(sub("FF$","",heat.colors(length(these_assertions))))
+## map each data row to colour, depending on its assertions
+marker_colour <- rep("#00FF00",nrow(x$data))
+for (k in 1:length(these_assertions)) marker_colour[x$data[,x_afcols[k]]] <- pal[k]
+## blank map, with imagery background
+m <- addProviderTiles(leaflet(),"Esri.WorldImagery")
+## add markers
+m <- addCircleMarkers(m,x$data$longitude,x$data$latitude,col=marker_colour,popup=popup_link)
+print(m)
 ```
 
-And now you can open the map in your browser with:
-
-```{r eval=FALSE}
-browseURL(alamap)
-```
-
-Note: this would more elegantly be mapped as a single data set with categorical styling (marker colours by assertion) --- but for unknown reasons this didn't seem to work properly.
 
 ### Example 4: Community composition and turnover
 

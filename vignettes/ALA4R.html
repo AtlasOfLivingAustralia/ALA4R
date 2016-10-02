@@ -12,7 +12,7 @@
 
 <meta name="author" content="Ben Raymond" />
 
-<meta name="date" content="2016-09-17" />
+<meta name="date" content="2016-10-02" />
 
 <title>ALA4R</title>
 
@@ -70,20 +70,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">ALA4R</h1>
 <h4 class="author"><em>Ben Raymond</em></h4>
-<h4 class="date"><em>2016-09-17</em></h4>
+<h4 class="date"><em>2016-10-02</em></h4>
 
 
 
-<!--
-%\VignetteEngine{knitr::rmarkdown}
-%\VignetteIndexEntry{ALA4R}
--->
-<!-- Knit this vignette to HTML and PDF manually: -->
-<!-- rmarkdown::render(system.file("vignettes/ALA4R.Rmd"),package="ALA4R"),output_format = "html_vignette") -->
-<!-- rmarkdown::render(system.file("vignettes/ALA4R.Rmd"),package="ALA4R"),output_format = "pdf_document") -->
-<!-- then use tools::compactPDF(system.file("vignettes/ALA4R.pdf",package="ALA4R"),gs_quality="ebook")-->
-<!-- The vignette is not built automatically as part of the package because of all of the additional -->
-<!-- packages required here. -->
 <div id="ala4r" class="section level1">
 <h1>ALA4R</h1>
 <p>The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from <a href="http://www.ala.org.au/" class="uri">http://www.ala.org.au/</a>. Here we provide a subset of the tools to be directly used within R.</p>
@@ -160,7 +150,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="example-usage" class="section level2">
 <h2>Example usage</h2>
 <p>First, check that we have some additional packages that we’ll use in the examples, and install them if necessary.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">to_install &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;plyr&quot;</span>,<span class="st">&quot;jpeg&quot;</span>,<span class="st">&quot;phytools&quot;</span>,<span class="st">&quot;ape&quot;</span>,<span class="st">&quot;leafletR&quot;</span>,<span class="st">&quot;vegan&quot;</span>,<span class="st">&quot;mgcv&quot;</span>,<span class="st">&quot;geosphere&quot;</span>,<span class="st">&quot;maps&quot;</span>,<span class="st">&quot;mapdata&quot;</span>,<span class="st">&quot;maptools&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">to_install &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;plyr&quot;</span>,<span class="st">&quot;jpeg&quot;</span>,<span class="st">&quot;phytools&quot;</span>,<span class="st">&quot;ape&quot;</span>,<span class="st">&quot;vegan&quot;</span>,<span class="st">&quot;mgcv&quot;</span>,<span class="st">&quot;geosphere&quot;</span>,<span class="st">&quot;maps&quot;</span>,<span class="st">&quot;mapdata&quot;</span>,<span class="st">&quot;maptools&quot;</span>)
 to_install &lt;-<span class="st"> </span>to_install[!<span class="kw">sapply</span>(to_install,requireNamespace,<span class="dt">quietly=</span><span class="ot">TRUE</span>)]
 if(<span class="kw">length</span>(to_install)&gt;<span class="dv">0</span>) <span class="kw">install.packages</span>(to_install)</code></pre></div>
 <p>We’ll use the <code>plyr</code> package throughout these examples, so load that now:</p>
@@ -194,8 +184,8 @@ if(<span class="kw">length</span>(to_install)&gt;<span class="dv">0</span>) <spa
 ## 8                                                                                                   Hoiho, Yellow-eyed penguin, Yellow-eyed penguin
 ## 9                                                                                macaroni penguin, Macaroni Penguin, Crested Penguin, Royal Penguin
 ## 10                                                                                                                     Moseley's Rockhopper Penguin</code></pre>
-<p>And we can see from the first result that penguins correspond to the family Spheniscidae. Now we can download the taxonomic data (note that the search is case-sensitive, so “SPHENISCIDAE” must appear as it does in the search results above):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tx &lt;-<span class="st"> </span><span class="kw">taxinfo_download</span>(<span class="st">&quot;rk_family:SPHENISCIDAE&quot;</span>,<span class="dt">fields=</span><span class="kw">c</span>(<span class="st">&quot;guid&quot;</span>,<span class="st">&quot;rk_genus&quot;</span>,<span class="st">&quot;nameComplete&quot;</span>,<span class="st">&quot;rank&quot;</span>))
+<p>And we can see that penguins correspond to the family Spheniscidae. Now we can download the taxonomic data (note that the search is case-sensitive, so “SPHENISCIDAE” must appear as it does in the search results above):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tx &lt;-<span class="st"> </span><span class="kw">taxinfo_download</span>(<span class="st">&quot;rk_family:SPHENISCIDAE&quot;</span>,<span class="dt">fields=</span><span class="kw">c</span>(<span class="st">&quot;guid&quot;</span>,<span class="st">&quot;rk_genus&quot;</span>,<span class="st">&quot;scientificName&quot;</span>,<span class="st">&quot;rank&quot;</span>))
 tx &lt;-<span class="st"> </span>tx[tx$rank %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;species&quot;</span>,<span class="st">&quot;subspecies&quot;</span>),] ## restrict to species and subspecies</code></pre></div>
 <p>We can make a taxonomic tree plot using the <code>phytools</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## as.phylo requires the taxonomic columns to be factors
@@ -238,41 +228,114 @@ temp &lt;-<span class="st"> </span><span class="kw">chull</span>(lonlat)
 lonlat &lt;-<span class="st"> </span>lonlat[<span class="kw">c</span>(temp,temp[<span class="dv">1</span>]),] 
 ## create WKT string
 wkt &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;POLYGON((&quot;</span>,<span class="kw">paste</span>(<span class="kw">apply</span>(lonlat,<span class="dv">1</span>,function(z) <span class="kw">paste</span>(z,<span class="dt">collapse=</span><span class="st">&quot; &quot;</span>)),<span class="dt">collapse=</span><span class="st">&quot;,&quot;</span>),<span class="st">&quot;))&quot;</span>,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</code></pre></div>
-<p>Now extract the species list in this polygon:</p>
+<p>Now extract the species list in this polygon, filtering to only include those with a conservation status:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">specieslist</span>(<span class="dt">wkt=</span>wkt,<span class="dt">fq=</span><span class="st">&quot;state_conservation:*&quot;</span>)
 (<span class="kw">head</span>(<span class="kw">arrange</span>(x,<span class="kw">desc</span>(occurrenceCount)),<span class="dv">20</span>))</code></pre></div>
-<pre><code>##                                                              taxonConceptLsid
-## 1 urn:lsid:biodiversity.org.au:afd.taxon:e7873288-a90c-4f20-8be1-e8ec69a074a5
-## 2 urn:lsid:biodiversity.org.au:afd.taxon:4273bd9a-f874-4a33-b1f0-3633abfdc5c8
-## 3 urn:lsid:biodiversity.org.au:afd.taxon:00b1b9a2-70c9-45be-8019-9c7fd755afc8
-## 4 urn:lsid:biodiversity.org.au:afd.taxon:0feaa88d-37f2-4a48-9f72-111d946234a6
-## 5 urn:lsid:biodiversity.org.au:afd.taxon:597261d9-ba8a-499e-a83c-fa19f774a5a3
-## 6 urn:lsid:biodiversity.org.au:afd.taxon:a2553aed-383a-4c9b-9534-c6058bcee81b
-## 7 urn:lsid:biodiversity.org.au:afd.taxon:ceaf58f0-17df-468e-8f34-b4892145df3b
-##                                      speciesName scientificNameAuthorship
-## 1  Calyptorhynchus (Zanda) funereus (Shaw, 1794)             (Shaw, 1794)
-## 2         Isoodon obesulus obesulus (Shaw, 1797)             (Shaw, 1797)
-## 3             Trichosurus vulpecula (Kerr, 1792)             (Kerr, 1792)
-## 4            Pseudophryne bibronii Günther, 1858            Günther, 1858
-## 5    Neophema (Neonanodes) elegans (Gould, 1838)            (Gould, 1838)
-## 6          Pteropus poliocephalus Temminck, 1825           Temminck, 1825
-## 7 Neophema (Neonanodes) chrysostoma (Kuhl, 1820)             (Kuhl, 1820)
-##         rank  kingdom   phylum    class           order         family
-## 1    species ANIMALIA CHORDATA     AVES  PSITTACIFORMES     CACATUIDAE
-## 2 subspecies ANIMALIA CHORDATA MAMMALIA PERAMELEMORPHIA    PERAMELIDAE
-## 3    species ANIMALIA CHORDATA MAMMALIA   DIPROTODONTIA  PHALANGERIDAE
-## 4    species ANIMALIA CHORDATA AMPHIBIA           ANURA MYOBATRACHIDAE
-## 5    species ANIMALIA CHORDATA     AVES  PSITTACIFORMES    PSITTACIDAE
-## 6    species ANIMALIA CHORDATA MAMMALIA      CHIROPTERA   PTEROPODIDAE
-## 7    species ANIMALIA CHORDATA     AVES  PSITTACIFORMES    PSITTACIDAE
-##             genus                   commonName occurrenceCount
-## 1 Calyptorhynchus Yellow-tailed Black-cockatoo             327
-## 2         Isoodon                                           21
-## 3     Trichosurus      Common Brushtail Possum              14
-## 4    Pseudophryne             Bibron's Toadlet              12
-## 5        Neophema               Elegant Parrot               1
-## 6        Pteropus       Grey-headed Flying-fox               1
-## 7        Neophema           Blue-winged Parrot               1</code></pre>
+<pre><code>##                                                               taxonConceptLsid
+## 1  urn:lsid:biodiversity.org.au:afd.taxon:e7873288-a90c-4f20-8be1-e8ec69a074a5
+## 2  urn:lsid:biodiversity.org.au:afd.taxon:dc90876f-838c-4686-a353-75a3e25d2e1b
+## 3                              http://id.biodiversity.org.au/node/apni/2896820
+## 4  urn:lsid:biodiversity.org.au:afd.taxon:364d0d4b-e986-45af-b5da-bb372a3ad39c
+## 5                              http://id.biodiversity.org.au/node/apni/2921103
+## 6                              http://id.biodiversity.org.au/node/apni/2919415
+## 7                              http://id.biodiversity.org.au/node/apni/2891764
+## 8  urn:lsid:biodiversity.org.au:afd.taxon:4273bd9a-f874-4a33-b1f0-3633abfdc5c8
+## 9  urn:lsid:biodiversity.org.au:afd.taxon:3293a0b2-c691-4e3e-b8ed-c639a24d0da5
+## 10                              http://id.biodiversity.org.au/name/apni/106077
+## 11                             http://id.biodiversity.org.au/node/apni/2918729
+## 12 urn:lsid:biodiversity.org.au:afd.taxon:00b1b9a2-70c9-45be-8019-9c7fd755afc8
+## 13 urn:lsid:biodiversity.org.au:afd.taxon:a581c303-95b9-4e2f-8fdc-103e394dd85f
+## 14 urn:lsid:biodiversity.org.au:afd.taxon:0feaa88d-37f2-4a48-9f72-111d946234a6
+## 15 urn:lsid:biodiversity.org.au:afd.taxon:26a72559-86a3-4996-8f6d-9e0490e8f9f4
+## 16                             http://id.biodiversity.org.au/node/apni/2899781
+## 17                             http://id.biodiversity.org.au/node/apni/2898209
+## 18                             http://id.biodiversity.org.au/node/apni/2916843
+## 19                             http://id.biodiversity.org.au/node/apni/2919200
+## 20                             http://id.biodiversity.org.au/node/apni/2887223
+##                                                       speciesName
+## 1                   Calyptorhynchus (Zanda) funereus (Shaw, 1794)
+## 2            Hylacola pyrrhopygia parkeri (Schodde &amp; Mason, 1999)
+## 3                                 Eucalyptus fasciculosa F.Muell.
+## 4                    Falco (Hierofalco) peregrinus Tunstall, 1771
+## 5                         Spyridium spathulatum (F.Muell.) Benth.
+## 6                               Anthocercis angustifolia F.Muell.
+## 7  Austrostipa multispiculis (J.M.Black) S.W.L.Jacobs &amp; J.Everett
+## 8                          Isoodon obesulus obesulus (Shaw, 1797)
+## 9                            Falcunculus frontatus (Latham, 1801)
+## 10                              Prasophyllum pruinosum R.S.Rogers
+## 11           Correa glabra var. leucoclada (Lindl.) Paul G.Wilson
+## 12                             Trichosurus vulpecula (Kerr, 1792)
+## 13                         Antechinus flavipes (Waterhouse, 1838)
+## 14                            Pseudophryne bibronii Günther, 1858
+## 15                          Egernia cunninghami (J.E. Gray, 1832)
+## 16                  Eucalyptus viminalis Labill. subsp. viminalis
+## 17                                 Prasophyllum pallidum Nicholls
+## 18                                     Todea barbara (L.) T.Moore
+## 19                           Acacia iteaphylla F.Muell. ex Benth.
+## 20                                   Adiantum capillus-veneris L.
+##                scientificNameAuthorship       rank  kingdom     phylum
+## 1                          (Shaw, 1794)    species ANIMALIA   CHORDATA
+## 2               (Schodde &amp; Mason, 1999) subspecies ANIMALIA   CHORDATA
+## 3                              F.Muell.    species  Plantae Charophyta
+## 4                        Tunstall, 1771    species ANIMALIA   CHORDATA
+## 5                     (F.Muell.) Benth.    species  Plantae Charophyta
+## 6                              F.Muell.    species  Plantae Charophyta
+## 7  (J.M.Black) S.W.L.Jacobs &amp; J.Everett    species  Plantae Charophyta
+## 8                          (Shaw, 1797) subspecies ANIMALIA   CHORDATA
+## 9                        (Latham, 1801)    species ANIMALIA   CHORDATA
+## 10                           R.S.Rogers    species  Plantae           
+## 11               (Lindl.) Paul G.Wilson    variety  Plantae Charophyta
+## 12                         (Kerr, 1792)    species ANIMALIA   CHORDATA
+## 13                   (Waterhouse, 1838)    species ANIMALIA   CHORDATA
+## 14                        Günther, 1858    species ANIMALIA   CHORDATA
+## 15                    (J.E. Gray, 1832)    species ANIMALIA   CHORDATA
+## 16                                      subspecies  Plantae Charophyta
+## 17                             Nicholls    species  Plantae Charophyta
+## 18                         (L.) T.Moore    species  Plantae Charophyta
+## 19                   F.Muell. ex Benth.    species  Plantae Charophyta
+## 20                                   L.    species  Plantae Charophyta
+##            class           order          family           genus
+## 1           AVES  PSITTACIFORMES      CACATUIDAE Calyptorhynchus
+## 2           AVES   PASSERIFORMES    ACANTHIZIDAE        Hylacola
+## 3  Equisetopsida        Myrtales       Myrtaceae      Eucalyptus
+## 4           AVES   FALCONIFORMES      FALCONIDAE           Falco
+## 5  Equisetopsida         Rosales      Rhamnaceae       Spyridium
+## 6  Equisetopsida       Solanales      Solanaceae     Anthocercis
+## 7  Equisetopsida          Poales         Poaceae     Austrostipa
+## 8       MAMMALIA PERAMELEMORPHIA     PERAMELIDAE         Isoodon
+## 9           AVES   PASSERIFORMES PACHYCEPHALIDAE     Falcunculus
+## 10                                                              
+## 11 Equisetopsida      Sapindales        Rutaceae          Correa
+## 12      MAMMALIA   DIPROTODONTIA   PHALANGERIDAE     Trichosurus
+## 13      MAMMALIA  DASYUROMORPHIA      DASYURIDAE      Antechinus
+## 14      AMPHIBIA           ANURA  MYOBATRACHIDAE    Pseudophryne
+## 15      REPTILIA        SQUAMATA       SCINCIDAE         Egernia
+## 16 Equisetopsida        Myrtales       Myrtaceae      Eucalyptus
+## 17 Equisetopsida     Asparagales     Orchidaceae    Prasophyllum
+## 18 Equisetopsida      Osmundales     Osmundaceae           Todea
+## 19 Equisetopsida         Fabales        Fabaceae          Acacia
+## 20 Equisetopsida                     Pteridaceae        Adiantum
+##                      commonName occurrenceCount
+## 1  Yellow-tailed Black-cockatoo             327
+## 2                                            58
+## 3                                            55
+## 4              Peregrine Falcon              41
+## 5                                            39
+## 6                                            30
+## 7                                            27
+## 8                                            21
+## 9            Crested Shrike-tit              16
+## 10                                           15
+## 11                                           14
+## 12      Common Brushtail Possum              14
+## 13     Yellow-footed Antechinus              13
+## 14             Bibron's Toadlet              12
+## 15           Cunningham's Skink              12
+## 16                                            9
+## 17                                            8
+## 18                                            8
+## 19                Winter Wattle               8
+## 20                                            6</code></pre>
 </div>
 <div id="example-3-quality-assertions" class="section level3">
 <h3>Example 3: Quality assertions</h3>
@@ -282,7 +345,7 @@ wkt &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st"
 <pre><code>## number of original names: 7 
 ## number of taxonomically corrected names: 1 
 ## number of observation records: 1328 
-## number of assertions listed: 17  -- ones with flagged issues are listed below
+## number of assertions listed: 18  -- ones with flagged issues are listed below
 ##  invalidCollectionDate: 110 records 
 ##  incompleteCollectionDate: 150 records 
 ##  firstOfCentury: 8 records 
@@ -299,38 +362,33 @@ wkt &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st"
 ##  unrecognizedGeodeticDatum: 105 records 
 ##  inferredDuplicateRecord: 106 records 
 ##  stateCoordinateMismatch: 1 records 
+##  habitatMismatch: 14 records -- considered fatal
 ##  firstOfMonth: 89 records</code></pre>
 <p>You can see that some of the points have assertions that are considered “fatal” (i.e. the occurrence record in question is unlikely to be suitable for subsequent analysis). We can use the <code>occurrences_plot</code> function to create a PDF file with a plot of this data, showing the points with fatal assertions (this will create an “Rplots.pdf” file in your working directory; not run here):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">occurrences_plot</span>(x,<span class="dt">qa=</span><span class="st">&quot;fatal&quot;</span>)</code></pre></div>
-<p>There are many other ways of producing spatial plots in R. The <code>leafletR</code> package provides a simple method of producing browser-based maps iwth panning, zooming, and background layers:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(leafletR)
-## drop any records with missing lat/lon values: leaflet does not like them
+<p>There are many other ways of producing spatial plots in R. The <code>leaflet</code> package provides a simple method of producing browser-based maps iwth panning, zooming, and background layers:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(leaflet)
+## drop any records with missing lat/lon values
 x$data &lt;-<span class="st"> </span>x$data[!<span class="kw">is.na</span>(x$data$longitude) &amp;<span class="st"> </span>!<span class="kw">is.na</span>(x$data$latitude),] 
 xa &lt;-<span class="st"> </span><span class="kw">check_assertions</span>(x)
 ## columns of x corresponding to a fatal assertion
-x_afcols &lt;-<span class="st"> </span><span class="kw">names</span>(x$data) %in%<span class="st"> </span>xa$occurColnames[xa$fatal]
+x_afcols &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">names</span>(x$data) %in%<span class="st"> </span>xa$occurColnames[xa$fatal])
 ## rows of x that have a fatal assertion
 x_afrows &lt;-<span class="st"> </span><span class="kw">apply</span>(x$data[,x_afcols],<span class="dv">1</span>,any)
 ## which fatal assertions are present in this data?
 these_assertions &lt;-<span class="st"> </span><span class="kw">names</span>(x$data)[x_afcols]
-## start with the &quot;clean&quot; data (data rows without fatal assertions)
-datlist &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">toGeoJSON</span>(<span class="dt">data=</span>x$data[!x_afrows,<span class="kw">c</span>(<span class="st">&quot;latitude&quot;</span>,<span class="st">&quot;longitude&quot;</span>)],<span class="dt">name=</span><span class="st">&quot;Am0&quot;</span>,<span class="dt">dest=</span><span class="kw">tempdir</span>()))
-## now for each assertion, create a geojson formatted-file of the associated data
-for (k in <span class="dv">1</span>:<span class="kw">length</span>(these_assertions)) {
-    idx &lt;-<span class="st"> </span>x$data[,<span class="kw">which</span>(x_afcols)[k]]
-    datlist[k<span class="dv">+1</span>] &lt;-<span class="st"> </span><span class="kw">toGeoJSON</span>(<span class="dt">data=</span>x$data[idx,<span class="kw">c</span>(<span class="st">&quot;latitude&quot;</span>,<span class="st">&quot;longitude&quot;</span>)],<span class="dt">name=</span><span class="kw">paste</span>(<span class="st">&quot;Am&quot;</span>,k,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>),<span class="dt">dest=</span><span class="kw">tempdir</span>())
-}
-## create styles
-sty0 &lt;-<span class="st"> </span><span class="kw">styleSingle</span>(<span class="dt">col=</span><span class="st">&quot;white&quot;</span>,<span class="dt">fill=</span><span class="st">&quot;black&quot;</span>,<span class="dt">fill.alpha=</span><span class="dv">1</span>)
-sty1 &lt;-<span class="st"> </span><span class="kw">styleSingle</span>(<span class="dt">col=</span><span class="st">&quot;red&quot;</span>,<span class="dt">fill=</span><span class="st">&quot;red&quot;</span>,<span class="dt">fill.alpha=</span><span class="dv">1</span>)
-sty2 &lt;-<span class="st"> </span><span class="kw">styleSingle</span>(<span class="dt">col=</span><span class="st">&quot;yellow&quot;</span>,<span class="dt">fill=</span><span class="st">&quot;yellow&quot;</span>,<span class="dt">fill.alpha=</span><span class="dv">1</span>)
-sty3 &lt;-<span class="st"> </span><span class="kw">styleSingle</span>(<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>,<span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>,<span class="dt">fill.alpha=</span><span class="dv">1</span>)
-## create the leaflet map
-alamap &lt;-<span class="st"> </span><span class="kw">leaflet</span>(<span class="dt">data=</span>datlist,<span class="dt">title=</span><span class="st">&quot;Amblyornis newtonianus&quot;</span>,<span class="dt">base.map=</span><span class="st">&quot;mqsat&quot;</span>,
-  <span class="dt">popup=</span><span class="st">&quot;mag&quot;</span>,<span class="dt">style=</span><span class="kw">list</span>(sty0,sty1,sty2,sty3),<span class="dt">dest=</span><span class="kw">tempdir</span>())</code></pre></div>
-<p>And now you can open the map in your browser with:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">browseURL</span>(alamap)</code></pre></div>
-<p>Note: this would more elegantly be mapped as a single data set with categorical styling (marker colours by assertion) — but for unknown reasons this didn’t seem to work properly.</p>
+## make a link to th web page for each occurrence
+popup_link &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;&lt;a href=</span><span class="ch">\&quot;</span><span class="st">http://biocache.ala.org.au/occurrences/&quot;</span>,x$data$id,<span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">&gt;Link to occurrence record&lt;/a&gt;&quot;</span>)
+## colour palette
+pal &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">sub</span>(<span class="st">&quot;FF$&quot;</span>,<span class="st">&quot;&quot;</span>,<span class="kw">heat.colors</span>(<span class="kw">length</span>(these_assertions))))
+## map each data row to colour, depending on its assertions
+marker_colour &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="st">&quot;#00FF00&quot;</span>,<span class="kw">nrow</span>(x$data))
+for (k in <span class="dv">1</span>:<span class="kw">length</span>(these_assertions)) marker_colour[x$data[,x_afcols[k]]] &lt;-<span class="st"> </span>pal[k]
+## blank map, with imagery background
+m &lt;-<span class="st"> </span><span class="kw">addProviderTiles</span>(<span class="kw">leaflet</span>(),<span class="st">&quot;Esri.WorldImagery&quot;</span>)
+## add markers
+m &lt;-<span class="st"> </span><span class="kw">addCircleMarkers</span>(m,x$data$longitude,x$data$latitude,<span class="dt">col=</span>marker_colour,<span class="dt">popup=</span>popup_link)
+<span class="kw">print</span>(m)</code></pre></div>
 </div>
 <div id="example-4-community-composition-and-turnover" class="section level3">
 <h3>Example 4: Community composition and turnover</h3>
