@@ -8,6 +8,8 @@ thischeck=function() {
         expect_that(nrow(search_fulltext("red",page_size=20)$data),equals(20))
         expect_that(search_fulltext("red kangaroo",output_format="complete"),has_names(c("meta","data")))
         expect_that(search_fulltext("kingdom:Fungi",output_format="complete"),has_names(c("meta","data")))
+        expect_output(print(search_fulltext("red kangaroo")),"Search results:")
+        expect_output(print(search_fulltext("red kangaroo",output_format="complete")),"nameFormatted") ## expect extra cols here
     })
 }
 check_caching(thischeck)

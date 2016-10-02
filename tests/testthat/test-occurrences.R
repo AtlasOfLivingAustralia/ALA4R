@@ -41,3 +41,29 @@ thischeck <- function() {
 }
 check_caching(thischeck)
 
+
+thischeck <- function() {
+    test_that("occurrences unique does something sensible", {
+        x <- occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)
+        xu <- unique(x,spatial=0.1)
+        expect_is(xu,"list")
+        expect_named(xu,c("data","meta"))
+        expect_is(xu$data,"data.frame")
+        expect_lt(nrow(xu$data),nrow(x$data))
+        xu <- unique(x,spatial=0,temporal="yearmonth")
+        expect_lt(nrow(xu$data),nrow(x$data))
+    })
+}
+check_caching(thischeck)
+
+thischeck <- function() {
+    test_that("occurrences subset does something sensible", {
+        x <- occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)
+        xs <- subset(x)
+        expect_is(xs,"list")
+        expect_named(xs,c("data","meta"))
+        expect_is(xs$data,"data.frame")
+        expect_lt(nrow(xs$data),nrow(x$data))
+    })
+}
+check_caching(thischeck)
