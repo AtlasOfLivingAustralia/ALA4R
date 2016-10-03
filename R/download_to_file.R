@@ -15,6 +15,7 @@ download_to_file <- function(url,outfile,binary_file=FALSE,caching=ala_config()$
         ## file exists but is zero sized
         unlink(outfile)
     }
+    if (nchar(url)>ala_constants()$server_max_url_length) warning("URL length may be longer than is allowed by the server")
 
     ## are we using cached results?
     if ((caching %in% c("off","refresh")) || (! file.exists(outfile))) {

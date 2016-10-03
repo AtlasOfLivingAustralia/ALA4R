@@ -216,6 +216,7 @@ convert_reason <- function(reason) {
 ## internal function, returns some behaviours and settings of the ALA servers and setup
 ala_constants <- function() {
     list(max_occurrence_records=500000,
+         server_max_url_length=8150, ## bytes, for Apache with default LimitRequestLine value of 8190, allowing 40 bytes slop. Users will be warned of possible problems when URL exceeds this length
          brand="ALA4R", ## the package name that is shown to users in messages and warnings
          notify="If this problem persists please notify the ALA4R maintainers by lodging an issue at https://github.com/AtlasOfLivingAustralia/ALA4R/issues/ or emailing support@ala.org.au", ## the string that will be displayed to users to notify the package maintainers
          support_email="support@ala.org.au", ## contact email
