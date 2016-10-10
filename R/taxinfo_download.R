@@ -11,7 +11,7 @@
 #' To obtain OR behaviour, use the form c("field1:abc OR field2:def")
 #' @param fields string vector: (optional) a vector of field names to return. Note that the columns of the returned data 
 #' frame are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of 
-#' fields will be returned. See \code{ala_fields("general",as_is=TRUE)} for valid field names
+#' fields will be returned. See \code{ala_fields("general",as_is=TRUE)} for valid field names. Use \code{fields="all"} to include all available fields
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
 #' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the 
 #' data.table package. Requires data.table to be available. If this fails, or use_data_table is FALSE, then read.table 
@@ -58,6 +58,7 @@ taxinfo_download <- function(query,fq,fields,verbose=ala_config()$verbose,use_da
         assert_that(is.character(fields))
         ## user has specified some fields
         valid_fields <- ala_fields(fields_type="general",as_is=TRUE)
+        if (identical(tolower(fields),"all")) fields <- valid_fields$name
         unknown <- setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
             stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"general\",as_is=TRUE)")
