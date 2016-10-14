@@ -1,5 +1,5 @@
 [![Travis-CI Build Status](https://travis-ci.org/AtlasOfLivingAustralia/ALA4R.svg?branch=master)](https://travis-ci.org/AtlasOfLivingAustralia/ALA4R)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AtlasOfLivingAustralia/ALA4R?branch=master&svg=true)](https://ci.appveyor.com/project/AtlasOfLivingAustralia/ALA4R)
+[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/mdsmv5n90gv54b1o/branch/master?svg=true)](https://ci.appveyor.com/project/raymondben/ala4r/branch/master)
 [![Coverage Status](https://img.shields.io/codecov/c/github/AtlasOfLivingAustralia/ALA4R/master.svg)](https://codecov.io/github/AtlasOfLivingAustralia/ALA4R?branch=master)
 
 # ALA4R
