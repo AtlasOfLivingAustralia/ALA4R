@@ -8,7 +8,7 @@
 #' species occurrence locations.
 #' NOTE: batch requests (multiple points) are currently processed in a *single queue* on the ALA servers. Processing times may be slow if there are many requests in the queue. Note also that the actual processing of batch requests is inherently slow: a large number of points may take quite some time. Be warned.
 #' @param pnts numeric: vector of latitude/longitude pairs, or a 2 column data.frame or matrix of lat,lons. NOTE: the number of locations must be less than 100000.
-#' @param layers string vector: ids of layers to be intersected. The list of possible layers is available from \code{ala_fields("layers")}. Names can be passed as full layer names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Note: if more than one location has been provided in \code{pnts}, the number of layers must be less than 700.
+#' @param layers string vector: ids of layers to be intersected. The list of possible layers is available from \code{ala_fields("layers")}. Names can be passed as full layer names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Note: if more than one location has been provided in \code{pnts}, the number of layers must be less than 700. 
 #' @param SPdata.frame logical: should the output should be returned as a SpatialPointsDataFrame of the sp package or simply as a data.frame?
 #' @param use_layer_names logical: if TRUE, layer names will be used as column names in the returned data frame (e.g. "radiationLowestPeriodBio22"). Otherwise, layer id value will be used for column names (e.g. "el871")
 #' @param verbose logical: show additional progress information? [default is set by \code{\link{ala_config}}]
@@ -69,9 +69,11 @@ intersect_points <- function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE
         }
     }
     ##format the layers string
+    valid_layers <- ala_fields("layers") #get a list of valid fields
+    ##if (identical(tolower(layers),"all")) layers <- valid_layers$name
+    valid_layers <- valid_layers$id
     layers <- fields_name_to_id(fields=layers,fields_type="layers") ## replace long names with ids
     if (bulk) { if (length(layers)>(num_layers_limit-1)) stop('the number of layers must be <',num_layers_limit,' if intersecting more than a single location') } #ensure no more than 300 layers when bulk
-    valid_layers <- ala_fields('layers')$id #get a list of valid fields
     unknown <- setdiff(layers, valid_layers) #get the different layers
     if (length(unknown)>0) { 
         warning(paste(paste(unknown,collapse=', '),'are invalid layer ids')) #warn user of bad layer ids
