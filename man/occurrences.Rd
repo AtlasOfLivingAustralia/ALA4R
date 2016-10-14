@@ -4,7 +4,7 @@
 \alias{occurrences}
 \title{Get occurrence data}
 \usage{
-occurrences(taxon, wkt, fq, fields, extra, qa,
+occurrences(taxon, wkt, fq, fields, extra, qa, method = "indexed", email,
   download_reason_id = ala_config()$download_reason_id, reason,
   verbose = ala_config()$verbose, record_count_only = FALSE,
   use_layer_names = TRUE, use_data_table = TRUE)
@@ -23,11 +23,15 @@ field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form
 OR field2:def"). See e.g. \url{http://wiki.apache.org/solr/CommonQueryParameters} for more information about filter queries}
 
 \item{fields}{string vector: (optional) a vector of field names to return. Note that the columns of the returned data frame 
-are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")}
+are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Use \code{fields="all"} to include all available fields, but note that \code{"all"} will probably cause an error with \code{method="offline"} because the request URL will exceed the maximum allowable length}
 
-\item{extra}{string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Use \code{extra="all"} to include all available fields}
+\item{extra}{string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Use \code{extra="all"} to include all available fields, but note that \code{"all"} will probably cause an error with \code{method="offline"} because the request URL will exceed the maximum allowable length}
 
 \item{qa}{string vector: (optional) list of record issues to include in the download. Use \code{qa="all"} to include all available issues, or \code{qa="none"} to include none. Otherwise see \code{ala_fields("assertions",as_is=TRUE)} for valid values}
+
+\item{method}{string: "indexed" (default) or "offline". In "offline" mode, more fields are available and larger datasets can be returned}
+
+\item{email}{string: the email address of the user performing the download (required for \code{method="offline"}}
 
 \item{download_reason_id}{numeric or string: (required unless record_count_only is TRUE) a reason code for the download, either as a numeric ID (currently 0--11) or a string (see \code{\link{ala_reasons}} for a list of valid ID codes and names). The download_reason_id can be passed directly to this function, or alternatively set using \code{ala_config(download_reason_id=...)}}
 
@@ -35,7 +39,7 @@ are not guaranteed to retain the ordering of the field names given here. If not 
 
 \item{verbose}{logical: show additional progress information? [default is set by ala_config()]}
 
-\item{record_count_only}{logical: if TRUE, return just the count of records that would be downloaded, but don't download them. Note that the record count is always re-retrieved from the ALA, regardless of the caching settings. If a cached copy of this query exists on the local machine, the actual data set size may therefore differ from this record count}
+\item{record_count_only}{logical: if TRUE, return just the count of records that would be downloaded, but don't download them. Note that the record count is always re-retrieved from the ALA, regardless of the caching settings. If a cached copy of this query exists on the local machine, the actual data set size may therefore differ from this record count. \code{record_count_only=TRUE} can only be used with \code{method="indexed"}}
 
 \item{use_layer_names}{logical: if TRUE, layer names will be used as layer column names in the returned data frame (e.g. "radiationLowestPeriodBio22"). Otherwise, layer id value will be used for layer column names (e.g. "el871")}
 
@@ -45,7 +49,7 @@ are not guaranteed to retain the ordering of the field names given here. If not 
 Data frame of occurrence results, with one row per occurrence record. The columns of the dataframe will depend on the requested fields
 }
 \description{
-Retrieve ALA occurrence data via the "occurrence download" web service. At least one of \code{taxon}, \code{wkt}, or \code{fq} must be supplied for a valid query. Note that the current service is limited to a maximum of 500000 records per request.
+Retrieve ALA occurrence data via the "occurrence download" web service. At least one of \code{taxon}, \code{wkt}, or \code{fq} must be supplied for a valid query. Note that there is a limit of 500000 records per request when using \code{method="indexed"}. Use the \code{method="offline"} for larger requests. For small requests, \code{method="indexed"} may be faster.
 }
 \examples{
 \dontrun{

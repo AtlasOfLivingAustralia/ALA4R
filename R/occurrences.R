@@ -1,6 +1,6 @@
 #' Get occurrence data
 #' 
-#' Retrieve ALA occurrence data via the "occurrence download" web service. At least one of \code{taxon}, \code{wkt}, or \code{fq} must be supplied for a valid query. Note that the current service is limited to a maximum of 500000 records per request.
+#' Retrieve ALA occurrence data via the "occurrence download" web service. At least one of \code{taxon}, \code{wkt}, or \code{fq} must be supplied for a valid query. Note that there is a limit of 500000 records per request when using \code{method="indexed"}. Use the \code{method="offline"} for larger requests. For small requests, \code{method="indexed"} may be faster.
 #' 
 #' @references \itemize{
 #' \item Associated ALA web service for record counts: \url{http://api.ala.org.au/#ws3}
@@ -18,13 +18,15 @@
 #' field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form c("field1:abc 
 #' OR field2:def"). See e.g. \url{http://wiki.apache.org/solr/CommonQueryParameters} for more information about filter queries
 #' @param fields string vector: (optional) a vector of field names to return. Note that the columns of the returned data frame 
-#' are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871")
-#' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Use \code{extra="all"} to include all available fields
+#' are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of fields will be returned. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Use \code{fields="all"} to include all available fields, but note that \code{"all"} will probably cause an error with \code{method="offline"} because the request URL will exceed the maximum allowable length
+#' @param extra string vector: (optional) a vector of field names to include in addition to those specified in \code{fields}. This is useful if you would like the default list of fields (i.e. when \code{fields} parameter is not specified) plus some additional extras. See \code{ala_fields("occurrence_stored",as_is=TRUE)} for valid field names. Field names can be passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Use \code{extra="all"} to include all available fields, but note that \code{"all"} will probably cause an error with \code{method="offline"} because the request URL will exceed the maximum allowable length
 #' @param qa string vector: (optional) list of record issues to include in the download. Use \code{qa="all"} to include all available issues, or \code{qa="none"} to include none. Otherwise see \code{ala_fields("assertions",as_is=TRUE)} for valid values
+#' @param method string: "indexed" (default) or "offline". In "offline" mode, more fields are available and larger datasets can be returned
+#' @param email string: the email address of the user performing the download (required for \code{method="offline"}
 #' @param download_reason_id numeric or string: (required unless record_count_only is TRUE) a reason code for the download, either as a numeric ID (currently 0--11) or a string (see \code{\link{ala_reasons}} for a list of valid ID codes and names). The download_reason_id can be passed directly to this function, or alternatively set using \code{ala_config(download_reason_id=...)}
 #' @param reason string: (optional) user-supplied description of the reason for the download. Providing this information is optional but will help the ALA to better support users by building a better understanding of user communities and their data requests
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
-#' @param record_count_only logical: if TRUE, return just the count of records that would be downloaded, but don't download them. Note that the record count is always re-retrieved from the ALA, regardless of the caching settings. If a cached copy of this query exists on the local machine, the actual data set size may therefore differ from this record count
+#' @param record_count_only logical: if TRUE, return just the count of records that would be downloaded, but don't download them. Note that the record count is always re-retrieved from the ALA, regardless of the caching settings. If a cached copy of this query exists on the local machine, the actual data set size may therefore differ from this record count. \code{record_count_only=TRUE} can only be used with \code{method="indexed"}
 #' @param use_layer_names logical: if TRUE, layer names will be used as layer column names in the returned data frame (e.g. "radiationLowestPeriodBio22"). Otherwise, layer id value will be used for layer column names (e.g. "el871")
 #' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails with an error or warning, or if use_data_table is FALSE, then read.table will be used (which may be slower)
 #' 
@@ -64,9 +66,12 @@
 ## TODO: more extensive testing, particularly of the csv-conversion process
 ## TODO LATER: add params: lat, lon, radius (for specifying a search circle)
 
-occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_config()$download_reason_id,reason,verbose=ala_config()$verbose,record_count_only=FALSE,use_layer_names=TRUE,use_data_table=TRUE) {
+occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,download_reason_id=ala_config()$download_reason_id,reason,verbose=ala_config()$verbose,record_count_only=FALSE,use_layer_names=TRUE,use_data_table=TRUE) {
     ## check input parms are sensible
     assert_that(is.flag(record_count_only))    
+    assert_that(is.string(method))
+    method <- match.arg(tolower(method),c("offline","indexed"))
+    valid_fields_type <- if (method=="indexed") "occurrence_stored" else "occurrence"
     this_query <- list()
     ## have we specified a taxon?
     if (!missing(taxon)) {
@@ -92,6 +97,10 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
     if (length(this_query)==0) {
         ## not a valid request!
         stop("invalid request: need at least one of taxon, fq, or wkt to be specified")
+    }
+    if (method=="offline") {
+        if (record_count_only) stop("record_count_only can only be used with method=\"indexed\"")
+        if (missing(email) || !is.string(email) || nchar(email)<1) stop("email is required for method=offline")
     }
     ## check the number of records
     if (record_count_only) {
@@ -123,22 +132,23 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
     if (!missing(fields)) {
         assert_that(is.character(fields))
         ## user has specified some fields
+        valid_fields <- ala_fields(fields_type=valid_fields_type,as_is=TRUE)
+        if (identical(tolower(fields),"all")) fields <- valid_fields$name
         fields <- fields_name_to_id(fields=fields,fields_type="occurrence") ## replace long names with ids
-        valid_fields <- ala_fields(fields_type="occurrence_stored",as_is=TRUE)
         unknown <- setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
-            stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"occurrence_stored\",as_is=TRUE)")
+            #***stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"",valid_fields_type,"\",as_is=TRUE)")
         }
         this_query$fields <- str_c(fields,collapse=",")
     }
     if (!missing(extra)) {
         assert_that(is.character(extra))
-        if (identical(tolower(extra),"all")) { extra <- ala_fields("occurrence_stored",as_is=TRUE)$name }
+        valid_fields <- ala_fields(fields_type=valid_fields_type,as_is=TRUE)
+        if (identical(tolower(extra),"all")) extra <- valid_fields$name
         extra <- fields_name_to_id(fields=extra,fields_type="occurrence") ## replace long names with ids
-        valid_fields <- ala_fields(fields_type="occurrence_stored",as_is=TRUE)
         unknown <- setdiff(extra,valid_fields$name)
         if (length(unknown)>0) {
-            stop("invalid extra fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"occurrence_stored\",as_is=TRUE)")
+            #***stop("invalid extra fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"",valid_fields_type,"\",as_is=TRUE)")
         }
         this_query$extra <- str_c(extra,collapse=",")
     }
@@ -156,15 +166,43 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
         assert_that(is.string(reason))
         this_query$reason <- reason
     }
+    if (method=="offline")
+        this_query$email <- email
     this_query$reasonTypeId <- download_reason_id
     this_query$sourceTypeId <- ala_sourcetypeid()
     this_query$esc <- "\\" ## force backslash-escaping of quotes rather than double-quote escaping
     this_query$sep <- "\t" ## tab-delimited
     this_query$file <- "data" ## to ensure that file is named "data.csv" within the zip file
 
-    this_url <- build_url_from_parts(ala_constants()$base_url_biocache,c("occurrences","index","download"),query=this_query)
+    if (method=="indexed")
+        this_url <- build_url_from_parts(ala_constants()$base_url_biocache,c("occurrences","index","download"),query=this_query)
+    else
+        this_url <- build_url_from_parts(ala_constants()$base_url_biocache,c("occurrences","offline","download"),query=this_query)
+
+    if (method=="offline") {
+        thisfile <- ala_cache_filename(this_url) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
+        if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(thisfile))) {
+            status <- cached_get(url=this_url,caching="off",type="json",verbose=verbose)
+            if (!"statusUrl" %in% names(status)) stop("reply from server was missing statusUrl. ",ala_constants()$notify)
+            status <- cached_get(status$statusUrl,caching="off",type="json",verbose=verbose)
+            while (tolower(status$status) %in% c("inqueue","running")) {##!= "finished") {
+                status <- cached_get(status$statusUrl,caching="off",type="json",verbose=verbose)
+                Sys.sleep(2)
+            }
+            if (status$status!="finished") {
+                stop("unexpected response from server. ",ala_constants()$notify,". Response was:\n",str(status))
+            } else {
+                ## finally we have the URL to the data file itself
+                download_to_file(status$downloadUrl,outfile=thisfile,binary_file=TRUE,verbose=verbose)
+            }
+        } else {
+            ## we are using the existing cached file
+            if (verbose) { cat(sprintf("  using cached file %s for %s\n",thisfile,this_url)) }
+        }
+    } else {
+        thisfile <- cached_get(url=this_url,type="binary_filename",verbose=verbose)
+    }
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
-    thisfile <- cached_get(url=this_url,type="binary_filename",verbose=verbose)
     if (!(file.info(thisfile)$size>0)) {
         ## empty file
         x <- NULL
@@ -220,9 +258,11 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,download_reason_id=ala_conf
         }
 
         if (!empty(x)) {
-            max_records <- ala_constants()$max_occurrence_records
-            if (nrow(x)==max_records) {
-                warning("Only ",max_records," data rows were returned from the server: this might not be the full data set you need. Contact ",ala_constants()$support_email)
+            if (method=="indexed") {
+                max_records <- ala_constants()$max_occurrence_records
+                if (nrow(x)>0.99*max_records) {
+                    warning(nrow(x)," data rows were returned from the server, which is close to the maximum allowed. This might not be the full data set you wanted --- consider using method=\"offline\"")
+                }
             }
             names(x) <- str_replace_all(names(x),"^(el|cl)\\.([0-9]+)","\\1\\2") ## change e.g. el.xxx to elxxx
             ## TODO what is "cl.1050.b" etc?

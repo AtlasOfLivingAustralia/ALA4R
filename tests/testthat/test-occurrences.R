@@ -67,3 +67,20 @@ thischeck <- function() {
     })
 }
 check_caching(thischeck)
+
+thischeck <- function() {
+    test_that("occurrences checks required inputs", {
+        expect_error(occurrences(taxon="data_resource_uid:dr356",method="offline",download_reason_id="testing",email=""))
+        expect_error(occurrences(taxon="data_resource_uid:dr356",method="offline",download_reason_id="testing"))
+        expect_error(occurrences(taxon="data_resource_uid:dr356",method="offline",download_reason_id="testing",email=NULL))
+        expect_error(occurrences(taxon="Amblyornis newtonianus")) ## missing download_reason_id
+    })
+
+thischeck <- function() {
+    test_that("occurrences warns on edge behaviour", {
+        expect_error(expect_warning(occurrences(taxon="data_resource_uid:dr356",method="offline",download_reason_id="testing",email="testing@test.org",fields="all"))) ## url string too long, 414 error and warning
+    })
+    
+    
+}
+check_caching(thischeck)
