@@ -17,5 +17,5 @@
 #' @importFrom grDevices dev.off pdf rainbow
 #' @importFrom graphics image legend points title
 #' @importFrom stats aggregate na.omit
-#' @importFrom utils URLencode data packageVersion read.csv read.table unzip
+#' @importFrom utils data packageVersion read.csv read.table str unzip URLencode 
 NULL
