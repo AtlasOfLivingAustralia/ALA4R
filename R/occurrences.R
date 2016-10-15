@@ -137,7 +137,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
         fields <- fields_name_to_id(fields=fields,fields_type="occurrence") ## replace long names with ids
         unknown <- setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
-            #***stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"",valid_fields_type,"\",as_is=TRUE)")
+            stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"",valid_fields_type,"\",as_is=TRUE)")
         }
         this_query$fields <- str_c(fields,collapse=",")
     }
@@ -148,7 +148,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
         extra <- fields_name_to_id(fields=extra,fields_type="occurrence") ## replace long names with ids
         unknown <- setdiff(extra,valid_fields$name)
         if (length(unknown)>0) {
-            #***stop("invalid extra fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"",valid_fields_type,"\",as_is=TRUE)")
+            stop("invalid extra fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"",valid_fields_type,"\",as_is=TRUE)")
         }
         this_query$extra <- str_c(extra,collapse=",")
     }
