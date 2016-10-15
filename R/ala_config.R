@@ -230,7 +230,8 @@ ala_constants <- function() {
          base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/",
          base_url_images="http://images.ala.org.au/",
          base_url_logger="http://logger.ala.org.au/service/logger/",
-         base_url_fieldguide="http://fieldguide.ala.org.au/"
+         base_url_fieldguide="http://fieldguide.ala.org.au/",
+         base_url_lists="http://lists.ala.org.au/ws/"
          )
 }
 #   \item base_url_spatial string: the base url for spatial web services (default="http://spatial.ala.org.au/ws/")
