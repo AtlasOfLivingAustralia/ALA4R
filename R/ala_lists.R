@@ -17,7 +17,7 @@
 #'  ## find the "Field Guide apps species profiles" from Museum Victoria
 #'  all_lists[grep("Field Guide",all_lists$listName),]
 #'  ## download the vertebrates one
-#'  l <- ala_list(id="dr1146")
+#'  l <- ala_list(druid="dr1146")
 #' }
 #'
 #' @export
