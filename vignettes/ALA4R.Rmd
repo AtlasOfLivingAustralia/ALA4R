@@ -170,7 +170,7 @@ We want to look at the taxonomic tree of penguins, but we don't know what the co
 sx <- search_fulltext("penguins")
 (sx$data[,c("name","rank","commonName")])
 ```
-And we can see that penguins correspond to the family Spheniscidae. Now we can download the taxonomic data (note that the search is case-sensitive, so "SPHENISCIDAE" must appear as it does in the search results above):
+And we can see that penguins correspond to the family Spheniscidae. There are (at the time of writing this vignette) two results: one "Spheniscidae" and the other "SPHENISCIDAE" (identical except all upper case). The first comes from the New Zealand Organism Register and represents extinct penguins. We want the other one ("SPHENISCIDAE"). Now we can download the taxonomic data (note that the search is case-sensitive):
 
 ```{r message=FALSE}
 tx <- taxinfo_download("rk_family:SPHENISCIDAE",fields=c("guid","rk_genus","scientificName","rank"))
