@@ -86,13 +86,13 @@ Various aspects of the ALA4R package can be customized.
 
 ###Caching
 ALA4R can cache most results to local files. This means that if the same code is run multiple times, the second and subsequent iterations will be faster. This will also reduce load on the ALA servers.
-By default, this caching is session-based, meaning that the local files are stored in a temporary directory that is automatically deleted when the R session is ended. This behaviour can be altered so that caching is permanent, by setting the caching directory to a non-temporary location. For example:
+By default, this caching is session-based, meaning that the local files are stored in a temporary directory that is automatically deleted when the R session is ended. This behaviour can be altered so that caching is permanent, by setting the caching directory to a non-temporary location. For example, under Windows, use something like:
 ```R
-ala_config(cache_directory=file.path("c:","mydata","ala_cache")) ## Windows
+ala_config(cache_directory <- file.path("c:","mydata","ala_cache")) ## Windows
 ```
 or for Linux:
 ```R
-ala_config(cache_directory=file.path("~","mydata","ala_cache")) ## Linux
+ala_config(cache_directory <- file.path("~","mydata","ala_cache")) ## Linux
 ```
 Note that this directory must exist (you need to create it yourself).
 
@@ -143,9 +143,9 @@ ala_config(warn_on_empty=TRUE)
 ##Examples
 First, check that we have some additional packages that we'll use in the examples, and install them if necessary.
 ```R
-to_install=c("plyr","jpeg","phytools","ape","leafletR","vegan","mgcv","geosphere","maps","mapdata","maptools")
-to_install=setdiff(to_install,installed.packages()[,"Package"])
-if(length(to_install)) install.packages(to_install)
+to_install <- c("plyr","jpeg","phytools","ape","leaflet","vegan","mgcv","geosphere","maps","mapdata","maptools")
+to_install <- to_install[!sapply(to_install,requireNamespace,quietly=TRUE)]
+if(length(to_install)>0) install.packages(to_install)
 ```
 
 We’ll use the `plyr` package throughout these examples, so load that now:
@@ -162,72 +162,57 @@ library(phytools)
 
 We want to look at the taxonomic tree of penguins, but we don’t know what the correct scientific name is, so let’s search for it:
 ```R
-sx=search_fulltext("penguins")
-(sx$data[,c("name","rank","score","commonName")])
+sx <- search_fulltext("penguins")
+(sx$data[,c("name","rank")])
 ```
 ```
-##                                    name       rank     score
-## 1                          SPHENISCIDAE     family 7.796e+00
-## 2                       Eudyptula minor    species 6.895e-01
-## 3                   Eudyptes chrysocome    species 2.998e-09
-## 4       Eudyptes pachyrhynchus robustus subspecies 2.596e-09
-## 5                        Pteria penguin    species 1.273e-09
-## 6                Eudyptes pachyrhynchus    species 8.494e-10
-## 7                 Eudyptes chrysolophus    species 8.494e-10
-## 8  Eudyptes pachyrhynchus pachyrhynchus subspecies 8.488e-10
-## 9                     Eudyptes sclateri    species 6.372e-10
-## 10              Aptenodytes patagonicus    species 2.641e-10
-##                                                                                                                                                                                                                                                                                                                                                     commonName
-## 1                                                                                                                                                                                                                                                                                                                                                     Penguins
-## 2   Blue Penguin,  Fairy Penguin, Fairy Penguin, Little Penguin, Little Penguin In The Manly Point Area (being The Area On And Near The Shoreline From Cannae Point Generally Northward To The Point Near The Intersection Of Stuart Street And Oyama Cove Avenue, And Extending 100 Metres Offshore From That Shoreline), Little Penguin, Little Blue Penguin
-## 3                                                                                                                                                                                                                                                            Crested Penguin, Jackass Penguin, Tufted Penguin, Rockhopper Penguin, Southern Rockhopper Penguin
-## 4                                                                                                                                                                                                                                                                                              Snares Crested Penguin,  Snares Islands Penguin, Snares Penguin
-## 5                                                                                                                                                                                                                                                                                                         Black Banded Winged Pearl Shell, Penguin Wing Oyster
-## 6                                                                                                                                                                                                                                                                                                                 Fiordland Crested Penguin, Fiordland Penguin
-## 7                                                                                                                                                                                                                                                                                                                              Macaroni Penguin, Royal Penguin
-## 8                                                                                                                                                                                                                                                                                                                 Fiordland Crested Penguin, Fiordland Penguin
-## 9                                                                                                                                                                                                                                                                                                                   Big-crested Penguin, Erect-crested Penguin
-## 10                                                                                                                                                                                                                                                                                                                                                King Penguin
+##                      name    rank
+## 1                penguins    <NA>
+## 2                Penguins    <NA>
+## 3                Penguins    <NA>
+## 4            Spheniscidae  family
+## 5            SPHENISCIDAE  family
+## 6  Eudyptes pachyrhynchus species
+## 7     Eudyptes chrysocome species
+## 8    Megadyptes antipodes species
+## 9   Eudyptes chrysolophus species
+## 10      Eudyptes moseleyi species
 ```
-And we can see from the first result that penguins correspond to the family Spheniscidae. Now we can download the taxonomic data (note that the search is case-sensitive, so “SPHENISCIDAE” must appear as it does in the search results above):
+And we can see that penguins correspond to the family Spheniscidae. There are (at the time of writing this vignette) two results: one "Spheniscidae" and the other "SPHENISCIDAE" (identical except all upper case). The first comes from the New Zealand Organism Register and represents extinct penguins. We want the other one ("SPHENISCIDAE"). Now we can download the taxonomic data (note that the search is case-sensitive):
 ```R
-tx=taxinfo_download("family:SPHENISCIDAE",fields=c("guid","genus","nameComplete","rank"))
-tx=tx[tx$rank %in% c("species","subspecies"),] ## restrict to species and subspecies
+tx <- taxinfo_download("rk_family:SPHENISCIDAE",fields=c("guid","rk_genus","scientificName","rank"))
+tx <- tx[tx$rank %in% c("species","subspecies"),] ## restrict to species and subspecies
 ```
 We can make a taxonomic tree plot using the `phytools` package:
 ```R
 ## as.phylo requires the taxonomic columns to be factors
-temp=colwise(factor, c("genus","scientificName"))(tx)
+temp <- colwise(factor, c("genus","scientificName"))(tx)
 ## create phylo object of Scientific.Name nested within Genus
-ax=as.phylo(~genus/scientificName,data=temp)
-tr=plotTree(ax,type="fan",fsize=0.7) ## plot it
+ax <- as.phylo(~genus/scientificName,data=temp)
+plotTree(ax,type="fan",fsize=0.7) ## plot it
 ```
 
 ![Alt text](./vignettes/images/figure-00.png?raw=true "plot of chunk unnamed-chunk-18")
 
 We can also plot the tree with images of the different penguin species. We’ll first extract a species profile for each species identifier (guid) in our results:
 ```R
-s=lapply(tx$guid,function(z){ species_info(guid=z) })
+s <- search_guids(tx$guid)
 ```
-And for each of those species profiles, find the first jpeg image, download it and store it in our data cache:
+And for each of those species profiles, download the thumbnail image and store it in our data cache:
+
 ```R
-imfiles=sapply(s,function(z){ 
-  ifelse(any(grepl("(\\.jpg)",z$images$smallImageUrl,ignore.case=TRUE)),
-  ALA4R:::cached_get(z$images$smallImageUrl[grepl("(\\.jpg)",z$images$smallImageUrl,
-    ignore.case=TRUE)][1],type="binary_filename"),"") 
+imfiles <- sapply(s$thumbnailUrl,function(z){ 
+  ifelse(!is.na(z),ALA4R:::cached_get(z,type="binary_filename"),"") 
 })
 ```
 And finally, plot the tree:
 ```R
-tr=plotTree(ax,type="fan",ftype="off") ## plot tree without labels
+plotTree(ax,type="fan",ftype="off") ## plot tree without labels
+tr <- get("last_plot.phylo",envir = .PlotPhyloEnv) ## get the tree plot object
 ## add each image
 library(jpeg)
-for (k in which(nchar(imfiles)>0)) {
-    tryCatch({ 
-               im=readJPEG(imfiles[k]); 
-           rasterImage(im,tr$xx[k]-1/10,tr$yy[k]-1/10,tr$xx[k]+1/10,tr$yy[k]+1/10) },
-           error=function(e){invisible(1)})
-}
+for (k in which(nchar(imfiles)>0))
+        rasterImage(readJPEG(imfiles[k]),tr$xx[k]-1/10,tr$yy[k]-1/10,tr$xx[k]+1/10,tr$yy[k]+1/10)
 ```
 
 ![Alt text](./vignettes/images/figure-01.png?raw=true "plot of chunk unnamed-chunk-21")
@@ -236,33 +221,34 @@ for (k in which(nchar(imfiles)>0)) {
 First download an example shapefile of South Australian conservation reserve boundaries: see http://data.sa.gov.au/dataset/conservation-reserve-boundaries. We use the ALA4R’s caching mechanism here, but you could equally download this file directly.
 ```R
 library(maptools)
-shape_filename=ALA4R:::cached_get(
+shape_filename <- ALA4R:::cached_get(
   "https://data.environment.sa.gov.au/NatureMaps/Documents/CONSERVATION_Npwsa_Reserves_shp.zip",
   type="binary_filename")
 unzip(shape_filename,exdir=ala_config()$cache_directory) ## unzip this file
-shape=readShapePoly(file.path(ala_config()$cache_directory,
+shape <- readShapePoly(file.path(ala_config()$cache_directory,
   "CONSERVATION_NpwsaReserves.shp"))
 ## extract just the Morialta Conservation Park polygon
-shape=shape[shape$RESNAME=="Morialta",]
+shape <- shape[shape$RESNAME=="Morialta",]
 ```
 We could create the WKT string using the `rgeos` library:
 ```R
 library(rgeos)
-wkt=writeWKT(shape)
+wkt <- writeWKT(shape)
 ```
+
 Unfortunately, in this instance this gives a WKT string that is too long and won’t be accepted by the ALA web service. Instead, let’s construct the WKT string directly, which gives us a little more control over its format:
 ```R
-lonlat=shape@polygons[[1]]@Polygons[[1]]@coords ## extract the polygon coordinates
+lonlat <- shape@polygons[[1]]@Polygons[[1]]@coords ## extract the polygon coordinates
 ## extract the convex hull of the polygon to reduce the length of the WKT string
-temp=chull(lonlat)
-lonlat=lonlat[c(temp,temp[1]),] 
+temp <- chull(lonlat)
+lonlat <- lonlat[c(temp,temp[1]),] 
 ## create WKT string
-wkt=paste("POLYGON((",paste(apply(lonlat,1,function(z)
+wkt <- paste("POLYGON((",paste(apply(lonlat,1,function(z)
   paste(z,collapse=" ")),collapse=","),"))",sep="")
 ```
-Now extract the species list in this polygon:
+Now extract the species list in this polygon, filtering to only include those with a conservation status:
 ```R
-x=specieslist(wkt=wkt,fq="state_conservation:*")
+x <- specieslist(wkt=wkt,fq="state_conservation:*")
 (head(arrange(x,desc(occurrenceCount)),20))
 ```
 ```
@@ -313,7 +299,7 @@ x=specieslist(wkt=wkt,fq="state_conservation:*")
 ###Example 3: Quality assertions
 Data quality assertions are a suite of fields that are the result of a set of tests peformed on ALA data. Download occurrence data for the golden bowerbird:
 ```R
-x=occurrences(taxon="Amblyornis newtonianus", download_reason_id=10)
+x <- occurrences(taxon="Amblyornis newtonianus", download_reason_id=10)
 summary(x)
 ```
 ```
@@ -344,40 +330,31 @@ You can see that some of the points have assertions that are considered “fatal
 ```R
 occurrences_plot(x,qa="fatal")
 ```
-There are many other ways of producing spatial plots in R. The `leafletR` package provides a simple method of producing browser-based maps iwth panning, zooming, and background layers:
+There are many other ways of producing spatial plots in R. The `leaflet` package provides a simple method of producing browser-based maps iwth panning, zooming, and background layers:
 ```R
-library(leafletR)
-## drop any records with missing lat/lon values: leaflet does not like them
-x$data=x$data[!is.na(x$data$longitude) & !is.na(x$data$latitude),] 
-xa=check_assertions(x)
+library(leaflet)
+## drop any records with missing lat/lon values
+x$data <- x$data[!is.na(x$data$longitude) & !is.na(x$data$latitude),] 
+xa <- check_assertions(x)
 ## columns of x corresponding to a fatal assertion
-x_afcols=names(x$data) %in% xa$occurColnames[xa$fatal]
+x_afcols <- which(names(x$data) %in% xa$occurColnames[xa$fatal])
 ## rows of x that have a fatal assertion
-x_afrows=apply(x$data[,x_afcols],1,any)
+x_afrows <- apply(x$data[,x_afcols],1,any)
 ## which fatal assertions are present in this data?
-these_assertions=names(x$data)[x_afcols]
-## start with the "clean" data (data rows without fatal assertions)
-datlist=list(toGeoJSON(data=x$data[!x_afrows,c("latitude","longitude")],name="Am0",dest=tempdir()))
-## now for each assertion, create a geojson formatted-file of the associated data
-for (k in 1:length(these_assertions)) {
-    idx=x$data[,which(x_afcols)[k]]
-    datlist[k+1]=toGeoJSON(
-      data=x$data[idx,c("latitude","longitude")],name=paste("Am",k,sep=""),dest=tempdir())
-}
-## create styles
-sty0=styleSingle(col="white",fill="black",fill.alpha=1)
-sty1=styleSingle(col="red",fill="red",fill.alpha=1)
-sty2=styleSingle(col="yellow",fill="yellow",fill.alpha=1)
-sty3=styleSingle(col="blue",fill="blue",fill.alpha=1)
-## create the leaflet map
-alamap=leaflet(data=datlist,title="Amblyornis newtonianus",base.map="mqsat",
-  popup="mag",style=list(sty0,sty1,sty2,sty3),dest=tempdir())
+these_assertions <- names(x$data)[x_afcols]
+## make a link to th web page for each occurrence
+popup_link <- paste0("<a href=\"http://biocache.ala.org.au/occurrences/",x$data$id,"\">Link to occurrence record</a>")
+## colour palette
+pal <- c(sub("FF$","",heat.colors(length(these_assertions))))
+## map each data row to colour, depending on its assertions
+marker_colour <- rep("#00FF00",nrow(x$data))
+for (k in 1:length(these_assertions)) marker_colour[x$data[,x_afcols[k]]] <- pal[k]
+## blank map, with imagery background
+m <- addProviderTiles(leaflet(),"Esri.WorldImagery")
+## add markers
+m <- addCircleMarkers(m,x$data$longitude,x$data$latitude,col=marker_colour,popup=popup_link)
+print(m)
 ```
-And now you can open the map in your browser with:
-```R
-browseURL(alamap)
-```
-Note: this would more elegantly be mapped as a single data set with categorical styling (marker colours by assertion) — but for unknown reasons this didn’t seem to work properly.
 
 ###Example 4: Community composition and turnover
 Some extra packages needed here:
@@ -388,29 +365,29 @@ library(geosphere)
 ```
 Define our area of interest as a transect running westwards from the Sydney region, and download the occurrences of legumes (Fabaceae; a large family of flowering plants) in this area:
 ```R
-wkt="POLYGON((152.5 -35,152.5 -32,140 -32,140 -35,152.5 -35))"
-x=occurrences(taxon="family:Fabaceae",wkt=wkt,qa="none",download_reason_id=10)
-x=x$data ## just take the data component
+wkt <- "POLYGON((152.5 -35,152.5 -32,140 -32,140 -35,152.5 -35))"
+x <- occurrences(taxon="family:Fabaceae",wkt=wkt,qa="none",download_reason_id=10)
+x <- x$data ## just take the data component
 ```
 Bin the locations into 0.5-degree grid cells:
 ```R
-x$longitude=round(x$longitude*2)/2
-x$latitude=round(x$latitude*2)/2
+x$longitude <- round(x$longitude*2)/2
+x$latitude <- round(x$latitude*2)/2
 ```
 Create a sites-by-species data frame. This could also be done with e.g. the reshape library or the table() function, or indeed directly from ALA4R’s `species_by_site` function. Note: this process inherently makes some strong assumptions about absences in the data.
 ```R
 ## discard genus- and higher-level records
-xsub=x$rank %in% c("species","subspecies","variety","form","cultivar")
-unames=unique(x[xsub,]$scientificName) ## unique names 
-ull=unique(x[xsub,c("longitude","latitude")])
-xgridded=matrix(NA,nrow=nrow(ull),ncol=length(unames))
+xsub <- x$rank %in% c("species","subspecies","variety","form","cultivar")
+unames <- unique(x[xsub,]$scientificName) ## unique names 
+ull <- unique(x[xsub,c("longitude","latitude")])
+xgridded <- matrix(NA,nrow=nrow(ull),ncol=length(unames))
 for (uli in 1:nrow(ull)) {
-    lidx=xsub & x$longitude==ull[uli,]$longitude & x$latitude==ull[uli,]$latitude
-    xgridded[uli,]=as.numeric(unames %in% x[lidx,]$scientificName)
+    lidx <- xsub & x$longitude==ull[uli,]$longitude & x$latitude==ull[uli,]$latitude
+    xgridded[uli,] <- as.numeric(unames %in% x[lidx,]$scientificName)
 }
-xgridded=as.data.frame(xgridded)
-names(xgridded)=unames
-xgridded=cbind(ull,xgridded)
+xgridded <- as.data.frame(xgridded)
+names(xgridded) <- unames
+xgridded <- cbind(ull,xgridded)
 ```
 Now we can start to examine the patterns in the data. Let’s plot richness as a function of longitude:
 ```R
@@ -424,20 +401,20 @@ The number of species is highest at the eastern end of the transect (the Sydney/
 
 How does the community composition change along the transect? Calculate the dissimilarity between nearby grid cells as a function of along-transect position:
 ```R
-D=vegdist(xgridded[,-c(1:2)],'bray') ## Bray-Curtis dissimilarity
-Dm=as.matrix(D) ## convert to a matrix object
+D <- vegdist(xgridded[,-c(1:2)],'bray') ## Bray-Curtis dissimilarity
+Dm <- as.matrix(D) ## convert to a matrix object
 ## calculate geographic distance from longitude and latitude
-Dll=apply(xgridded[,1:2],1,function(z){distVincentySphere(z,xgridded[,1:2])})
-closeidx=Dll>0 & Dll<100e3 ## find grid cells within 100km of each other
+Dll <- apply(xgridded[,1:2],1,function(z){distVincentySphere(z,xgridded[,1:2])})
+closeidx <- Dll>0 & Dll<100e3 ## find grid cells within 100km of each other
 ## create a matrix of longitudes that matches the size of the pairwise-D matrices
-temp=matrix(xgridded$longitude,nrow=nrow(xgridded),ncol=nrow(xgridded))
+temp <- matrix(xgridded$longitude,nrow=nrow(xgridded),ncol=nrow(xgridded))
 ## plot dissimilarity as a function of transect position
 plot(temp[closeidx],Dm[closeidx],xlab="Longitude",ylab="Dissimilarity",pch=20,
   col="grey85")
 ## add smooth fit via gam()
-fit=gam(d~s(tp,k=7),data=data.frame(tp=temp[closeidx],d=Dm[closeidx]))
-tpp=seq(from=min(xgridded$longitude),to=max(xgridded$longitude),length.out=100)
-fitp=predict(fit,newdata=data.frame(tp=tpp))
+fit <- gam(d~s(tp,k=7),data=data.frame(tp=temp[closeidx],d=Dm[closeidx]))
+tpp <- seq(from=min(xgridded$longitude),to=max(xgridded$longitude),length.out=100)
+fitp <- predict(fit,newdata=data.frame(tp=tpp))
 lines(tpp,fitp,col=1)
 ```
 
@@ -445,18 +422,18 @@ lines(tpp,fitp,col=1)
 
 Clustering:
 ```R
-cl=hclust(D,method="ave") ## UPGMA clustering
+cl <- hclust(D,method="ave") ## UPGMA clustering
 plot(cl) ## plot dendrogram
 ```
 
 ![Alt text](./vignettes/images/figure-04.png?raw=true "plot of chunk unnamed-chunk-38")
 
 ```R
-grp=cutree(cl,20) ## extract group labels at the 20-group level
+grp <- cutree(cl,20) ## extract group labels at the 20-group level
 ## coalesce small (outlier) groups into a single catch-all group
-sing=which(table(grp)<5)
-grp[grp %in% sing]=21 ## put these in a new combined group
-grp=sapply(grp,function(z)which(unique(grp)==z)) ## renumber groups
+sing <- which(table(grp)<5)
+grp[grp %in% sing] <- 21 ## put these in a new combined group
+grp <- sapply(grp,function(z)which(unique(grp)==z)) ## renumber groups
 ## plot
 with(xgridded,plot(longitude,latitude,pch=21,col=grp,bg=grp))
 ```
@@ -468,7 +445,7 @@ with(xgridded,plot(longitude,latitude,pch=21,col=grp,bg=grp))
 library(maps)
 library(mapdata)
 map("worldHires","Australia", xlim=c(105,155), ylim=c(-45,-10), col="gray90", fill=TRUE)
-thiscol=c("#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b",
+thiscol <- c("#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b",
   "#e377c2","#7f7f7f","#bcbd22","#17becf") ## colours for clusters
 with(xgridded,points(longitude,latitude,pch=21,col=thiscol[grp],bg=thiscol[grp],cex=0.75))
 ```
