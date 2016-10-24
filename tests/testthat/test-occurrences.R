@@ -93,3 +93,12 @@ thischeck <- function() {
     })
 }
 check_caching(thischeck)
+
+thischeck <- function() {
+    test_that("occurrences works with records_count_only", {
+        x1 <- occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE)
+        expect_true(is.numeric(x1))
+        expect_gt(x1,100)
+    })
+}
+check_caching(thischeck)
