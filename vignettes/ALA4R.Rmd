@@ -111,7 +111,7 @@ ala_config(caching="off")
 or set to "refresh", meaning that the cached results will re-downloaded from the ALA servers and the cache updated. (This will happen for as long as caching is set to "refresh" --- so you may wish to switch back to normal "on" caching behaviour once you have updated your cache with the data you are working on).
 
 ### User-agent string
-Each request to the ALA servers is accompanied by a "user-agent" string that identifies the software making the request. This is a standard behaviour used by web browsers as well. The user-agent identifies the user requests to the ALA, helping the ALA to adapt and enhance the services that it provides. By default, the ALA4R user-agent string is set to "ALA4R" plus the ALA4R version number, R version, and operating system (e.g. "ALA4R 0.16 (R version 3.0.2 (2013-09-25)/x86_64-pc-linux-gnu)"). 
+Each request to the ALA servers is accompanied by a "user-agent" string that identifies the software making the request. This is a standard behaviour used by web browsers as well. The user-agent identifies the user requests to the ALA, helping the ALA to adapt and enhance the services that it provides. By default, the ALA4R user-agent string is set to "ALA4R" plus the ALA4R version number, R version, and operating system (e.g. "ALA4R 0.16 (R version 3.0.2 (2013-09-25)/x86_64-pc-linux-gnu)").
 
 *NO* personal identification information is sent. You can see all configuration settings, including the the user-agent string that is being used, with the command:
 
@@ -154,7 +154,7 @@ if(length(to_install)>0) install.packages(to_install)
 
 We'll use the `plyr` package throughout these examples, so load that now:
 ```{r}
-library(plyr) 
+library(plyr)
 ```
 
 ### Example 1: Name searching and taxonomic trees
@@ -194,13 +194,13 @@ s <- search_guids(tx$guid)
 And for each of those species profiles, download the thumbnail image and store it in our data cache:
 
 ```{r}
-imfiles <- sapply(s$thumbnailUrl,function(z){ 
-  ifelse(!is.na(z),ALA4R:::cached_get(z,type="binary_filename"),"") 
+imfiles <- sapply(s$thumbnailUrl,function(z){
+  ifelse(!is.na(z),ALA4R:::cached_get(z,type="binary_filename"),"")
 })
 ```
 
 And finally, plot the tree:
-```{r results='hide', dev.args=list(png=list(colortype="pseudo.cube"))}
+```{r results='hide', dev.args=if (.Platform$OS.type=="unix") list(png=list(colortype="pseudo.cube")) else list()}
 plotTree(ax,type="fan",ftype="off") ## plot tree without labels
 tr <- get("last_plot.phylo",envir = .PlotPhyloEnv) ## get the tree plot object
 ## add each image
@@ -243,7 +243,7 @@ Unfortunately, in this instance this gives a WKT string that is too long and won
 lonlat <- shape@polygons[[1]]@Polygons[[1]]@coords ## extract the polygon coordinates
 ## extract the convex hull of the polygon to reduce the length of the WKT string
 temp <- chull(lonlat)
-lonlat <- lonlat[c(temp,temp[1]),] 
+lonlat <- lonlat[c(temp,temp[1]),]
 ## create WKT string
 wkt <- paste("POLYGON((",paste(apply(lonlat,1,function(z) paste(z,collapse=" ")),collapse=","),"))",sep="")
 ```
@@ -274,7 +274,7 @@ There are many other ways of producing spatial plots in R. The `leaflet` package
 ```{r eval=FALSE}
 library(leaflet)
 ## drop any records with missing lat/lon values
-x$data <- x$data[!is.na(x$data$longitude) & !is.na(x$data$latitude),] 
+x$data <- x$data[!is.na(x$data$longitude) & !is.na(x$data$latitude),]
 xa <- check_assertions(x)
 ## columns of x corresponding to a fatal assertion
 x_afcols <- which(names(x$data) %in% xa$occurColnames[xa$fatal])
@@ -324,7 +324,7 @@ Create a sites-by-species data frame. This could also be done with e.g. the resh
 ```{r eval=FALSE}
 ## discard genus- and higher-level records
 xsub <- x$rank %in% c("species","subspecies","variety","form","cultivar")
-unames <- unique(x[xsub,]$scientificName) ## unique names 
+unames <- unique(x[xsub,]$scientificName) ## unique names
 ull <- unique(x[xsub,c("longitude","latitude")])
 xgridded <- matrix(NA,nrow=nrow(ull),ncol=length(unames))
 for (uli in 1:nrow(ull)) {
