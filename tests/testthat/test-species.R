@@ -16,9 +16,7 @@ thischeck=function() {
         ##expect_equal(species_info(guid="ALA_Pterostylis_squamata")$classification[[1]],"ORCHIDACEAE") ## taxon with improper classification
     })
     test_that("text encoding works as expected",{
-        ## this one now just returns "Simoselaps fasciolatus"  - need to find new example to test
-        ##expect_equal(search_names("Simoselaps fasciolatus")$name,"Simoselaps fasciolatus (Günther, 1872)") ## uses POST
-        expect_equal(as.character(species_info('Simoselaps fasciolatus')$taxonConcept$author),"(Günther, 1872)") ## uses GET
+        expect_equal(as.character(species_info('Simoselaps fasciolatus')$taxonConcept$author),paste0("(G",intToUtf8(252),"nther, 1872)")) ## (Günther, 1872)
     })
 }
 check_caching(thischeck)
@@ -28,7 +26,7 @@ thischeck=function() {
     test_that("species_info gives resolvable guids for known species", {
         rsp <- httr::GET(as.character(species_info("Grevillea humilis subsp. maritima")$taxonConcept$guid))
         expect_equal(rsp$status_code,200)
-        
+
         rsp <- httr::GET("http://id.biodiversity.org.au/node/apni/blahblahblah")
         expect_equal(rsp$status_code,404)
     })
