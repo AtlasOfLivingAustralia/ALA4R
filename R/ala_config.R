@@ -213,7 +213,22 @@ convert_reason <- function(reason) {
     reason
 }
 
-## internal function, returns some behaviours and settings of the ALA servers and setup
+
+#' ALA4R internal settings and parameters
+#'
+#' Most users will not need to use this function: generally, users wishing to adjust ALA4R behaviour should look 
+#' at \code{\link{ala_config}}. However, developers of packages that import/depend on ALA4R might choose to override
+#' this function with their own.
+#'
+#' @return A named list of values.
+#'
+#' @seealso \code{\link{ala_config}}
+#'
+#' @examples
+#' \dontrun{
+#'  ala_constants()
+#' }
+#' @export
 ala_constants <- function() {
     list(max_occurrence_records=500000,
          server_max_url_length=8150, ## bytes, for Apache with default LimitRequestLine value of 8190, allowing 40 bytes wiggle room. Users will be warned of possible problems when URL exceeds this length
