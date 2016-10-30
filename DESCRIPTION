@@ -45,4 +45,4 @@ URL: https://github.com/AtlasOfLivingAustralia/ALA4R
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1.9000
+RoxygenNote: 5.0.1

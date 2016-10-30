@@ -5,13 +5,13 @@ expected_property_names=sort(c("imageIdentifier","title","creator","dataResource
 thischeck=function() {
     test_that("extract_image_detail matches html as expected", {
 ##        expect_true(FALSE)
-        expect_equal(extract_image_detail(c("<td>blah</td><td>thing</td>","thiswillnotmatch"),"blah")[1,1],"thing")
-        expect_equal(extract_image_detail(c("<td>blah</td> <td>thing</td>","thiswillnotmatch"),"blah")[2,1],as.character(NA))
+        expect_equal(ALA4R:::extract_image_detail(c("<td>blah</td><td>thing</td>","thiswillnotmatch"),"blah")[1,1],"thing")
+        expect_equal(ALA4R:::extract_image_detail(c("<td>blah</td> <td>thing</td>","thiswillnotmatch"),"blah")[2,1],as.character(NA))
         ## no matches at all: special case because extract_image_details enforces the columns imageURL and imageIdentifier ith stringr v0.6
         if (packageVersion("stringr")<"1.0") {
-            expect_equal(dim(extract_image_detail(c("<td>blah</td> <td>thing</td>","thiswillnotmatch"),"nomatches")),c(2,2))
+            expect_equal(dim(ALA4R:::extract_image_detail(c("<td>blah</td> <td>thing</td>","thiswillnotmatch"),"nomatches")),c(2,2))
         } else {
-            expect_equal(dim(extract_image_detail(c("<td>blah</td> <td>thing</td>","thiswillnotmatch"),"nomatches")),c(2,0))
+            expect_equal(dim(ALA4R:::extract_image_detail(c("<td>blah</td> <td>thing</td>","thiswillnotmatch"),"nomatches")),c(2,0))
         }        
     })
 }
