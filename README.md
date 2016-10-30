@@ -5,7 +5,7 @@
 # ALA4R
 
 ----
-*NOTE July 2016* --- the ALA's taxonomic infrastructure was recently updated (see http://www.ala.org.au/blogs-news/major-ala-upgrade/), which may cause some issues with ALA4R. In particular, some field names may have changed, and name searching may behave differently to previously. We are working to resolve these issues.
+*NOTE October 2016* --- ALA4R version 1.5 has been released, which should now work properly with the ALA's updated taxonomic infrastructure (see http://www.ala.org.au/blogs-news/major-ala-upgrade/).
 
 ----
 
@@ -14,7 +14,7 @@ The Atlas of Living Australia (ALA) provides tools to enable users of biodiversi
 
 ALA4R enables the R community to directly access data and resources hosted by the ALA. Our goal is to enable outputs (e.g. observations of species) to be queried and output in a range of standard formats.
 
-The use-examples presented at the [2014 ALA Science Symposium](http://www.ala.org.au/blogs-news/2014-atlas-of-living-australia-science-symposium/) are available in the package vignette, via (in R): `vignette("ALA4R")`, [as a pdf](./vignettes/ALA4R.pdf?raw=true), and are also copied below.
+The use-examples presented at the [2014 ALA Science Symposium](http://www.ala.org.au/blogs-news/2014-atlas-of-living-australia-science-symposium/) are available in the package vignette, via (in R): `vignette("ALA4R")`, and are also copied below.
 
 
 ## Installing ALA4R
