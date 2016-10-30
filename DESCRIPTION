@@ -40,7 +40,7 @@ Suggests:
     maps,
     mapdata,
     maptools
-License: MPL-1.1
+License: MPL-2.0
 URL: https://github.com/AtlasOfLivingAustralia/ALA4R
 LazyLoad: yes
 LazyData: yes
