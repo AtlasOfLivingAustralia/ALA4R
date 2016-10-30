@@ -1,9 +1,9 @@
 # ALA4R 1.5
 
-* update examples and vignette for new ALA taxonomic backbone
+* updated code,examples and vignette for new ALA taxonomic backbone
 * "offline" method added to `occurrences()`, allowing download of larger datasets with more fields
 * `fieldguide()` function added
-* fields="all" option added to taxinfo_download
+* fields="all" option added to `taxinfo_download()`
 * `ala_list()` and `ala_lists()` functions added
 
 # ALA4R 1.24
