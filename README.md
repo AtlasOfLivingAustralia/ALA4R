@@ -4,7 +4,6 @@
 
 # ALA4R
 
-----
 *NOTE October 2016* --- ALA4R version 1.5 has been released, which should now work properly with the ALA's updated taxonomic infrastructure (see http://www.ala.org.au/blogs-news/major-ala-upgrade/).
 
 ----
