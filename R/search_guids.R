@@ -36,7 +36,7 @@ search_guids <- function(guids=c(),occurrence_count=FALSE,output_format="simple"
     assert_that(is.flag(occurrence_count))
     assert_that(is.character(output_format))
     output_format <- match.arg(tolower(output_format),c("simple","complete"))
-    this_url <- build_url_from_parts(ala_constants()$base_url_bie,c("species","guids","bulklookup"))
+    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie,c("species","guids","bulklookup"))
     temp <- jsonlite::toJSON(guids)
     x <- cached_post(url=this_url,body=temp,type="json",content_type="application/json")
     ## x is a named list with one element

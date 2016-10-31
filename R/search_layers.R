@@ -25,7 +25,7 @@ search_layers <- function(query,type="all",output_format="simple") {
     output_format <- match.arg(tolower(output_format),c("simple","complete"))    
     
     mypath <- ifelse(type %in% c("grids","shapes"),c("layers",type),"layers")
-    this_url <- build_url_from_parts(ala_constants()$base_url_spatial,mypath)
+    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_spatial,mypath)
     out <- cached_get(url=this_url,type="json") ## download all data
     if (!missing(query)) {
         out <- out[grepl(query,out$name,ignore.case=TRUE) | grepl(query,out$description,ignore.case=TRUE),]

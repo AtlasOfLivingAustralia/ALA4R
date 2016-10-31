@@ -80,7 +80,7 @@ NULL
 "unique.occurrences" <- function(x, incomparables=FALSE, spatial=0, temporal=NULL, na.rm=FALSE, ...) {
     ## helper function to make sure names are present
     check_names_present <- function(nms) {
-        if (!all(nms %in% names(x$data))) stop(sprintf("expecting columns '%s' in occurrences data. %s",paste(setdiff(nms,names(x)),collapse="','"),ala_constants()$notify))
+        if (!all(nms %in% names(x$data))) stop(sprintf("expecting columns '%s' in occurrences data. %s",paste(setdiff(nms,names(x)),collapse="','"),getOption("ALA4R_server_config")$notify))
         invisible(TRUE)
     }
     assert_that(is.numeric(spatial)) #ensure unique.spatial is numeric

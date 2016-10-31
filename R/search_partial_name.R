@@ -39,7 +39,7 @@ search_partial_name <- function(taxon,geo_only=FALSE,output_format="simple",inde
         index_type <- match.arg(toupper(index_type),c("TAXON","REGION","COLLECTION","INSTITUTION","DATASET"))
         this_query$idxType <- index_type
     }
-    this_url <- build_url_from_parts(ala_constants()$base_url_bie,c("search","auto.json"),this_query)
+    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie,c("search","auto.json"),this_query)
     out <- cached_get(url=this_url,type="json") #get the data
     out <- out[[1]] #looking at the data
 	

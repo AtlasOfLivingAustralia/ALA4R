@@ -21,7 +21,7 @@
 #' @export
 check_assertions <- function(x) {
     if (! inherits(x,"occurrences")) {
-        stop("check_assertions must have an object of class occurrences from e.g., ",ala_constants()$occurrences_function,"() in the ",ala_constants()$brand," package")
+        stop("check_assertions must have an object of class occurrences from e.g., ",getOption("ALA4R_server_config")$occurrences_function,"() in the ",getOption("ALA4R_server_config")$brand," package")
     }
     ass <- ala_fields("assertions",as_is=TRUE) ## get all assertion fields
     ass$occurColnames <- NA

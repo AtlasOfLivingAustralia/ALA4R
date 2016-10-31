@@ -61,12 +61,12 @@ taxinfo_download <- function(query,fq,fields,verbose=ala_config()$verbose,use_da
         if (identical(tolower(fields),"all")) fields <- valid_fields$name
         unknown <- setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
-            stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"general\",as_is=TRUE)")
+            stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ",getOption("ALA4R_server_config")$fields_function,"(\"general\",as_is=TRUE)")
         }
         this_query$fields <- str_c(fields,collapse=",")
     }
     
-    this_url <- build_url_from_parts(ala_constants()$base_url_bie,"download",this_query)
+    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie,"download",this_query)
     
     ## these downloads can potentially be large, so we want to download directly to file and then read the file
     thisfile <- cached_get(url=this_url,type="binary_filename",verbose=verbose)

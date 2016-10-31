@@ -78,7 +78,7 @@ ala_config <- function(...) {
         known_options <- names(default_options)
         unknown <- setdiff(names(user_options),known_options)
         if (length(unknown)>0) {
-            stop("unknown ",ala_constants()$brand," options: ", str_c(unknown,collapse=", "))
+            stop("unknown ",getOption("ALA4R_server_config")$brand," options: ", str_c(unknown,collapse=", "))
         }
 
         current_options <- getOption(ala_option_name)
@@ -182,19 +182,19 @@ ala_reasons <- function() {
     ## 11         logger.download.reason.citizen.science                  citizen science 11
     ## 12 logger.download.reason.restoration.remediation          restoration/remediation 12
     
-    out <- cached_get(build_url_from_parts(ala_constants()$base_url_logger,path="reasons"),type="json")
+    out <- cached_get(build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,path="reasons"),type="json")
     if (any(names(out)=="deprecated")) out <- out[!out$deprecated,]
     out[,!names(out)=="deprecated"]
 }
 
 ## internal function, used to define the ALA4R sourceTypeId parameter value, passed by occurrences download and possibly other functions
 ala_sourcetypeid <- function() {
-    this_url <- build_url_from_parts(ala_constants()$base_url_logger,path="sources")
+    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,path="sources")
     sids <- cached_get(this_url,type="json")
     if ("ALA4R" %in% sids$name) {
         sids$id[sids$name=="ALA4R"]
     } else {
-        warning("could not retrieve ",ala_constants()$brand," source type from ",this_url,". ",ala_constants()$notify)
+        warning("could not retrieve ",getOption("ALA4R_server_config")$brand," source type from ",this_url,". ",getOption("ALA4R_server_config")$notify)
         2001 ## default value
     }
 }
@@ -207,51 +207,8 @@ convert_reason <- function(reason) {
         tryCatch({ reason<-match.arg(tolower(reason),valid_reasons$name)
                    reason<-valid_reasons$id[valid_reasons$name==reason]
                },
-                 error=function(e){ stop("could not match download_reason_id string \"",reason,"\" to valid reason string: see ",ala_constants()$reasons_function,"()") }
+                 error=function(e){ stop("could not match download_reason_id string \"",reason,"\" to valid reason string: see ",getOption("ALA4R_server_config")$reasons_function,"()") }
                  )
     }
     reason
 }
-
-
-#' ALA4R internal settings and parameters
-#'
-#' Most users will not need to use this function: generally, users wishing to adjust ALA4R behaviour should look 
-#' at \code{\link{ala_config}}. However, developers of packages that import/depend on ALA4R might choose to override
-#' this function with their own.
-#'
-#' @return A named list of values.
-#'
-#' @seealso \code{\link{ala_config}}
-#'
-#' @examples
-#' \dontrun{
-#'  ala_constants()
-#' }
-#' @export
-ala_constants <- function() {
-    list(max_occurrence_records=500000,
-         server_max_url_length=8150, ## bytes, for Apache with default LimitRequestLine value of 8190, allowing 40 bytes wiggle room. Users will be warned of possible problems when URL exceeds this length
-         brand="ALA4R", ## the package name that is shown to users in messages and warnings
-         notify="If this problem persists please notify the ALA4R maintainers by lodging an issue at https://github.com/AtlasOfLivingAustralia/ALA4R/issues/ or emailing support@ala.org.au", ## the string that will be displayed to users to notify the package maintainers
-         support_email="support@ala.org.au", ## contact email
-         reasons_function="ala_reasons", ## the ala_reasons or equivalent function name
-         fields_function="ala_fields", ## the ala_fields or equivalent function name
-         occurrences_function="occurrences", ## the occurrences or equivalent function name
-         config_function="ala_config", ## the ala_config or equivalent function name
-         base_url_spatial="http://spatial.ala.org.au/ws/",
-         base_url_bie="http://bie.ala.org.au/ws/",
-         base_url_biocache="http://biocache.ala.org.au/ws/",
-         base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/",
-         base_url_images="http://images.ala.org.au/",
-         base_url_logger="http://logger.ala.org.au/service/logger/",
-         base_url_fieldguide="http://fieldguide.ala.org.au/",
-         base_url_lists="http://lists.ala.org.au/ws/"
-         )
-}
-#   \item base_url_spatial string: the base url for spatial web services (default="http://spatial.ala.org.au/ws/")
-#   \item base_url_bie string: the base url for BIE web services (default="http://bie.ala.org.au/ws/")
-#   \item base_url_biocache string: the base url for biocache web services (default="http://biocache.ala.org.au/ws/")
-#   \item base_url_alaspatial string: the base url for older ALA spatial services (default="http://spatial.ala.org.au/alaspatial/ws/")
-#   \item base_url_images string: the base url for the images database (default="http://images.ala.org.au/"). Set to NULL or empty string if not available
-#   \item base_url_logger string: the base url for usage logging webservices (default="http://logger.ala.org.au/service/logger/")

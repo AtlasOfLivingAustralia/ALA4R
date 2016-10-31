@@ -28,7 +28,7 @@ cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=a
 
     ## strip newlines or multiple spaces from url: these seem to cause unexpected behaviour
     url=str_replace_all(url,"[\r\n ]+"," ")
-    if (nchar(url)>ala_constants()$server_max_url_length) warning("URL length may be longer than is allowed by the server")
+    if (nchar(url)>getOption("ALA4R_server_config")$server_max_url_length) warning("URL length may be longer than is allowed by the server")
 
     if (FALSE) {
         ## this is breaking, for some reason. As a workaround use the caching code by default

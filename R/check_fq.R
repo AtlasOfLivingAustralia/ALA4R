@@ -8,12 +8,12 @@ check_fq <- function(fq,type) {
     field_names <- extract_fq_fieldnames(fq)
     if (is.null(field_names)) {
         ## no matches, so somehow fq doesn't match our expected syntax
-        warning("fq may be invalid. See ",ala_constants()$fields_function,"(\"",type,"\",as_is=TRUE) for valid fields and help(\"",ala_constants()$occurrences_function,"\") for general help on fq syntax")
+        warning("fq may be invalid. See ",getOption("ALA4R_server_config")$fields_function,"(\"",type,"\",as_is=TRUE) for valid fields and help(\"",getOption("ALA4R_server_config")$occurrences_function,"\") for general help on fq syntax")
     } else {
         valid_fields <- ala_fields(type,as_is=TRUE)
         invalid_fields <- setdiff(tolower(field_names),tolower(valid_fields$name))
         if (length(invalid_fields)>0) {
-            warning("there may be invalid fields in fq: ",paste(invalid_fields,collapse=", "),". See ",ala_constants()$fields_function,"(\"",type,"\",as_is=TRUE)")
+            warning("there may be invalid fields in fq: ",paste(invalid_fields,collapse=", "),". See ",getOption("ALA4R_server_config")$fields_function,"(\"",type,"\",as_is=TRUE)")
         }
     }
 }

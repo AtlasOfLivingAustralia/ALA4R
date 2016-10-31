@@ -61,7 +61,7 @@ search_names <- function(taxa=c(),vernacular=FALSE,guids_only=FALSE,occurrence_c
     if (any(nchar(taxa)<1)) {
         stop("input contains empty string after cleaning (did the input name contain only non-alphabetic characters?)")
     }    
-    this_url <- build_url_from_parts(ala_constants()$base_url_bie,c("species","lookup","bulk"))
+    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie,c("species","lookup","bulk"))
     temp <- jsonlite::toJSON(list(names=taxa,vernacular=vernacular))
     ## toJSON puts vernacular as a single-element array, which causes failures. Need to convert to scalar logical
     temp <- str_replace(temp,"\\[[ ]*false[ ]*\\]","false")

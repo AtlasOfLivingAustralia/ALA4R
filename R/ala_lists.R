@@ -28,9 +28,9 @@ ala_list <- function(druid,kvp=TRUE,verbose=ala_config()$verbose) {
     valid_ids <- ala_lists()$dataResourceUid
     if (!druid %in% valid_ids) stop(sprintf("the supplied data resource UID (%s) does not appear to be a valid list ID",druid))
     if (kvp) {
-        this_url <- build_url_from_parts(ala_constants()$base_url_lists,c("speciesListItems",druid),list(includeKVP="true"))
+        this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_lists,c("speciesListItems",druid),list(includeKVP="true"))
     } else {
-        this_url <- build_url_from_parts(ala_constants()$base_url_lists,c("speciesListItems",druid))
+        this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_lists,c("speciesListItems",druid))
     }
     cached_get(this_url,type="json",verbose=verbose)
 }
@@ -62,10 +62,10 @@ ala_lists <- function(guid,offset=0,max=500,verbose=ala_config()$verbose) {
     assert_that(is.flag(verbose))
     if (!missing(guid)) {
         assert_that(is.string(guid))
-        this_url <- build_url_from_parts(ala_constants()$base_url_lists,c("species",guid),list(offset=offset,max=max))
+        this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_lists,c("species",guid),list(offset=offset,max=max))
         cached_get(this_url,type="json",verbose=verbose)
     } else {
-        this_url <- build_url_from_parts(ala_constants()$base_url_lists,"speciesList",list(offset=offset,max=max))
+        this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_lists,"speciesList",list(offset=offset,max=max))
         cached_get(this_url,type="json",verbose=verbose)$lists
     }
 }

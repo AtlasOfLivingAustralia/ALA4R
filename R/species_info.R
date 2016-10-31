@@ -48,7 +48,7 @@ species_info <- function(scientificname,guid,verbose=ala_config()$verbose) {
             return(list())
         }
     }
-    this_url <- build_url_from_parts(ala_constants()$base_url_bie,c("species",paste0(guid,".json")))
+    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie,c("species",paste0(guid,".json")))
     ## July 2016: invalid GUIDs now return 404 errors. Catch these and return a list()
     out <- tryCatch(cached_get(URLencode(this_url),type="json",verbose=verbose),
               error=function(e) if (grepl("code 404 received",e$message)) NULL else stop(e))
@@ -99,7 +99,7 @@ species_info <- function(scientificname,guid,verbose=ala_config()$verbose) {
         } else if (is.character(out$classification)) {
             ## leave as is
         } else {
-            warning("the structure of the $classification object was unexpected. ",ala_constants()$notify)
+            warning("the structure of the $classification object was unexpected. ",getOption("ALA4R_server_config")$notify)
         }
     }
     ## identifiers is a list - is OK

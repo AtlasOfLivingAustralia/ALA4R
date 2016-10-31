@@ -43,7 +43,7 @@ intersect_points <- function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE
     num_layers_limit <- 700 # was previously 300
     use_post <- TRUE # use POST for batch operations, not GET?
     
-    base_url <- ala_constants()$base_url_spatial #get the base url
+    base_url <- getOption("ALA4R_server_config")$base_url_spatial #get the base url
     bulk <- FALSE #set the default to not bulk
     force_bulk <- TRUE ## force to use the bulk method even if only one point provided (avoids some type problems with json parsing under single-point method, also ensures that output always consistent between the two methods)
 
@@ -108,7 +108,7 @@ intersect_points <- function(pnts,layers,SPdata.frame=FALSE,use_layer_names=TRUE
             }
             data_url <- cached_get(status_url,type="json",caching="off") #get the data url
             while (data_url$status != 'finished') { #keep checking the status until finished
-                if (data_url$status == "error" ) { stop("batch intersect has returned an error; please check your inputs. ",ala_constants()$notify) }
+                if (data_url$status == "error" ) { stop("batch intersect has returned an error; please check your inputs. ",getOption("ALA4R_server_config")$notify) }
                 if (verbose) {
                     if (data_url$status == 'waiting') {
                         if (data_url$waiting == "In queue") {

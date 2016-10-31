@@ -23,7 +23,7 @@ occurrence_details <- function(uuid,verbose=ala_config()$verbose) {
     }
     assert_that(is.flag(verbose))
     non_empty <- nchar(uuid)>0 & !is.na(uuid)
-    this_url <- sapply(uuid[non_empty],function(z)build_url_from_parts(ala_constants()$base_url_biocache,paste0("occurrence/",z)))
+    this_url <- sapply(uuid[non_empty],function(z)build_url_from_parts(getOption("ALA4R_server_config")$base_url_biocache,paste0("occurrence/",z)))
     out_non_empty <- lapply(this_url,function(z)cached_get(z,type="json",verbose=verbose))
     out <- vector("list",length(uuid))
     #if (is.null(out)) {

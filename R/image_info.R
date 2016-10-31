@@ -22,25 +22,25 @@ image_info <- function(id,image_number,verbose=ala_config()$verbose) {
     if (!missing(id)) { assert_that(is.character(id)) }
     if (!missing(image_number)) { assert_that(is.character(image_number) | is.numeric(image_number)) }
     assert_that(is.flag(verbose))
-    if (is.null(ala_constants()$base_url_images) || ala_constants()$base_url_images=="") {
-        stop("No URL to the image database has been configured: see base_url_images in ",ala_constants()$config_function)
+    if (is.null(getOption("ALA4R_server_config")$base_url_images) || getOption("ALA4R_server_config")$base_url_images=="") {
+        stop("No URL to the image database has been configured: see base_url_images in ",getOption("ALA4R_server_config")$config_function)
     }
     ## grab each image info web page
     if (!missing(id)) {
         non_empty <- nchar(id)>0 & !is.na(id)
-        this_url <- paste0(ala_constants()$base_url_images,"image/details?imageId=",id[non_empty])
+        this_url <- paste0(getOption("ALA4R_server_config")$base_url_images,"image/details?imageId=",id[non_empty])
     } else if (!missing(image_number)) {
         if (is.character(image_number)) {
             non_empty <- nchar(image_number)>0 & !is.na(image_number)
         } else {
             non_empty <- 1:length(image_number)
         }
-        this_url <- paste0(ala_constants()$base_url_images,"image/details/",image_number[non_empty])
+        this_url <- paste0(getOption("ALA4R_server_config")$base_url_images,"image/details/",image_number[non_empty])
     }        
     ## we get a 500 error if we ask for a non-existent image ID, so catch these errors with the on_server_error parm
     pages <- sapply(this_url,function(z) paste0(cached_get(URLencode(z),type="text",verbose=verbose,on_server_error=function(z)NULL),collapse=" "))
     ## keep only the table from each, which has the actual image details
-    pages <- sapply(pages,function(z) { if (nrow(str_locate(z,"<table"))==1) str_extract(z,regex("<table.*</table>",dotall=TRUE)) else stop("image information page in unexpected format. ",ala_constants()$notify) })
+    pages <- sapply(pages,function(z) { if (nrow(str_locate(z,"<table"))==1) str_extract(z,regex("<table.*</table>",dotall=TRUE)) else stop("image information page in unexpected format. ",getOption("ALA4R_server_config")$notify) })
         
     out <- extract_image_detail(pages,".*?")
     ## this will have NA values for imageIdentifier where id was not valid (because the imageIdentifier value comes from the scraped HTML, which won't exist for invalid id). Replace with input ids

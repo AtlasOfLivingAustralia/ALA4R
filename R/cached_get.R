@@ -24,7 +24,7 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
 
     ## strip newlines or multiple spaces from url: these seem to cause unexpected behaviour
     url=str_replace_all(url,"[\r\n ]+"," ")
-    if (nchar(url)>ala_constants()$server_max_url_length) warning("URL length may be longer than is allowed by the server")
+    if (nchar(url)>getOption("ALA4R_server_config")$server_max_url_length) warning("URL length may be longer than is allowed by the server")
 
     if (identical(caching,"off") && !(type %in% c("filename","binary_filename"))) {
         ## if we are not caching, get this directly without saving to file at all

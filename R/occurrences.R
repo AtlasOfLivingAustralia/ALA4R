@@ -108,7 +108,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
         temp_query <- this_query
         temp_query$pageSize <- 0
         temp_query$facet <- "off"
-        this_url <- build_url_from_parts(ala_constants()$base_url_biocache,c("occurrences","search"),query=temp_query)
+        this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_biocache,c("occurrences","search"),query=temp_query)
         # ## don't need to check number of records if caching is on and we already have the file
         # cache_file_exists=file.exists(ala_cache_filename(this_url))
         # if ((ala_config()$caching %in% c("off","refresh")) | (!cache_file_exists & ala_config()$caching=="on")) {
@@ -127,7 +127,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
         reason_ok <- download_reason_id %in% valid_reasons$id
     }
     if (! reason_ok) {
-        stop("download_reason_id must be a valid reason_id. See ",ala_constants()$reasons_function,"()")
+        stop("download_reason_id must be a valid reason_id. See ",getOption("ALA4R_server_config")$reasons_function,"()")
     }
     if (!missing(fields)) {
         assert_that(is.character(fields))
@@ -137,7 +137,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
         fields <- fields_name_to_id(fields=fields,fields_type="occurrence") ## replace long names with ids
         unknown <- setdiff(fields,valid_fields$name)
         if (length(unknown)>0) {
-            stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"",valid_fields_type,"\",as_is=TRUE)")
+            stop("invalid fields requested: ", str_c(unknown,collapse=", "), ". See ",getOption("ALA4R_server_config")$fields_function,"(\"",valid_fields_type,"\",as_is=TRUE)")
         }
         this_query$fields <- str_c(fields,collapse=",")
     }
@@ -148,7 +148,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
         extra <- fields_name_to_id(fields=extra,fields_type="occurrence") ## replace long names with ids
         unknown <- setdiff(extra,valid_fields$name)
         if (length(unknown)>0) {
-            stop("invalid extra fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"",valid_fields_type,"\",as_is=TRUE)")
+            stop("invalid extra fields requested: ", str_c(unknown,collapse=", "), ". See ",getOption("ALA4R_server_config")$fields_function,"(\"",valid_fields_type,"\",as_is=TRUE)")
         }
         this_query$extra <- str_c(extra,collapse=",")
     }
@@ -158,7 +158,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
         valid_fields <- c("none",ala_fields(fields_type="assertions",as_is=TRUE)$name) ## valid entries for qa
         unknown <- setdiff(qa,valid_fields)
         if (length(unknown)>0) {
-            stop("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ",ala_constants()$fields_function,"(\"assertions\",as_is=TRUE)")
+            stop("invalid qa fields requested: ", str_c(unknown,collapse=", "), ". See ",getOption("ALA4R_server_config")$fields_function,"(\"assertions\",as_is=TRUE)")
         }
         this_query$qa <- str_c(qa,collapse=",")
     }
@@ -175,22 +175,22 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
     this_query$file <- "data" ## to ensure that file is named "data.csv" within the zip file
 
     if (method=="indexed")
-        this_url <- build_url_from_parts(ala_constants()$base_url_biocache,c("occurrences","index","download"),query=this_query)
+        this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_biocache,c("occurrences","index","download"),query=this_query)
     else
-        this_url <- build_url_from_parts(ala_constants()$base_url_biocache,c("occurrences","offline","download"),query=this_query)
+        this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_biocache,c("occurrences","offline","download"),query=this_query)
 
     if (method=="offline") {
         thisfile <- ala_cache_filename(this_url) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
         if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(thisfile))) {
             status <- cached_get(url=this_url,caching="off",type="json",verbose=verbose)
-            if (!"statusUrl" %in% names(status)) stop("reply from server was missing statusUrl. ",ala_constants()$notify)
+            if (!"statusUrl" %in% names(status)) stop("reply from server was missing statusUrl. ",getOption("ALA4R_server_config")$notify)
             status <- cached_get(status$statusUrl,caching="off",type="json",verbose=verbose)
             while (tolower(status$status) %in% c("inqueue","running")) {##!= "finished") {
                 status <- cached_get(status$statusUrl,caching="off",type="json",verbose=verbose)
                 Sys.sleep(2)
             }
             if (status$status!="finished") {
-                stop("unexpected response from server. ",ala_constants()$notify,". Response was:\n",str(status))
+                stop("unexpected response from server. ",getOption("ALA4R_server_config")$notify,". Response was:\n",str(status))
             } else {
                 ## finally we have the URL to the data file itself
                 download_to_file(status$downloadUrl,outfile=thisfile,binary_file=TRUE,verbose=verbose)
@@ -259,7 +259,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
 
         if (!empty(x)) {
             if (method=="indexed") {
-                max_records <- ala_constants()$max_occurrence_records
+                max_records <- getOption("ALA4R_server_config")$max_occurrence_records
                 if (nrow(x)>0.99*max_records) {
                     warning(nrow(x)," data rows were returned from the server, which is close to the maximum allowed. This might not be the full data set you wanted --- consider using method=\"offline\"")
                 }
