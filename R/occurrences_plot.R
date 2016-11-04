@@ -66,13 +66,9 @@ occurrences_plot <- function(x, filename='Rplots.pdf', qa=c('fatal','error'), gr
     }
 
         ## load aus map data
-        ##note this will ideally be states
-        
-        ## don't do this: the aus variable isn't visible to check()
-        ##data("aus",envir = environment())
-	
-        load_obj <- function(f) { env <- new.env(); nm <- load(f, env)[1]; env[[nm]] }
-        aus <- load_obj(system.file("data/aus.RData",package="ALA4R"))        
+        ## note this should ideally be states        
+        aus <- NULL
+        data("aus",package="ALA4R",envir=environment())
 	
 	###plot function to be used
 	tplot <- function(xx,Main,coi,pch) {
