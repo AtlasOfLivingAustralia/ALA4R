@@ -2,6 +2,7 @@ context("Test searching functions")
 
 thischeck=function() {
     test_that("search_fulltext generally functions as expected", {
+        skip_on_cran()
         expect_that(search_fulltext("red kangaroo"),has_names(c("meta","data")))
         expect_true(all(c("guid","name","commonName","rank","author","occurrenceCount") %in% names(search_fulltext("red kangaroo")$data))) ## "score" and "isAustralian" also used to be present, but are no longer
         expect_that(nrow(search_fulltext("bilbobaggins")$data),equals(0)) ## query that should not match anything
@@ -16,6 +17,7 @@ check_caching(thischeck)
 
 thischeck=function() {
     test_that("search_fulltext start parm works as expected", {
+        skip_on_cran()
         x1=search_fulltext("red",page_size=10)
         x2=search_fulltext("red",page_size=10,start=2)
         ## so row 1 of x2$data should equal row 2 of x1$data ... but columns may actually be different!
@@ -29,17 +31,29 @@ thischeck=function() {
 }
 check_caching(thischeck)
 
-#test_that("search_fulltext sort_by parm works as expected", {
-#    expect_error(search_fulltext("red",page_size=10,sort_by="blurg"))
-#    ## hmmm, other sort_by's don't work: sort_by="name" or "family" works, but not "scientificName" or others (500 error)
-#    ## and in fact sort_by "name" doesn't seem to give strict reverse ordering when order="desc","asc" used
-#    ## not quite sure what is going on here - seems to be issues at server end, not R end
-#})
+
+thischeck=function() {
+    test_that("search_fulltext sort_by parm works as expected", {
+        skip_on_cran()
+        expect_error(search_fulltext("red",page_size=10,sort_by="blurg"))
+        ## sort by scientific name
+        ## note that ALA sorting is case-sensitive, with A-Z preceding a-z
+        temp <- search_fulltext("red",page_size=10,sort_by="scientificName")$data$scientificName
+        temp <- temp[grepl("^[A-Z]",temp)]
+        expect_equal(order(temp),1:length(temp))
+        ## descending order
+        temp <- search_fulltext("red",page_size=10,sort_by="scientificName",sort_dir="desc")$data$scientificName
+        temp <- temp[grepl("^[A-Z]",temp)]
+        expect_equal(order(temp),length(temp):1)
+    })
+}
+check_caching(thischeck)
 
 ## not tested yet: S3method(print,search_fulltext)
 
 thischeck=function() {
     test_that("search_layers generally works as expected", {
+        skip_on_cran()
         expect_that(search_layers(type="all"),is_a('data.frame'))
         expect_that(search_layers(type="all",output_format="complete"),is_a('data.frame'))
         expect_that(nrow(search_layers(type="all")),is_more_than(400))
@@ -55,6 +69,7 @@ check_caching(thischeck)
 
 thischeck=function() {
     test_that("search_names can cope with factor inputs", {
+        skip_on_cran()
         expect_equal(search_names(factor("Grevillea humilis")),search_names("Grevillea humilis"))
     })
 }
@@ -62,6 +77,7 @@ check_caching(thischeck)
 
 thischeck=function() {
     test_that("search_names can cope with all-unrecogized names", {
+        skip_on_cran()
         expect_equal(nrow(search_names("fljkhdlsi")),1)
         expect_equal(nrow(search_names(c("fljkhdlsi","sdkhfowbiu"))),2)
         expect_true(all(is.na(search_names(c("fljkhdlsi","sdkhfowbiu"))$guid)))
@@ -71,17 +87,18 @@ check_caching(thischeck)
 
 thischeck=function() {
     test_that("unexpected case-related behaviour in search_names has not changed", {
+        skip_on_cran()
         expect_equal(search_names("Gallirallus australis")$name,"Gallirallus australis")
         expect_equal(search_names("Gallirallus Australis")$name,"Gallirallus australis")
         expect_equal(search_names("Gallirallus australi")$name,as.character(NA))
         expect_equal(search_names("Gallirallus Australi")$name,as.character(NA))
     })
 }
-##check_caching(thischeck)
-## skip this one while new BIE settles down
-
+check_caching(thischeck)
+    
 thischeck=function() {
     test_that("nonbreaking spaces not present in names", {
+        skip_on_cran()
         expect_false(any(colSums(apply(search_fulltext("Gallirallus australis")$data,2,function(z)grepl("\ua0",z)))>0))
         expect_false(grepl("\ua0",search_names("Gallirallus australis")$name))
     })
@@ -91,6 +108,7 @@ check_caching(thischeck)
 
 thischeck=function() {
     test_that("search_names returns occurrence counts when asked", {
+        skip_on_cran()
         expect_false(is.na(search_names("Grevillea",occurrence_count=TRUE)$occurrenceCount))
         expect_equal(is.na(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=TRUE)$occurrenceCount),c(FALSE,TRUE))
         expect_output(print(search_names(c("Pachyptila turtur","isdulfsadh"),occurrence_count=TRUE)),"occurrenceCount")
