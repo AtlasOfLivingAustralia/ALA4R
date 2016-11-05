@@ -6,7 +6,9 @@ Authors@R: c(person("Ben","Raymond",email="ben_ala@untan.gl",
   	   role=c("aut","cre")),
 	   person("Jeremy","VanDerWal",role="aut"),
 	   person("Lee","Belbin",role="aut"),
-	   person("Michael","Sumner",role="ctb"))
+	   person("Michael","Sumner",role="ctb"),
+	   person("Tom","August",role="ctb"),
+	   person("John","Baumgartner",role="ctb"))
 Description: The Atlas of Living Australia (ALA) provides tools to enable users
     of biodiversity information to find, access, combine and visualise data on
     Australian plants and animals; these have been made available from
