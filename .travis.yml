@@ -4,5 +4,9 @@ language: R
 sudo: false
 cache: packages
 
+# set NOT_CRAN to true to ensure that skip_on_cran tests are run here
+env:
+  - NOT_CRAN=true
+
 after_success:
 - Rscript -e 'covr::codecov()'
