@@ -4,6 +4,7 @@ is_empty_list=function(z) is.list(z) && length(z)<1
 
 thischeck=function(){
     test_that("empty list returned for null inputs", {
+        skip_on_cran()
         ## null (empty string) input
         empty_result=occurrence_details("")
         expect_is(empty_result,"list")
@@ -28,6 +29,7 @@ check_caching(thischeck)
 
 thischeck=function() {
     test_that("occurrence_details result has the expected fields", {
+        skip_on_cran()
         ## names are a bit changeable, but expect to see at least "processed", "raw", "userAssertions", "systemAssertions", "consensus"
         core_names=c("processed","raw","userAssertions","systemAssertions","consensus")
         ## this one has images, so also images in the names

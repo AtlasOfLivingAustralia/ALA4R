@@ -2,6 +2,7 @@ context("Test list-related functions")
 
 thischeck=function() {
     test_that("ala_lists does stuff", {
+        skip_on_cran()
         all_lists <- ala_lists()
         expect_is(all_lists,"data.frame")
         expect_true(all(c("dataResourceUid","listName","listType") %in% names(all_lists)))
@@ -18,6 +19,9 @@ check_caching(thischeck)
 
 thischeck=function() {
     test_that("ala_list does stuff", {
+        ## skip this one temporarily
+        skip("skipping vertebrates field guide test temporarily: something wrong in list content preventing parsing") 
+        skip_on_cran()
         ## download the vertebrates field guide
         l <- ala_list(druid="dr1146")
         expect_is(l,"data.frame")
@@ -26,5 +30,4 @@ thischeck=function() {
         expect_named(l$kvpValues[[1]],c("key","value"))
     })
 }
-##check_caching(thischeck)
-## skip this one temporarily: something wrong in list content preventing parsing
+check_caching(thischeck)

@@ -1,7 +1,7 @@
 Package: ALA4R
 Type: Package
 Title: Atlas of Living Australia (ALA) Data and Resources in R
-Version: 1.5.1
+Version: 1.5.2
 Authors@R: c(person("Ben","Raymond",email="ben_ala@untan.gl", 
   	   role=c("aut","cre")),
 	   person("Jeremy","VanDerWal",role="aut"),
@@ -16,30 +16,30 @@ Description: The Atlas of Living Australia (ALA) provides tools to enable users
     observations of species) to be queried and output in a range of standard
     formats.
 Imports:
-    stringr (>= 1.0.0),
-    httr,
-    plyr,
-    wellknown,
-    digest,
     RCurl,
-    jsonlite (>= 0.9.8),
     assertthat,
-    sp
+    digest,
+    httr,
+    jsonlite (>= 0.9.8),
+    plyr,
+    sp,
+    stringr (>= 1.0.0),
+    wellknown
 Suggests:
-    data.table,
-    testthat,
-    covr,
-    knitr,
-    rmarkdown,
-    jpeg,
-    phytools,
     ape,
-    vegan,
-    mgcv,
+    covr,
+    data.table,
     geosphere,
-    maps,
+    jpeg,
+    knitr,
     mapdata,
-    maptools
+    maps,
+    maptools,
+    mgcv,
+    phytools,
+    rmarkdown,
+    testthat,
+    vegan
 License: MPL-2.0
 URL: https://github.com/AtlasOfLivingAustralia/ALA4R
 LazyLoad: yes

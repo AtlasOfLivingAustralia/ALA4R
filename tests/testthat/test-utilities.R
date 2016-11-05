@@ -24,6 +24,7 @@ test_that("ala_cache_filename works as expected", {
 })
 
 test_that("caching messages change as expected ", {
+    skip_on_cran()
     ala_config(caching="off")
     expect_output(species_info("Grevillea humilis subsp. maritima",verbose=TRUE),"GETting URL")
     ala_config(caching="refresh")
@@ -34,6 +35,7 @@ test_that("caching messages change as expected ", {
 
 thischeck <- function() {
     test_that("check_fq extracts field names correctly", {
+        skip_on_cran()
         expect_equal(ALA4R:::extract_fq_fieldnames("occurrence_year:[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]"),c("occurrence_year"))
         expect_null(ALA4R:::check_fq("occurrence_year:[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]","occurrence"))
 

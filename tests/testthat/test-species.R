@@ -4,6 +4,7 @@ context("Test species information functions")
 
 thischeck=function() {
     test_that("species_info generally works as expected", {
+        skip_on_cran()
         expect_is(species_info("Grevillea humilis subsp. maritima"),"list")
         expect_error(species_info("Grevillea humilis subsp. maritima",verbose="yes"))
         expect_equal(species_info("Grevillea humilis subsp. maritima"),species_info(factor("Grevillea humilis subsp. maritima")))
@@ -16,6 +17,7 @@ thischeck=function() {
         ##expect_equal(species_info(guid="ALA_Pterostylis_squamata")$classification[[1]],"ORCHIDACEAE") ## taxon with improper classification
     })
     test_that("text encoding works as expected",{
+        skip_on_cran()
         expect_equal(as.character(species_info('Simoselaps fasciolatus')$taxonConcept$author),paste0("(G",intToUtf8(252),"nther, 1872)")) ## (Günther, 1872)
     })
 }
@@ -24,6 +26,7 @@ check_caching(thischeck)
 
 thischeck=function() {
     test_that("species_info gives resolvable guids for known species", {
+        skip_on_cran()
         rsp <- httr::GET(as.character(species_info("Grevillea humilis subsp. maritima")$taxonConcept$guid))
         expect_equal(rsp$status_code,200)
 

@@ -3,6 +3,7 @@ context("Test taxonomic information functions")
 ## taxinfo_download
 thischeck=function() {
     test_that("taxinfo_download generally works as expected", {
+        skip_on_cran()
         tx <- taxinfo_download("rk_family:SPHENISCIDAE",fields=c("guid","rk_genus","scientificName","rank"))
         expect_equal(names(tx),c("guid","genus","scientificName","rank"))
         expect_gte(nrow(tx),10) ## expect at least 10 results here
@@ -24,6 +25,7 @@ check_caching(thischeck)
 
 thischeck=function() {
     test_that("taxinfo_download fields thingies work", {
+        skip_on_cran()
         f <- ala_fields("general")
         t <- taxinfo_download("rk_family:Spheniscidae",fields="all")
         expect_equal(ncol(t),nrow(f))
