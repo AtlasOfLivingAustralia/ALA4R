@@ -30,6 +30,14 @@ ALA4R enables the R community to directly access data and resources hosted by th
 
 In R:
 
+Stable version from CRAN:
+
+```{r eval=FALSE}
+install.packages("ALA4R")
+```
+
+Or the development version from GitHub:
+
 ```{r eval=FALSE}
 install.packages("devtools")
 library(devtools)
@@ -168,7 +176,7 @@ We want to look at the taxonomic tree of penguins, but we don't know what the co
 
 ```{r}
 sx <- search_fulltext("penguins")
-(sx$data[,c("name","rank","commonName")])
+sx$data[,c("name","rank","commonName")]
 ```
 And we can see that penguins correspond to the family Spheniscidae. There are (at the time of writing this vignette) two results: one "Spheniscidae" and the other "SPHENISCIDAE" (identical except all upper case). The first comes from the New Zealand Organism Register and represents extinct penguins. We want the other one ("SPHENISCIDAE"). Now we can download the taxonomic data (note that the search is case-sensitive):
 
