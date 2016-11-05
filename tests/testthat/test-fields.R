@@ -31,6 +31,7 @@ check_caching(thischeck)
 
 thischeck=function() {
     test_that("field_info on layers copes with all possible layers", {
+        skip("skipping really slow field_info test")
         skip_on_cran()
         ## this test quite slow
         tt = ala_fields('layers')
