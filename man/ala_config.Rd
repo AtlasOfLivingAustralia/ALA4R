@@ -24,7 +24,7 @@ ala_reasons()
   \item verbose logical: should ALA4R give verbose output to assist debugging?  (default=FALSE)
   \item warn_on_empty logical: should a warning be issued if a request returns an empty result set? (default=FALSE)
   \item user_agent string: the user-agent string used with all web requests to the ALA servers.
-    Default = "ALA4R" with version number, R version and date and user platform
+    Default = "ALA4R" with version number
   \item text_encoding string: text encoding assumed when reading cached files from local disk (default="UTF-8")
   \item download_reason_id numeric or string: the "download reason" required by some ALA services, either as a numeric ID (currently 0--11)
   or a string (see \code{ala_reasons()} for a list of valid ID codes and names). By default this is NA. Some ALA services require a valid

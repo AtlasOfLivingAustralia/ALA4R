@@ -119,7 +119,7 @@ ala_config(caching="off")
 or set to "refresh", meaning that the cached results will re-downloaded from the ALA servers and the cache updated. (This will happen for as long as caching is set to "refresh" --- so you may wish to switch back to normal "on" caching behaviour once you have updated your cache with the data you are working on).
 
 ### User-agent string
-Each request to the ALA servers is accompanied by a "user-agent" string that identifies the software making the request. This is a standard behaviour used by web browsers as well. The user-agent identifies the user requests to the ALA, helping the ALA to adapt and enhance the services that it provides. By default, the ALA4R user-agent string is set to "ALA4R" plus the ALA4R version number, R version, and operating system (e.g. "ALA4R 0.16 (R version 3.0.2 (2013-09-25)/x86_64-pc-linux-gnu)").
+Each request to the ALA servers is accompanied by a "user-agent" string that identifies the software making the request. This is a standard behaviour used by web browsers as well. The user-agent identifies the user requests to the ALA, helping the ALA to adapt and enhance the services that it provides. By default, the ALA4R user-agent string is set to "ALA4R" plus the ALA4R version number (e.g. "ALA4R 1.5.2").
 
 *NO* personal identification information is sent. You can see all configuration settings, including the the user-agent string that is being used, with the command:
 
