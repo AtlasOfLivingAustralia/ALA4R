@@ -10,12 +10,12 @@
 #' @author Atlas of Living Australia \email{support@@ala.org.au}, Ben Raymond, Jeremy VanDerWal, Lee Belbin
 #' @docType package
 #' @references \url{http://api.ala.org.au/}
-#' @import httr plyr digest RCurl jsonlite assertthat sp
+#' @import assertthat digest httr jsonlite plyr RCurl sp
 #' @importFrom stringr regex str_c str_detect str_extract str_locate str_match str_match_all
 #' @importFrom stringr str_replace str_replace_all str_split str_trim
 #' @importFrom wellknown lint
 #' @importFrom grDevices dev.off pdf rainbow
 #' @importFrom graphics image legend points title
 #' @importFrom stats aggregate na.omit
-#' @importFrom utils data packageVersion read.csv read.table str unzip URLencode 
+#' @importFrom utils data packageVersion read.csv read.table str unzip URLencode
 NULL
