@@ -1,8 +1,12 @@
 [![Travis-CI Build Status](https://travis-ci.org/AtlasOfLivingAustralia/ALA4R.svg?branch=master)](https://travis-ci.org/AtlasOfLivingAustralia/ALA4R)
 [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/mdsmv5n90gv54b1o/branch/master?svg=true)](https://ci.appveyor.com/project/raymondben/ala4r/branch/master)
 [![Coverage Status](https://img.shields.io/codecov/c/github/AtlasOfLivingAustralia/ALA4R/master.svg)](https://codecov.io/github/AtlasOfLivingAustralia/ALA4R?branch=master)
+[![CRAN Status](http://www.r-pkg.org/badges/version/ALA4R)](http://www.r-pkg.org/pkg/ALA4R)
+
 
 # ALA4R
+
+*NOTE November 2016* --- ALA4R is now on CRAN.
 
 *NOTE October 2016* --- ALA4R version 1.5 has been released, which should now work properly with the ALA's updated taxonomic infrastructure (see http://www.ala.org.au/blogs-news/major-ala-upgrade/).
 
@@ -21,6 +25,14 @@ The use-examples presented at the [2014 ALA Science Symposium](http://www.ala.or
 ### Windows
 
 In R:
+
+Stable version from CRAN:
+
+```R
+install.packages("ALA4R")
+```
+
+Or the development version from GitHub:
 
 ```R
 install.packages("devtools")
@@ -53,7 +65,15 @@ or install `libcurl4-openssl-dev` via the Software Centre.
 
 Then, in R:
 
-```R
+Stable version from CRAN:
+
+```{r eval=FALSE}
+install.packages("ALA4R")
+```
+
+Or the development version from GitHub:
+
+```{r eval=FALSE}
 install.packages("devtools")
 library(devtools)
 install_github("AtlasOfLivingAustralia/ALA4R")
@@ -65,7 +85,7 @@ If you see an error about a missing package, you will need to install it manuall
 ```R
 install.packages(c("stringr","sp"))
 ```
-and then `install_github("AtlasOfLivingAustralia/ALA4R")` again.
+and then try installing ALA4R again.
 
 
 If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
