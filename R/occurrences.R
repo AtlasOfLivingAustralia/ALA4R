@@ -169,7 +169,8 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
     if (method=="offline")
         this_query$email <- email
     this_query$reasonTypeId <- download_reason_id
-    this_query$sourceTypeId <- ala_sourcetypeid()
+    if (getOption("ALA4R_server_config")$biocache_version > "1.8.1")
+        this_query$sourceTypeId <- ala_sourcetypeid() ## only for more recent biocache versions
     this_query$esc <- "\\" ## force backslash-escaping of quotes rather than double-quote escaping
     this_query$sep <- "\t" ## tab-delimited
     this_query$file <- "data" ## to ensure that file is named "data.csv" within the zip file

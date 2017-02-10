@@ -16,6 +16,7 @@
                               base_url_spatial="http://spatial.ala.org.au/ws/", ## the base url for spatial web services
                               base_url_bie="http://bie.ala.org.au/ws/", ## the base url for BIE web services
                               base_url_biocache="http://biocache.ala.org.au/ws/", ## the base url for biocache web services
+                              biocache_version="1.8.2",
                               base_url_alaspatial="http://spatial.ala.org.au/alaspatial/ws/", ## the base url for older ALA spatial services
                               base_url_images="http://images.ala.org.au/", ## the base url for the images database. Set to NULL or empty string if not available
                               base_url_logger="http://logger.ala.org.au/service/logger/", ## the base url for usage logging webservices
