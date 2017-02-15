@@ -36,4 +36,3 @@ fieldguide(guids=
 \seealso{
 \code{\link{search_guids}}
 }
-

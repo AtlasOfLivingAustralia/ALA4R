@@ -51,4 +51,3 @@ Associated ALA web service: \url{http://api.ala.org.au/#ws1}
 \seealso{
 \code{\link{ala_fields}}
 }
-

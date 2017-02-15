@@ -45,4 +45,3 @@ Associated web services: \url{http://spatial.ala.org.au/ws}
 
 \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 }
-

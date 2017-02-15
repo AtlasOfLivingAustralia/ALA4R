@@ -35,4 +35,3 @@ Note that this refers to pre-generated lists of species stored on the ALA server
 \seealso{
 \code{\link{specieslist}} \code{\link{ala_lists}}
 }
-

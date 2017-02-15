@@ -92,4 +92,3 @@ occurrences(taxon="Eucalyptus gunnii",fields=c("latitude","longitude"),
 \seealso{
 \code{\link{ala_reasons}} for download reasons; \code{\link{ala_config}}
 }
-

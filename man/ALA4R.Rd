@@ -15,4 +15,3 @@ by the Atlas; see the API link below.
 \references{
 \url{http://api.ala.org.au/}
 }
-

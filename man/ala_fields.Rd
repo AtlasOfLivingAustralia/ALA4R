@@ -60,4 +60,3 @@ Relevant ALA web services: \itemize{
 \seealso{
 \code{\link{search_layers}} to search for spatial layers
 }
-

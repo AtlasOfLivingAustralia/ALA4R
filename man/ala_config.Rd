@@ -56,4 +56,3 @@ Invoking \code{ala_config()} with no arguments returns a list with the current v
 
 \code{ala_reasons()} returns a data frame with information describing the valid options for \code{download_reason_id}
 }
-

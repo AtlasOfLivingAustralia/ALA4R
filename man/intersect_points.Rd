@@ -52,4 +52,3 @@ NOTE: batch requests (multiple points) are currently processed in a *single queu
 \seealso{
 \code{\link{ala_config}}
 }
-

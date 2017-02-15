@@ -27,4 +27,3 @@ ala_cache_filename("http://biocache.ala.org.au/ws/index/fields")
 \seealso{
 \code{ala_config} for cache settings, particularly the cache directory
 }
-

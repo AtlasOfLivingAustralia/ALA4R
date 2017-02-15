@@ -2,9 +2,9 @@
 % Please edit documentation in R/occurrences_s3.R
 \name{occurrences_s3}
 \alias{occurrences_s3}
-\alias{subset.occurrences}
 \alias{summary.occurrences}
 \alias{unique.occurrences}
+\alias{subset.occurrences}
 \title{Summarize, filter and subset occurrence data}
 \usage{
 \method{summary}{occurrences}(object, ...)
@@ -19,6 +19,8 @@
 }
 \arguments{
 \item{object}{list: an 'occurrence' object that has been downloaded using \code{\link{occurrences}}}
+
+\item{\dots}{not currently used}
 
 \item{x}{list: an 'occurrence' object that has been downloaded using \code{\link{occurrences}}}
 
@@ -41,8 +43,6 @@
 \item{max.spatial.uncertainty}{numeric: number defining the maximum spatial uncertainty (in meters) one is willing to accept.}
 
 \item{keep.missing.spatial.uncertainty}{logical: keep (FALSE) or remove (TRUE) information missing spatial uncertainty data.}
-
-\item{\dots}{not currently used}
 }
 \description{
 Set of S3 methods to summarize, filter and get unique occurrence data retrieved using \code{\link{occurrences}}.
@@ -77,4 +77,3 @@ summary(tt)
 
 \url{http://stat.ethz.ch/R-manual/R-devel/library/methods/html/Methods.html}
 }
-

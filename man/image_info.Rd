@@ -29,4 +29,3 @@ image_info(c("84654e14-dc35-4486-9e7c-40eb2f8d3faa",
 \seealso{
 \code{\link{ala_config}} \code{\link{occurrences}}
 }
-

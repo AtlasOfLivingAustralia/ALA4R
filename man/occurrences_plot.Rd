@@ -47,4 +47,3 @@ occurrences_plot(x,"alaPlot.pdf",qa="fatal",grouped=FALSE, taxon_level="species"
 \references{
 \url{http://api.ala.org.au/}
 }
-

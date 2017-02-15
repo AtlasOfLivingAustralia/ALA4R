@@ -35,4 +35,3 @@ Find ALA species lists
 \seealso{
 \code{\link{ala_list}}
 }
-

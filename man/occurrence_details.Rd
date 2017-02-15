@@ -29,4 +29,3 @@ Associated ALA web service: \url{http://api.ala.org.au/#ws102}
 \seealso{
 \code{\link{occurrences}} \code{\link{ala_config}}
 }
-

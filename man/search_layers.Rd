@@ -31,4 +31,3 @@ Associated ALA web services: \url{http://api.ala.org.au/#ws11} \url{http://api.a
 
 Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/})
 }
-

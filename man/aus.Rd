@@ -16,4 +16,3 @@ A basic raster dataset in SpatialGridDataFrame (package sp) representing
 Australia at 0.05 degree (~5km) resolution.
 }
 \keyword{datasets}
-

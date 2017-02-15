@@ -38,4 +38,3 @@ Associated ALA web service: \url{http://api.ala.org.au/#ws98}
 \seealso{
 \code{\link{ala_fields}} for occurrence fields that are queryable via the \code{fq} parameter
 }
-

@@ -32,4 +32,3 @@ Associated ALA web service: \url{http://api.ala.org.au/#ws80}
 \seealso{
 \code{\link{ala_config}}
 }
-
