@@ -61,11 +61,17 @@ search_guids <- function(guids=c(),occurrence_count=FALSE,output_format="simple"
             firstcols <- intersect(c("searchTerm","name","commonNameSingle","guid","rank"),xcols)
             ## note commonName now seems to be commonNameSingle
             xcols <- c(firstcols,setdiff(xcols,firstcols))
-            x <- subset(x,select=xcols)            
+            x <- subset(x,select=xcols)
+            ## ensure that cols are character
+            if ("searchTerm" %in% names(x)) x$searchTerm <- as.character(x$searchTerm)
+            if ("name" %in% names(x)) x$name <- as.character(x$name)
+            if ("commonNameSingle" %in% names(x)) x$commonNameSingle <- as.character(x$commonNameSingle)
+            if ("guid" %in% names(x)) x$guid <- as.character(x$guid)
+            if ("rank" %in% names(x)) x$rank <- as.character(x$rank)
             attr(x,"output_format") <- output_format            
         } else {
             if (ala_config()$warn_on_empty) warning("no records found")
-            x <- data.frame(searchTerm=guids,name=NA,commonName=NA,rank=NA,guid=NA)
+            x <- data.frame(searchTerm=guids,name=as.character(NA),commonName=as.character(NA),rank=as.character(NA),guid=as.character(NA),stringsAsFactors=FALSE)
             attr(x,"output_format") <- output_format
         }
 
