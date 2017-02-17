@@ -9,8 +9,8 @@ thischeck=function() {
         ## should be a few Field Guide lists
         expect_gt(nrow(all_lists[grep("Field Guide",all_lists$listName),]),1)
         
-        l <- ala_lists(search_guids("Achatina fulica")$guid)
-        ## these names are different to when no guid is supplied
+        l <- ala_lists(search_names("Achatina fulica")$guid)
+        ## these names (with guid supplied) are different to the case when no guid is supplied
         expect_equal(names(l),c("dataResourceUid","guid","list","kvpValues"))        
     })
 }
