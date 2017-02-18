@@ -1,3 +1,7 @@
+# ALA4R 1.5.6
+* added `biocache_version` parameter to server configuration, to support use of ALA4R with other server instances (e.g. other national installations using the ALA server infrastructure) 
+* minor bugfixes
+
 # ALA4R 1.5
 
 * updated code,examples and vignette for new ALA taxonomic backbone
