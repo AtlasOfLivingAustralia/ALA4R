@@ -17,21 +17,28 @@ specieslist(taxon, wkt, fq)
 data frame of results, where each row is a taxon, its classification information, and its occurrence count
 }
 \description{
-Retrieve a list of taxa matching a search query, within a spatial search area, or both
+Retrieve a list of taxa matching a search query, within a spatial search area, or both.
+}
+\details{
+NOTE March 2017: the response object might include records with missing taxonomic information. This is an issue with the ALA server-side systems; see https://github.com/AtlasOfLivingAustralia/bie-index/issues/134
 }
 \examples{
 \dontrun{
-x <- specieslist(taxon="macropus",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
+x <- specieslist(taxon="Hakea",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
 
 x <- specieslist(wkt="POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,
   147.62 -42.83))",fq="rank:species")
 
 x <- specieslist(wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",fq="genus:Macropus")
 
+x <- specieslist(wkt="POLYGON((152.38 -30.43,152.5 -30.43,152.5 -30.5,152.38 -30.5,152.38 -30.43))",
+    fq="kingdom:Plantae")
+## NOTE that this response might include records with empty or NA kingdom, phylum, or class values, as per
+##   the note above.
 }
 }
 \references{
-Associated ALA web service: \url{http://api.ala.org.au/#ws98}
+Associated ALA web service: \url{http://api.ala.org.au/#ws106}
 
 \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 }

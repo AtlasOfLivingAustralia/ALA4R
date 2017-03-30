@@ -1,8 +1,10 @@
 #' Get list of taxa and their occurrence counts
 #'
-#' Retrieve a list of taxa matching a search query, within a spatial search area, or both
+#' Retrieve a list of taxa matching a search query, within a spatial search area, or both.
+#'
+#' NOTE March 2017: the response object might include records with missing taxonomic information. This is an issue with the ALA server-side systems; see https://github.com/AtlasOfLivingAustralia/bie-index/issues/134
 #' 
-#' @references Associated ALA web service: \url{http://api.ala.org.au/#ws98}
+#' @references Associated ALA web service: \url{http://api.ala.org.au/#ws106}
 #' @references \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' 
 #' @param taxon string: Text of taxon, e.g. "Macropus rufus" or "macropodidae"
@@ -12,13 +14,17 @@
 #' @seealso \code{\link{ala_fields}} for occurrence fields that are queryable via the \code{fq} parameter
 #' @examples
 #' \dontrun{
-#' x <- specieslist(taxon="macropus",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
+#' x <- specieslist(taxon="Hakea",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
 #' 
 #' x <- specieslist(wkt="POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,
 #'   147.62 -42.83))",fq="rank:species")
 #'
 #' x <- specieslist(wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",fq="genus:Macropus")
-#' 
+#'
+#' x <- specieslist(wkt="POLYGON((152.38 -30.43,152.5 -30.43,152.5 -30.5,152.38 -30.5,152.38 -30.43))",
+#'     fq="kingdom:Plantae")
+#' ## NOTE that this response might include records with empty or NA kingdom, phylum, or class values, as per
+#' ##   the note above.
 #' }
 #' @export specieslist
 
@@ -36,10 +42,6 @@ specieslist <- function(taxon,wkt,fq) {
         ## the server will provide this diagnostic info anyway
         this_query$wkt <- wkt
     }    
-    if (length(this_query)==0) {
-        ## not a valid request!
-        stop("invalid request: need either fq or wkt parameter to be specified")
-    }
     if (!missing(fq)) {
         assert_that(is.character(fq))
         ## can have multiple fq parameters, need to specify in url as fq=a:b&fq=c:d&fq=...
@@ -48,6 +50,14 @@ specieslist <- function(taxon,wkt,fq) {
         names(fq) <- rep("fq",length(fq))
         this_query <- c(this_query,fq)
     }
+    if (length(this_query)==0) {
+        ## not a valid request!
+        stop("invalid request: need to supply at least one of taxon, wkt, or fq parameter")
+    }
+    ## update March 2017: the service will actually accept a request with no parameters, so it's not strictly invalid.
+    ## But it's probably not a good idea to allow it, since it will be an enormous request.
+    ## If a user really needs to do it they can specify taxon="*"
+    
     this_query$facets <- "taxon_concept_lsid" ## or "species_guid" to avoid genus and higher records
     this_query$lookup <- "true" ## "set to true if you would like the download include the scientific names and higher classification for the supplied guids. Downloads that include this param will take extra time as a lookup need to be performed"
     this_query$count <- "true"
