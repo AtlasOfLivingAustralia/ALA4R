@@ -6,9 +6,8 @@
 
 # ALA4R
 
-*NOTE November 2016* --- ALA4R is now on CRAN.
+*NOTE March 2017* --- some ALA4R functions may not work correctly due to back-end server changes. This includes the occurrences() function, and full-text searching [particularly specieslist(taxon=...)]. The issue is being investigated.
 
-*NOTE October 2016* --- ALA4R version 1.5 has been released, which should now work properly with the ALA's updated taxonomic infrastructure (see http://www.ala.org.au/blogs-news/major-ala-upgrade/).
 
 ----
 
