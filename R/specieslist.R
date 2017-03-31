@@ -23,8 +23,8 @@
 #'
 #' x <- specieslist(wkt="POLYGON((152.38 -30.43,152.5 -30.43,152.5 -30.5,152.38 -30.5,152.38 -30.43))",
 #'     fq="kingdom:Plantae")
-#' ## NOTE that this response might include records with empty or NA kingdom, phylum, or class values, as per
-#' ##   the note above.
+#' ## NOTE that this response might include records with empty or NA kingdom, phylum, or
+#' ##  class values, as per the note above.
 #' }
 #' @export specieslist
 
