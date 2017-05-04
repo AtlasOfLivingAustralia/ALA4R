@@ -267,7 +267,7 @@ x <- specieslist(wkt=wkt,fq="state_conservation:*")
 Data quality assertions are a suite of fields that are the result of a set of tests peformed on ALA data. Download occurrence data for the golden bowerbird:
 
 ```{r}
-x <- occurrences(taxon="Amblyornis newtonianus", download_reason_id=10)
+x <- occurrences(taxon="taxon_name:\"Amblyornis newtonianus\"", download_reason_id=10)
 summary(x)
 ```
 
