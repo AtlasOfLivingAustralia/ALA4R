@@ -6,8 +6,7 @@
 
 # ALA4R
 
-*NOTE, April 2017* --- some ALA4R functions may not work correctly due to back-end server changes. This includes the occurrences() function, and full-text searching [particularly specieslist(taxon=...)]. The issue is being investigated.
-
+*NOTE, May 2017* --- some field (column) names in returned data objects may have changed with recent changes to the ALA infrastructure. These are liable to remain in flux but are being investigated.
 
 ----
 
