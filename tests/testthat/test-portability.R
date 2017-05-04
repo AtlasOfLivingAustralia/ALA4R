@@ -10,7 +10,7 @@ test_that("occurrences works on a different server", {
     ala_config(caching="off")
     server_config <- sv_serverconfig
     server_config$biocache_version <- "1.8.1"
-    server_config$base_url_biocache <- "http://datos.gbif.es/biocache-service/" ##or "http://recherche-ws.gbif.fr/"
+    server_config$base_url_biocache <- "http://recherche-ws.gbif.fr/" ## or "http://datos.gbif.es/biocache-service/"
     options(ALA4R_server_config = server_config)
     
     occx <- occurrences(taxon="Apus apus",download_reason_id=10)
