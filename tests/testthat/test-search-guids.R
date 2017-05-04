@@ -1,8 +1,6 @@
 thischeck=function() {
     test_that("search_guids can cope with factor inputs", {
         skip_on_cran()
-
-        urn:lsid:biodiversity.org.au:afd.name:292120
         expect_equal(search_guids(factor("urn:lsid:biodiversity.org.au:afd.name:292120")),search_guids("urn:lsid:biodiversity.org.au:afd.name:292120"))
     })
 }
