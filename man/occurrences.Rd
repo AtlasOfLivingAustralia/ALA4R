@@ -10,7 +10,13 @@ occurrences(taxon, wkt, fq, fields, extra, qa, method = "indexed", email,
   use_layer_names = TRUE, use_data_table = TRUE)
 }
 \arguments{
-\item{taxon}{string: (optional) query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")}
+\item{taxon}{string: (optional) query of the form field:value (e.g. "genus:Macropus") or a free text search (e.g. "macropodidae"). Note that
+a free-text search is equivalent to specifying the "text" field (i.e. \code{taxon="Alaba"} is equivalent to \code{taxon="text:Alaba"}. 
+The text field is populated with the taxon name along with a handful of other commonly-used fields, and so just specifying your target
+taxon (e.g. taxon="Alaba vibex") will probably work. 
+However, for reliable results it is recommended to use a specific field where possible (see \code{ala_fields("occurrence_indexed")}
+for valid fields). It is also good practice to quote the taxon name if it contains multiple words, for example
+\code{taxon="taxon_name:\"Alaba vibex\""}}
 
 \item{wkt}{string: (optional) a WKT (well-known text) string providing a spatial polygon within which to search, e.g. "POLYGON((140 -37,151 -37,151 -26,140.131 -26,140 -37))"}
 
@@ -49,7 +55,7 @@ are not guaranteed to retain the ordering of the field names given here. If not 
 Data frame of occurrence results, with one row per occurrence record. The columns of the dataframe will depend on the requested fields
 }
 \description{
-Retrieve ALA occurrence data via the "occurrence download" web service. At least one of \code{taxon}, \code{wkt}, or \code{fq} must be supplied for a valid query. Note that there is a limit of 500000 records per request when using \code{method="indexed"}. Use the \code{method="offline"} for larger requests. For small requests, \code{method="indexed"} may be faster.
+Retrieve ALA occurrence data via the "occurrence download" web service. At least one of \code{taxon}, \code{wkt}, or \code{fq} must be supplied for a valid query. Note that there is a limit of 500000 records per request when using \code{method="indexed"}. Use the \code{method="offline"} for larger requests. For small requests, \code{method="indexed"} likely to be faster.
 }
 \examples{
 \dontrun{
@@ -61,24 +67,24 @@ x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10)
 x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,
   fields=ala_fields("occurrence_stored",as_is=TRUE)$name) 
 ## download records, with specified fields
-x <- occurrences(taxon="macropus",fields=c("longitude","latitude","common_name",
-  "taxon_name","el807"),download_reason_id=10)
+x <- occurrences(taxon="genus:macropus",fields=c("longitude","latitude",
+  "common_name","taxon_name","el807"),download_reason_id=10)
  ## download records in polygon, with no quality assertion information
-x <- occurrences(taxon="macropus",
+x <- occurrences(taxon="genus:macropus",
   wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",
   download_reason_id=10,qa="none")
 
-y <- occurrences(taxon="alaba vibex",fields=c("latitude","longitude","el874"),download_reason_id=10)
+y <- occurrences(taxon="taxon_name:\\"Alaba vibex\\"",fields=c("latitude","longitude","el874"),download_reason_id=10)
 str(y)
-# equivalent direct webservice call:
-# http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Alaba\%20vibex&
-#    fields=latitude,longitude,el874&qa=none
+# equivalent direct webservice call [see this by setting ala_config(verbose=TRUE)]:
+# http://biocache.ala.org.au/ws/occurrences/index/download?q=taxon_name\%3A\%22Alaba\%20vibex\%22&
+# fields=latitude,longitude,el874&reasonTypeId=10&sourceTypeId=2001&esc=\%5C&sep=\%09&file=data
 
-occurrences(taxon="Eucalyptus gunnii",fields=c("latitude","longitude"),
-  qa="none",fq="basis_of_record:LivingSpecimen",download_reason_id=10)
-# equivalent direct webservice call:
-# http://biocache.ala.org.au/ws/occurrences/index/download?reasonTypeId=10&q=Eucalyptus\%20gunnii&
-#    fields=latitude,longitude&qa=none&fq=basis_of_record:LivingSpecimen
+occurrences(taxon="taxon_name:\\"Eucalyptus gunnii\\"",fields=c("latitude","longitude"),qa="none",fq="basis_of_record:LivingSpecimen",download_reason_id=10)
+# equivalent direct webservice call [see this by setting ala_config(verbose=TRUE)]:
+# http://biocache.ala.org.au/ws/occurrences/index/download?q=taxon_name\%3A\%22Eucalyptus\%20gunnii\%22&
+# fq=basis_of_record\%3ALivingSpecimen&fields=latitude,longitude&qa=none&reasonTypeId=10&
+# sourceTypeId=2001&esc=\%5C&sep=\%09&file=data
 }
 }
 \references{

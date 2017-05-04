@@ -7,7 +7,11 @@
 specieslist(taxon, wkt, fq)
 }
 \arguments{
-\item{taxon}{string: Text of taxon, e.g. "Macropus rufus" or "macropodidae"}
+\item{taxon}{string: (optional) query of the form field:value (e.g. "genus:Macropus") or a free text search (e.g. "macropodidae").
+For reliable results it is recommended to use a specific field where possible (see \code{ala_fields("occurrence_indexed")}
+for valid fields). It is also good practice to quote the taxon name if it contains multiple words, for example
+\code{taxon="taxon_name:\"Alaba vibex\""} (noting, however, that multi-word names are unlikely in the context of a specieslist
+search, where one would typically be searching for all species within, say, a genus or family)}
 
 \item{wkt}{string: WKT (well-known text) defining a polygon within which to limit taxon search, e.g. "POLYGON((140 -37,151 -37,151 -26,140 -26,140 -37))"}
 
@@ -24,7 +28,7 @@ NOTE March 2017: the response object might include records with missing taxonomi
 }
 \examples{
 \dontrun{
-x <- specieslist(taxon="Hakea",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
+x <- specieslist(taxon="genus:Hakea",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
 
 x <- specieslist(wkt="POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,
   147.62 -42.83))",fq="rank:species")
