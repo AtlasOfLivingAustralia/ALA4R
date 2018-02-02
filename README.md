@@ -157,7 +157,7 @@ If you make a request that returns an empty result set (e.g. an un-matched name)
 ala_config(warn_on_empty=TRUE)
 ```
 
-##Examples
+## Examples
 First, check that we have some additional packages that we'll use in the examples, and install them if necessary.
 ```R
 to_install <- c("plyr","jpeg","phytools","ape","leaflet","vegan","mgcv","geosphere","maps","mapdata","maptools")
@@ -170,7 +170,7 @@ We’ll use the `plyr` package throughout these examples, so load that now:
 library(plyr) 
 ```
 
-###Example 1: Name searching and taxonomic trees
+### Example 1: Name searching and taxonomic trees
 
 ```R
 library(ape)
@@ -234,7 +234,7 @@ for (k in which(nchar(imfiles)>0))
 
 ![Alt text](./vignettes/images/figure-01.png?raw=true "plot of chunk unnamed-chunk-21")
 
-###Example 2: Area report: what listed species exist in a given area?
+### Example 2: Area report: what listed species exist in a given area?
 First download an example shapefile of South Australian conservation reserve boundaries: see http://data.sa.gov.au/dataset/conservation-reserve-boundaries. We use the ALA4R’s caching mechanism here, but you could equally download this file directly.
 ```R
 library(maptools)
@@ -313,7 +313,7 @@ x <- specieslist(wkt=wkt,fq="state_conservation:*")
 ## 20               6
 ```
 
-###Example 3: Quality assertions
+### Example 3: Quality assertions
 Data quality assertions are a suite of fields that are the result of a set of tests peformed on ALA data. Download occurrence data for the golden bowerbird:
 ```R
 x <- occurrences(taxon="Amblyornis newtonianus", download_reason_id=10)
@@ -373,7 +373,7 @@ m <- addCircleMarkers(m,x$data$longitude,x$data$latitude,col=marker_colour,popup
 print(m)
 ```
 
-###Example 4: Community composition and turnover
+### Example 4: Community composition and turnover
 Some extra packages needed here:
 ```R
 library(vegan)
