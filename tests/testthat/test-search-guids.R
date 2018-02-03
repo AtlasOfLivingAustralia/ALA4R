@@ -9,7 +9,7 @@ check_caching(thischeck)
 thischeck=function() {
     test_that("search_guids can cope with mixed recognized/unrecogized guids", {
         skip_on_cran()
-        expect_equal(is.na(search_guids(c("urn:lsid:biodiversity.org.au:afd.name:292120","http://id.biodiversity.org.au/node/apni/2890970","this_is_not_a_valid_guid"))$guid),c(FALSE,FALSE,TRUE))
+        expect_equal(is.na(search_guids(c("http://id.biodiversity.org.au/node/apni/2890970","this_is_not_a_valid_guid"))$guid),c(FALSE,TRUE))
     })
 }
 check_caching(thischeck)
