@@ -8,7 +8,7 @@ thischeck=function() {
         expect_is(species_info("Grevillea humilis subsp. maritima"),"list")
         expect_error(species_info("Grevillea humilis subsp. maritima",verbose="yes"))
         expect_equal(species_info("Grevillea humilis subsp. maritima"),species_info(factor("Grevillea humilis subsp. maritima")))
-        expect_true(all(names(species_info("Grevillea humilis subsp. maritima")) %in% c("taxonConcept","taxonName","classification","identifiers","synonyms","commonNames","childConcepts","parentConcepts","sameAsConcepts","pestStatuses","conservationStatuses","simpleProperties","images","imageIdentifier","distributionImages","screenshotImages","extantStatuses","habitats","regionTypes","references","publicationReference","identificationKeys","specimenHolding","categories","isAustralian","linkIdentifier","extantStatuses")))
+        expect_true(all(names(species_info("Grevillea humilis subsp. maritima")) %in% c("taxonConcept","taxonName","classification","identifiers","synonyms","commonNames","childConcepts","parentConcepts","sameAsConcepts","pestStatuses","conservationStatuses","simpleProperties","images","imageIdentifier","distributionImages","screenshotImages","extantStatuses","habitats","regionTypes","references","publicationReference","identificationKeys","specimenHolding","categories","isAustralian","linkIdentifier","extantStatuses","variants")))
         expect_warning(expect_is(species_info(guid="urn:lsid:biodiversity.org.au:apni.taxon:248651"),"list"))
         expect_is(species_info(guid="bilbobaggins"),"list") ## empty result should still be a list
         expect_is(species_info("bilbobaggins"),"list") ## empty result should still be a list
