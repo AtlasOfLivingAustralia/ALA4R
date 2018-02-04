@@ -107,6 +107,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
         stop("invalid request: need at least one of taxon, fq, or wkt to be specified")
     }
     if (method=="offline") {
+        warning("*NOTE, Feb 2018* --- offline occurrences functionality may not work because of recent changes to the ALA infrastructure. This is being investigated.")
         if (record_count_only) stop("record_count_only can only be used with method=\"indexed\"")
         if (missing(email) || !is.string(email) || nchar(email)<1) stop("email is required for method=offline")
     }

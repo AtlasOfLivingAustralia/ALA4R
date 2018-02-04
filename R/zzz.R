@@ -1,3 +1,3 @@
-##.onAttach <- function(libname, pkgname) {
-##    packageStartupMessage("*NOTE, May 2017* --- some field (column) names in returned data objects may have changed with recent changes to the ALA infrastructure. These are liable to remain in flux but are being investigated.")
-##}
+.onAttach <- function(libname, pkgname) {
+    packageStartupMessage("*NOTE, Feb 2018* --- some functionality may not work because of recent changes to the ALA infrastructure. These are being investigated.")
+}

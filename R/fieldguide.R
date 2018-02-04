@@ -19,6 +19,7 @@
 #'
 #' @export
 fieldguide <- function(guids,title="Field guide",filename=tempfile(fileext=".pdf"),overwrite=FALSE) {
+    warning("*NOTE, Feb 2018* --- the field guide functionality may not work because of recent changes to the ALA infrastructure. This is being investigated.")
     if (missing(guids)) stop("one or more GUIDs must be supplied")
     if (is.list(guids)) guids <- unlist(guids)
     if (is.factor(guids)) guids <- as.character(guids)
