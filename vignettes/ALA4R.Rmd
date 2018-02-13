@@ -14,8 +14,8 @@ vignette: >
 ```{r setup, include=FALSE}
 library(knitr)
 ## center images: this only works for html output format
-if (grepl("html",opts_knit$get("rmarkdown.pandoc.to")))
-    opts_chunk$set(out.extra='style="display:block; margin: auto"', fig.align="center")
+temp <- opts_knit$get("rmarkdown.pandoc.to")
+if (!is.null(temp) && !is.na(temp) && grepl("html",temp)) opts_chunk$set(out.extra='style="display:block; margin: auto"', fig.align="center")
 ```
 
 
