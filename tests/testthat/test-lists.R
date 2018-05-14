@@ -19,8 +19,6 @@ check_caching(thischeck)
 
 thischeck=function() {
     test_that("ala_list does stuff", {
-        ## skip this one temporarily
-        skip("skipping vertebrates field guide test temporarily: something wrong in list content preventing parsing") 
         skip_on_cran()
         ## download the vertebrates field guide
         l <- ala_list(druid="dr1146")
