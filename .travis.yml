@@ -2,13 +2,22 @@
 
 language: R
 sudo: false
-cache: packages
+#cache: packages
 
 addons:
   apt:
-#    update: true
+    #update: true
     packages:
       - libv8-3.14-dev
+
+matrix:
+    include:
+        - os: linux
+          r: release
+          dist: trusty # 14.04
+          env:
+           - BUILD_NAME=trusty_release
+           - DETAILS="trusty release build"
 
 # set NOT_CRAN to true to ensure that skip_on_cran tests are run here
 env:
