@@ -11,57 +11,65 @@
 # @references \url{http://api.ala.org.au/}
 # @examples
 #
-# out = cached_get(url="http://biocache.ala.org.au/ws/index/fields",type="json")
+# out <- cached_get(url="http://biocache.ala.org.au/ws/index/fields", type="json")
 #
 
-cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL,encoding=ala_config()$text_encoding) {
+cached_get <- function(url, type="text", caching=ala_config()$caching, verbose=ala_config()$verbose, on_redirect=NULL, on_client_error=NULL, on_server_error=NULL, encoding=ala_config()$text_encoding) {
     assert_that(is.notempty.string(url))
     assert_that(is.string(type))
-    type=match.arg(tolower(type),c("text","json","filename","binary_filename"))
+    type <- match.arg(tolower(type), c("text", "json", "filename", "binary_filename"))
     assert_that(is.string(caching))
-    caching=match.arg(tolower(caching),c("on","off","refresh"))
+    caching <- match.arg(tolower(caching), c("on", "off", "refresh"))
     assert_that(is.flag(verbose))
 
     ## strip newlines or multiple spaces from url: these seem to cause unexpected behaviour
-    url=str_replace_all(url,"[\r\n ]+"," ")
+    url <- str_replace_all(url, "[\r\n ]+"," ")
     if (nchar(url)>getOption("ALA4R_server_config")$server_max_url_length) warning("URL length may be longer than is allowed by the server")
 
-    if (identical(caching,"off") && !(type %in% c("filename","binary_filename"))) {
+    ## the not-caching code fails sometimes (e.g. parsing json from directly-provided string behaves differently to parsing json from a file!)
+    ## so use caching code for all requests
+    if (FALSE) {##(identical(caching, "off") && !(type %in% c("filename", "binary_filename"))) {
         ## if we are not caching, get this directly without saving to file at all
-        if (verbose) { cat(sprintf("  GETting URL %s\n",url)) }
+        if (verbose) { cat(sprintf("  GETting URL %s\n", url)) }
 
         ## if use RCurl directly
-        h=basicHeaderGatherer()
-        x=getURL(url=url,useragent=ala_config()$user_agent,header=FALSE,headerfunction=h$update)
-        diag_message=""
-        if ((substr(h$value()[["status"]],1,1)=="5") || (substr(h$value()[["status"]],1,1)=="4")) {
+        h <- basicHeaderGatherer()
+        x <- getURL(url=url, useragent=ala_config()$user_agent, header=FALSE, headerfunction=h$update)
+        diag_message <- ""
+        if ((substr(h$value()[["status"]], 1, 1)=="5") || (substr(h$value()[["status"]], 1, 1)=="4")) {
             ## do we have any useful diagnostic info in x?
-            diag_message=get_diag_message(x)
+            diag_message <- get_diag_message(x)
         }
-        check_status_code(h$value()[["status"]],extra_info=diag_message,on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error)
+        check_status_code(h$value()[["status"]], extra_info=diag_message, on_redirect=on_redirect, on_client_error=on_client_error, on_server_error=on_server_error)
 
         ## else use httr
-        ##x=GET(url=url,user_agent(ala_config()$user_agent)) ## use httr's GET wrapper around RCurl
-        ##check_status_code(x,on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error)
-        ##x=content(x,as="text")
+        ##x=GET(url=url, user_agent(ala_config()$user_agent)) ## use httr's GET wrapper around RCurl
+        ##check_status_code(x, on_redirect=on_redirect, on_client_error=on_client_error, on_server_error=on_server_error)
+        ##x=content(x, as="text")
 
-        if (identical(type,"json")) {
+        if (identical(type, "json")) {
             if (nchar(x)<1) {
                 ## empty string, fromJSON will throw error, so just return NULL
-                x=NULL
+                x <- NULL
             } else {
-                x=jsonlite::fromJSON(x) ## do text-then-conversion, rather than content(as="parsed") to avoid httr's default use of RJSONIO::fromJSON
+                x <- jsonlite::fromJSON(x) ## do text-then-conversion, rather than content(as="parsed") to avoid httr's default use of RJSONIO::fromJSON
             }
         }
         x
     } else {
+        if (identical(caching, "off") && !(type %in% c("filename", "binary_filename"))) {
+            if (verbose) { cat(sprintf("  GETting URL %s\n", url)) }
+            this_outfile <-  tempfile()
+        } else {
+            this_outfile <- ala_cache_filename(url)
+        }
         ## use caching
-        thisfile=download_to_file(url,binary_file=identical(type,"binary_filename"),verbose=verbose,on_redirect=on_redirect,on_client_error=on_client_error,on_server_error=on_server_error)
+        thisfile <- download_to_file(url, outfile=this_outfile, binary_file=identical(type, "binary_filename"), verbose=verbose, on_redirect=on_redirect, on_client_error=on_client_error, on_server_error=on_server_error)
         if (!file.exists(thisfile)) {
             ## file does not exist
             NULL
         } else {
-            if (type %in% c("json","text")) {
+            if (type %in% c("json", "text")) {
                 if (!(file.info(thisfile)$size>0)) {
                     NULL
                 } else {
@@ -70,17 +78,17 @@ cached_get=function(url,type="text",caching=ala_config()$caching,verbose=ala_con
                         ## convert directly from file - this also allows jsonlite to handle encoding issues
                         jsonlite::fromJSON(thisfile)
                     } else {
-                        fid=file(thisfile, "rt")
-                        out=readLines(fid,warn=FALSE,encoding=encoding)
+                        fid <- file(thisfile, "rt")
+                        out <- readLines(fid, warn=FALSE, encoding=encoding)
                         close(fid)
                         out
                     }
                 }
-            } else if (type %in% c("filename","binary_filename")) {
+            } else if (type %in% c("filename", "binary_filename")) {
                 thisfile
             } else {
                 ## should not be here! did we add an allowed type to the arguments without adding handler code down here?
-                stop(sprintf("unrecognized type %s in cached_get",type))
+                stop(sprintf("unrecognized type %s in cached_get", type))
             }
         }
     }
