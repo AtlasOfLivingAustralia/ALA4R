@@ -16,51 +16,43 @@
 #' @export image_info
 
 image_info <- function(id,image_number,verbose=ala_config()$verbose) {
-    if (missing(id) & missing(image_number)) {
-        stop("image id or number must be provided")
-    }
-    if (!missing(id)) { assert_that(is.character(id)) }
-    if (!missing(image_number)) { assert_that(is.character(image_number) | is.numeric(image_number)) }
-    assert_that(is.flag(verbose))
+    if (missing(id) & missing(image_number)) stop("image id or number must be provided")
+    if (!missing(id)) assert_that(is.character(id))
+    if (!missing(image_number)) assert_that(is.character(image_number) || is.numeric(image_number))
+    assert_that(is.flag(verbose) && !is.na(verbose))
     if (is.null(getOption("ALA4R_server_config")$base_url_images) || getOption("ALA4R_server_config")$base_url_images=="") {
-        stop("No URL to the image database has been configured: see base_url_images in ",getOption("ALA4R_server_config")$config_function)
+        stop("No URL to the image database has been configured: see base_url_images in ", getOption("ALA4R_server_config")$config_function)
     }
     ## grab each image info web page
     if (!missing(id)) {
-        non_empty <- nchar(id)>0 & !is.na(id)
-        this_url <- paste0(getOption("ALA4R_server_config")$base_url_images,"image/details?imageId=",id[non_empty])
+        non_empty <- nzchar(id) & !is.na(id)
+        this_url <- paste0(getOption("ALA4R_server_config")$base_url_images, "image/details?imageId=", id[non_empty])
     } else if (!missing(image_number)) {
-        if (is.character(image_number)) {
-            non_empty <- nchar(image_number)>0 & !is.na(image_number)
-        } else {
-            non_empty <- 1:length(image_number)
-        }
-        this_url <- paste0(getOption("ALA4R_server_config")$base_url_images,"image/details/",image_number[non_empty])
+        non_empty <- if (is.character(image_number)) nzchar(image_number) & !is.na(image_number) else !is.na(image_number)
+        this_url <- paste0(getOption("ALA4R_server_config")$base_url_images, "image/details/", image_number[non_empty])
     }        
     ## we get a 500 error if we ask for a non-existent image ID, so catch these errors with the on_server_error parm
-    pages <- sapply(this_url,function(z) paste0(cached_get(URLencode(z),type="text",verbose=verbose,on_server_error=function(z)NULL),collapse=" "))
+    pages <- vapply(this_url, function(z) paste0(cached_get(URLencode(z), type="text", verbose=verbose, on_server_error=function(z)NULL), collapse=" "), FUN.VALUE="", USE.NAMES=FALSE)
     ## keep only the table from each, which has the actual image details
-    pages <- sapply(pages,function(z) { if (nrow(str_locate(z,"<table"))==1) str_extract(z,regex("<table.*</table>",dotall=TRUE)) else stop("image information page in unexpected format. ",getOption("ALA4R_server_config")$notify) })
-        
-    out <- extract_image_detail(pages,".*?")
-    ## this will have NA values for imageIdentifier where id was not valid (because the imageIdentifier value comes from the scraped HTML, which won't exist for invalid id). Replace with input ids
-    if (!missing(id)) { out$imageIdentifier=id }
-    if (!missing(image_number)) { out$image_number=image_number }
-    out
+    pages <- vapply(pages, function(z) { if (nrow(str_locate(z,"<table"))==1) str_extract(z,regex("<table.*</table>",dotall=TRUE)) else stop("image information page in unexpected format. ", getOption("ALA4R_server_config")$notify) }, FUN.VALUE="", USE.NAMES=FALSE)        
+    temp <- extract_image_detail(pages, ".*?")
+    ## this only has rows where the imageIdentifier had a valid match
+    ## reconstruct a data.frame with the same row ordering as the input ids
+    out <- data.frame(imageIdentifier=id, stringsAsFactors=FALSE)
+    merge(out, temp, all.x=TRUE, by="imageIdentifier", sort=FALSE)
 }
 
-## helper function to extract detail from the scraped html pages
-extract_image_detail <- function(html,property_name_regex) {
-    regex_str <- paste0("<td[^>]*>(",property_name_regex,")</td>\\s*<td[^>]*>(.*?)</t[rd]")
-    out <- str_match_all(html,regex(regex_str,ignore_case=TRUE,dotall=TRUE))
+## worker function to extract detail from the scraped html pages
+extract_image_detail <- function(html, property_name_regex) {
+    regex_str <- paste0("<td[^>]*>(", property_name_regex, ")</td>\\s*<td[^>]*>(.*?)</t[rd]")
+    out <- str_match_all(html, regex(regex_str, ignore_case=TRUE, dotall=TRUE))
     ## out is a list, where each element is a character matrix where nrows = number of matches to property_name_regex and ncols=3
     ##  if image ID was invalid, then nrows=1 and each entry is NA
-    ldply(out,function(z) {
-        if (nrow(z)==1 && is.na(z[,3])) {
-            data.frame(imageIdentifier=NA,imageURL=NA)
-        } else {
-            this <- as.data.frame(t(str_trim(z[,3])),stringsAsFactors=FALSE)
-            names(this) <- rename_variables(z[,2],type="occurrence")
+    do.call(rbind, lapply(out, function(z) {
+        if (!(nrow(z)==1 && is.na(z[, 3]))) {
+            this <- as.data.frame(t(str_trim(z[, 3])), stringsAsFactors=FALSE)
+            names(this) <- rename_variables(z[, 2], type="occurrence")
             this
-        }} )
+        }
+    }))
 }
