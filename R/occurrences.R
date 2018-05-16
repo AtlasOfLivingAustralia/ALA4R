@@ -200,7 +200,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
                 Sys.sleep(2)
             }
             if (status$status!="finished") {
-                stop("unexpected response from server. ",getOption("ALA4R_server_config")$notify,". Response was:\n",str(status))
+                stop("unexpected response from server. ",getOption("ALA4R_server_config")$notify,". The server response was: ",status$status)
             } else {
                 ## finally we have the URL to the data file itself
                 download_to_file(status$downloadUrl,outfile=thisfile,binary_file=TRUE,verbose=verbose)
