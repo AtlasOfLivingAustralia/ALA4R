@@ -107,7 +107,6 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
         stop("invalid request: need at least one of taxon, fq, or wkt to be specified")
     }
     if (method=="offline") {
-        warning("*NOTE, Feb 2018* --- offline occurrences functionality may not work because of recent changes to the ALA infrastructure. This is being investigated.")
         if (record_count_only) stop("record_count_only can only be used with method=\"indexed\"")
         if (missing(email) || !is.string(email) || nchar(email)<1) stop("email is required for method=offline")
     }
@@ -194,16 +193,34 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
         if ((ala_config()$caching %in% c("off","refresh")) || (! file.exists(thisfile))) {
             status <- cached_get(url=this_url,caching="off",type="json",verbose=verbose)
             if (!"statusUrl" %in% names(status)) stop("reply from server was missing statusUrl. ",getOption("ALA4R_server_config")$notify)
-            status <- cached_get(status$statusUrl,caching="off",type="json",verbose=verbose)
+            this_status_url <- status$statusUrl
+            status <- cached_get(this_status_url,caching="off",type="json",verbose=verbose)
             while (tolower(status$status) %in% c("inqueue","running")) {##!= "finished") {
-                status <- cached_get(status$statusUrl,caching="off",type="json",verbose=verbose)
+                status <- cached_get(this_status_url,caching="off",type="json",verbose=verbose)
                 Sys.sleep(2)
             }
-            if (status$status!="finished") {
-                stop("unexpected response from server. ",getOption("ALA4R_server_config")$notify,". The server response was: ",status$status)
+            ## May 2018: workaround for server-side bug
+            ## see https://github.com/AtlasOfLivingAustralia/biocache-service/issues/221#issuecomment-389740284
+            if (tolower(status$status) %in% c("invalidid")) {
+                tryCatch({
+                    ## pull out the uuid from the status URL
+                    this_uuid <- stringr::str_match(this_status_url, "status/([^/]+)/?$")[1, 2]
+                    ## change last "-" to "/"
+                    temp <- strsplit(this_uuid, "-")[[1]]
+                    temp <- paste0(paste(temp[-length(temp)], collapse="-"), "/", temp[length(temp)])
+                    url_to_try <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_biocache_download, c(temp, "data.zip"))
+                    download_to_file(url_to_try, outfile=thisfile, binary_file=TRUE, verbose=verbose)
+                    status$status <- "finished" ## act as if it all worked!
+                }, error=function(e) {
+                    stop("Offline download failed. ", getOption("ALA4R_server_config")$notify)
+                })
             } else {
-                ## finally we have the URL to the data file itself
-                download_to_file(status$downloadUrl,outfile=thisfile,binary_file=TRUE,verbose=verbose)
+                if (status$status!="finished") {
+                    stop("unexpected response from server. ",getOption("ALA4R_server_config")$notify,". The server response was: ",status$status)
+                } else {
+                    ## finally we have the URL to the data file itself
+                    download_to_file(status$downloadUrl,outfile=thisfile,binary_file=TRUE,verbose=verbose)
+                }
             }
         } else {
             ## we are using the existing cached file
