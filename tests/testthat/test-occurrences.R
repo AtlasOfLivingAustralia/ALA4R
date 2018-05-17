@@ -76,7 +76,6 @@ check_caching(thischeck)
 
 thischeck <- function() {
     test_that("occurrences checks required inputs", {
-        skip("Feb-2018: skipped until changes in offline API have been resolved")
         skip_on_cran()
         expect_error(occurrences(taxon="data_resource_uid:dr356",method="offline",download_reason_id="testing",email=""))
         expect_error(occurrences(taxon="data_resource_uid:dr356",method="offline",download_reason_id="testing"))
@@ -88,7 +87,6 @@ check_caching(thischeck)
 
 thischeck <- function() {
     test_that("occurrences warns for long URLs", {
-        skip("Feb-2018: skipped until changes in offline API have been resolved")
         skip_on_cran()
         expect_error(expect_warning(occurrences(taxon="data_resource_uid:dr356",method="offline",download_reason_id="testing",email="testing@test.org",fields="all"))) ## url string too long, 414 error and warning
     })
@@ -97,7 +95,6 @@ check_caching(thischeck)
 
 thischeck <- function() {
     test_that("occurrences gives same results for offline and indexed methods", {
-        skip("Feb-2018: skipped until changes in offline API have been resolved")
         skip_on_cran()
         x1 <- occurrences(taxon="data_resource_uid:dr356",method="offline",download_reason_id="testing",email="ala4rtesting@test.org")
         x2 <- occurrences(taxon="data_resource_uid:dr356",download_reason_id="testing")

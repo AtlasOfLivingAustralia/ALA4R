@@ -1,3 +1,6 @@
+# ALA4R 1.5.10
+* bugfixes
+
 # ALA4R 1.5.6
 * added `biocache_version` parameter to server configuration, to support use of ALA4R with other server instances (e.g. other national installations using the ALA server infrastructure) 
 * minor bugfixes

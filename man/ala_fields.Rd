@@ -40,9 +40,9 @@ Note for occurrence fields: only fields that are indexed in the ALA database can
 \examples{
 \dontrun{
  l <- ala_fields("layers")
- l[,4]
+ l[, 4]
  o <- ala_fields("occurrence")
- o[1:13,]
+ o[1:13, ]
  a <- ala_fields("assertions")
  a$description
  field_info("cl22")
