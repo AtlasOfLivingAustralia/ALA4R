@@ -10,4 +10,4 @@ check_caching=function(f) {
     f()
 }
 
-test_check("ALA4R",reporter="summary")
+test_check("ALA4R")
