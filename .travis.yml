@@ -23,5 +23,13 @@ matrix:
 env:
   - NOT_CRAN=true
 
+warnings_are_errors: true
+
+script: 
+  - |
+    R CMD build .
+    travis_wait 20 R CMD check ALA4R*tar.gz
+
+
 after_success:
-- Rscript -e 'covr::codecov()'
+- travis_wait 20 Rscript -e 'covr::codecov()'
