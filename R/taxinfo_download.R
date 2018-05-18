@@ -85,7 +85,7 @@ taxinfo_download <- function(query,fq,fields,verbose=ala_config()$verbose,use_da
                     ## convert column data types
                     ## ALA supplies *all* values as quoted text, even numeric, and they appear here as character type
                     ## we will convert whatever looks like numeric or logical to those classes
-                    x <- colwise(convert_dt)(x)
+                    for (cl in seq_len(ncol(x))) x[, cl] <- convert_dt(x[, cl]) ## x <- plyr::colwise(convert_dt)(x)
                 }
                 read_ok <- TRUE
             }, error=function(e) {
@@ -98,7 +98,7 @@ taxinfo_download <- function(query,fq,fields,verbose=ala_config()$verbose,use_da
             if (!empty(x)) {
                 ## convert column data types
                 ## read.table handles quoted numerics but not quoted logicals
-                x <- colwise(convert_dt)(x,test_numeric=FALSE)
+                for (cl in seq_len(ncol(x))) x[, cl] <- convert_dt(x[, cl], test_numeric=FALSE) ## x <- plyr::colwise(convert_dt)(x,test_numeric=FALSE)
             }
         }
 

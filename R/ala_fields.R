@@ -167,23 +167,23 @@ fields_name_to_id <- function(fields, fields_type, make_names=FALSE) {
            )
     }
     switch(fields_type,
-           "layers"=laply(fields, function(z) ifelse(z %in% valid_fields$description & (!z %in% valid_fields$id), {
+           "layers"=vapply(fields, function(z) ifelse(z %in% valid_fields$description & (!z %in% valid_fields$id), {
                if (sum(valid_fields$description==z, na.rm=TRUE)>1) {
                    if (nchar(z)>0) { ## don't warn if field name is degenerate ""
                        warning(" multiple ", fields_type, " fields match the name \"", z, "\", using first")
                    }
                }
                valid_fields$id[which(valid_fields$description==z)[1]]
-           }, z)),
+           }, z), FUN.VALUE="", USE.NAMES=FALSE),
            "occurrence"=,
-           "assertions"=laply(fields, function(z) ifelse(z %in% valid_fields$description & (!z %in% valid_fields$name), {
+           "assertions"=vapply(fields, function(z) ifelse(z %in% valid_fields$description & (!z %in% valid_fields$name), {
                if (sum(valid_fields$description==z, na.rm=TRUE)>1) {
                    if (nchar(z)>0) {
                        warning(" multiple ", fields_type, " fields match the name \"", z, "\", using first")
                    }
                }
                valid_fields$name[which(valid_fields$description==z)[1]]
-           }, z)),
+           }, z), FUN.VALUE="", USE.NAMES=FALSE),
            fields ## default to just returning the fields as supplied 
        )
 }
@@ -201,23 +201,23 @@ fields_id_to_name <- function(fields, fields_type) {
     ## for general, there is no long name (description)
     ## for each one, warn if multiple matches on long name are found
     switch(fields_type,
-           "layers"=laply(fields, function(z) ifelse(z %in% valid_fields$id & (!z %in% valid_fields$description), {
+           "layers"=vapply(fields, function(z) ifelse(z %in% valid_fields$id & (!z %in% valid_fields$description), {
                if (sum(valid_fields$id==z, na.rm=TRUE)>1) {
                    if (nchar(z)>0) {
                        warning(" multiple ", fields_type, " fields match the id \"", z, "\", using first")
                    }
                }
                valid_fields$description[which(valid_fields$id==z)[1]]
-           }, z)),
+           }, z), FUN.VALUE="", USE.NAMES=FALSE),
            "occurrence"=,
-           "assertions"=laply(fields, function(z) ifelse(z %in% valid_fields$name & (!z %in% valid_fields$description), {
+           "assertions"=vapply(fields, function(z) ifelse(z %in% valid_fields$name & (!z %in% valid_fields$description), {
                if (sum(valid_fields$name==z, na.rm=TRUE)>1) {
                    if (nchar(z)>0) {
                        warning(" multiple ", fields_type, " fields match the id \"", z, "\", using first")
                    }
                }
                valid_fields$description[which(valid_fields$name==z)[1]]
-           }, z)),
+           }, z), FUN.VALUE="", USE.NAMES=FALSE),
            fields ## default to just returning the fields as supplied 
        )
 }

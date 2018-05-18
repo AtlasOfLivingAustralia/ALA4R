@@ -96,9 +96,13 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences gives same results for offline and indexed methods", {
         skip_on_cran()
-        x1 <- occurrences(taxon="data_resource_uid:dr356",method="offline",download_reason_id="testing",email="ala4rtesting@test.org")
-        x2 <- occurrences(taxon="data_resource_uid:dr356",download_reason_id="testing")
-        expect_identical(arrange(x1$data,id),arrange(x2$data,id))
+        x1 <- occurrences(taxon="data_resource_uid:dr356", method="offline", download_reason_id="testing", email="ala4rtesting@test.org")
+        x2 <- occurrences(taxon="data_resource_uid:dr356", download_reason_id="testing")
+        x1 <- x1$data[order(x1$data$id), ]
+        x2 <- x2$data[order(x2$data$id), ]
+        rownames(x1) <- seq_len(nrow(x1)) ## to avoid non-identical rownames after ordering
+        rownames(x2) <- seq_len(nrow(x2))
+        expect_identical(x1, x2)
     })
 }
 check_caching(thischeck)

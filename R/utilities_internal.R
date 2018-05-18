@@ -2,6 +2,8 @@
 
 ##----------------------------------------------------------------------------------------------
 
+empty <- function(x) is.null(x) || nrow(x)<1 || ncol(x)<1
+
 is.notempty.string <- function(x) {
     is.string(x) && !is.na(x) && nchar(x)>0
 }
