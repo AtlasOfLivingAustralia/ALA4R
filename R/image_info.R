@@ -38,8 +38,14 @@ image_info <- function(id,image_number,verbose=ala_config()$verbose) {
     temp <- extract_image_detail(pages, ".*?")
     ## this only has rows where the imageIdentifier had a valid match
     ## reconstruct a data.frame with the same row ordering as the input ids
-    out <- data.frame(imageIdentifier=id, stringsAsFactors=FALSE)
-    merge(out, temp, all.x=TRUE, by="imageIdentifier", sort=FALSE)
+    if (is.null(temp) || nrow(temp)<1) {
+        ## no matches, return data.frame with supplied ids but NA-columns
+        ## note that this isn't the complete set of columns that one gets when an id is actually matched
+        data.frame(imageIdentifier=id, imageURL=NA_character_, stringsAsFactors=FALSE)
+    } else {
+        out <- data.frame(imageIdentifier=id, stringsAsFactors=FALSE)
+        merge(out, temp, all.x=TRUE, by="imageIdentifier", sort=FALSE)
+    }
 }
 
 ## worker function to extract detail from the scraped html pages
