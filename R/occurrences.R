@@ -248,7 +248,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
                         ## convert column data types
                         ## ALA supplies *all* values as quoted text, even numeric, and they appear here as character type
                         ## we will convert whatever looks like numeric or logical to those classes
-                        for (cl in seq_len(ncol(x))) x[, cl] <- convert_dt(x[, cl]) ## x <- plyr::colwise(convert_dt)(x)
+                        for (cl in seq_len(ncol(x))) x[, cl] <- convert_dt(x[, cl])
                     }
                     read_ok <- TRUE
                 } else {
@@ -273,7 +273,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
             if (!empty(x)) {
                 ## convert column data types
                 ## read.table handles quoted numerics but not quoted logicals
-                for (cl in seq_len(ncol(x))) x[, cl] <- convert_dt(x[, cl], test_numeric=FALSE) ## x <- plyr::colwise(convert_dt)(x,test_numeric=FALSE)
+                for (cl in seq_len(ncol(x))) x[, cl] <- convert_dt(x[, cl], test_numeric=FALSE)
             }
         }
 

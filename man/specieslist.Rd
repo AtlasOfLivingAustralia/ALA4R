@@ -15,7 +15,7 @@ search, where one would typically be searching for all species within, say, a ge
 
 \item{wkt}{string: WKT (well-known text) defining a polygon within which to limit taxon search, e.g. "POLYGON((140 -37,151 -37,151 -26,140 -26,140 -37))"}
 
-\item{fq}{string: character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See \code{ala_fields("occurrence_indexed",as_is=TRUE)} for all the fields that are queryable. NOTE that fq matches are case-sensitive, but sometimes the entries in the fields are not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA"). fq matches are ANDed by default (e.g. c("field1:abc","field2:def") will match records that have field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form c("field1:abc OR field2:def")}
+\item{fq}{string: character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See \code{ala_fields("occurrence_indexed", as_is=TRUE)} for all the fields that are queryable. NOTE that fq matches are case-sensitive, but sometimes the entries in the fields are not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA"). fq matches are ANDed by default (e.g. c("field1:abc", "field2:def") will match records that have field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form c("field1:abc OR field2:def")}
 }
 \value{
 data frame of results, where each row is a taxon, its classification information, and its occurrence count
@@ -28,12 +28,12 @@ NOTE March 2017: the response object might include records with missing taxonomi
 }
 \examples{
 \dontrun{
-x <- specieslist(taxon="genus:Hakea",wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
+x <- specieslist(taxon="genus:Hakea", wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
 
 x <- specieslist(wkt="POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,
-  147.62 -42.83))",fq="rank:species")
+  147.62 -42.83))", fq="rank:species")
 
-x <- specieslist(wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",fq="genus:Macropus")
+x <- specieslist(wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))", fq="genus:Macropus")
 
 x <- specieslist(wkt="POLYGON((152.38 -30.43,152.5 -30.43,152.5 -30.5,152.38 -30.5,152.38 -30.43))",
     fq="kingdom:Plantae")
