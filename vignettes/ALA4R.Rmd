@@ -16,19 +16,14 @@ library(knitr)
 ## center images: this only works for html output format
 temp <- opts_knit$get("rmarkdown.pandoc.to")
 if (!is.null(temp) && !is.na(temp) && grepl("html",temp)) opts_chunk$set(out.extra='style="display:block; margin: auto"', fig.align="center")
+options(width=120)
 ```
-
 
 The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from http://www.ala.org.au/. Here we provide a subset of the tools to be directly used within R.
 
-ALA4R enables the R community to directly access data and resources hosted by the ALA. Our goal is to enable outputs (e.g. observations of species) to be queried and output in a range of standard formats.
-
+ALA4R enables the R community to directly access data and resources hosted by the ALA. 
 
 ## Installing ALA4R
-
-### Windows
-
-In R:
 
 Stable version from CRAN:
 
@@ -40,36 +35,21 @@ Or the development version from GitHub:
 
 ```{r eval=FALSE}
 install.packages("devtools")
-library(devtools)
-install_github("AtlasOfLivingAustralia/ALA4R")
+devtools::install_github("AtlasOfLivingAustralia/ALA4R")
 ```
-
-You may see a warning about the `Rtools` package: you don't need to install this. You may also be asked about a location for the `R.cache` directory --- choose whatever you prefer here, ALA4R does not use `R.cache`.
-
-If you see an error about a missing package, you will need to install it manually, e.g.:
-```{r eval=FALSE}
-install.packages(c("stringr", "sp"))
-```
-and then try installing ALA4R again.
-
 
 If you wish to use the `data.table` package for potentially faster loading of data matrices (optional), also do:
 ```{r eval=FALSE}
 install.packages("data.table")
 ```
 
+On Linux you will first need to ensure that `libcurl` is installed on your system --- e.g. on Ubuntu, open a terminal and do:
 
-### Linux
-
-First, ensure that `libcurl` is installed on your system --- e.g. on Ubuntu, open a terminal and do:
 ```{sh eval=FALSE}
 sudo apt-get install libcurl4-openssl-dev
 ```
 
 or install `libcurl4-openssl-dev` via the Software Centre.
-
-
-Then follow the instructions for Windows, above.
 
 
 ## Using ALA4R
@@ -90,13 +70,13 @@ ALA4R can cache most results to local files. This means that if the same code is
 By default, this caching is session-based, meaning that the local files are stored in a temporary directory that is automatically deleted when the R session is ended. This behaviour can be altered so that caching is permanent, by setting the caching directory to a non-temporary location. For example, under Windows, use something like:
 
 ```{r eval=FALSE}
-ala_config(cache_directory=file.path("c:", "mydata", "ala_cache")) ## Windows
+ala_config(cache_directory <- "c:/mydata/ala_cache") ## use forward slashes, not \
 ```
 
 or for Linux:
 
 ```{r eval=FALSE}
-ala_config(cache_directory=file.path("~", "mydata", "ala_cache")) ## Linux
+ala_config(cache_directory <- "~/mydata/ala_cache")
 ```
 
 Note that this directory must exist (you need to create it yourself).
@@ -107,7 +87,8 @@ All results will be stored in that cache directory and will be used from one ses
 If you change the cache_directory to a permanent location, you may wish to add something like this to your .Rprofile file, so that it happens automatically each time the ALA4R package is loaded:
 
 ```{r eval=FALSE}
-setHook(packageEvent("ALA4R", "attach"), function(...) ala_config(cache_directory=file.path("~", "mydata", "ala_cache")))
+setHook(packageEvent("ALA4R", "attach"), function(...)
+    ala_config(cache_directory=file.path("~", "mydata", "ala_cache")))
 ```
 
 Caching can also be turned off entirely by:
@@ -155,9 +136,11 @@ ala_config(warn_on_empty=TRUE)
 
 First, check that we have some additional packages that we'll use in the examples, and install them if necessary.
 ```{r}
-to_install <- c("jpeg", "phytools", "ape", "vegan", "mgcv", "geosphere", "maps", "mapdata", "maptools")
+to_install <- c("jpeg", "phytools", "ape", "vegan", "mgcv", "geosphere",
+                "maps", "mapdata", "maptools")
 to_install <- to_install[!sapply(to_install, requireNamespace, quietly=TRUE)]
-if(length(to_install)>0) install.packages(to_install, repos="http://cran.us.r-project.org")
+if(length(to_install)>0)
+    install.packages(to_install, repos="http://cran.us.r-project.org")
 ```
 
 ### Example 1: Name searching and taxonomic trees
@@ -384,16 +367,20 @@ Clustering:
 cl <- hclust(D, method="ave") ## UPGMA clustering
 plot(cl) ## plot dendrogram
 grp <- cutree(cl, 20) ## extract group labels at the 20-group level
+
 ## coalesce small (outlier) groups into a single catch-all group
 sing <- which(table(grp)<5)
 grp[grp %in% sing] <- 21 ## put these in a new combined group
 grp <- sapply(grp, function(z)which(unique(grp)==z)) ## renumber groups
+
 ## plot
 with(xgridded, plot(longitude, latitude, pch=21, col=grp, bg=grp))
+
 ## or slightly nicer map plot
 library(maps)
 library(mapdata)
 map("worldHires", "Australia", xlim=c(105, 155), ylim=c(-45, -10), col="gray90", fill=TRUE)
+
 ## colours for clusters
 thiscol <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2",
              "#7f7f7f", "#bcbd22", "#17becf")
