@@ -20,7 +20,7 @@ Note that this makes a separate web request for each occurrence uuid, and so may
 \examples{
 \dontrun{
 s1 <- occurrence_details("f259c5ce-200c-41a2-b73a-e36a91f748f7")
-str(s1,max.level=3)
+str(s1, max.level=3)
 }
 }
 \references{
