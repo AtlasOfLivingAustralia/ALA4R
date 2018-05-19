@@ -13,14 +13,14 @@ occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
 \item{filename}{string: name of file to be created; defaults to RPlots.pdf}
 
 \item{qa}{string vector: list of record issues to be mapped; these can be assertion columnnames, 
-or 'all' or 'none' or any combination of 'error', 'warning' or 'fatal'. Column or categories in 
+or "all" or "none" or any combination of "error", "warning" or "fatal". Column or categories in 
 your dataset can be viewed using \code{check_assertions}.}
 
 \item{grouped}{logical: TRUE creates a single plot for all observations; FALSE plots individual 
 maps for the taxon level defined.}
 
-\item{taxon_level}{string: taxonomic level at which to create maps; possible values are 'species', 
-'genus', 'family' or 'order'}
+\item{taxon_level}{string: taxonomic level at which to create maps; possible values are "species", 
+"genus", "family", or "order"}
 
 \item{pch}{single number or character representing point type. See description of \code{pch} in \code{\link{points}}.}
 
@@ -37,11 +37,12 @@ an Australian basemap and colours the occurrence records dots according to param
 }
 \examples{
 \dontrun{ 
-#download some observations
-x <- occurrences(taxon="Eucalyptus gunnii",download_reason_id=10)
+## download some observations
+x <- occurrences(taxon="Eucalyptus gunnii", download_reason_id=10)
 occurrences_plot(x)
-x <- occurrences(taxon="Cider Gum",download_reason_id=10)
-occurrences_plot(x,"alaPlot.pdf",qa="fatal",grouped=FALSE, taxon_level="species",pch='+')
+
+x <- occurrences(taxon="Cider Gum", download_reason_id=10)
+occurrences_plot(x, "alaPlot.pdf", qa="fatal", grouped=FALSE, taxon_level="species", pch="+")
 }
 }
 \references{

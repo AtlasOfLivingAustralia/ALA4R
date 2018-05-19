@@ -24,7 +24,7 @@ Provides names, taxonomic classification, and other information for a list of GU
 \examples{
 \dontrun{
 search_guids(c("urn:lsid:biodiversity.org.au:afd.taxon:95773568-053d-44de-a624-5699f0ac4a59",
-  "http://id.biodiversity.org.au/node/apni/2890970","this_is_not_a_valid_guid"))
+  "http://id.biodiversity.org.au/node/apni/2890970", "this_is_not_a_valid_guid"))
 }
 
 }

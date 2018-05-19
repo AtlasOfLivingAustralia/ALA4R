@@ -22,8 +22,8 @@ Search for environmental and contextual data layers
 \examples{
 \dontrun{
 search_layers(type="all")
-search_layers(type="grids",query="income")
-search_layers(type="shapes",query="coral",output_format="simple")
+search_layers(type="grids", query="income")
+search_layers(type="shapes", query="coral", output_format="simple")
 }
 }
 \references{

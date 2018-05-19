@@ -27,10 +27,10 @@ A partial-name search for species names & identifiers used at the ALA. If search
 \examples{
 \dontrun{
 # find any names containing "allaba"
-search_partial_name("allaba",output_format="simple")
+search_partial_name("allaba", output_format="simple")
 
 # retrieve only species that have geolocated occurrence records
-search_partial_name("Gallaba",geo_only=TRUE)
+search_partial_name("Gallaba", geo_only=TRUE)
 }
 }
 \references{

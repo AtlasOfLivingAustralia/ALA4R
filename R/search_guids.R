@@ -13,12 +13,12 @@
 #' @examples
 #' \dontrun{
 #' search_guids(c("urn:lsid:biodiversity.org.au:afd.taxon:95773568-053d-44de-a624-5699f0ac4a59",
-#'   "http://id.biodiversity.org.au/node/apni/2890970","this_is_not_a_valid_guid"))
+#'   "http://id.biodiversity.org.au/node/apni/2890970", "this_is_not_a_valid_guid"))
 #' }
 #' 
 #' @export
 
-search_guids <- function(guids=c(),occurrence_count=FALSE,output_format="simple") {
+search_guids <- function(guids=c(), occurrence_count=FALSE, output_format="simple") {
     ## input argument checks
     if (is.list(guids)) {
         guids <- unlist(guids)
@@ -35,13 +35,13 @@ search_guids <- function(guids=c(),occurrence_count=FALSE,output_format="simple"
     }
     assert_that(is.flag(occurrence_count))
     assert_that(is.character(output_format))
-    output_format <- match.arg(tolower(output_format),c("simple","complete"))
-    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie,c("species","guids","bulklookup"))
+    output_format <- match.arg(tolower(output_format), c("simple", "complete"))
+    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie, c("species", "guids", "bulklookup"))
     temp <- jsonlite::toJSON(guids)
-    x <- cached_post(url=this_url,body=temp,type="json",content_type="application/json")
+    x <- cached_post(url=this_url, body=temp, type="json", content_type="application/json")
     ## x is a named list with one element
     x <- x[[1]]
-    if (length(guids)==1 & (identical(x,NA) || identical(x,as.character(NA)))) {
+    if (length(guids)==1 & (identical(x, NA) || identical(x, as.character(NA)))) {
         ## if a single non-matched GUID is supplied, we get NA back
         x <- NULL
     }
@@ -56,35 +56,34 @@ search_guids <- function(guids=c(),occurrence_count=FALSE,output_format="simple"
             ## add searchTerm, so user can more easily see what each original query was
             x$searchTerm <- guids
             ## remove some columns that are unlikely to be of value here
-            xcols <- setdiff(names(x),unwanted_columns("general"))
+            xcols <- setdiff(names(x), unwanted_columns("general"))
             ## reorder columns, for minor convenience
-            firstcols <- intersect(c("searchTerm","name","commonNameSingle","guid","rank"),xcols)
+            firstcols <- intersect(c("searchTerm", "name", "commonNameSingle", "guid", "rank"), xcols)
             ## note commonName now seems to be commonNameSingle
-            xcols <- c(firstcols,setdiff(xcols,firstcols))
-            x <- subset(x,select=xcols)
+            xcols <- c(firstcols, setdiff(xcols, firstcols))
+            x <- subset(x, select=xcols)
             ## ensure that cols are character
             if ("searchTerm" %in% names(x)) x$searchTerm <- as.character(x$searchTerm)
             if ("name" %in% names(x)) x$name <- as.character(x$name)
             if ("commonNameSingle" %in% names(x)) x$commonNameSingle <- as.character(x$commonNameSingle)
             if ("guid" %in% names(x)) x$guid <- as.character(x$guid)
             if ("rank" %in% names(x)) x$rank <- as.character(x$rank)
-            attr(x,"output_format") <- output_format            
+            attr(x, "output_format") <- output_format            
         } else {
             if (ala_config()$warn_on_empty) warning("no records found")
-            x <- data.frame(searchTerm=guids,name=as.character(NA),commonName=as.character(NA),rank=as.character(NA),guid=as.character(NA),stringsAsFactors=FALSE)
-            attr(x,"output_format") <- output_format
+            x <- data.frame(searchTerm=guids, name=as.character(NA), commonName=as.character(NA), rank=as.character(NA), guid=as.character(NA), stringsAsFactors=FALSE)
+            attr(x, "output_format") <- output_format
         }
 
-    names(x) <- rename_variables(names(x),type="general")
+    names(x) <- rename_variables(names(x), type="general")
     if (occurrence_count) {
         x$occurrenceCount <- NA
         non_na <- !is.na(x$guid)
         if (any(non_na)) {
-##            x$occurrenceCount[non_na] <- sapply(x$guid[non_na],function(z) occurrences(taxon=paste0("lsid:",z),record_count_only=TRUE))
             x$occurrenceCount[non_na] <- vapply(x$guid[non_na], function(z) occurrences(taxon=paste0("lsid:", z), record_count_only=TRUE), FUN.VALUE=1, USE.NAMES=FALSE)
         }
     }
-    class(x) <- c("search_guids",class(x)) ## add the search_names class
+    class(x) <- c("search_guids", class(x)) ## add the search_names class
     x
 }
 
@@ -92,15 +91,15 @@ search_guids <- function(guids=c(),occurrence_count=FALSE,output_format="simple"
 #' @export
 "print.search_guids" <- function(x, ...)
 {
-    if (inherits(x,"list")) {
+    if (inherits(x, "list")) {
         ## from guids_only seach
         print(format(x))
     } else {
         cols <- names(x)
-        if (identical(attr(x,"output_format"),"simple")) {
-            cols <- intersect(c("searchTerm","name","commonName","rank","guid","occurrenceCount"),cols)
+        if (identical(attr(x, "output_format"), "simple")) {
+            cols <- intersect(c("searchTerm", "name", "commonName", "rank", "guid", "occurrenceCount"), cols)
         }
-        print(format.data.frame(x[,cols],na.encode=FALSE))
+        print(format.data.frame(x[, cols], na.encode=FALSE))
     }
     invisible(x)
 }

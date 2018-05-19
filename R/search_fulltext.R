@@ -28,11 +28,11 @@
 #'  search_fulltext("urn:lsid:biodiversity.org.au:afd.taxon:31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae")
 #'
 #'  # find genus names like "Oenanthe"
-#'  search_fulltext("oenanthe",sort_by="rk_kingdom",fq="rank:genus")
+#'  search_fulltext("oenanthe", sort_by="rk_kingdom", fq="rank:genus")
 #' }
 #' @export
-search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort_by,sort_dir) {
-    output_format <- match.arg(tolower(output_format),c("simple","complete"))
+search_fulltext <- function(query, fq, output_format="simple", start, page_size, sort_by, sort_dir) {
+    output_format <- match.arg(tolower(output_format), c("simple", "complete"))
     this_query <- list()
     if (!missing(query)) {
         if (is.factor(query)) {
@@ -44,10 +44,10 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     if (!missing(fq)) {
         assert_that(is.character(fq))
         ## can have multiple fq parameters, need to specify in url as fq=a:b&fq=c:d&fq=...
-        check_fq(fq,type="general") ## check that fq fields are valid
+        check_fq(fq, type="general") ## check that fq fields are valid
         fq <- as.list(fq)
-        names(fq) <- rep("fq",length(fq))
-        this_query <- c(this_query,fq)
+        names(fq) <- rep("fq", length(fq))
+        this_query <- c(this_query, fq)
     }
     if (!missing(start)) {
         assert_that(is.count(start))
@@ -60,38 +60,38 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
     if (!missing(sort_by)) {
         assert_that(is.string(sort_by))
         ## check that this is a valid field
-        valid_fields <- ala_fields("general",as_is=TRUE)$name
+        valid_fields <- ala_fields("general", as_is=TRUE)$name
         if (! sort_by %in% valid_fields) {
-            stop(sort_by," is not a valid field for sort_by. See ",getOption("ALA4R_server_config")$fields_function,"(\"general\",as_is=TRUE)")
+            stop(sort_by, " is not a valid field for sort_by. See ", getOption("ALA4R_server_config")$fields_function, "(\"general\", as_is=TRUE)")
         }
         this_query$sort <- sort_by
     }
     if (!missing(sort_dir)) {
         assert_that(is.string(sort_dir))
-        sort_dir <- match.arg(tolower(sort_dir),c("asc","desc"))
+        sort_dir <- match.arg(tolower(sort_dir), c("asc", "desc"))
         this_query$dir <- sort_dir
     }
     
-    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie,"search.json",query=this_query)
+    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie, "search.json", query=this_query)
     
-    x <- cached_get(url=this_url,type="json")
+    x <- cached_get(url=this_url, type="json")
     x <- as.list(x)
     ## server may return a message saying e.g. "400 error"
-    if (any(names(x)=="error")) stop("Error. The message from the server was: ",x$error)
+    if (any(names(x)=="error")) stop("Error. The message from the server was: ", x$error)
 
     ## reformat data into a more concise structure
     ## for newer jsonlite (> something like 0.9.5) there is a top-level x$searchResults and other parts of the structure differ slightly
     is_old_jsonlite <- TRUE
-    if (identical(names(x),"searchResults")) {
+    if (identical(names(x), "searchResults")) {
         x <- x$searchResults
         is_old_jsonlite <- FALSE
     }    
     ## x is a named list. Each component of that list is itself a named list with a single element "searchResults".
     ## first collate the metadata, which is everything except "results" and "facetResults" elements
-    out <- list(meta=x[!names(x) %in% c("results","facetResults")])
+    out <- list(meta=x[!names(x) %in% c("results", "facetResults")])
     if (is_old_jsonlite) {
         ## collapse the singleton "searchResults" structures
-        out$meta <- lapply(out$meta,function(z)z$searchResults)
+        out$meta <- lapply(out$meta, function(z)z$searchResults)
         out$data <- x$results$searchResults
     } else {
         out$data <- x$results
@@ -104,42 +104,42 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
         out$data <- data.frame()
     } else if (! is.data.frame(out$data)) {
         ## something wrong
-        stop("structure of json not as expected. ",getOption("ALA4R_server_config")$notify)
+        stop("structure of json not as expected. ", getOption("ALA4R_server_config")$notify)
     } else {
         ## rename some columns
         names(out$data)[names(out$data)=="classs"] <- "class"
-        names(out$data) <- rename_variables(names(out$data),type="general")
+        names(out$data) <- rename_variables(names(out$data), type="general")
         ## remove unwanted columns
-        xcols <- setdiff(names(out$data),unwanted_columns("general"))
+        xcols <- setdiff(names(out$data), unwanted_columns("general"))
         ## also some additional ones specific here
-        xcols <- setdiff(xcols,c("hasChildren","image","thumbnail"))
+        xcols <- setdiff(xcols, c("hasChildren", "image", "thumbnail"))
         ## hasChildren seems always to be false, even for taxa that ought to have children (e.g. Macropus)
         ## image and thumbnail appear to be internal paths, not full URLs
         ## 2016-09-16 - these don't seem to be returned now, but leave this code in place anyway
-        out$data <- subset(out$data,select=xcols)
+        out$data <- subset(out$data, select=xcols)
     }
-    for (n in intersect(names(out$data),c("name","nameComplete","scientificName","species")))
-        out$data[,n] <- replace_nonbreaking_spaces(out$data[,n])
+    for (n in intersect(names(out$data), c("name", "nameComplete", "scientificName", "species")))
+        out$data[, n] <- replace_nonbreaking_spaces(out$data[, n])
     out$facets <- x$facetResults$searchResults    
     class(out) <- "search_fulltext"
-    attr(out,"output_format") <- output_format
+    attr(out, "output_format") <- output_format
     out
 }
 
 #' @method print search_fulltext
 #' @export
-"print.search_fulltext" <- function(x,...) {
+"print.search_fulltext" <- function(x, ...) {
     cat(sprintf("Search metadata:\n"))
     print(format(as.data.frame(x$meta)))
     cat(sprintf("\nFacet results:\n"))
     print(format(x$facets))    
     cat(sprintf("\nSearch results:\n"))
     cols <- names(x$data)
-    if (identical(attr(x,"output_format"),"simple")) {
+    if (identical(attr(x, "output_format"), "simple")) {
         cncol <- if ("commonNameSingle" %in% cols) "commonNameSingle" else "commonName"
-        cols <- intersect(c("name",cncol,"rank","guid"),cols)
+        cols <- intersect(c("name", cncol, "rank", "guid"), cols)
     }
-    print(as.matrix(format.data.frame(x$data[,cols],na.encode=FALSE)))
+    print(as.matrix(format.data.frame(x$data[, cols], na.encode=FALSE)))
     #print(format(x$data))
     invisible(x)
 }
