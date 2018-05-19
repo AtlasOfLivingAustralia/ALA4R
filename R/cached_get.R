@@ -26,70 +26,44 @@ cached_get <- function(url, type="text", caching=ala_config()$caching, verbose=a
     url <- str_replace_all(url, "[\r\n ]+"," ")
     if (nchar(url)>getOption("ALA4R_server_config")$server_max_url_length) warning("URL length may be longer than is allowed by the server")
 
-    ## the not-caching code fails sometimes (e.g. parsing json from directly-provided string behaves differently to parsing json from a file!)
-    ## so use caching code for all requests
-    if (FALSE) {##(identical(caching, "off") && !(type %in% c("filename", "binary_filename"))) {
-        ## if we are not caching, get this directly without saving to file at all
+    ## Originally the code was different for caching=="off" vs caching "on" or "refresh"
+    ## The former previously read data direct to memory without downloading to a file first; however,
+    ## JSON parsing of text behaves differently to parsing a file
+    ## So for consistency and simplicity we always download to file. When caching is "off" or "refresh" the cached
+    ##  file will be re-downloaded each time.
+    
+    if (identical(caching, "off") && !(type %in% c("filename", "binary_filename"))) {
         if (verbose) { cat(sprintf("  GETting URL %s\n", url)) }
-
-        ## if use RCurl directly
-        h <- basicHeaderGatherer()
-        x <- getURL(url=url, useragent=ala_config()$user_agent, header=FALSE, headerfunction=h$update)
-        diag_message <- ""
-        if ((substr(h$value()[["status"]], 1, 1)=="5") || (substr(h$value()[["status"]], 1, 1)=="4")) {
-            ## do we have any useful diagnostic info in x?
-            diag_message <- get_diag_message(x)
-        }
-        check_status_code(h$value()[["status"]], extra_info=diag_message, on_redirect=on_redirect, on_client_error=on_client_error, on_server_error=on_server_error)
-
-        ## else use httr
-        ##x=GET(url=url, user_agent(ala_config()$user_agent)) ## use httr's GET wrapper around RCurl
-        ##check_status_code(x, on_redirect=on_redirect, on_client_error=on_client_error, on_server_error=on_server_error)
-        ##x=content(x, as="text")
-
-        if (identical(type, "json")) {
-            if (nchar(x)<1) {
-                ## empty string, fromJSON will throw error, so just return NULL
-                x <- NULL
-            } else {
-                x <- jsonlite::fromJSON(x) ## do text-then-conversion, rather than content(as="parsed") to avoid httr's default use of RJSONIO::fromJSON
-            }
-        }
-        x
+        this_outfile <-  tempfile()
     } else {
-        if (identical(caching, "off") && !(type %in% c("filename", "binary_filename"))) {
-            if (verbose) { cat(sprintf("  GETting URL %s\n", url)) }
-            this_outfile <-  tempfile()
-        } else {
-            this_outfile <- ala_cache_filename(url)
-        }
-        ## use caching
-        thisfile <- download_to_file(url, outfile=this_outfile, binary_file=identical(type, "binary_filename"), verbose=verbose, on_redirect=on_redirect, on_client_error=on_client_error, on_server_error=on_server_error)
-        if (!file.exists(thisfile)) {
-            ## file does not exist
-            NULL
-        } else {
-            if (type %in% c("json", "text")) {
-                if (!(file.info(thisfile)$size>0)) {
-                    NULL
-                } else {
-                    ## for json, previously we read as string first, then passed this to fromJSON. This was compatible with either RJSON's or rjsonlite's version of fromJSON (only RJSON's version can take a filename directly). However, it introduced issues with readLines and handling of encoding. Now we pass the file directly to jsonlite::fromJSON
-                    if (type=="json") {
-                        ## convert directly from file - this also allows jsonlite to handle encoding issues
-                        jsonlite::fromJSON(thisfile)
-                    } else {
-                        fid <- file(thisfile, "rt")
-                        out <- readLines(fid, warn=FALSE, encoding=encoding)
-                        close(fid)
-                        out
-                    }
-                }
-            } else if (type %in% c("filename", "binary_filename")) {
-                thisfile
+        this_outfile <- ala_cache_filename(url)
+    }
+    ## use caching
+    thisfile <- download_to_file(url, outfile=this_outfile, binary_file=identical(type, "binary_filename"), verbose=verbose, on_redirect=on_redirect, on_client_error=on_client_error, on_server_error=on_server_error)
+    if (!file.exists(thisfile)) {
+        ## file does not exist
+        NULL
+    } else {
+        if (type %in% c("json", "text")) {
+            if (!(file.info(thisfile)$size>0)) {
+                NULL
             } else {
-                ## should not be here! did we add an allowed type to the arguments without adding handler code down here?
-                stop(sprintf("unrecognized type %s in cached_get", type))
+                ## for json, previously we read as string first, then passed this to fromJSON. This was compatible with either RJSON's or rjsonlite's version of fromJSON (only RJSON's version can take a filename directly). However, it introduced issues with readLines and handling of encoding. Now we pass the file directly to jsonlite::fromJSON
+                if (type=="json") {
+                    ## convert directly from file - this also allows jsonlite to handle encoding issues
+                    jsonlite::fromJSON(thisfile)
+                } else {
+                    fid <- file(thisfile, "rt")
+                    out <- readLines(fid, warn=FALSE, encoding=encoding)
+                    close(fid)
+                    out
+                }
             }
+        } else if (type %in% c("filename", "binary_filename")) {
+            thisfile
+        } else {
+            ## should not be here! did we add an allowed type to the arguments without adding handler code down here?
+            stop(sprintf("unrecognized type %s in cached_get", type))
         }
     }
 }
