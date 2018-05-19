@@ -41,7 +41,7 @@ fieldguide <- function(guids, title="Field guide", filename=tempfile(fileext=".p
             fileid <- readLines(cache_file)
             ## this tells us what the locally-cached pdf file ought to be
             this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_fieldguide, paste0("guide/", fileid))
-            cached_pdf_file <- ala_cache_filename(this_utl)
+            cached_pdf_file <- ala_cache_filename(this_url)
             ## if this cached pdf file does not exist, then let's just re-generate the whole thing
             if (!file.exists(cached_pdf_file) || (!(file.info(cached_pdf_file)$size>0))) fileid <- NULL
         }, silent=TRUE)
