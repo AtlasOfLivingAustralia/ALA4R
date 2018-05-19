@@ -9,12 +9,14 @@
 #' @name ALA4R
 #' @docType package
 #' @references \url{http://api.ala.org.au/}
-#' @import assertthat digest httr jsonlite RCurl sp
-#' @importFrom stringr regex str_c str_detect str_extract str_locate str_match str_match_all
-#' @importFrom stringr str_replace str_replace_all str_split str_trim
-#' @importFrom wellknown lint
+#' @import assertthat httr RCurl sp
+#' @importFrom digest digest
 #' @importFrom grDevices dev.off pdf rainbow
 #' @importFrom graphics image legend points title
+#' @importFrom jsonlite fromJSON
 #' @importFrom stats aggregate na.omit
+#' @importFrom stringr regex str_c str_detect str_extract str_locate str_match str_match_all
+#' @importFrom stringr str_replace str_replace_all str_split str_trim
 #' @importFrom utils data packageVersion read.csv read.table str unzip URLencode
+#' @importFrom wellknown lint
 NULL
