@@ -78,6 +78,7 @@ NULL
 #' @method unique occurrences
 #' @export
 "unique.occurrences" <- function(x, incomparables=FALSE, spatial=0, temporal=NULL, na.rm=FALSE, ...) {
+    verbose <- ala_config()$verbose
     ## helper function to make sure names are present
     check_names_present <- function(nms) {
         if (!all(nms %in% names(x$data))) stop(sprintf("expecting columns '%s' in occurrences data. %s",paste(setdiff(nms,names(x)),collapse="','"),getOption("ALA4R_server_config")$notify))
@@ -107,7 +108,7 @@ NULL
             if (length(grep('year',temporal))>0) cois$year <- x$data$year
         }
     }
-    cat('extracting unique data using columns: ', paste(names(cois),collapse=','),'\n')
+    if (verbose) message('extracting unique data using columns: ', paste(names(cois),collapse=','))
 	x$data <- aggregate(x$data,by=cois,min)[,-c(1:length(names(cois)))] #get 'unique' spatial/temporal data
     if (na.rm) {
         rois <- which(is.na(x$data[,names(cois)]),arr.ind=TRUE)[,1]

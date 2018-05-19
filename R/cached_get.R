@@ -33,7 +33,7 @@ cached_get <- function(url, type="text", caching=ala_config()$caching, verbose=a
     ##  file will be re-downloaded each time.
     
     if (identical(caching, "off") && !(type %in% c("filename", "binary_filename"))) {
-        if (verbose) { cat(sprintf("  GETting URL %s\n", url)) }
+        if (verbose) message(sprintf("GETting URL %s", url))
         this_outfile <-  tempfile()
     } else {
         this_outfile <- ala_cache_filename(url)

@@ -42,7 +42,7 @@ cached_post <- function(url, body, type="text", caching=ala_config()$caching, ve
     ## check if file exists
     if ((caching %in% c("off", "refresh")) || (! file.exists(thisfile))) {
         ## file does not exist, or we want to refresh it, so go ahead and get it and save to thisfile
-        if (verbose) cat(sprintf("  caching %s POST to file %s\n", url, thisfile))
+        if (verbose) message(sprintf("Caching %s POST to file %s", url, thisfile))
         file_mode <- "w" ## text mode
         if (identical(type, "binary_filename")) {
             file_mode <- "wb"
@@ -71,7 +71,7 @@ cached_post <- function(url, body, type="text", caching=ala_config()$caching, ve
         }
         check_status_code(h$value()[["status"]], extra_info=diag_message)
     } else {
-        if (verbose) cat(sprintf("  using cached file %s for POST to %s\n", thisfile, url))
+        if (verbose) message(sprintf("Using cached file %s for POST to %s", thisfile, url))
     }
     ## now return whatever is appropriate according to type
     if (type %in% c("json", "text")) {

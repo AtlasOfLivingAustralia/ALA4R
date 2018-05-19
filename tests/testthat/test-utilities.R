@@ -26,11 +26,11 @@ test_that("ala_cache_filename works as expected", {
 test_that("caching messages change as expected ", {
     skip_on_cran()
     ala_config(caching="off")
-    expect_output(species_info("Grevillea humilis subsp. maritima",verbose=TRUE),"GETting URL")
+    expect_message(species_info("Grevillea humilis subsp. maritima",verbose=TRUE),"GETting URL")
     ala_config(caching="refresh")
-    expect_output(species_info("Grevillea humilis subsp. maritima",verbose=TRUE),"caching")
+    expect_message(species_info("Grevillea humilis subsp. maritima",verbose=TRUE),"Caching")
     ala_config(caching="on")
-    expect_output(species_info("Grevillea humilis subsp. maritima",verbose=TRUE),"using cached file")
+    expect_message(species_info("Grevillea humilis subsp. maritima",verbose=TRUE),"Using cached file")
 })
 
 thischeck <- function() {

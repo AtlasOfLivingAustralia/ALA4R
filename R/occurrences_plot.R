@@ -103,11 +103,11 @@ occurrences_plot <- function(x, filename='Rplots.pdf', qa=c('fatal','error'), gr
 			if (grouped) {
 				tplot(x$data,Main='all species',coi=qa,pch)
 			} else {
-				cat('this is plotting',length(unique(x$data[,taxon_level])),taxon_level,'maps... names will act as status bar\n')
+				message('This is plotting ',length(unique(x$data[,taxon_level])),taxon_level,' maps... names will act as status bar')
 				spp_count <- 0
 				for (spp in unique(x$data[,taxon_level])) {
 					spp_count <- spp_count+1
-					cat(spp_count,'.\t',spp,'\n',sep="")
+					message(spp_count, '.\t', spp)
 					if (spp!="") { 
 						tplot(x$data[which(x$data[,taxon_level]==spp),],Main=spp,coi=qa,pch)
 					} else {

@@ -117,13 +117,6 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
         temp_query$pageSize <- 0
         temp_query$facet <- "off"
         this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_biocache,c("occurrences","search"),query=temp_query)
-        # ## don't need to check number of records if caching is on and we already have the file
-        # cache_file_exists=file.exists(ala_cache_filename(this_url))
-        # if ((ala_config()$caching %in% c("off","refresh")) | (!cache_file_exists & ala_config()$caching=="on")) {
-            ## check
-        #    num_records=cached_get(url=this_url,type="json")$totalRecords
-        #    cat(sprintf('occurrences: downloading dataset with %d records',num_records))
-        #}
         return(cached_get(url=this_url,type="json",caching="off",verbose=verbose)$totalRecords)
     }
     assert_that(is.flag(use_data_table))
@@ -224,7 +217,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
             }
         } else {
             ## we are using the existing cached file
-            if (verbose) { cat(sprintf("  using cached file %s for %s\n",thisfile,this_url)) }
+            if (verbose) message(sprintf("Using cached file %s for %s",thisfile,this_url))
         }
     } else {
         thisfile <- cached_get(url=this_url,type="binary_filename",verbose=verbose)
@@ -243,7 +236,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
                 ## this may end up making fread() slower than direct read.table() ... needs testing
                 tempsubdir <- tempfile(pattern="dir")
                 if (verbose) {
-                    cat(sprintf(" unzipping downloaded occurrences data.csv file into %s\n",tempsubdir))
+                    message(sprintf("Unzipping downloaded occurrences data.csv file into %s",tempsubdir))
                 }
                 dir.create(tempsubdir)
                 unzip(thisfile,files=c("data.csv"),junkpaths=TRUE,exdir=tempsubdir)
