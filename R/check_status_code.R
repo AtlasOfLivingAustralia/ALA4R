@@ -17,10 +17,10 @@
 # check_status_code(out$headers$status) ## or pass the status code explicitly
 # }
 
-check_status_code <- function(x,on_redirect=NULL,on_client_error=NULL,on_server_error=NULL,extra_info="") {
+check_status_code <- function(x, on_redirect=NULL, on_client_error=NULL, on_server_error=NULL, extra_info="") {
     assert_that(is.string(extra_info))
     was_full_response <- FALSE
-    if (inherits(x,"response")) {
+    if (inherits(x, "response")) {
         ## if this is a response object, extract the status code
         ## we may also be able to get meaningful diagnostic info out of the message body in some cases
         was_full_response <- TRUE
@@ -32,7 +32,7 @@ check_status_code <- function(x,on_redirect=NULL,on_client_error=NULL,on_server_
         }
         ## check again
         if (is.null(xstatus)) {
-                warning("error in http status checking: skipped. ",getOption("ALA4R_server_config")$notify)
+                warning("error in http status checking: skipped. ", getOption("ALA4R_server_config")$notify)
                 was_full_response <- FALSE
                 xstatus <- "200" ## default to OK
         }
@@ -48,7 +48,7 @@ check_status_code <- function(x,on_redirect=NULL,on_client_error=NULL,on_server_
         }
         xstatus <- x
     }
-    switch (substr(xstatus,1,1),
+    switch (substr(xstatus, 1, 1),
             "2"={ ## 2xx are all success codes
                 return(0) },
             "3"={ ## 3xx are redirection codes
@@ -59,7 +59,7 @@ check_status_code <- function(x,on_redirect=NULL,on_client_error=NULL,on_server_
                     return(on_redirect(xstatus))
                 } else {
                     ## just issue a warning for now
-                    warning("HTTP status code ",xstatus," received.\nThis may be OK: if there are problems, please notify the package maintainers.")
+                    warning("HTTP status code ", xstatus, " received.\nThis may be OK: if there are problems, please notify the package maintainers.")
                     return(1)
                 }
             },
@@ -70,18 +70,18 @@ check_status_code <- function(x,on_redirect=NULL,on_client_error=NULL,on_server_
                     assert_that(is.function(on_client_error))
                     return(on_client_error(xstatus))
                 } else {
-                    diag_msg <- paste0("  Either there was an error with your request or in the ",getOption("ALA4R_server_config")$brand," package, or the servers are down. ",getOption("ALA4R_server_config")$notify)
+                    diag_msg <- paste0("  Either there was an error with your request or in the ", getOption("ALA4R_server_config")$brand, " package, or the servers are down. ", getOption("ALA4R_server_config")$notify)
                     if (was_full_response) {
-                        x <- jsonlite::fromJSON(content(x,type="text"))
+                        x <- jsonlite::fromJSON(content(x, type="text"))
                         if (!is.null(x$message)) {
-                            diag_msg <- paste(diag_msg,"\nThe error message was:",x$message,sep=" ")
+                            diag_msg <- paste(diag_msg, "\nThe error message was:", x$message, sep=" ")
                         }
                     } else {
                         if (nchar(extra_info)>0) {
-                            diag_msg <- paste(diag_msg,"\n  Some additional diagnostic information that might help:",extra_info,sep=" ")
+                            diag_msg <- paste(diag_msg, "\n  Some additional diagnostic information that might help:", extra_info, sep=" ")
                         }
                     }
-                    stop("HTTP status code ",xstatus," received.\n",diag_msg)
+                    stop("HTTP status code ", xstatus, " received.\n", diag_msg)
                 }
             },
             "5"={ ## 5xx are server errors
@@ -89,20 +89,20 @@ check_status_code <- function(x,on_redirect=NULL,on_client_error=NULL,on_server_
                     assert_that(is.function(on_server_error))
                     return(on_server_error(xstatus))
                 } else {
-                    diag_msg <- paste0("  Either there was an error with the request, or the servers may be down (try again later). ",getOption("ALA4R_server_config")$notify)
+                    diag_msg <- paste0("  Either there was an error with the request, or the servers may be down (try again later). ", getOption("ALA4R_server_config")$notify)
                     if (was_full_response) {
-                        x <- jsonlite::fromJSON(content(x,type="text"))
+                        x <- jsonlite::fromJSON(content(x, type="text"))
                         if (!is.null(x$message)) {
-                            diag_msg <- paste(diag_msg,"\nThe error message was:",x$message,sep=" ")
+                            diag_msg <- paste(diag_msg, "\nThe error message was:", x$message, sep=" ")
                         }
                     } else {
                         if (nchar(extra_info)>0) {
-                            diag_msg <- paste(diag_msg,"\n  Some additional diagnostic information that might help:",extra_info,sep=" ")
+                            diag_msg <- paste(diag_msg, "\n  Some additional diagnostic information that might help:", extra_info, sep=" ")
                         }
                     }                        
-                    stop("HTTP status code ",xstatus," received.\n",diag_msg)
+                    stop("HTTP status code ", xstatus, " received.\n", diag_msg)
                 }
             }
         )
-    warning("Unexpected HTTP status code ",x," received.\n  ",getOption("ALA4R_server_config")$notify)
+    warning("Unexpected HTTP status code ", x, " received.\n  ", getOption("ALA4R_server_config")$notify)
 }
