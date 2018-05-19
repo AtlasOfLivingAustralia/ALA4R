@@ -9,23 +9,28 @@
 #' @return A dataframe of assertions column names, descriptions and categories/error codes. If no assertions are in the dataset, NULL is returned.
 #'
 #' @examples
-#' #download species data with all possible assertions
 #' \dontrun{
-#'  x <- occurrences(taxon="golden bowerbird",download_reason_id=10,qa=ala_fields("assertions")$name)
-#'  asserts <- check_assertions(x) #data.frame of assertions, their description and column names
-#'  asserts$description # List out descriptions of all (current) assertions
+#'  ##download species data with all possible assertions
+#' 
+#'  x <- occurrences(taxon="golden bowerbird", download_reason_id=10, qa=ala_fields("assertions")$name)
 #'
-#'  tmp <- x$data[,names(x$data) %in% asserts$name] ## assertion columns from data
+#'  asserts <- check_assertions(x)
+#'  ## this is a data.frame of assertions, their description and column names
+#'
+#'  ## list the descriptions of all (current) assertions
+#'  asserts$description
+#'
+#'  tmp <- x$data[, names(x$data) %in% asserts$name] ## assertion columns from data
 #'  which(colSums(tmp)>0) ## discard those not seen in the data
 #' }
 #' @export
 check_assertions <- function(x) {
-    if (! inherits(x,"occurrences")) {
-        stop("check_assertions must have an object of class occurrences from e.g., ",getOption("ALA4R_server_config")$occurrences_function,"() in the ",getOption("ALA4R_server_config")$brand," package")
+    if (! inherits(x, "occurrences")) {
+        stop("check_assertions must have an object of class occurrences from e.g., ", getOption("ALA4R_server_config")$occurrences_function, "() in the ", getOption("ALA4R_server_config")$brand, " package")
     }
-    ass <- ala_fields("assertions",as_is=TRUE) ## get all assertion fields
+    ass <- ala_fields("assertions", as_is=TRUE) ## get all assertion fields
     ass$occurColnames <- NA
-    temp_description <- rename_variables(ass$description,type="assertions")
+    temp_description <- rename_variables(ass$description, type="assertions")
     for (coi in colnames(x$data)) {
         ## match on either name or description
         tt <- which(coi==ass$name | coi==temp_description)
@@ -33,7 +38,7 @@ check_assertions <- function(x) {
             ass$occurColnames[tt[1]] <- coi #place the colname
     }
     ass <- na.omit(ass)
-    if (nrow(ass)==0) {
+    if (nrow(ass)<1) {
         if (ala_config()$warn_on_empty) {
             warning("no assertions in data")
         }
