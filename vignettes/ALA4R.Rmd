@@ -186,6 +186,7 @@ We can make a taxonomic tree plot using the `phytools` package:
 temp <- tx
 temp$genus <- factor(temp$genus)
 temp$scientificName <- factor(temp$scientificName)
+
 ## create phylo object of Scientific.Name nested within Genus
 ax <- as.phylo(~genus/scientificName, data=temp)
 plotTree(ax, type="fan", fsize=0.7) ## plot it
@@ -247,9 +248,11 @@ wkt <- writeWKT(shape)
 Unfortunately, in this instance this gives a WKT string that is too long and won't be accepted by the ALA web service. Instead, let's construct the WKT string directly, which gives us a little more control over its format:
 ```{r}
 lonlat <- shape@polygons[[1]]@Polygons[[1]]@coords ## extract the polygon coordinates
+
 ## extract the convex hull of the polygon to reduce the length of the WKT string
 temp <- chull(lonlat)
 lonlat <- lonlat[c(temp, temp[1]), ]
+
 ## create WKT string
 wkt <- paste("POLYGON((", paste(apply(lonlat, 1, function(z) paste(z, collapse=" ")), collapse=","), "))", sep="")
 ```
@@ -257,7 +260,8 @@ wkt <- paste("POLYGON((", paste(apply(lonlat, 1, function(z) paste(z, collapse="
 Now extract the species list in this polygon, filtering to only include those with a conservation status:
 ```{r}
 x <- specieslist(wkt=wkt, fq="state_conservation:*")
-head(x[order(x$occurrenceCount, decreasing=TRUE), c("speciesName", "commonName", "occurrenceCount")], 20)
+head(x[order(x$occurrenceCount, decreasing=TRUE),
+       c("speciesName", "commonName", "occurrenceCount")], 20)
 ```
 
 ### Example 3: Quality assertions
@@ -391,6 +395,7 @@ library(maps)
 library(mapdata)
 map("worldHires", "Australia", xlim=c(105, 155), ylim=c(-45, -10), col="gray90", fill=TRUE)
 ## colours for clusters
-thiscol <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
+thiscol <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2",
+             "#7f7f7f", "#bcbd22", "#17becf")
 with(xgridded, points(longitude, latitude, pch=21, col=thiscol[grp], bg=thiscol[grp], cex=0.75))
 ```

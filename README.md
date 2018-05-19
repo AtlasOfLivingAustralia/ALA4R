@@ -159,14 +159,10 @@ ala_config(warn_on_empty=TRUE)
 ## Examples
 First, check that we have some additional packages that we'll use in the examples, and install them if necessary.
 ```R
-to_install <- c("plyr","jpeg","phytools","ape","leaflet","vegan","mgcv","geosphere","maps","mapdata","maptools")
-to_install <- to_install[!sapply(to_install,requireNamespace,quietly=TRUE)]
+to_install <- c("plyr", "jpeg", "phytools", "ape", "leaflet", "vegan", "mgcv",
+  "geosphere", "maps", "mapdata", "maptools")
+to_install <- to_install[!sapply(to_install, requireNamespace, quietly=TRUE)]
 if(length(to_install)>0) install.packages(to_install)
-```
-
-We’ll use the `plyr` package throughout these examples, so load that now:
-```R
-library(plyr) 
 ```
 
 ### Example 1: Name searching and taxonomic trees
@@ -176,10 +172,11 @@ library(ape)
 library(phytools)
 ```
 
-We want to look at the taxonomic tree of penguins, but we don’t know what the correct scientific name is, so let’s search for it:
+Let's say that we want to look at the taxonomic tree of penguins but we don't know what the correct scientific name is. Start by searching for it:
+
 ```R
 sx <- search_fulltext("penguins")
-(sx$data[,c("name","rank")])
+sx$data[,c("name","rank")]
 ```
 ```
 ##                      name    rank
@@ -194,7 +191,8 @@ sx <- search_fulltext("penguins")
 ## 9   Eudyptes chrysolophus species
 ## 10      Eudyptes moseleyi species
 ```
-And we can see that penguins correspond to the family Spheniscidae. There are (at the time of writing this vignette) two results: one "Spheniscidae" and the other "SPHENISCIDAE" (identical except all upper case). The first comes from the New Zealand Organism Register and represents extinct penguins. We want the other one ("SPHENISCIDAE"). Now we can download the taxonomic data (note that the search is case-sensitive):
+And we can see that penguins correspond to the family "SPHENISCIDAE". Now we can download the taxonomic data (note that the search is case-sensitive):
+
 ```R
 tx <- taxinfo_download("rk_family:SPHENISCIDAE",fields=c("guid","rk_genus","scientificName","rank"))
 tx <- tx[tx$rank %in% c("species","subspecies"),] ## restrict to species and subspecies
@@ -202,7 +200,10 @@ tx <- tx[tx$rank %in% c("species","subspecies"),] ## restrict to species and sub
 We can make a taxonomic tree plot using the `phytools` package:
 ```R
 ## as.phylo requires the taxonomic columns to be factors
-temp <- colwise(factor, c("genus","scientificName"))(tx)
+temp <- tx
+temp$genus <- factor(temp$genus)
+temp$scientificName <- factor(temp$scientificName)
+
 ## create phylo object of Scientific.Name nested within Genus
 ax <- as.phylo(~genus/scientificName,data=temp)
 plotTree(ax,type="fan",fsize=0.7) ## plot it
@@ -223,7 +224,7 @@ imfiles <- sapply(s$thumbnailUrl,function(z){
 ```
 And finally, plot the tree:
 ```R
-plotTree(ax,type="fan",ftype="off") ## plot tree without labels
+plotTree(ax, type="fan", ftype="off") ## plot tree without labels
 tr <- get("last_plot.phylo",envir = .PlotPhyloEnv) ## get the tree plot object
 ## add each image
 library(jpeg)
@@ -234,6 +235,7 @@ for (k in which(nchar(imfiles)>0))
 ![Alt text](./vignettes/images/figure-01.png?raw=true "plot of chunk unnamed-chunk-21")
 
 ### Example 2: Area report: what listed species exist in a given area?
+
 First download an example shapefile of South Australian conservation reserve boundaries: see http://data.sa.gov.au/dataset/conservation-reserve-boundaries. We use the ALA4R’s caching mechanism here, but you could equally download this file directly.
 ```R
 library(maptools)
@@ -255,9 +257,11 @@ wkt <- writeWKT(shape)
 Unfortunately, in this instance this gives a WKT string that is too long and won’t be accepted by the ALA web service. Instead, let’s construct the WKT string directly, which gives us a little more control over its format:
 ```R
 lonlat <- shape@polygons[[1]]@Polygons[[1]]@coords ## extract the polygon coordinates
+
 ## extract the convex hull of the polygon to reduce the length of the WKT string
 temp <- chull(lonlat)
 lonlat <- lonlat[c(temp,temp[1]),] 
+
 ## create WKT string
 wkt <- paste("POLYGON((",paste(apply(lonlat,1,function(z)
   paste(z,collapse=" ")),collapse=","),"))",sep="")
@@ -265,7 +269,8 @@ wkt <- paste("POLYGON((",paste(apply(lonlat,1,function(z)
 Now extract the species list in this polygon, filtering to only include those with a conservation status:
 ```R
 x <- specieslist(wkt=wkt,fq="state_conservation:*")
-(head(arrange(x,desc(occurrenceCount)),20))
+head(x[order(x$occurrenceCount, decreasing=TRUE),
+       c("speciesName", "commonName", "occurrenceCount")], 20)
 ```
 ```
 ##                                                               taxonConceptLsid
@@ -407,8 +412,8 @@ xgridded <- cbind(ull,xgridded)
 ```
 Now we can start to examine the patterns in the data. Let’s plot richness as a function of longitude:
 ```R
-plot(xgridded$longitude,apply(xgridded[,-c(1:2)],1,sum),ylab="Richness",
-  xlab="Longitude",pch=20,col="grey25")
+plot(xgridded$longitude, apply(xgridded[, -c(1:2)], 1, sum), ylab="Richness",
+  xlab="Longitude", pch=20, col="grey25")
 ```
 
 ![Alt text](./vignettes/images/figure-02.png?raw=true "plot of chunk unnamed-chunk-36")
@@ -417,7 +422,7 @@ The number of species is highest at the eastern end of the transect (the Sydney/
 
 How does the community composition change along the transect? Calculate the dissimilarity between nearby grid cells as a function of along-transect position:
 ```R
-D <- vegdist(xgridded[,-c(1:2)],'bray') ## Bray-Curtis dissimilarity
+D <- vegdist(xgridded[, -c(1:2)], "bray") ## Bray-Curtis dissimilarity
 Dm <- as.matrix(D) ## convert to a matrix object
 ## calculate geographic distance from longitude and latitude
 Dll <- apply(xgridded[,1:2],1,function(z){distVincentySphere(z,xgridded[,1:2])})
@@ -438,14 +443,14 @@ lines(tpp,fitp,col=1)
 
 Clustering:
 ```R
-cl <- hclust(D,method="ave") ## UPGMA clustering
+cl <- hclust(D, method="ave") ## UPGMA clustering
 plot(cl) ## plot dendrogram
 ```
 
 ![Alt text](./vignettes/images/figure-04.png?raw=true "plot of chunk unnamed-chunk-38")
 
 ```R
-grp <- cutree(cl,20) ## extract group labels at the 20-group level
+grp <- cutree(cl, 20) ## extract group labels at the 20-group level
 ## coalesce small (outlier) groups into a single catch-all group
 sing <- which(table(grp)<5)
 grp[grp %in% sing] <- 21 ## put these in a new combined group
@@ -461,9 +466,9 @@ with(xgridded,plot(longitude,latitude,pch=21,col=grp,bg=grp))
 library(maps)
 library(mapdata)
 map("worldHires","Australia", xlim=c(105,155), ylim=c(-45,-10), col="gray90", fill=TRUE)
-thiscol <- c("#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b",
-  "#e377c2","#7f7f7f","#bcbd22","#17becf") ## colours for clusters
-with(xgridded,points(longitude,latitude,pch=21,col=thiscol[grp],bg=thiscol[grp],cex=0.75))
+thiscol <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2",
+             "#7f7f7f", "#bcbd22", "#17becf")
+with(xgridded, points(longitude, latitude, pch=21, col=thiscol[grp], bg=thiscol[grp], cex=0.75))
 ```
 
 ![Alt text](./vignettes/images/figure-06.png?raw=true "plot of chunk unnamed-chunk-38")
