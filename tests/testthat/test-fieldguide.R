@@ -12,7 +12,7 @@ thischeck=function() {
 check_caching(thischeck)
 
 thischeck=function() {
-    test_that("fieldguide offline tests", {
+    test_that("fieldguide degenerate calls work", {
         expect_error(fieldguide()) ## no guids
         expect_error(fieldguide(guids=NULL)) ## NULL guids
     })
