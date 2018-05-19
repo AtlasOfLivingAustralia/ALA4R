@@ -24,8 +24,8 @@
 #' x <- taxinfo_download("rk_genus:Macropus")
 #' 
 #' ## Data for Fabaceae with specified fields
-#' x <- taxinfo_download("rk_family:Fabaceae", fields=c("guid", "parentGuid", "rk_kingdom", "rk_phylum",
-#'   "rk_class", "rk_order", "rk_family", "rk_genus", "scientificName"))
+#' x <- taxinfo_download("rk_family:Fabaceae", fields=c("guid", "parentGuid", "rk_kingdom",
+#'   "rk_phylum", "rk_class", "rk_order", "rk_family", "rk_genus", "scientificName"))
 #' 
 #' ## equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,rk_kingdom,
 #' ##    rk_phylum,rk_class,rk_order,rk_family,rk_genus,scientificName&q=rk_family:Fabaceae
