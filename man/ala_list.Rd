@@ -17,13 +17,17 @@ ala_list(druid, kvp = TRUE, verbose = ala_config()$verbose)
 data.frame
 }
 \description{
+Retrieves a specified species list. See \code{\link{ala_lists}} to find all available species lists.
+}
+\details{
 Note that this refers to pre-generated lists of species stored on the ALA servers. The similarly-named but different function \code{\link{specieslist}} provides a different function, namely listing the species matching a query or recorded as present in a search area.
 }
 \examples{
 \dontrun{
  all_lists <- ala_lists()
  ## find the "Field Guide apps species profiles" from Museum Victoria
- all_lists[grep("Field Guide",all_lists$listName),]
+ all_lists[grep("Field Guide", all_lists$listName), ]
+
  ## download the vertebrates one
  l <- ala_list(druid="dr1146")
 }
@@ -33,5 +37,5 @@ Note that this refers to pre-generated lists of species stored on the ALA server
 \url{http://lists.ala.org.au} and the associated web services at \url{http://lists.ala.org.au/ws}
 }
 \seealso{
-\code{\link{specieslist}} \code{\link{ala_lists}}
+\code{\link{specieslist}}, \code{\link{ala_lists}}
 }

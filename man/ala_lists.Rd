@@ -19,7 +19,7 @@ ala_lists(guid, offset = 0, max = 500, verbose = ala_config()$verbose)
 data.frame of list name and other details
 }
 \description{
-Find ALA species lists
+Returns all available species lists. See \code{\link{ala_list}} to retrieve a specified list.
 }
 \examples{
 \dontrun{
