@@ -79,7 +79,10 @@ search_guids <- function(guids=c(),occurrence_count=FALSE,output_format="simple"
     if (occurrence_count) {
         x$occurrenceCount <- NA
         non_na <- !is.na(x$guid)
-        if (any(non_na)) x$occurrenceCount[non_na] <- sapply(x$guid[non_na],function(z) occurrences(taxon=paste0("lsid:",z),record_count_only=TRUE))
+        if (any(non_na)) {
+##            x$occurrenceCount[non_na] <- sapply(x$guid[non_na],function(z) occurrences(taxon=paste0("lsid:",z),record_count_only=TRUE))
+            x$occurrenceCount[non_na] <- vapply(x$guid[non_na], function(z) occurrences(taxon=paste0("lsid:", z), record_count_only=TRUE), FUN.VALUE=1, USE.NAMES=FALSE)
+        }
     }
     class(x) <- c("search_guids",class(x)) ## add the search_names class
     x

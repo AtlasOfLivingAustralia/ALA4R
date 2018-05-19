@@ -56,7 +56,7 @@ search_names <- function(taxa=c(),vernacular=FALSE,guids_only=FALSE,occurrence_c
     assert_that(is.character(output_format))
     output_format <- match.arg(tolower(output_format),c("simple","complete"))
     taxa_original <- taxa
-    taxa <- sapply(taxa,clean_string,USE.NAMES=FALSE) ## clean up the taxon name
+    taxa <- vapply(taxa, clean_string, FUN.VALUE="", USE.NAMES=FALSE) ## clean up the taxon name
     ## re-check names, since clean_string may have changed them
     if (any(nchar(taxa)<1)) {
         stop("input contains empty string after cleaning (did the input name contain only non-alphabetic characters?)")
@@ -125,7 +125,10 @@ search_names <- function(taxa=c(),vernacular=FALSE,guids_only=FALSE,occurrence_c
         ## do this after renaming variables, so that column name guid is predictable
         x$occurrenceCount <- NA
         non_na <- !is.na(x$guid)
-        if (any(non_na)) x$occurrenceCount[non_na] <- sapply(x$guid[non_na],function(z) occurrences(taxon=paste0("lsid:",z),record_count_only=TRUE))
+        if (any(non_na)) {
+##            x$occurrenceCount[non_na] <- sapply(x$guid[non_na],function(z) occurrences(taxon=paste0("lsid:",z),record_count_only=TRUE))
+            x$occurrenceCount[non_na] <- vapply(x$guid[non_na], function(z) occurrences(taxon=paste0("lsid:", z), record_count_only=TRUE), FUN.VALUE=1, USE.NAMES=FALSE)
+        }
     }
     class(x) <- c("search_names",class(x)) ## add the search_names class
     x

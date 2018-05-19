@@ -58,11 +58,10 @@ tocamel <- function (x, delim = "[^[:alnum:]]", upper = FALSE, sep = "") {
     assert_that(is.character(x))
     assert_that(is.string(delim))
     s <- strsplit(x, delim)
-	tfun <- function(y) {
+    tfun <- function(y) {
         if (any(is.na(y))) {
             y
-        }
-        else {
+        } else {
             first <- substring(y, 1, 1)
             if (isTRUE(upper)) 
                 first <- toupper(first)
@@ -70,7 +69,7 @@ tocamel <- function (x, delim = "[^[:alnum:]]", upper = FALSE, sep = "") {
             paste(first, substring(y, 2), sep = "", collapse = sep)
         }
     }
-    sapply(s, tfun)
+    vapply(s, tfun, FUN.VALUE="", USE.NAMES=FALSE)
 }
 
 ##----------------------------------------------------------------------------------------------
@@ -168,7 +167,7 @@ rename_variables <- function(varnames,type,verbose=ala_config()$verbose) {
         ## want all assertion field names to match those in a$name
         ## but some may be camelCased versions of the description
         a$description <- rename_variables(a$description,type="other") ## use "other" here to avoid this renaming code block, just apply camelCasing etc
-        varnames <- sapply(varnames,function(z){ifelse(z %in% a$name,z,ifelse(sum(z==a$description)==1,a$name[a$description==z],z))})
+        varnames <- vapply(varnames, function(z) ifelse(z %in% a$name,z,ifelse(sum(z==a$description)==1,a$name[a$description==z],z)), FUN.VALUE="", USE.NAMES=FALSE)
     }
     ## do this again, it may have been lost in the processing: enforce first letter lowercase
     varnames <- paste(tolower(substr(varnames,1,1)),substring(varnames,2),sep="")
@@ -194,14 +193,15 @@ rename_variables <- function(varnames,type,verbose=ala_config()$verbose) {
 }
 
 ## construct url path, taking care to remove multiple forward slashes, leading slash
-clean_path <- function(...,sep="/") {
-    path1 <- sapply(list(...),FUN=function(z)paste(z,sep=sep,collapse=sep)) ## collapse individual arguments
+clean_path <- function(..., sep="/") {
+    ## collapse individual arguments
+    path1 <- vapply(list(...), function(z) paste(z, sep=sep, collapse=sep), FUN.VALUE="", USE.NAMES=FALSE)
     ## workaround to avoid replacing "http://" with "http:/", since this is now used in GUID strings (July 2016)
-    path <- paste(path1,sep=sep,collapse=sep) ## paste parts together
-    path <- gsub("http://","http:@@",path,fixed=TRUE)
-    path <- gsub(paste0("[",sep,"]+"),sep,path) ## remove multiple slashes
-    path <- gsub("http:@@","http://",path,fixed=TRUE)
-    sub(paste0("^",sep),"",path) ## remove leading slash
+    path <- paste(path1, sep=sep, collapse=sep) ## paste parts together
+    path <- gsub("http://", "http:@@", path, fixed=TRUE)
+    path <- gsub(paste0("[",sep,"]+"), sep, path) ## remove multiple slashes
+    path <- gsub("http:@@", "http://", path, fixed=TRUE)
+    sub(paste0("^", sep), "", path) ## remove leading slash
 }
 
 ## convenience function for building urls
