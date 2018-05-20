@@ -79,7 +79,7 @@ taxinfo_download <- function(query,fq,fields,verbose=ala_config()$verbose,use_da
         read_ok <- FALSE
         if (use_data_table & requireNamespace("data.table",quietly=TRUE)) { ## if data.table package is available
             tryCatch({
-                x <- data.table::fread(thisfile,data.table=FALSE,stringsAsFactors=FALSE,header=TRUE,verbose=verbose)
+                x <- data.table::fread(thisfile, data.table=FALSE, stringsAsFactors=FALSE, header=TRUE, verbose=verbose, na.strings="NA", logical01=FALSE)
                 names(x) <- make.names(names(x))
                 if (!empty(x)) {
                     ## convert column data types
