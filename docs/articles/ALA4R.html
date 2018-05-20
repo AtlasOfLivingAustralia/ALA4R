@@ -271,8 +271,8 @@
 <div id="example-3-quality-assertions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#example-3-quality-assertions" class="anchor"></a>Example 3: Quality assertions</h3>
-<p>Data quality assertions are a suite of fields that are the result of a set of tests peformed on ALA data. Download occurrence data for the golden bowerbird:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/occurrences.html">occurrences</a></span>(<span class="dt">taxon=</span><span class="st">"taxon_name:</span><span class="ch">\"</span><span class="st">Amblyornis newtonianus</span><span class="ch">\"</span><span class="st">"</span>, <span class="dt">download_reason_id=</span><span class="dv">10</span>)</a>
+<p>Data quality assertions are a suite of fields that are the result of a set of tests peformed on ALA data. Download occurrence data for the golden bowerbird (you should adjust the <code>download_reason_id</code> to match your purposes if using this function for your own analyses; see <code><a href="../reference/ala_config.html">ala_reasons()</a></code>):</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/occurrences.html">occurrences</a></span>(<span class="dt">taxon=</span><span class="st">"taxon_name:</span><span class="ch">\"</span><span class="st">Amblyornis newtonianus</span><span class="ch">\"</span><span class="st">"</span>, <span class="dt">download_reason_id=</span><span class="st">"testing"</span>)</a>
 <a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">summary</span>(x)</a></code></pre></div>
 <pre><code>## number of original names: 7 
 ## number of taxonomically corrected names: 1 
@@ -345,8 +345,12 @@
 <a class="sourceLine" id="cb33-6" data-line-number="6">## Download the data.  We use the `occurrences()` function, adding environmental</a>
 <a class="sourceLine" id="cb33-7" data-line-number="7">##   data via the 'extra' parameter. Note that method="offline" supports</a>
 <a class="sourceLine" id="cb33-8" data-line-number="8">##   unlimited download size and more fields (but is slower).</a>
-<a class="sourceLine" id="cb33-9" data-line-number="9">x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/occurrences.html">occurrences</a></span>(<span class="dt">taxon=</span><span class="st">"family:Fabaceae"</span>, <span class="dt">wkt=</span>wkt, <span class="dt">qa=</span><span class="st">"none"</span>, <span class="dt">download_reason_id=</span><span class="dv">10</span>,</a>
-<a class="sourceLine" id="cb33-10" data-line-number="10">                 <span class="dt">extra=</span>env_layers)</a></code></pre></div>
+<a class="sourceLine" id="cb33-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb33-10" data-line-number="10">## You should adjust the `download_reason_id` to match your purposes if using</a>
+<a class="sourceLine" id="cb33-11" data-line-number="11">##   this function for your own analyses; see `ala_reasons()`</a>
+<a class="sourceLine" id="cb33-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb33-13" data-line-number="13">x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/occurrences.html">occurrences</a></span>(<span class="dt">taxon=</span><span class="st">"family:Fabaceae"</span>, <span class="dt">wkt=</span>wkt, <span class="dt">qa=</span><span class="st">"none"</span>,</a>
+<a class="sourceLine" id="cb33-14" data-line-number="14">                 <span class="dt">download_reason_id=</span><span class="st">"testing"</span>, <span class="dt">extra=</span>env_layers)</a></code></pre></div>
 <p>Convert this to a sites-by-species data.frame:</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">xgridded &lt;-<span class="st"> </span>x<span class="op">$</span>data <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb34-2" data-line-number="2"><span class="st">    </span>## discard genus- and higher-level records</a>
