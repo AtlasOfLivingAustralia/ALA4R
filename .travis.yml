@@ -11,20 +11,21 @@ addons:
       - libv8-3.14-dev
 
 matrix:
-    include:
-        - os: linux
-          r: release
-          dist: trusty # 14.04
-          env:
-           - BUILD_NAME=trusty_release
-           - DETAILS="trusty release build"
-        - os: linux
-          r: devel
-          dist: trusty # 14.04
-          env:
-           - BUILD_NAME=trusty_devel
-           - DETAILS="trusty devel build"
-	   - R_CODECOV=true
+  include:
+    - os: linux
+      r: release
+      dist: trusty # 14.04
+      env:
+        - BUILD_NAME=trusty_release
+        - DETAILS="trusty release build"
+        - R_CODECOV=false
+    - os: linux
+      r: devel
+      dist: trusty # 14.04
+      env:
+        - BUILD_NAME=trusty_devel
+        - DETAILS="trusty devel build"
+        - R_CODECOV=true
 
 # set NOT_CRAN to true to ensure that skip_on_cran tests are run here
 env:
@@ -38,4 +39,4 @@ script:
     travis_wait 20 R CMD check ALA4R*tar.gz
 
 after_success:
-- if [[ "${R_CODECOV}" ]]; then travis_wait 20 Rscript -e 'covr::codecov()'; fi
+  - if [[ "${R_CODECOV}" ]]; then travis_wait 20 Rscript -e 'covr::codecov()'; fi
