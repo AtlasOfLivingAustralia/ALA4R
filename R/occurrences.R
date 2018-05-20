@@ -242,7 +242,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
                 unzip(thisfile,files=c("data.csv"),junkpaths=TRUE,exdir=tempsubdir)
                 ## first check if file is empty
                 if (file.info(file.path(tempsubdir,"data.csv"))$size>0) {
-                    x <- data.table::fread(file.path(tempsubdir,"data.csv"),data.table=FALSE,stringsAsFactors=FALSE,header=TRUE,verbose=verbose,sep="\t")
+                    x <- data.table::fread(file.path(tempsubdir, "data.csv"), data.table=FALSE, stringsAsFactors=FALSE, header=TRUE, verbose=verbose, sep="\t", na.strings="NA", logical01=FALSE)
                     names(x) <- make.names(names(x))
                     if (!empty(x)) {
                         ## convert column data types
