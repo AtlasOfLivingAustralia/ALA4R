@@ -31,16 +31,17 @@ Suggests:
     ape,
     covr,
     data.table,
-    geosphere,
+    dplyr,
+    ggplot2,
     jpeg,
     knitr,
     mapdata,
     maps,
     maptools,
-    mgcv,
     phytools,
     rmarkdown,
     testthat,
+    tidyr,
     vegan
 License: MPL-2.0
 URL: https://github.com/AtlasOfLivingAustralia/ALA4R
