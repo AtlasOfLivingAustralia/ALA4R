@@ -49,14 +49,14 @@ loading of data matrices (optional), also do:
 install.packages("data.table")
 ```
 
-On Linux you will first need to ensure that `libcurl` is installed on
+On Linux you will first need to ensure that `libcurl` and `v8` (version <= 3.15) are installed on
 your system — e.g. on Ubuntu/Debian, open a terminal and do:
 
 ``` sh
-sudo apt-get install libcurl4-openssl-dev
+sudo apt-get install libcurl4-openssl-dev libv8-3.14-dev
 ```
 
-or install `libcurl4-openssl-dev` via the Software Centre.
+or install via the Software Centre.
 
 ## Usage
 
