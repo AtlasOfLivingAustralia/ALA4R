@@ -275,10 +275,10 @@ specieslist(wkt=wkt, fq="state_conservation:*") %>%
 
 ### Example 3: Quality assertions
 
-Data quality assertions are a suite of fields that are the result of a set of tests peformed on ALA data. Download occurrence data for the golden bowerbird:
+Data quality assertions are a suite of fields that are the result of a set of tests peformed on ALA data. Download occurrence data for the golden bowerbird (you should adjust the `download_reason_id` to match your purposes if using this function for your own analyses; see `ala_reasons()`):
 
 ```{r}
-x <- occurrences(taxon="taxon_name:\"Amblyornis newtonianus\"", download_reason_id=10)
+x <- occurrences(taxon="taxon_name:\"Amblyornis newtonianus\"", download_reason_id="testing")
 summary(x)
 ```
 
@@ -342,8 +342,12 @@ env_layers <- c("Precipitation - annual","Temperature - annual max mean")
 ## Download the data.  We use the `occurrences()` function, adding environmental
 ##   data via the 'extra' parameter. Note that method="offline" supports
 ##   unlimited download size and more fields (but is slower).
-x <- occurrences(taxon="family:Fabaceae", wkt=wkt, qa="none", download_reason_id=10,
-                 extra=env_layers)
+
+## You should adjust the `download_reason_id` to match your purposes if using
+##   this function for your own analyses; see `ala_reasons()`
+
+x <- occurrences(taxon="family:Fabaceae", wkt=wkt, qa="none",
+                 download_reason_id="testing", extra=env_layers)
 ```
 
 Convert this to a sites-by-species data.frame:
