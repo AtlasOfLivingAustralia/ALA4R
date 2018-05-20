@@ -42,13 +42,6 @@ install.packages("devtools")
 devtools::install_github("AtlasOfLivingAustralia/ALA4R")
 ```
 
-If you wish to use the `data.table` package for potentially faster
-loading of data matrices (optional), also do:
-
-``` r
-install.packages("data.table")
-```
-
 On Linux you will first need to ensure that `libcurl` is installed on
 your system — e.g. on Ubuntu/Debian, open a terminal and do:
 

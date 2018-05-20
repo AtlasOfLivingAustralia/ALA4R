@@ -34,8 +34,8 @@
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
 #' @param record_count_only logical: if TRUE, return just the count of records that would be downloaded, but don't download them. Note that the record count is always re-retrieved from the ALA, regardless of the caching settings. If a cached copy of this query exists on the local machine, the actual data set size may therefore differ from this record count. \code{record_count_only=TRUE} can only be used with \code{method="indexed"}
 #' @param use_layer_names logical: if TRUE, layer names will be used as layer column names in the returned data frame (e.g. "radiationLowestPeriodBio22"). Otherwise, layer id value will be used for layer column names (e.g. "el871")
-#' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails with an error or warning, or if use_data_table is FALSE, then read.table will be used (which may be slower)
-#' 
+#' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. If this fails with an error or warning, or if use_data_table is FALSE, then read.table will be used (which may be slower)
+#'
 #' @return Data frame of occurrence results, with one row per occurrence record. The columns of the dataframe will depend on the requested fields
 #' @seealso \code{\link{ala_reasons}} for download reasons; \code{\link{ala_config}}
 #' @examples
@@ -228,9 +228,8 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
         x <- NULL
         ## actually this isn't a sufficient check, since even with empty data.csv file inside, the outer zip file will be > 0 bytes. Check again below on the actual data.csv file
     } else {
-        ## if data.table is available, first try using this
         read_ok <- FALSE
-        if (use_data_table & requireNamespace("data.table",quietly=TRUE)) { ## if data.table package is available
+        if (use_data_table) {
             tryCatch({
                 ## first need to extract data.csv from the zip file
                 ## this may end up making fread() slower than direct read.table() ... needs testing

@@ -49,7 +49,7 @@ are not guaranteed to retain the ordering of the field names given here. If not 
 
 \item{use_layer_names}{logical: if TRUE, layer names will be used as layer column names in the returned data frame (e.g. "radiationLowestPeriodBio22"). Otherwise, layer id value will be used for layer column names (e.g. "el871")}
 
-\item{use_data_table}{logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. Requires data.table to be available. If this fails with an error or warning, or if use_data_table is FALSE, then read.table will be used (which may be slower)}
+\item{use_data_table}{logical: if TRUE, attempt to read the data.csv file using the fread function from the data.table package. If this fails with an error or warning, or if use_data_table is FALSE, then read.table will be used (which may be slower)}
 }
 \value{
 Data frame of occurrence results, with one row per occurrence record. The columns of the dataframe will depend on the requested fields

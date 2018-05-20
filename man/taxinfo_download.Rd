@@ -24,8 +24,7 @@ fields will be returned. See \code{ala_fields("general", as_is=TRUE)} for valid 
 \item{verbose}{logical: show additional progress information? [default is set by ala_config()]}
 
 \item{use_data_table}{logical: if TRUE, attempt to read the data.csv file using the fread function from the 
-data.table package. Requires data.table to be available. If this fails, or use_data_table is FALSE, then read.table 
-will be used (which may be slower)}
+data.table package. If this fails, or use_data_table is FALSE, then read.table will be used (which may be slower)}
 }
 \value{
 data frame of results, containing one row per taxon, typically with name, guid, and taxonomic information. The columns returned will depend on the field requested

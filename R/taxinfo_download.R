@@ -14,8 +14,7 @@
 #' fields will be returned. See \code{ala_fields("general", as_is=TRUE)} for valid field names. Use \code{fields="all"} to include all available fields
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]
 #' @param use_data_table logical: if TRUE, attempt to read the data.csv file using the fread function from the 
-#' data.table package. Requires data.table to be available. If this fails, or use_data_table is FALSE, then read.table 
-#' will be used (which may be slower)
+#' data.table package. If this fails, or use_data_table is FALSE, then read.table will be used (which may be slower)
 #' @return data frame of results, containing one row per taxon, typically with name, guid, and taxonomic information. The columns returned will depend on the field requested
 #' @seealso \code{\link{ala_fields}}, \code{\link{ala_config}}
 #' @examples
@@ -76,9 +75,8 @@ taxinfo_download <- function(query, fq, fields, verbose=ala_config()$verbose, us
         ## empty file
         x <- NULL
     } else {
-        ## if data.table is available, first try using this
         read_ok <- FALSE
-        if (use_data_table & requireNamespace("data.table", quietly=TRUE)) { ## if data.table package is available
+        if (use_data_table) {
             tryCatch({
                 x <- data.table::fread(thisfile, data.table=FALSE, stringsAsFactors=FALSE, header=TRUE, verbose=verbose, na.strings="NA", logical01=FALSE)
                 names(x) <- make.names(names(x))
