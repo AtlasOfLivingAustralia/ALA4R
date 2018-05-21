@@ -18,14 +18,14 @@ matrix:
       env:
         - BUILD_NAME=trusty_release
         - DETAILS="trusty release build"
-        - R_CODECOV=false
-    - os: linux
-      r: devel
-      dist: trusty # 14.04
-      env:
-        - BUILD_NAME=trusty_devel
-        - DETAILS="trusty devel build"
         - R_CODECOV=true
+#    - os: linux
+#      r: devel
+#      dist: trusty # 14.04
+#      env:
+#        - BUILD_NAME=trusty_devel
+#        - DETAILS="trusty devel build"
+#        - R_CODECOV=false
 
 # set NOT_CRAN to true to ensure that skip_on_cran tests are run here
 env:
