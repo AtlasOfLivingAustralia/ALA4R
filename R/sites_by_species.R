@@ -5,7 +5,7 @@
 #' @references Associated web services: \url{http://spatial.ala.org.au/ws}
 #' @references \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' 
-#' @param taxon string: the identifier to get the species data from the ala biocache. E.g. "genus:Macropus". See \code{ala_fields("occurrence_stored")} for valid field names
+#' @param taxon string: the identifier to get the species data from the ala biocache. E.g. "genus:Heleioporus". See \code{ala_fields("occurrence_stored")} for valid field names
 #' @param wkt string: Bounding area in Well Known Text (WKT) format. E.g. "POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))".
 #' @param gridsize numeric: size of output grid cells in decimal degrees. E.g. 0.1 (=~10km)
 #' @param SPdata.frame logical: should the output be returned as a SpatialPointsDataFrame of the sp package?

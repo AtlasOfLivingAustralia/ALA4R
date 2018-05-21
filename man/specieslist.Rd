@@ -7,7 +7,7 @@
 specieslist(taxon, wkt, fq)
 }
 \arguments{
-\item{taxon}{string: (optional) query of the form field:value (e.g. "genus:Macropus") or a free text search (e.g. "macropodidae").
+\item{taxon}{string: (optional) query of the form field:value (e.g. "genus:Heleioporus") or a free text search (e.g. "macropodidae").
 For reliable results it is recommended to use a specific field where possible (see \code{ala_fields("occurrence_indexed")}
 for valid fields). It is also good practice to quote the taxon name if it contains multiple words, for example
 \code{taxon="taxon_name:\"Alaba vibex\""} (noting, however, that multi-word names are unlikely in the context of a specieslist
@@ -33,7 +33,7 @@ x <- specieslist(taxon="genus:Hakea", wkt="POLYGON((145 -37,150 -37,150 -30,145 
 x <- specieslist(wkt="POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,
   147.62 -42.83))", fq="rank:species")
 
-x <- specieslist(wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))", fq="genus:Macropus")
+x <- specieslist(wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))", fq="genus:Heleioporus")
 
 x <- specieslist(wkt="POLYGON((152.38 -30.43,152.5 -30.43,152.5 -30.5,152.38 -30.5,152.38 -30.43))",
     fq="kingdom:Plantae")
