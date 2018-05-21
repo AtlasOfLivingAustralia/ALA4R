@@ -23,9 +23,8 @@
 #' #  area=POLYGON((144%20-43,148%20-43,148%20-40,144%20-40,144%20-43))&bs=http://biocache.ala.org.au/
 #' #  ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1
 #'
-#' ## get the guid of the first species (which is the third column of the data frame, since the
-#' ##  first two columns are longitude and latitude)
-#' attr(ss, "guid")[1]
+#' ## get the guid of the first species
+#' attr(ss,"guid")[1]
 #' }
 
 # TODO need way to better check input species query. If the query is incorrect, the call will fail with message along the lines of: "Error in sites_by_species(taxon = "gen:Eucalyptus", wkt = "POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))",  :   Error processing your Sites By Species request. Please try again or if problem persists, contact the Administrator."

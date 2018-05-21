@@ -8,7 +8,7 @@ sites_by_species(taxon, wkt, gridsize = 0.1, SPdata.frame = FALSE,
   verbose = ala_config()$verbose)
 }
 \arguments{
-\item{taxon}{string: the identifier to get the species data from the ala biocache. E.g. "genus:Macropus". See \code{ala_fields("occurrence_stored")} for valid field names}
+\item{taxon}{string: the identifier to get the species data from the ala biocache. E.g. "genus:Heleioporus". See \code{ala_fields("occurrence_stored")} for valid field names}
 
 \item{wkt}{string: Bounding area in Well Known Text (WKT) format. E.g. "POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))".}
 
@@ -35,9 +35,8 @@ head(ss[, 1:6])
 #  area=POLYGON((144\%20-43,148\%20-43,148\%20-40,144\%20-40,144\%20-43))&bs=http://biocache.ala.org.au/
 #  ws/&movingaveragesize=1&gridsize=0.1&sitesbyspecies=1
 
-## get the guid of the first species (which is the third column of the data frame, since the
-##  first two columns are longitude and latitude)
-attr(ss, "guid")[1]
+## get the guid of the first species
+attr(ss,"guid")[1]
 }
 }
 \references{

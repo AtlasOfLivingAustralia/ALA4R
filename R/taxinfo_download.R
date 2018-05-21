@@ -2,7 +2,7 @@
 #' 
 #' @references Associated ALA web service: \url{http://api.ala.org.au/#ws2}
 #' 
-#' @param query string: (optional) query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")
+#' @param query string: (optional) query of the form field:value (e.g. "genus:Heleioporus") or a free text search ("Alaba vibex")
 #' @param fq string: character string or vector of strings, specifying filters to be applied to the original query. 
 #' These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See \code{ala_fields("general", as_is=TRUE)} for all the 
 #' fields that are queryable. NOTE that fq matches are case-sensitive, but sometimes the entries in the fields are 
@@ -20,7 +20,7 @@
 #' @examples
 #' \dontrun{
 #' ## simplest usage
-#' x <- taxinfo_download("rk_genus:Macropus")
+#' x <- taxinfo_download("rk_genus:Heleioporus")
 #' 
 #' ## Data for Fabaceae with specified fields
 #' x <- taxinfo_download("rk_family:Fabaceae", fields=c("guid", "parentGuid", "rk_kingdom",

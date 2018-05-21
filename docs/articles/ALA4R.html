@@ -198,7 +198,7 @@
 <a class="sourceLine" id="cb19-4" data-line-number="4">## create phylo object of Scientific.Name nested within Genus</a>
 <a class="sourceLine" id="cb19-5" data-line-number="5">ax &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ape/topics/as.phylo">as.phylo</a></span>(<span class="op">~</span>genus<span class="op">/</span>scientificName, <span class="dt">data=</span>tx)</a>
 <a class="sourceLine" id="cb19-6" data-line-number="6"><span class="kw"><a href="http://www.rdocumentation.org/packages/phytools/topics/plotTree">plotTree</a></span>(ax, <span class="dt">type=</span><span class="st">"fan"</span>, <span class="dt">fsize=</span><span class="fl">0.7</span>) ## plot it</a></code></pre></div>
-<p><img src="ALA4R_files/figure-html/unnamed-chunk-18-1.png" width="864" style="display:block; margin: auto"></p>
+<p><img src="ALA4R_files/figure-html/unnamed-chunk-18-1.png" width="864"></p>
 <p>We can also plot the tree with images of the different penguin species. We’ll first extract a species profile for each species identifier (guid) in our results:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">s &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_guids.html">search_guids</a></span>(tx<span class="op">$</span>guid)</a></code></pre></div>
 <p>And for each of those species profiles, download the thumbnail image and store it in our data cache:</p>
@@ -216,7 +216,7 @@
 <a class="sourceLine" id="cb22-8" data-line-number="8"><span class="kw">library</span>(jpeg)</a>
 <a class="sourceLine" id="cb22-9" data-line-number="9"><span class="cf">for</span> (k <span class="cf">in</span> <span class="kw">which</span>(<span class="kw">nchar</span>(imfiles)<span class="op">&gt;</span><span class="dv">0</span>))</a>
 <a class="sourceLine" id="cb22-10" data-line-number="10">        <span class="kw">rasterImage</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/jpeg/topics/readJPEG">readJPEG</a></span>(imfiles[k]), tr<span class="op">$</span>xx[k]<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">10</span>, tr<span class="op">$</span>yy[k]<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">10</span>, tr<span class="op">$</span>xx[k]<span class="op">+</span><span class="dv">1</span><span class="op">/</span><span class="dv">10</span>, tr<span class="op">$</span>yy[k]<span class="op">+</span><span class="dv">1</span><span class="op">/</span><span class="dv">10</span>)</a></code></pre></div>
-<p><img src="ALA4R_files/figure-html/unnamed-chunk-21-1.png" width="720" style="display:block; margin: auto"></p>
+<p><img src="ALA4R_files/figure-html/unnamed-chunk-21-1.png" width="720"></p>
 <p>A number of species have no image (mostly, these are extinct species) and others are images of eggs rather than animals, but you get the idea.</p>
 </div>
 <div id="example-2-area-report-what-listed-species-exist-in-a-given-area" class="section level3">
@@ -431,12 +431,12 @@
 <p>Now we can start to examine the patterns in the data. Let’s plot richness as a function of longitude:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
 <a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(xgridded, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(longitude, richness)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>()</a></code></pre></div>
-<p><img src="ALA4R_files/figure-html/unnamed-chunk-35-1.png" width="700" style="display:block; margin: auto"></p>
+<p><img src="ALA4R_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
 <p>The number of species is highest at the eastern end of the transect (the Sydney/Blue Mountains area). This probably reflects both higher species richness as well as greater sampling effort in this area compared to the western end of the transect.</p>
 <p>Species richness as a function of environment:</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(xgridded, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(temperatureAnnualMaxMean, precipitationAnnual, <span class="dt">colour=</span>richness)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb38-2" data-line-number="2"><span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_brewer">scale_colour_distiller</a></span>(<span class="dt">palette=</span><span class="st">"Spectral"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="dt">size=</span><span class="dv">8</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>()</a></code></pre></div>
-<p><img src="ALA4R_files/figure-html/unnamed-chunk-36-1.png" width="700" style="display:block; margin: auto"></p>
+<p><img src="ALA4R_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
 <p>Higher species richness in cooler, wetter areas (i.e. the Blue Mountains).</p>
 <p>How does the community composition change along the transect? Use clustering:</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">## Bray-Curtis dissimilarity</a>
@@ -447,7 +447,7 @@
 <a class="sourceLine" id="cb39-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb39-7" data-line-number="7">## plot the dendrogram</a>
 <a class="sourceLine" id="cb39-8" data-line-number="8"><span class="kw">plot</span>(cl)</a></code></pre></div>
-<p><img src="ALA4R_files/figure-html/unnamed-chunk-37-1.png" width="576" style="display:block; margin: auto"></p>
+<p><img src="ALA4R_files/figure-html/unnamed-chunk-37-1.png" width="576"></p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">## extract group labels at the 20-group level</a>
 <a class="sourceLine" id="cb40-2" data-line-number="2">grp &lt;-<span class="st"> </span><span class="kw">cutree</span>(cl, <span class="dv">20</span>)</a>
 <a class="sourceLine" id="cb40-3" data-line-number="3"></a>
@@ -463,13 +463,13 @@
 <a class="sourceLine" id="cb40-13" data-line-number="13">             <span class="st">"#7f7f7f"</span>, <span class="st">"#bcbd22"</span>, <span class="st">"#17becf"</span>)</a>
 <a class="sourceLine" id="cb40-14" data-line-number="14"><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(xgridded, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(longitude, latitude, <span class="dt">colour=</span>grp)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="dt">size=</span><span class="dv">5</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb40-15" data-line-number="15"><span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_manual">scale_colour_manual</a></span>(<span class="dt">values=</span>thiscol) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>()</a></code></pre></div>
-<p><img src="ALA4R_files/figure-html/unnamed-chunk-37-2.png" width="576" style="display:block; margin: auto"></p>
+<p><img src="ALA4R_files/figure-html/unnamed-chunk-37-2.png" width="576"></p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">## or a slightly nicer map plot</a>
 <a class="sourceLine" id="cb41-2" data-line-number="2"><span class="kw">library</span>(maps)</a>
 <a class="sourceLine" id="cb41-3" data-line-number="3"><span class="kw">library</span>(mapdata)</a>
 <a class="sourceLine" id="cb41-4" data-line-number="4"><span class="kw"><a href="http://www.rdocumentation.org/packages/maps/topics/map">map</a></span>(<span class="st">"worldHires"</span>, <span class="st">"Australia"</span>, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">105</span>, <span class="dv">155</span>), <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">45</span>, <span class="dv">-10</span>), <span class="dt">col=</span><span class="st">"gray90"</span>, <span class="dt">fill=</span><span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb41-5" data-line-number="5"><span class="kw">with</span>(xgridded, <span class="kw">points</span>(longitude, latitude, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">col=</span>thiscol[grp], <span class="dt">bg=</span>thiscol[grp], <span class="dt">cex=</span><span class="fl">0.75</span>))</a></code></pre></div>
-<p><img src="ALA4R_files/figure-html/unnamed-chunk-37-3.png" width="576" style="display:block; margin: auto"></p>
+<p><img src="ALA4R_files/figure-html/unnamed-chunk-37-3.png" width="576"></p>
 </div>
 </div>
 </div>

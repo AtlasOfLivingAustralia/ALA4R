@@ -18,7 +18,7 @@ thischeck=function() {
         expect_equal(names(tx),c("guid","genus","scientificName","rank"))
 
         ## default fields
-        expect_true(setequal(names(taxinfo_download("rk_genus:Macropus")),c("guid","rank","scientificName","establishmentMeans","genus","family","order","class","phylum","kingdom","datasetName")))
+        expect_true(setequal(names(taxinfo_download("rk_genus:Heleioporus")),c("guid","rank","scientificName","establishmentMeans","genus","family","order","class","phylum","kingdom","datasetName")))
     })
 }
 check_caching(thischeck)

@@ -118,7 +118,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>taxon</th>
-      <td><p>string: (optional) query of the form field:value (e.g. "genus:Macropus") or a free text search (e.g. "macropodidae").
+      <td><p>string: (optional) query of the form field:value (e.g. "genus:Heleioporus") or a free text search (e.g. "macropodidae").
 For reliable results it is recommended to use a specific field where possible (see <code><a href='ala_fields.html'>ala_fields("occurrence_indexed")</a></code>
 for valid fields). It is also good practice to quote the taxon name if it contains multiple words, for example
 <code>taxon="taxon_name:\"Alaba vibex\""</code> (noting, however, that multi-word names are unlikely in the context of a specieslist
@@ -159,7 +159,7 @@ search, where one would typically be searching for all species within, say, a ge
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,
   147.62 -42.83))"</span>,<span class='kw'>fq</span><span class='kw'>=</span><span class='st'>"rank:species"</span>)
 
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))"</span>,<span class='kw'>fq</span><span class='kw'>=</span><span class='st'>"genus:Macropus"</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))"</span>,<span class='kw'>fq</span><span class='kw'>=</span><span class='st'>"genus:Heleioporus"</span>)
 
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"POLYGON((152.38 -30.43,152.5 -30.43,152.5 -30.5,152.38 -30.5,152.38 -30.43))"</span>,
     <span class='kw'>fq</span><span class='kw'>=</span><span class='st'>"kingdom:Plantae"</span>)
