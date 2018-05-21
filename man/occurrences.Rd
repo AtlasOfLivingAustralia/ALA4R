@@ -10,7 +10,7 @@ occurrences(taxon, wkt, fq, fields, extra, qa, method = "indexed", email,
   use_layer_names = TRUE, use_data_table = TRUE)
 }
 \arguments{
-\item{taxon}{string: (optional) query of the form field:value (e.g. "genus:Macropus") or a free text search (e.g. "macropodidae"). Note that
+\item{taxon}{string: (optional) query of the form field:value (e.g. "genus:Heleioporus") or a free text search (e.g. "macropodidae"). Note that
 a free-text search is equivalent to specifying the "text" field (i.e. \code{taxon="Alaba"} is equivalent to \code{taxon="text:Alaba"}. 
 The text field is populated with the taxon name along with a handful of other commonly-used fields, and so just specifying your target
 taxon (e.g. taxon="Alaba vibex") will probably work. 
@@ -67,10 +67,10 @@ x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10)
 x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,
   fields=ala_fields("occurrence_stored",as_is=TRUE)$name) 
 ## download records, with specified fields
-x <- occurrences(taxon="genus:macropus",fields=c("longitude","latitude",
+x <- occurrences(taxon="genus:Heleioporus",fields=c("longitude","latitude",
   "common_name","taxon_name","el807"),download_reason_id=10)
  ## download records in polygon, with no quality assertion information
-x <- occurrences(taxon="genus:macropus",
+x <- occurrences(taxon="genus:Heleioporus",
   wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",
   download_reason_id=10,qa="none")
 

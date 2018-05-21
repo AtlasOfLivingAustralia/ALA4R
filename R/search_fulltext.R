@@ -24,7 +24,7 @@
 #' \dontrun{
 #'  # find information ALA holds on red kangaroo
 #'  search_fulltext("red kangaroo")
-#'  search_fulltext("Macropus rufus")
+#'  search_fulltext("Heleioporus australiacus")
 #'  search_fulltext("urn:lsid:biodiversity.org.au:afd.taxon:31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae")
 #'
 #'  # find genus names like "Oenanthe"
@@ -113,7 +113,7 @@ search_fulltext <- function(query,fq,output_format="simple",start,page_size,sort
         xcols <- setdiff(names(out$data),unwanted_columns("general"))
         ## also some additional ones specific here
         xcols <- setdiff(xcols,c("hasChildren","image","thumbnail"))
-        ## hasChildren seems always to be false, even for taxa that ought to have children (e.g. Macropus)
+        ## hasChildren seems always to be false, even for taxa that ought to have children (e.g. Heleioporus)
         ## image and thumbnail appear to be internal paths, not full URLs
         ## 2016-09-16 - these don't seem to be returned now, but leave this code in place anyway
         out$data <- subset(out$data,select=xcols)

@@ -121,7 +121,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>taxon</th>
-      <td><p>string: (optional) query of the form field:value (e.g. "genus:Macropus") or a free text search (e.g. "macropodidae"). Note that
+      <td><p>string: (optional) query of the form field:value (e.g. "genus:Heleioporus") or a free text search (e.g. "macropodidae"). Note that
 a free-text search is equivalent to specifying the "text" field (i.e. <code>taxon="Alaba"</code> is equivalent to <code>taxon="text:Alaba"</code>. 
 The text field is populated with the taxon name along with a handful of other commonly-used fields, and so just specifying your target
 taxon (e.g. taxon="Alaba vibex") will probably work. 
@@ -218,10 +218,10 @@ are not guaranteed to retain the ordering of the field names given here. If not 
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>occurrences</span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"data_resource_uid:dr356"</span>,<span class='kw'>download_reason_id</span><span class='kw'>=</span><span class='fl'>10</span>,
   <span class='kw'>fields</span><span class='kw'>=</span><span class='fu'><a href='ala_fields.html'>ala_fields</a></span>(<span class='st'>"occurrence_stored"</span>,<span class='kw'>as_is</span><span class='kw'>=</span><span class='fl'>TRUE</span>)$<span class='no'>name</span>)
 <span class='co'>## download records, with specified fields</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>occurrences</span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"genus:macropus"</span>,<span class='kw'>fields</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>"longitude"</span>,<span class='st'>"latitude"</span>,
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>occurrences</span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"genus:Heleioporus"</span>,<span class='kw'>fields</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>"longitude"</span>,<span class='st'>"latitude"</span>,
   <span class='st'>"common_name"</span>,<span class='st'>"taxon_name"</span>,<span class='st'>"el807"</span>),<span class='kw'>download_reason_id</span><span class='kw'>=</span><span class='fl'>10</span>)
  <span class='co'>## download records in polygon, with no quality assertion information</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>occurrences</span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"genus:macropus"</span>,
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>occurrences</span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"genus:Heleioporus"</span>,
   <span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))"</span>,
   <span class='kw'>download_reason_id</span><span class='kw'>=</span><span class='fl'>10</span>,<span class='kw'>qa</span><span class='kw'>=</span><span class='st'>"none"</span>)
 

@@ -119,7 +119,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>query</th>
-      <td><p>string: (optional) query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")</p></td>
+      <td><p>string: (optional) query of the form field:value (e.g. "genus:Heleioporus") or a free text search ("Alaba vibex")</p></td>
     </tr>
     <tr>
       <th>fq</th>
@@ -164,7 +164,7 @@ will be used (which may be slower)</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'>## simplest usage</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>taxinfo_download</span>(<span class='st'>"rk_genus:Macropus"</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>taxinfo_download</span>(<span class='st'>"rk_genus:Heleioporus"</span>)
 
 <span class='co'>## Data for Fabaceae with specified fields</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>taxinfo_download</span>(<span class='st'>"rk_family:Fabaceae"</span>,<span class='kw'>fields</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>"guid"</span>,<span class='st'>"parentGuid"</span>,<span class='st'>"rk_kingdom"</span>,<span class='st'>"rk_phylum"</span>,

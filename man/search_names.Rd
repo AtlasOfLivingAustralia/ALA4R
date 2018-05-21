@@ -29,10 +29,10 @@ Case-insensitive but otherwise exact matches are used.
 \examples{
 \dontrun{
 search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
-  "Macropus","Thisisnot aname"))
+  "Heleioporus","Thisisnot aname"))
 
 search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
-  "Macropus","Thisisnot aname"),guids_only=TRUE)
+  "Heleioporus","Thisisnot aname"),guids_only=TRUE)
 
 search_names("kookaburra",vernacular=FALSE)
 
@@ -40,11 +40,11 @@ search_names("kookaburra",vernacular=TRUE)
 
 ## occurrence counts for matched names
 search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
-  "Macropus","Thisisnot aname"),occurrence_count=TRUE)
+  "Heleioporus","Thisisnot aname"),occurrence_count=TRUE)
 
 ## no occurrence counts because guids_only is TRUE
 search_names(c("Grevillea humilis","Grevillea humilis subsp. maritima",
-  "Macropus","Thisisnot aname"),occurrence_count=TRUE,guids_only=TRUE)
+  "Heleioporus","Thisisnot aname"),occurrence_count=TRUE,guids_only=TRUE)
 }
 }
 \references{

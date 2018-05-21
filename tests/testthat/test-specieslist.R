@@ -11,9 +11,9 @@ thischeck=function() {
     test_that("specieslist checks fq fields", {
         skip_on_cran()
         ## rk_genus is the BIE field name, but specieslist uses occurrence fields, which is just "genus"
-        expect_warning(x <- specieslist(wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",fq="rk_genus:Macropus"))
+        expect_warning(x <- specieslist(wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",fq="rk_genus:Heleioporus"))
         expect_equal(nrow(x),0)
-        x <- specieslist(wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",fq="genus:Macropus")
+        x <- specieslist(wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",fq="genus:Heleioporus")
         expect_gt(nrow(x),0)
     })
 }

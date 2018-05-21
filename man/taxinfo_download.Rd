@@ -8,7 +8,7 @@ taxinfo_download(query, fq, fields, verbose = ala_config()$verbose,
   use_data_table = TRUE)
 }
 \arguments{
-\item{query}{string: (optional) query of the form field:value (e.g. "genus:Macropus") or a free text search ("Alaba vibex")}
+\item{query}{string: (optional) query of the form field:value (e.g. "genus:Heleioporus") or a free text search ("Alaba vibex")}
 
 \item{fq}{string: character string or vector of strings, specifying filters to be applied to the original query. 
 These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See \code{ala_fields("general",as_is=TRUE)} for all the 
@@ -36,7 +36,7 @@ Download taxonomic data
 \examples{
 \dontrun{
 ## simplest usage
-x <- taxinfo_download("rk_genus:Macropus")
+x <- taxinfo_download("rk_genus:Heleioporus")
 
 ## Data for Fabaceae with specified fields
 x <- taxinfo_download("rk_family:Fabaceae",fields=c("guid","parentGuid","rk_kingdom","rk_phylum",

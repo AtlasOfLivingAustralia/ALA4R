@@ -38,7 +38,7 @@ Performs a search across all objects, and selects the closest matches. Generally
 \dontrun{
  # find information ALA holds on red kangaroo
  search_fulltext("red kangaroo")
- search_fulltext("Macropus rufus")
+ search_fulltext("Heleioporus australiacus")
  search_fulltext("urn:lsid:biodiversity.org.au:afd.taxon:31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae")
 
  # find genus names like "Oenanthe"

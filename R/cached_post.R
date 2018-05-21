@@ -13,8 +13,8 @@
 # @references \url{http://api.ala.org.au/}
 # @examples
 #
-# out = cached_post(url="http://bie.ala.org.au/ws/species/lookup/bulk",body=jsonlite::toJSON(list(names=c("Macropus rufus","Grevillea"))),type="json")
-# out = cached_post(url="http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Macropus&qname=Macropus&area=POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))&bs=http://biocache.ala.org.au/ws&gridsize=0.1&movingaveragesize=9&sitesbyspecies=1",body="")
+# out = cached_post(url="http://bie.ala.org.au/ws/species/lookup/bulk",body=jsonlite::toJSON(list(names=c("Heleioporus australiacus","Grevillea"))),type="json")
+# out = cached_post(url="http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Heleioporus&qname=Heleioporus&area=POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))&bs=http://biocache.ala.org.au/ws&gridsize=0.1&movingaveragesize=9&sitesbyspecies=1",body="")
 
 
 cached_post=function(url,body,type="text",caching=ala_config()$caching,verbose=ala_config()$verbose,content_type,encoding=ala_config()$text_encoding,...) {
