@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ALA4R</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.5.10</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.6.0</span>
       </span>
     </div>
 
@@ -73,7 +73,7 @@
       <h1>ALA4R</h1>
                         <h4 class="author">Ben Raymond</h4>
             
-            <h4 class="date">2018-05-20</h4>
+            <h4 class="date">2018-05-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/vignettes/ALA4R.Rmd"><code>vignettes/ALA4R.Rmd</code></a></small>
       <div class="hidden name"><code>ALA4R.Rmd</code></div>
@@ -97,9 +97,9 @@
 <a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"AtlasOfLivingAustralia/ALA4R"</span>)</a></code></pre></div>
 <p>If you wish to use the <code>data.table</code> package for potentially faster loading of data matrices (optional), also do:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"data.table"</span>)</a></code></pre></div>
-<p>On Linux you will first need to ensure that <code>libcurl</code> is installed on your system — e.g. on Ubuntu, open a terminal and do:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="fu">sudo</span> apt-get install libcurl4-openssl-dev</a></code></pre></div>
-<p>or install <code>libcurl4-openssl-dev</code> via the Software Centre.</p>
+<p>On Linux you will first need to ensure that <code>libcurl</code> and <code>v8</code> (version &lt;= 3.15) are installed on your system — e.g. on Ubuntu/Debian, open a terminal and do:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="fu">sudo</span> apt-get install libcurl4-openssl-dev libv8-3.14-dev</a></code></pre></div>
+<p>or install via the Software Centre.</p>
 </div>
 <div id="using-ala4r" class="section level2">
 <h2 class="hasAnchor">
@@ -257,9 +257,9 @@
 <a class="sourceLine" id="cb26-3" data-line-number="3"><span class="st">    </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(speciesName, commonName, occurrenceCount) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb26-4" data-line-number="4"><span class="st">    </span><span class="kw">head</span>(<span class="dv">10</span>)</a></code></pre></div>
 <pre><code>##                         speciesName                   commonName occurrenceCount
-## 1  Calyptorhynchus (Zanda) funereus Yellow-Tailed Black-Cockatoo             356
+## 1  Calyptorhynchus (Zanda) funereus Yellow-Tailed Black-Cockatoo             245
 ## 2      Hylacola pyrrhopygia parkeri                                           58
-## 3            Eucalyptus fasciculosa                     Hill Gum              54
+## 3            Eucalyptus fasciculosa                     Hill Gum              55
 ## 4     Falco (Hierofalco) peregrinus             Peregrine Falcon              53
 ## 5             Spyridium spathulatum         Spoon-Leaf Spyridium              39
 ## 6          Anthocercis angustifolia       Narrow-Leaf Ray-Flower              30
@@ -496,7 +496,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Ben Raymond, Jeremy VanDerWal, Lee Belbin.</p>
+  <p>Developed by Peggy Newman, Ben Raymond, Jeremy VanDerWal, Lee Belbin.</p>
 </div>
 
 <div class="pkgdown">
