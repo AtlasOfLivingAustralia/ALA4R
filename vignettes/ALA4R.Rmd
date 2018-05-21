@@ -69,13 +69,13 @@ ALA4R can cache most results to local files. This means that if the same code is
 By default, this caching is session-based, meaning that the local files are stored in a temporary directory that is automatically deleted when the R session is ended. This behaviour can be altered so that caching is permanent, by setting the caching directory to a non-temporary location. For example, under Windows, use something like:
 
 ```{r eval=FALSE}
-ala_config(cache_directory <- "c:/mydata/ala_cache") ## use forward slashes, not \
+ala_config(cache_directory="c:/mydata/ala_cache") ## use forward slashes, not \
 ```
 
 or for Linux:
 
 ```{r eval=FALSE}
-ala_config(cache_directory <- "~/mydata/ala_cache")
+ala_config(cache_directory="~/mydata/ala_cache")
 ```
 
 Note that this directory must exist (you need to create it yourself).
