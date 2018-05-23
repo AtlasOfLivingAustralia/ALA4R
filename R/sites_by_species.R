@@ -68,6 +68,8 @@ sites_by_species <- function(taxon, wkt, gridsize=0.1, SPdata.frame=FALSE, verbo
             ## error - but note that we may still get a STATUS 200 from the server in this case
             ## Check the WKT string, maybe that was the problem
             if (!missing(wkt) && !isTRUE(check_wkt(wkt))) warning("WKT string may not be valid: ", wkt)
+            ## NOTE May 2018: in fact it seems that the server can fail to parse the WKT string even if (apparently) valid
+            ## see https://github.com/AtlasOfLivingAustralia/biocache-service/issues/225
             stop("there has been an issue with this service. ", getOption("ALA4R_server_config")$notify) } #catch for these missing pid issues
         status_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_alaspatial, "job", list(pid=pid))
         if (verbose) message("Waiting for sites-by-species results to become available: ", appendLF=FALSE)
