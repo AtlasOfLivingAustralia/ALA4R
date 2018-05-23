@@ -19,7 +19,7 @@ image_info <- function(id, image_number, verbose=ala_config()$verbose) {
     if (missing(id) & missing(image_number)) stop("image id or number must be provided")
     if (!missing(id)) assert_that(is.character(id))
     if (!missing(image_number)) assert_that(is.character(image_number) || is.numeric(image_number))
-    assert_that(is.flag(verbose) && !is.na(verbose))
+    assert_that(is.flag(verbose), !is.na(verbose))
     if (is.null(getOption("ALA4R_server_config")$base_url_images) || getOption("ALA4R_server_config")$base_url_images=="") {
         stop("No URL to the image database has been configured: see base_url_images in ", getOption("ALA4R_server_config")$config_function)
     }
