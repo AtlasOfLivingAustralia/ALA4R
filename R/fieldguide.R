@@ -27,6 +27,7 @@ fieldguide <- function(guids, title="Field guide", filename=tempfile(fileext=".p
     assert_that(is.flag(overwrite))
     assert_that(is.string(filename))
     if (!overwrite && file.exists(filename)) stop("file exists: delete it or specify overwrite=TRUE")
+    verbose <- ala_config()$verbose
 
     ## we initially make a request to the /generate service, which generates the PDF on the server
     ##  and returns the PDF file name to download
@@ -38,6 +39,7 @@ fieldguide <- function(guids, title="Field guide", filename=tempfile(fileext=".p
     if (caching %in% c("on") && file.exists(cache_file)) {
         ## try reading the cached fileid
         try({
+            if (verbose) message(sprintf("trying cached file %s for %s", cache_file, this_url))
             fileid <- readLines(cache_file)
             ## this tells us what the locally-cached pdf file ought to be
             this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_fieldguide, paste0("guide/", fileid))
