@@ -9,6 +9,7 @@ Status](https://travis-ci.org/AtlasOfLivingAustralia/ALA4R.svg?branch=master)](h
 [![codecov](https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R/branch/master/graph/badge.svg)](https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R)
 [![CRAN
 Status](http://www.r-pkg.org/badges/version/ALA4R)](http://www.r-pkg.org/pkg/ALA4R)
+[![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ALA4R)](https://cran.rstudio.com/web/packages/ALA4R/index.html)
 
 The Atlas of Living Australia (ALA) provides tools to enable users of
 biodiversity information to find, access, combine and visualise data on

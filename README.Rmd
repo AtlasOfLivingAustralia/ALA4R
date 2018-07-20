@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/6dmcp1wc4wcr0rdb?svg=true)](https://ci.appveyor.com/project/raymondben/ala4r-kt6t8)
 [![codecov](https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R/branch/master/graph/badge.svg)](https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R)
 [![CRAN Status](http://www.r-pkg.org/badges/version/ALA4R)](http://www.r-pkg.org/pkg/ALA4R)
-
+[![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ALA4R)](https://cran.rstudio.com/web/packages/ALA4R/index.html)
 
 The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from http://www.ala.org.au/. Here we provide a subset of the tools to be directly used within R.
 
