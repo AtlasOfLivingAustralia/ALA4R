@@ -23,7 +23,7 @@ thischeck=function() {
         ## download the vertebrates field guide
         l <- ala_list(druid="dr1146")
         expect_is(l,"data.frame")
-        expect_named(l,c("id","name","commonName","scientificName","lsid","kvpValues"))
+        expect_named(l,c("id","name","commonName","scientificName","lsid",'dataResourceUid',"kvpValues"))
         expect_is(l$kvpValues,"list")
         expect_named(l$kvpValues[[1]],c("key","value"))
     })
