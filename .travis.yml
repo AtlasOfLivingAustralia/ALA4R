@@ -1,42 +1,29 @@
-# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
-
 language: R
 sudo: false
 cache: packages
-
 addons:
   apt:
-    #update: true
     packages:
-      - libv8-3.14-dev
-
+    - libv8-3.14-dev
 matrix:
   include:
-    - os: linux
-      r: release
-      dist: trusty # 14.04
-      env:
-        - BUILD_NAME=trusty_release
-        - DETAILS="trusty release build"
-        - R_CODECOV=true
-#    - os: linux
-#      r: devel
-#      dist: trusty # 14.04
-#      env:
-#        - BUILD_NAME=trusty_devel
-#        - DETAILS="trusty devel build"
-#        - R_CODECOV=false
-
-# set NOT_CRAN to true to ensure that skip_on_cran tests are run here
+  - os: linux
+    r: release
+    dist: trusty
+    env:
+    - BUILD_NAME=trusty_release
+    - DETAILS="trusty release build"
+    - R_CODECOV=true
 env:
-  - NOT_CRAN=true
-
+- NOT_CRAN=true
 warnings_are_errors: true
-
-script: 
-  - |
-    R CMD build .
-    travis_wait 20 R CMD check ALA4R*tar.gz
-
+script:
+- |
+  R CMD build .
+  travis_wait 20 R CMD check ALA4R*tar.gz
 after_success:
-  - if [[ "${R_CODECOV}" ]]; then travis_wait 20 Rscript -e 'covr::codecov()'; fi
+- if [[ "${R_CODECOV}" ]]; then travis_wait 20 Rscript -e 'covr::codecov()'; fi
+notifications:
+  hipchat:
+    rooms:
+      secure: GcAsJ2ZSa1p3xGaYU1dqVXn1y08yRVTm/ADJJx3PU8s/SCk8CVjMcKGzBqPw66EYrYkBcaa+6vvFfJHyeJclbQgp9EIBxgqrvp4mNHxZPa9XVkTpCNNE7s26zkXmDZyH1UzD9o0AJfuEhwvCBawjckxArfAMSUgXZ3Ago/l8R24=
