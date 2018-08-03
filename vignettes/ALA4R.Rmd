@@ -128,7 +128,7 @@ ala_config(warn_on_empty=TRUE)
 First, check that we have some additional packages that we'll use in the examples, and install them if necessary.
 ```{r message=FALSE}
 to_install <- c("ape", "dplyr", "ggplot2", "jpeg", "maps", "mapdata",
-                "maptools", "phytools", "tidyr", "vegan", "rgeos")
+                "maptools", "phytools", "tidyr", "vegan")
 to_install <- to_install[!sapply(to_install, requireNamespace, quietly=TRUE)]
 if(length(to_install)>0)
     install.packages(to_install, repos="http://cran.us.r-project.org")
