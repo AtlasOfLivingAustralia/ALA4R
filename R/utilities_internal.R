@@ -150,9 +150,8 @@ rename_variables <- function(varnames, type, verbose=ala_config()$verbose) {
     } else if (type=="layers") {
         varnames[varnames=="desc"] <- "description"
     } else if (type %in% c("occurrence", "occurrence_stored", "occurrence_indexed")) {
-        ## "scientificName" is actually scientificNameOriginal
-        varnames[varnames=="scientificName"] <- "scientificNameOriginal"
-        ## and "matchedScientificName" will get changed to "scientificName" below
+        ## old columns: Scientific Name, Matched Scientific Name
+        ## new columns: Scientific Name - original, Scientific Name
         varnames[varnames=="recordID"] <- "id"
         varnames[varnames=="xVersion"] <- "version" ## is actually "_version_" in web service
         varnames <- str_replace_all(varnames, regex("axonconceptguid", ignore_case=TRUE), "axonConceptLsid")                
