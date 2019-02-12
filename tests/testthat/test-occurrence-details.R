@@ -35,8 +35,8 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrence_details result has the expected fields", {
         skip_on_cran()
-        ## names are a bit changeable, but expect to see at least "processed", "raw", "userAssertions", "systemAssertions", "consensus"
-        core_names <- c("processed", "raw", "userAssertions", "systemAssertions", "consensus")
+        ## names are a bit changeable, but expect to see at least "processed", "raw", "userAssertions", "systemAssertions"
+        core_names <- c("processed", "raw", "userAssertions", "systemAssertions")
         ## this one has images, so also images in the names
         expect_true(all(c("images", core_names) %in% names(occurrence_details("ba9dfe7f-77f8-4486-b77e-3ae366d3c2ae")[[1]])))
         ## no images
