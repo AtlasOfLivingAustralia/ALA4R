@@ -137,6 +137,7 @@ if(length(to_install)>0)
 library(dplyr)
 ```
 
+
 ### Example 1: Name searching and taxonomic trees
 
 ```{r message=FALSE}
@@ -146,21 +147,44 @@ library(phytools)
 
 Let's say that we want to look at the taxonomic tree of penguins but we don't know what the correct scientific name is. Start by searching for it:
 
-```{r}
+```{r eval=FALSE}
 sx <- search_fulltext("penguins")
 sx$data %>% dplyr::select(name, rank, commonName)
 ```
-And we can see that penguins correspond to the family "SPHENISCIDAE". Now we can download the taxonomic data (note that the search is case-sensitive):
 
-```{r message=FALSE}
+```{r echo=FALSE}
+bieServerUp <- FALSE
+
+tryCatch({
+  sx <- search_fulltext("penguins")
+  sx$data %>% dplyr::select(name, rank, commonName)
+  bieServerUp <- TRUE
+},warning = function(w) {print(w$message)}
+ ,error = function(e) {
+   print(e$message)})
+```
+We can see that penguins correspond to the family "SPHENISCIDAE". Now we can download the taxonomic data (note that the search is case-sensitive):
+
+```{r eval=FALSE}
 tx <- taxinfo_download("rk_family:SPHENISCIDAE", fields=c("guid", "rk_genus", "scientificName", "rank"))
-
+  
 ## keep only species and subspecies records
 tx <- tx %>% dplyr::filter(rank %in% c("species","subspecies"))
 ```
 
+```{r message=FALSE, echo=FALSE}
+tx <- as.data.frame
+if (bieServerUp) {
+  tryCatch({
+    tx <- taxinfo_download("rk_family:SPHENISCIDAE", fields=c("guid", "rk_genus", "scientificName", "rank"))
+    tx <- tx %>% dplyr::filter(rank %in% c("species","subspecies"))
+  },warning = function(w) {print(w$message)}
+   ,error = function(e) {print(e$message)})
+}  
+```
+
 We can make a taxonomic tree plot using the `phytools` package:
-```{r results="hide", fig.width=9, fig.height=9}
+```{r eval=FALSE}
 ## as.phylo requires the taxonomic columns to be factors
 tx <- tx %>% mutate_all(as.factor)
 
@@ -170,22 +194,53 @@ ax <- as.phylo(~genus/scientificName, data=tx)
 plotTree(ax, type="fan", fsize=0.7) ## plot it
 ```
 
-We can also plot the tree with images of the different penguin species. We'll first extract a species profile for each species identifier (guid) in our results:
-
-```{r}
-s <- search_guids(tx$guid)
+```{r results="hide", fig.width=9, fig.height=9, echo=FALSE}
+txExists <- !is.null(dim(tx))
+if(txExists)
+{
+  tx <- tx %>% mutate_all(as.factor)
+  ax <- as.phylo(~genus/scientificName, data=tx)
+  plotTree(ax, type="fan", fsize=0.7) ## plot it
+}
 ```
 
-And for each of those species profiles, download the thumbnail image and store it in our data cache:
+We can also plot the tree with images of the different penguin species. We can first extract a species profile for each species identifier (guid) in our results:
 
-```{r}
+```{r eval=FALSE}
+  s <- search_guids(tx$guid)
+```
+
+```{r echo=FALSE}
+if(bieServerUp & txExists) {
+  tryCatch({
+    s <- search_guids(tx$guid)
+},warning = function(w) {print(w$message)}
+ ,error = function(e) {print(e$message)})
+}
+```
+
+For each of those species profiles, download the thumbnail image and store it in our data cache:
+
+```{r eval=FALSE}
 imfiles <- sapply(s$thumbnailUrl, function(z) {
   ifelse(!is.na(z), ALA4R:::cached_get(z, type="binary_filename"), "")
 })
 ```
 
+```{r echo=FALSE}
+if(txExists) {
+  tryCatch({
+  imfiles <- sapply(s$thumbnailUrl, function(z) {
+    ifelse(!is.na(z), ALA4R:::cached_get(z, type="binary_filename"), "")
+  })
+},warning = function(w) {print(w$message)}
+ ,error = function(e) {print(e$message)})
+}
+```
+
+
 And finally, plot the tree:
-```{r results="hide", fig.width=7.5, fig.height=7.5, dev.args=if (.Platform$OS.type=="unix") list(png=list(colortype="pseudo.cube")) else list()}
+```{r eval = FALSE, results="hide", fig.width=7.5, fig.height=7.5, dev.args=if (.Platform$OS.type=="unix") list(png=list(colortype="pseudo.cube")) else list()}
 ## plot tree without labels
 plotTree(ax, type="fan", ftype="off")
 
@@ -198,7 +253,26 @@ for (k in which(nchar(imfiles)>0))
         rasterImage(readJPEG(imfiles[k]), tr$xx[k]-1/10, tr$yy[k]-1/10, tr$xx[k]+1/10, tr$yy[k]+1/10)
 ```
 
-A number of species have no image (mostly, these are extinct species) and others are images of eggs rather than animals, but you get the idea.
+```{r echo = FALSE, results="hide", fig.width=7.5, fig.height=7.5, dev.args=if (.Platform$OS.type=="unix") list(png=list(colortype="pseudo.cube")) else list()}
+
+if(txExists) {
+  tryCatch({
+    ## plot tree without labels
+    plotTree(ax, type="fan", ftype="off")
+    
+    ## get the tree plot object
+    tr <- get("last_plot.phylo", envir = .PlotPhyloEnv)
+    
+    ## add each image
+    library(jpeg)
+    for (k in which(nchar(imfiles)>0))
+            rasterImage(readJPEG(imfiles[k]), tr$xx[k]-1/10, tr$yy[k]-1/10, tr$xx[k]+1/10, tr$yy[k]+1/10)
+},warning = function(w) {print(w$message)}
+ ,error = function(e) {print(e$message)})
+}
+```
+
+A number of species may have no image (mostly, these are extinct species) and others are images of eggs rather than animals, but you get the idea.
 
 
 ### Example 2: Area report: what listed species exist in a given area?
@@ -257,20 +331,37 @@ wkt <- paste("POLYGON((", paste(temp, collapse=","), "))", sep="")
 ```
 
 Now extract the species list in this polygon, filtering to only include those with a conservation status:
-```{r}
+```{r eval=FALSE}
 specieslist(wkt=wkt, fq="state_conservation:*") %>%
     dplyr::arrange(desc(occurrenceCount)) %>%
     dplyr::select(speciesName, commonName, occurrenceCount) %>%
     head(10)
 ```
 
+```{r echo=FALSE}
+tryCatch({
+specieslist(wkt=wkt, fq="state_conservation:*") %>%
+    dplyr::arrange(desc(occurrenceCount)) %>%
+    dplyr::select(speciesName, commonName, occurrenceCount) %>%
+    head(10)
+}, error = function(e) { print(e$message)})
+```
+
 ### Example 3: Quality assertions
 
 Data quality assertions are a suite of fields that are the result of a set of tests peformed on ALA data. Download occurrence data for the golden bowerbird (you should adjust the `download_reason_id` to match your purposes if using this function for your own analyses; see `ala_reasons()`):
 
-```{r}
+```{r eval=FALSE}
 x <- occurrences(taxon="taxon_name:\"Amblyornis newtonianus\"", download_reason_id="testing")
 summary(x)
+```
+
+```{r echo=FALSE}
+tryCatch({
+  x <- occurrences(taxon="taxon_name:\"Amblyornis newtonianus\"", download_reason_id="testing")
+  summary(x)
+},warning = function(w) {print(w$message)}
+ ,error = function(e) { print(e$message)})
 ```
 
 You can see that some of the points have assertions that are considered "fatal" (i.e. the occurrence record in question is unlikely to be suitable for subsequent analysis). We can use the `occurrences_plot` function to create a PDF file with a plot of this data, showing the points with fatal assertions (this will create an "Rplots.pdf" file in your working directory; not run here):
