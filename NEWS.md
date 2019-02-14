@@ -1,3 +1,7 @@
+# ALA4R 1.6.2
+* updates to handle ALA API field changes
+* update vignette to be more robust to server outage
+
 # ALA4R 1.6.0
 * added workaround for `occurrences(..., method="offline")` to cope with server-side bug (see https://github.com/AtlasOfLivingAustralia/biocache-service/issues/221)
 * package documentation via `pkgdown` (https://atlasoflivingaustralia.github.io/ALA4R/)

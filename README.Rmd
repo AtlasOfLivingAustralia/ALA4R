@@ -8,47 +8,27 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "vignettes/README-"
+  fig.path = "README-"
 )
 ```
 
 # ALA4R
 
-[![Travis-CI Build Status](https://travis-ci.org/AtlasOfLivingAustralia/ALA4R.svg?branch=master)](https://travis-ci.org/AtlasOfLivingAustralia/ALA4R)
-[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/6dmcp1wc4wcr0rdb?svg=true)](https://ci.appveyor.com/project/raymondben/ala4r-kt6t8)
-[![codecov](https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R/branch/master/graph/badge.svg)](https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R)
-[![CRAN Status](http://www.r-pkg.org/badges/version/ALA4R)](http://www.r-pkg.org/pkg/ALA4R)
-[![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ALA4R)](https://cran.rstudio.com/web/packages/ALA4R/index.html)
+The goal of ALA4R is to ...
 
-The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from http://www.ala.org.au/. Here we provide a subset of the tools to be directly used within R.
+## Installation
 
-ALA4R enables the R community to directly access data and resources hosted by the ALA.
+You can install ALA4R from github with:
 
-The use-examples presented at the [2014 ALA Science Symposium](http://www.ala.org.au/blogs-news/2014-atlas-of-living-australia-science-symposium/) are available in the package vignette, via (in R): `vignette("ALA4R")`, or [browse it online](https://atlasoflivingaustralia.github.io/ALA4R/articles/ALA4R.html).
-
-## Installing
-
-Stable version from CRAN:
-
-```{r eval=FALSE}
-install.packages("ALA4R")
-```
-
-Or the development version from GitHub:
-
-```{r eval=FALSE}
-install.packages("devtools")
+```{r gh-installation, eval = FALSE}
+# install.packages("devtools")
 devtools::install_github("AtlasOfLivingAustralia/ALA4R")
 ```
 
-On Linux you will first need to ensure that `libcurl` and `v8` (version <= 3.15) are installed on your system --- e.g. on Ubuntu/Debian, open a terminal and do:
+## Example
 
-```{sh eval=FALSE}
-sudo apt-get install libcurl4-openssl-dev libv8-3.14-dev
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+## basic example code
 ```
-or install via the Software Centre.
-
-
-## Usage
-
-See the online documentation at https://atlasoflivingaustralia.github.io/ALA4R/ including the [package vignette](https://atlasoflivingaustralia.github.io/ALA4R/articles/ALA4R.html).
