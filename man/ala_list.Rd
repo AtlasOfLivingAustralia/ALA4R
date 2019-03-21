@@ -34,7 +34,7 @@ Note that this refers to pre-generated lists of species stored on the ALA server
 
 }
 \references{
-\url{http://lists.ala.org.au} and the associated web services at \url{http://lists.ala.org.au/ws}
+\url{https://lists.ala.org.au} and the associated web services at \url{https://lists.ala.org.au/ws}
 }
 \seealso{
 \code{\link{specieslist}}, \code{\link{ala_lists}}

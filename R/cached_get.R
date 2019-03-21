@@ -8,10 +8,10 @@
 # @param on_redirect, on_server_error, on_client_error function: passed to check_status_code()
 # @return for type=="text" the content is returned as text. For type=="json", the content is parsed using jsonlite::fromJSON. For "filename", the name of the stored file is returned.
 # @details Depending on the value of caching, the page is either retrieved from the cache or from the url, and stored in the cache if appropriate. The user-agent string is set according to ala_config()$user_agent. The returned response (if not from cached file) is also passed to check_status_code().
-# @references \url{http://api.ala.org.au/}
+# @references \url{https://api.ala.org.au/}
 # @examples
 #
-# out <- cached_get(url="http://biocache.ala.org.au/ws/index/fields", type="json")
+# out <- cached_get(url="https://biocache-ws.ala.org.au/ws/index/fields", type="json")
 #
 
 cached_get <- function(url, type="text", caching=ala_config()$caching, verbose=ala_config()$verbose, on_redirect=NULL, on_client_error=NULL, on_server_error=NULL, encoding=ala_config()$text_encoding) {

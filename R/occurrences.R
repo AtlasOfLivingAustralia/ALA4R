@@ -3,8 +3,8 @@
 #' Retrieve ALA occurrence data via the "occurrence download" web service. At least one of \code{taxon}, \code{wkt}, or \code{fq} must be supplied for a valid query. Note that there is a limit of 500000 records per request when using \code{method="indexed"}. Use the \code{method="offline"} for larger requests. For small requests, \code{method="indexed"} likely to be faster.
 #' 
 #' @references \itemize{
-#' \item Associated ALA web service for record counts: \url{http://api.ala.org.au/#ws3}
-#' \item Associated ALA web service for occurence downloads: \url{http://api.ala.org.au/#ws4}
+#' \item Associated ALA web service for record counts: \url{https://api.ala.org.au/#ws3}
+#' \item Associated ALA web service for occurence downloads: \url{https://api.ala.org.au/#ws4}
 #' \item Field definitions: \url{https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc}
 #' \item WKT reference: \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' }
@@ -59,15 +59,15 @@
 #'   download_reason_id=10)
 #' str(y)
 #' # equivalent direct webservice call [see this by setting ala_config(verbose=TRUE)]:
-#' # http://biocache.ala.org.au/ws/occurrences/index/download?q=taxon_name%3A%22Alaba%20vibex%22&
+#' # https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name%3A%22Alaba%20vibex%22&
 #' # fields=latitude,longitude,el874&reasonTypeId=10&sourceTypeId=2001&esc=%5C&sep=%09&file=data
 #'
 #' occurrences(taxon="taxon_name:\"Eucalyptus gunnii\"",fields=c("latitude","longitude"),
 #'   qa="none",fq="basis_of_record:LivingSpecimen",download_reason_id=10)
 #' # equivalent direct webservice call [see this by setting ala_config(verbose=TRUE)]:
-#' # http://biocache.ala.org.au/ws/occurrences/index/download?q=taxon_name%3A%22Eucalyptus%20gunnii%22&
-#' # fq=basis_of_record%3ALivingSpecimen&fields=latitude,longitude&qa=none&reasonTypeId=10&
-#' # sourceTypeId=2001&esc=%5C&sep=%09&file=data
+#' # https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name%3A%22Eucalyptus
+#' # %20gunnii%22&fq=basis_of_record%3ALivingSpecimen&fields=latitude,longitude&qa=none&
+#' # reasonTypeId=10&sourceTypeId=2001&esc=%5C&sep=%09&file=data
 #' }
 #' @export occurrences
 
@@ -112,7 +112,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method="indexed",email,down
     }
     ## check the number of records
     if (record_count_only) {
-        ## check using e.g. http://biocache.ala.org.au/ws/occurrences/search?q=*:*&pageSize=0&facet=off
+        ## check using e.g. https://biocache-ws.ala.org.au/ws/occurrences/search?q=*:*&pageSize=0&facet=off
         temp_query <- this_query
         temp_query$pageSize <- 0
         temp_query$facet <- "off"

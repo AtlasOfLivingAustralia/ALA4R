@@ -3,7 +3,7 @@
 #' Provides GUID, taxonomic classification, and other information for a list of names. 
 #' Case-insensitive but otherwise exact matches are used.
 #'
-#' @references The associated ALA web service: \url{http://api.ala.org.au/#ws87}
+#' @references The associated ALA web service: \url{https://api.ala.org.au/#ws87}
 #' 
 #' @param taxa string: a single name or vector of names
 #' @param vernacular logical: if TRUE, match on common names as well as scientific names, otherwise match only on scientific names

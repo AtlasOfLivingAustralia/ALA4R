@@ -48,5 +48,5 @@ search_names(c("Grevillea humilis", "Grevillea humilis subsp. maritima",
 }
 }
 \references{
-The associated ALA web service: \url{http://api.ala.org.au/#ws87}
+The associated ALA web service: \url{https://api.ala.org.au/#ws87}
 }

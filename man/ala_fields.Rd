@@ -51,10 +51,10 @@ Note for occurrence fields: only fields that are indexed in the ALA database can
 }
 \references{
 Relevant ALA web services: \itemize{
-\item for fields_type "occurrence": http://api.ala.org.au/#ws72
-\item for fields_type "general": http://api.ala.org.au/#ws88
-\item for fields_type "layers": http://api.ala.org.au/#ws11 (see also descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/})
-\item for fields_type "assertions": http://api.ala.org.au/#ws81
+\item for fields_type "occurrence": https://api.ala.org.au/#ws72
+\item for fields_type "general": https://api.ala.org.au/#ws88
+\item for fields_type "layers": https://api.ala.org.au/#ws11 (see also descriptions of the spatial layers: \url{https://spatial.ala.org.au/layers/})
+\item for fields_type "assertions": https://api.ala.org.au/#ws81
 }
 }
 \seealso{

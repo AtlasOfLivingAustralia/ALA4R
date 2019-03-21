@@ -5,8 +5,8 @@
 #' species occurrence locations. 
 #' NOTE: Requests are currently processed in a *single queue* on the ALA servers. Processing times may be slow if there are many requests in the queue. Note also that the actual processing of batch requests is inherently slow: a large number of points may take quite some time. Be warned.
 #' 
-#' @references The associated ALA web service: \url{http://api.ala.org.au/#ws84}
-#' @references Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/}
+#' @references The associated ALA web service: \url{https://api.ala.org.au/#ws84}
+#' @references Descriptions of the spatial layers: \url{https://spatial.ala.org.au/layers/}
 #' @param pnts numeric: vector of latitude/longitude pairs, or a 2 column data.frame or matrix of lat, lons. NOTE: the number of locations must be less than 100000
 #' @param layers string vector: ids of layers to be intersected. The list of possible layers is available from \code{ala_fields("layers")}. Names can be passed as full layer names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Note: if more than one location has been provided in \code{pnts}, the number of layers must be less than 700
 #' @param SPdata.frame logical: should the output should be returned as a SpatialPointsDataFrame of the sp package or simply as a data.frame?
@@ -22,7 +22,7 @@
 #'  intersect_points(pnts, layers)
 #' 
 #'  ## equivalent direct web service call:
-#'  ## http://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  
+#'  ## https://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  
 #' 
 #'  ## multiple points as a grid sampling multiple layers
 #'  layers <- c("cl22", "cl23", "el773")

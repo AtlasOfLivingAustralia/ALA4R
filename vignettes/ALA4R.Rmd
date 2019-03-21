@@ -8,7 +8,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-d
+
 # ALA4R
 
 ```{r setup, include=FALSE}
@@ -16,7 +16,7 @@ library(knitr)
 options(width=120)
 ```
 
-The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from http://www.ala.org.au/. Here we provide a subset of the tools to be directly used within R.
+The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from https://www.ala.org.au/. Here we provide a subset of the tools to be directly used within R.
 
 ALA4R enables the R community to directly access data and resources hosted by the ALA. 
 
@@ -389,7 +389,7 @@ x_afrows <- apply(x$data[, x_afcols], 1, any)
 these_assertions <- names(x$data)[x_afcols]
 
 ## make a link to th web page for each occurrence
-popup_link <- paste0("<a href=\"http://biocache.ala.org.au/occurrences/", x$data$id, "\">Link to occurrence record</a>")
+popup_link <- paste0("<a href=\"https://biocache.ala.org.au/occurrences/", x$data$id, "\">Link to occurrence record</a>")
 
 ## colour palette
 pal <- c(sub("FF$", "", heat.colors(length(these_assertions))))

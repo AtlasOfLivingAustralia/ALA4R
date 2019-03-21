@@ -24,7 +24,7 @@ str(s1, max.level=3)
 }
 }
 \references{
-Associated ALA web service: \url{http://api.ala.org.au/#ws102}
+Associated ALA web service: \url{https://api.ala.org.au/#ws102}
 }
 \seealso{
 \code{\link{occurrences}} \code{\link{ala_config}}

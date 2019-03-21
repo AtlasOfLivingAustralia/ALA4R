@@ -27,7 +27,7 @@ search_layers(type="shapes", query="coral", output_format="simple")
 }
 }
 \references{
-Associated ALA web services: \url{http://api.ala.org.au/#ws11} \url{http://api.ala.org.au/#ws12} \url{http://api.ala.org.au/#ws13}
+Associated ALA web services: \url{https://api.ala.org.au/#ws11} \url{https://api.ala.org.au/#ws12} \url{https://api.ala.org.au/#ws13}
 
-Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/})
+Descriptions of the spatial layers: \url{https://spatial.ala.org.au/layers/})
 }

@@ -2,7 +2,7 @@
 #' 
 #' A partial-name search for species names & identifiers used at the ALA. If searching for a taxon name, and the scientific name or common name of the taxon are known, use \code{\link{search_names}} instead.
 #' 
-#' @references Associated ALA web service: \url{http://api.ala.org.au/#ws25}
+#' @references Associated ALA web service: \url{https://api.ala.org.au/#ws25}
 #' @seealso \code{\link{search_names}} for searching known scientific or common taxonomic names
 #' @param taxon string: part of the scientific, common name of the taxa
 #' @param geo_only logical: if TRUE, only results that have geospatial occurrence records will be included

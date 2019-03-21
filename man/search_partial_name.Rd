@@ -34,7 +34,7 @@ search_partial_name("Gallaba", geo_only=TRUE)
 }
 }
 \references{
-Associated ALA web service: \url{http://api.ala.org.au/#ws25}
+Associated ALA web service: \url{https://api.ala.org.au/#ws25}
 }
 \seealso{
 \code{\link{search_names}} for searching known scientific or common taxonomic names

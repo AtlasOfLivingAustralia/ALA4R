@@ -1,7 +1,7 @@
 Package: ALA4R
 Type: Package
 Title: Atlas of Living Australia (ALA) Data and Resources in R
-Version: 1.6.2
+Version: 1.6.3
 Authors@R: c(person("Peggy", "Newman", email="peggy.newman@csiro.au", role=c("aut", "cre")),
              person("Ben", "Raymond", email="ben_ala@untan.gl", role="aut"),
              person("Jeremy", "VanDerWal", role="aut"),
@@ -12,7 +12,7 @@ Authors@R: c(person("Peggy", "Newman", email="peggy.newman@csiro.au", role=c("au
 Description: The Atlas of Living Australia (ALA) provides tools to enable users
     of biodiversity information to find, access, combine and visualise data on
     Australian plants and animals; these have been made available from
-    <http://ala.org.au/>. ALA4R provides a subset of the tools to be
+    <https://ala.org.au/>. ALA4R provides a subset of the tools to be
     directly used within R. It enables the R community to directly access data
     and resources hosted by the ALA.
 Imports:
@@ -46,4 +46,5 @@ BugReports: https://github.com/AtlasOfLivingAustralia/ALA4R/issues
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
+Encoding: UTF-8

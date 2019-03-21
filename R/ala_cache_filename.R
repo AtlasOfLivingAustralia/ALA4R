@@ -1,14 +1,14 @@
 #' Returns the name of the cache file associated with the given URL. Note that this file 
 #' may not actually exist, this function just provides the mapping from URL to filename
 #' 
-#' @references \url{http://api.ala.org.au/}
+#' @references \url{https://api.ala.org.au/}
 #' @seealso \code{ala_config} for cache settings, particularly the cache directory
 #'  
 #' @param url string: the URL
 #' @return string: the file path and name
 #' 
 #' @examples
-#' ala_cache_filename("http://biocache.ala.org.au/ws/index/fields")
+#' ala_cache_filename("https://biocache-ws.ala.org.au/ws/index/fields")
 #' 
 #' @export ala_cache_filename
 ala_cache_filename <- function(url) {

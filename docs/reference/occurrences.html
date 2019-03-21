@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ALA4R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.3</span>
       </span>
     </div>
 
@@ -202,8 +202,8 @@ are not guaranteed to retain the ordering of the field names given here. If not 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <ul>
-<li><p>Associated ALA web service for record counts: <a href='http://api.ala.org.au/#ws3'>http://api.ala.org.au/#ws3</a></p></li>
-<li><p>Associated ALA web service for occurence downloads: <a href='http://api.ala.org.au/#ws4'>http://api.ala.org.au/#ws4</a></p></li>
+<li><p>Associated ALA web service for record counts: <a href='https://api.ala.org.au/#ws3'>https://api.ala.org.au/#ws3</a></p></li>
+<li><p>Associated ALA web service for occurence downloads: <a href='https://api.ala.org.au/#ws4'>https://api.ala.org.au/#ws4</a></p></li>
 <li><p>Field definitions: <a href='https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc'>https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc</a></p></li>
 <li><p>WKT reference: <a href='http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html'>http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html</a></p></li>
 </ul>
@@ -234,15 +234,15 @@ are not guaranteed to retain the ordering of the field names given here. If not 
   <span class='kw'>download_reason_id</span><span class='kw'>=</span><span class='fl'>10</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/str'>str</a></span>(<span class='no'>y</span>)
 <span class='co'># equivalent direct webservice call [see this by setting ala_config(verbose=TRUE)]:</span>
-<span class='co'># http://biocache.ala.org.au/ws/occurrences/index/download?q=taxon_name%3A%22Alaba%20vibex%22&amp;</span>
+<span class='co'># https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name%3A%22Alaba%20vibex%22&amp;</span>
 <span class='co'># fields=latitude,longitude,el874&amp;reasonTypeId=10&amp;sourceTypeId=2001&amp;esc=%5C&amp;sep=%09&amp;file=data</span>
 
 <span class='fu'>occurrences</span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"taxon_name:\"Eucalyptus gunnii\""</span>,<span class='kw'>fields</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"latitude"</span>,<span class='st'>"longitude"</span>),
   <span class='kw'>qa</span><span class='kw'>=</span><span class='st'>"none"</span>,<span class='kw'>fq</span><span class='kw'>=</span><span class='st'>"basis_of_record:LivingSpecimen"</span>,<span class='kw'>download_reason_id</span><span class='kw'>=</span><span class='fl'>10</span>)
 <span class='co'># equivalent direct webservice call [see this by setting ala_config(verbose=TRUE)]:</span>
-<span class='co'># http://biocache.ala.org.au/ws/occurrences/index/download?q=taxon_name%3A%22Eucalyptus%20gunnii%22&amp;</span>
-<span class='co'># fq=basis_of_record%3ALivingSpecimen&amp;fields=latitude,longitude&amp;qa=none&amp;reasonTypeId=10&amp;</span>
-<span class='co'># sourceTypeId=2001&amp;esc=%5C&amp;sep=%09&amp;file=data</span>
+<span class='co'># https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name%3A%22Eucalyptus</span>
+<span class='co'># %20gunnii%22&amp;fq=basis_of_record%3ALivingSpecimen&amp;fields=latitude,longitude&amp;qa=none&amp;</span>
+<span class='co'># reasonTypeId=10&amp;sourceTypeId=2001&amp;esc=%5C&amp;sep=%09&amp;file=data</span>
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

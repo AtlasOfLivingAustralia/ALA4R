@@ -4,8 +4,8 @@
 \alias{intersect_points}
 \title{Intersect environmental or contextual layers at a given a set of points (coordinates)}
 \usage{
-intersect_points(pnts, layers, SPdata.frame = FALSE, use_layer_names = TRUE,
-  verbose = ala_config()$verbose)
+intersect_points(pnts, layers, SPdata.frame = FALSE,
+  use_layer_names = TRUE, verbose = ala_config()$verbose)
 }
 \arguments{
 \item{pnts}{numeric: vector of latitude/longitude pairs, or a 2 column data.frame or matrix of lat, lons. NOTE: the number of locations must be less than 100000}
@@ -35,7 +35,7 @@ NOTE: Requests are currently processed in a *single queue* on the ALA servers. P
  intersect_points(pnts, layers)
 
  ## equivalent direct web service call:
- ## http://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  
+ ## https://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  
 
  ## multiple points as a grid sampling multiple layers
  layers <- c("cl22", "cl23", "el773")
@@ -44,9 +44,9 @@ NOTE: Requests are currently processed in a *single queue* on the ALA servers. P
 }
 }
 \references{
-The associated ALA web service: \url{http://api.ala.org.au/#ws84}
+The associated ALA web service: \url{https://api.ala.org.au/#ws84}
 
-Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/}
+Descriptions of the spatial layers: \url{https://spatial.ala.org.au/layers/}
 }
 \seealso{
 \code{\link{ala_config}}

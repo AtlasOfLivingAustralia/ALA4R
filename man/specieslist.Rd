@@ -42,7 +42,7 @@ x <- specieslist(wkt="POLYGON((152.38 -30.43,152.5 -30.43,152.5 -30.5,152.38 -30
 }
 }
 \references{
-Associated ALA web service: \url{http://api.ala.org.au/#ws106}
+Associated ALA web service: \url{https://api.ala.org.au/#ws106}
 
 \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 }

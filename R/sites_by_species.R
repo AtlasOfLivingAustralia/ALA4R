@@ -22,15 +22,26 @@
 #' ## get the guid of the first species
 #' attr(ss,"guid")[1]
 #' 
-#' # Steps: 1. POST webservice creates a task
-#' curl 'https://spatial.ala.org.au/ws/tasks/create?userId=0' --data-binary 'name=PointsToGrid&input={"area":[{"name":"Current extent","wkt":"POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))"}],"occurrenceDensity":false,"sitesBySpecies":true,"speciesRichness":false,"species":{"q":["genus:Eucalyptus"],"bs":"https://biocache-ws.ala.org.au/ws/","name":"genus:Eucalyptus"},"gridCellSize":0.1,"resolution":0.01,"movingAverage":"1x1 (no moving average)"}'
-#' #resp eg '{"name":"PointsToGrid","created":1552881125953,"email":"null","history":{},"tag":"null","userId":"0","sessionId":"null","status":0,"id":<id>}'
+#' # Steps: 1. POST webservice creates a task (use single quotes around data-binary argument)
+#' curl 'https://spatial.ala.org.au/ws/tasks/create?userId=0' --data-binary name=PointsToGrid
+#' &input={"area":[{"name":"Current extent"
+#' ,"wkt":"POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))"}]
+#' ,"occurrenceDensity":false,"sitesBySpecies":true,"speciesRichness":false
+#' ,"species":{"q":["genus:Eucalyptus"]
+#' ,"bs":"https://biocache-ws.ala.org.au/ws/","name":"genus:Eucalyptus"}
+#' ,"gridCellSize":0.1,"resolution":0.01,"movingAverage":"1x1 (no moving average)"}'
+#' #resp eg '{"name":"PointsToGrid","created":1552881125953,"email":"null","history":{}
+#' ,"tag":"null","userId":"0","sessionId":"null","status":0,"id":<id>}
 #' # 2. check status values: 0 = in_queue, 1 = running, 2 = cancelled, 3 = error, 4 = finished 
-#' see https://github.com/AtlasOfLivingAustralia/spatial-service/blob/master/grails-app/domain/au/org/ala/spatial/service/Task.groovy#L32)
 #' curl 'https://spatial.ala.org.au/ws/tasks/status/<id>'
 #' waiting: {"status":1,"message":"getting species data","id":<id>,"name":"PointsToGrid"}
-#' complete:{"status":4,"message":"finished","id":<id>,"name":"PointsToGrid","history":{"1552879452131":"finished","1552879452155":"finished (id:<id>)"},"output":[{"name":"files","file":"SitesBySpecies.csv","taskId":<id>,"id":33111},{"name":"sxs_metadata.html","taskId":<id>,"file":"sxs_metadata.html","id":33109},{"file":"download.zip","taskId":<id>,"name":"download.zip","id":33110}]}
-#' failed:  {"status":4,"message":"finished","id":<id>,"name":"PointsToGrid","history":{"1552881921817":"failed (id:<id>)"}}
+#' complete:{"status":4,"message":"finished","id":<id>,"name":"PointsToGrid"
+#' ,"history":{"1552879452131":"finished","1552879452155":"finished (id:<id>)"}
+#' ,"output":[{"name":"files","file":"SitesBySpecies.csv","taskId":<id>,"id":33111}
+#' ,{"name":"sxs_metadata.html","taskId":<id>,"file":"sxs_metadata.html","id":33109}
+#' ,{"file":"download.zip","taskId":<id>,"name":"download.zip","id":33110}]}
+#' failed:  {"status":4,"message":"finished","id":<id>,"name":"PointsToGrid"
+#' ,"history":{"1552881921817":"failed (id:<id>)"}}
 #' # 3. download the zip and extract the file
 #' https://spatial.ala.org.au/ws/tasks/output/<id>/download.zip
 #' https://spatial.ala.org.au/ws/tasks/output/<id>/SitesBySpecies.csv
@@ -69,7 +80,7 @@ sites_by_species <- function(taxon, wkt, gridsize=0.1, SPdata.frame=FALSE, verbo
   body <- paste(body,',"sitesBySpecies":true', sep="")
   body <- paste(body,',"speciesRichness":false', sep="")
   body <- paste(body,',"species":{"q":["', taxon, '"]', sep="")
-  body <- paste(body,',"bs":"', base_url_biocache,'"', sep="")
+  body <- paste(body,',"bs":"', getOption("ALA4R_server_config")$base_url_biocache,'"', sep="")
   body <- paste(body,',"name":"',taxon,'"}', sep="")
   body <- paste(body,',"gridCellSize":',gridsize, sep="")
   body <- paste(body,',"resolution":',resolution, sep="")

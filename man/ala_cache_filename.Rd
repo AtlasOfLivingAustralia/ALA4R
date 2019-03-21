@@ -18,11 +18,11 @@ Returns the name of the cache file associated with the given URL. Note that this
 may not actually exist, this function just provides the mapping from URL to filename
 }
 \examples{
-ala_cache_filename("http://biocache.ala.org.au/ws/index/fields")
+ala_cache_filename("https://biocache-ws.ala.org.au/ws/index/fields")
 
 }
 \references{
-\url{http://api.ala.org.au/}
+\url{https://api.ala.org.au/}
 }
 \seealso{
 \code{ala_config} for cache settings, particularly the cache directory

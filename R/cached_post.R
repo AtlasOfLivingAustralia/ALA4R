@@ -10,11 +10,10 @@
 # @param ... additional arguments passed to curlPerform
 # @return for type=="text" the content is returned as text. For type=="json", the content is parsed using jsonlite::fromJSON. For "filename", the name of the stored file is returned.
 # @details Depending on the value of caching, the page is either retrieved from the cache or from the url, and stored in the cache if appropriate. The user-agent string is set according to ala_config()$user_agent. The returned response (if not from cached file) is also passed to check_status_code().
-# @references \url{http://api.ala.org.au/}
+# @references \url{https://api.ala.org.au/}
 # @examples
 #
-# out <- cached_post(url="http://bie.ala.org.au/ws/species/lookup/bulk", body=jsonlite::toJSON(list(names=c("Heleioporus australiacus", "Grevillea"))), type="json")
-# out <- cached_post(url="http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Heleioporus&qname=Heleioporus&area=POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))&bs=http://biocache.ala.org.au/ws&gridsize=0.1&movingaveragesize=9&sitesbyspecies=1", body="")
+# out <- cached_post(url="https://bie.ala.org.au/ws/species/lookup/bulk", body=jsonlite::toJSON(list(names=c("Heleioporus australiacus", "Grevillea"))), type="json")
 
 
 cached_post <- function(url, body, type="text", caching=ala_config()$caching, verbose=ala_config()$verbose, content_type, encoding=ala_config()$text_encoding, ...) {

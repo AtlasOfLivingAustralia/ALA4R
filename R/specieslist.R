@@ -4,7 +4,7 @@
 #'
 #' NOTE March 2017: the response object might include records with missing taxonomic information. This is an issue with the ALA server-side systems; see https://github.com/AtlasOfLivingAustralia/bie-index/issues/134
 #' 
-#' @references Associated ALA web service: \url{http://api.ala.org.au/#ws106}
+#' @references Associated ALA web service: \url{https://api.ala.org.au/#ws106}
 #' @references \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 #' 
 #' @param taxon string: (optional) query of the form field:value (e.g. "genus:Heleioporus") or a free text search (e.g. "macropodidae").

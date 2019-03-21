@@ -13,5 +13,5 @@ standard formats for R. ALA4R is based around the extensive web services provide
 by the Atlas; see the API link below.
 }
 \references{
-\url{http://api.ala.org.au/}
+\url{https://api.ala.org.au/}
 }

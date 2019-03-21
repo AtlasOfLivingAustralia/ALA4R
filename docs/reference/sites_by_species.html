@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ALA4R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.3</span>
       </span>
     </div>
 
@@ -150,24 +150,47 @@
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Associated web services: <a href='http://spatial.ala.org.au/ws'>http://spatial.ala.org.au/ws</a></p>
+    <p>Associated web services: <a href='https://spatial.ala.org.au/ws/capabilities'>https://spatial.ala.org.au/ws/capabilities</a> see PointsToGrid/sitesBySpecies</p>
 <p><a href='http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html'>http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># Eucalyptus in Tasmania based on a 0.1 degree grid</span>
-<span class='no'>ss</span> <span class='kw'>&lt;-</span> <span class='fu'>sites_by_species</span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"genus:Eucalyptus"</span>, <span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"POLYGON((144 -43,148 -43,148 -40,
-  144 -40,144 -43))"</span>, <span class='kw'>gridsize</span><span class='kw'>=</span><span class='fl'>0.1</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>ss</span>[, <span class='fl'>1</span>:<span class='fl'>6</span>])
-<span class='co'># equivalent direct POST webservice call:</span>
-<span class='co'># http://spatial.ala.org.au/alaspatial/ws/sitesbyspecies?speciesq=genus:Eucalyptus&amp;qname=data&amp;</span>
-<span class='co'>#  area=POLYGON((144%20-43,148%20-43,148%20-40,144%20-40,144%20-43))&amp;bs=http://biocache.ala.org.au/</span>
-<span class='co'>#  ws/&amp;movingaveragesize=1&amp;gridsize=0.1&amp;sitesbyspecies=1</span>
+    <pre class="examples"># NOT RUN {
+# Eucalyptus in Tasmania based on a 0.1 degree grid
+ss <- sites_by_species(taxon="genus:Eucalyptus", wkt="POLYGON((144 -43,148 -43,148 -40,
+  144 -40,144 -43))", gridsize=0.1, verbose=TRUE)
+head(ss[, 1:6])
 
-<span class='co'>## get the guid of the first species</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr</a></span>(<span class='no'>ss</span>,<span class='st'>"guid"</span>)[<span class='fl'>1</span>]
-<span class='co'># }</span></pre>
+## get the guid of the first species
+attr(ss,"guid")[1]
+
+# Steps: 1. POST webservice creates a task (use single quotes around data-binary argument)
+curl 'https://spatial.ala.org.au/ws/tasks/create?userId=0' --data-binary name=PointsToGrid
+&input={"area":[{"name":"Current extent"
+,"wkt":"POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))"}]
+,"occurrenceDensity":false,"sitesBySpecies":true,"speciesRichness":false
+,"species":{"q":["genus:Eucalyptus"]
+,"bs":"https://biocache-ws.ala.org.au/ws/","name":"genus:Eucalyptus"}
+,"gridCellSize":0.1,"resolution":0.01,"movingAverage":"1x1 (no moving average)"}'
+#resp eg '{"name":"PointsToGrid","created":1552881125953,"email":"null","history":{}
+,"tag":"null","userId":"0","sessionId":"null","status":0,"id":<id>}
+# 2. check status values: 0 = in_queue, 1 = running, 2 = cancelled, 3 = error, 4 = finished 
+curl 'https://spatial.ala.org.au/ws/tasks/status/<id>'
+waiting: {"status":1,"message":"getting species data","id":<id>,"name":"PointsToGrid"}
+complete:{"status":4,"message":"finished","id":<id>,"name":"PointsToGrid"
+,"history":{"1552879452131":"finished","1552879452155":"finished (id:<id>)"}
+,"output":[{"name":"files","file":"SitesBySpecies.csv","taskId":<id>,"id":33111}
+,{"name":"sxs_metadata.html","taskId":<id>,"file":"sxs_metadata.html","id":33109}
+,{"file":"download.zip","taskId":<id>,"name":"download.zip","id":33110}]}
+failed:  {"status":4,"message":"finished","id":<id>,"name":"PointsToGrid"
+,"history":{"1552881921817":"failed (id:<id>)"}}
+# 3. download the zip and extract the file
+https://spatial.ala.org.au/ws/tasks/output/<id>/download.zip
+https://spatial.ala.org.au/ws/tasks/output/<id>/SitesBySpecies.csv
+# }
+<div class='input'>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

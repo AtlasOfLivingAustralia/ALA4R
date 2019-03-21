@@ -27,7 +27,7 @@ Fetch a taxon profile given a scientific name or LSID (GUID)
 }
 }
 \references{
-Associated ALA web service: \url{http://api.ala.org.au/#ws80}
+Associated ALA web service: \url{https://api.ala.org.au/#ws80}
 }
 \seealso{
 \code{\link{ala_config}}

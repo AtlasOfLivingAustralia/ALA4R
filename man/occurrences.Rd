@@ -78,21 +78,21 @@ y <- occurrences(taxon="taxon_name:\\"Alaba vibex\\"",fields=c("latitude","longi
   download_reason_id=10)
 str(y)
 # equivalent direct webservice call [see this by setting ala_config(verbose=TRUE)]:
-# http://biocache.ala.org.au/ws/occurrences/index/download?q=taxon_name\%3A\%22Alaba\%20vibex\%22&
+# https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name\%3A\%22Alaba\%20vibex\%22&
 # fields=latitude,longitude,el874&reasonTypeId=10&sourceTypeId=2001&esc=\%5C&sep=\%09&file=data
 
 occurrences(taxon="taxon_name:\\"Eucalyptus gunnii\\"",fields=c("latitude","longitude"),
   qa="none",fq="basis_of_record:LivingSpecimen",download_reason_id=10)
 # equivalent direct webservice call [see this by setting ala_config(verbose=TRUE)]:
-# http://biocache.ala.org.au/ws/occurrences/index/download?q=taxon_name\%3A\%22Eucalyptus\%20gunnii\%22&
-# fq=basis_of_record\%3ALivingSpecimen&fields=latitude,longitude&qa=none&reasonTypeId=10&
-# sourceTypeId=2001&esc=\%5C&sep=\%09&file=data
+# https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name\%3A\%22Eucalyptus
+# \%20gunnii\%22&fq=basis_of_record\%3ALivingSpecimen&fields=latitude,longitude&qa=none&
+# reasonTypeId=10&sourceTypeId=2001&esc=\%5C&sep=\%09&file=data
 }
 }
 \references{
 \itemize{
-\item Associated ALA web service for record counts: \url{http://api.ala.org.au/#ws3}
-\item Associated ALA web service for occurence downloads: \url{http://api.ala.org.au/#ws4}
+\item Associated ALA web service for record counts: \url{https://api.ala.org.au/#ws3}
+\item Associated ALA web service for occurence downloads: \url{https://api.ala.org.au/#ws4}
 \item Field definitions: \url{https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc}
 \item WKT reference: \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 }

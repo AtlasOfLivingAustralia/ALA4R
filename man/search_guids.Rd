@@ -29,5 +29,5 @@ search_guids(c("urn:lsid:biodiversity.org.au:afd.taxon:95773568-053d-44de-a624-5
 
 }
 \references{
-The associated ALA web service: \url{http://api.ala.org.au/#ws87}
+The associated ALA web service: \url{https://api.ala.org.au/#ws87}
 }

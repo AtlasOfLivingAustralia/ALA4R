@@ -73,7 +73,7 @@ summary(tt)
 }
 }
 \references{
-\url{http://api.ala.org.au/}
+\url{https://api.ala.org.au/}
 
 \url{http://stat.ethz.ch/R-manual/R-devel/library/methods/html/Methods.html}
 }

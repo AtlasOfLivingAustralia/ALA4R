@@ -1,6 +1,6 @@
 #' Download taxonomic data
 #' 
-#' @references Associated ALA web service: \url{http://api.ala.org.au/#ws2}
+#' @references Associated ALA web service: \url{https://api.ala.org.au/#ws2}
 #' 
 #' @param query string: (optional) query of the form field:value (e.g. "genus:Heleioporus") or a free text search ("Alaba vibex")
 #' @param fq string: character string or vector of strings, specifying filters to be applied to the original query. 
@@ -26,7 +26,7 @@
 #' x <- taxinfo_download("rk_family:Fabaceae", fields=c("guid", "parentGuid", "rk_kingdom",
 #'   "rk_phylum", "rk_class", "rk_order", "rk_family", "rk_genus", "scientificName"))
 #' 
-#' ## equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,rk_kingdom,
+#' ## equivalent direct URL: https://bie.ala.org.au/ws/download?fields=guid,parentGuid,rk_kingdom,
 #' ##    rk_phylum,rk_class,rk_order,rk_family,rk_genus,scientificName&q=rk_family:Fabaceae
 #' }
 #' @export

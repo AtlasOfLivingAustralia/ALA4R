@@ -2,7 +2,7 @@
 #'
 #' Note that this makes a separate web request for each occurrence uuid, and so may not be wise to use on a large number of uuids.
 #' 
-#' @references Associated ALA web service: \url{http://api.ala.org.au/#ws102}
+#' @references Associated ALA web service: \url{https://api.ala.org.au/#ws102}
 #' 
 #' @param uuid string: one or more record ids, as returned by \code{\link{occurrences}} (in the \code{data$id} column)
 #' @param verbose logical: show additional progress information? [default is set by ala_config()]

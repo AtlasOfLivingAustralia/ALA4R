@@ -1,6 +1,6 @@
 #' Generate a PDF field guide using the ALA's field guide generator
 #'
-#' @references \url{http://fieldguide.ala.org.au/}
+#' @references \url{https://fieldguide.ala.org.au/}
 #' @param guids character: vector of GUIDs 
 #' @param title string: title to use in the field guide PDF 
 #' @param filename string: filename for the PDF document

@@ -66,7 +66,7 @@ NOTE: Requests are currently processed in a *single queue* on the ALA servers. P
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ALA4R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.3</span>
       </span>
     </div>
 
@@ -122,8 +122,8 @@ NOTE: Requests are currently processed in a *single queue* on the ALA servers. P
     
     </div>
 
-    <pre class="usage"><span class='fu'>intersect_points</span>(<span class='no'>pnts</span>, <span class='no'>layers</span>, <span class='kw'>SPdata.frame</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>use_layer_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span>()$<span class='no'>verbose</span>)</pre>
+    <pre class="usage"><span class='fu'>intersect_points</span>(<span class='no'>pnts</span>, <span class='no'>layers</span>, <span class='kw'>SPdata.frame</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>use_layer_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span>()$<span class='no'>verbose</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,8 +156,8 @@ NOTE: Requests are currently processed in a *single queue* on the ALA servers. P
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>The associated ALA web service: <a href='http://api.ala.org.au/#ws84'>http://api.ala.org.au/#ws84</a></p>
-<p>Descriptions of the spatial layers: <a href='http://spatial.ala.org.au/layers/'>http://spatial.ala.org.au/layers/</a></p>
+    <p>The associated ALA web service: <a href='https://api.ala.org.au/#ws84'>https://api.ala.org.au/#ws84</a></p>
+<p>Descriptions of the spatial layers: <a href='https://spatial.ala.org.au/layers/'>https://spatial.ala.org.au/layers/</a></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -172,7 +172,7 @@ NOTE: Requests are currently processed in a *single queue* on the ALA servers. P
  <span class='fu'>intersect_points</span>(<span class='no'>pnts</span>, <span class='no'>layers</span>)
 
  <span class='co'>## equivalent direct web service call:</span>
- <span class='co'>## http://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  </span>
+ <span class='co'>## https://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  </span>
 
  <span class='co'>## multiple points as a grid sampling multiple layers</span>
  <span class='no'>layers</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"cl22"</span>, <span class='st'>"cl23"</span>, <span class='st'>"el773"</span>)

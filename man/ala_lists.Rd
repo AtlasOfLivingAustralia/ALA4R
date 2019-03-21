@@ -4,7 +4,8 @@
 \alias{ala_lists}
 \title{Find ALA species lists}
 \usage{
-ala_lists(guid, offset = 0, max = 500, verbose = ala_config()$verbose)
+ala_lists(guid, offset = 0, max = 500,
+  verbose = ala_config()$verbose)
 }
 \arguments{
 \item{guid}{string: (optional) if provided, return only lists in which this GUID appears}
@@ -30,7 +31,7 @@ Returns all available species lists. See \code{\link{ala_list}} to retrieve a sp
 
 }
 \references{
-\url{http://lists.ala.org.au} and the associated web services at \url{http://lists.ala.org.au/ws}
+\url{https://lists.ala.org.au} and the associated web services at \url{https://lists.ala.org.au/ws}
 }
 \seealso{
 \code{\link{ala_list}}

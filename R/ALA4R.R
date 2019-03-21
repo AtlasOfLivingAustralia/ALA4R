@@ -8,7 +8,7 @@
 #' 
 #' @name ALA4R
 #' @docType package
-#' @references \url{http://api.ala.org.au/}
+#' @references \url{https://api.ala.org.au/}
 #' @import assertthat httr RCurl sp
 #' @importFrom digest digest
 #' @importFrom grDevices dev.off pdf rainbow

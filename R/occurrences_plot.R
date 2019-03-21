@@ -3,7 +3,7 @@
 #' Generates a plot of occurrence data retrieved using \code{\link{occurrences}}.The plot uses
 #' an Australian basemap and colours the occurrence records dots according to parameters
 #' 
-#' @references \url{http://api.ala.org.au/}
+#' @references \url{https://api.ala.org.au/}
 #' 
 #' @param x list: a list object that has been downloaded using \code{\link{occurrences}}
 #' @param filename string: name of file to be created; defaults to RPlots.pdf

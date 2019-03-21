@@ -2,7 +2,7 @@
 #'
 #' This provides a data.frame detailing the assertions that are found in a dataset returned from \code{\link{occurrences}}.
 #'
-#' @references \url{http://api.ala.org.au/}, \samp{http://biocache.ala.org.au/ws/assertions/codes}
+#' @references \url{https://api.ala.org.au/}, \samp{https://biocache-ws.ala.org.au/ws/assertions/codes}
 #'  
 #' @param x list: an object returned from \code{\link{occurrences}}
 #' 

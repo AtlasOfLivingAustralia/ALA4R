@@ -1,7 +1,7 @@
 #' Search for environmental and contextual data layers
 #' 
-#' @references Associated ALA web services: \url{http://api.ala.org.au/#ws11} \url{http://api.ala.org.au/#ws12} \url{http://api.ala.org.au/#ws13}
-#' @references Descriptions of the spatial layers: \url{http://spatial.ala.org.au/layers/})
+#' @references Associated ALA web services: \url{https://api.ala.org.au/#ws11} \url{https://api.ala.org.au/#ws12} \url{https://api.ala.org.au/#ws13}
+#' @references Descriptions of the spatial layers: \url{https://spatial.ala.org.au/layers/})
 #'
 #' @param query text string: optional search term against layer metadata. Only layers that include this term in their metadata will be returned.
 #' @param type string: either "all" (all possible layers; default), "grids" (gridded environmental layers), or "shapes" (contextual shapefile layers)

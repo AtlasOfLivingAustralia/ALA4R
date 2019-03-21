@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ALA4R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.3</span>
       </span>
     </div>
 
@@ -74,7 +74,7 @@
       <h1>ALA4R</h1>
                         <h4 class="author">Ben Raymond</h4>
             
-            <h4 class="date">2019-02-13</h4>
+            <h4 class="date">2019-03-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/vignettes/ALA4R.Rmd"><code>vignettes/ALA4R.Rmd</code></a></small>
       <div class="hidden name"><code>ALA4R.Rmd</code></div>
@@ -84,7 +84,7 @@
     
     
 <p>d # ALA4R</p>
-<p>The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from <a href="http://www.ala.org.au/" class="uri">http://www.ala.org.au/</a>. Here we provide a subset of the tools to be directly used within R.</p>
+<p>The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from <a href="https://www.ala.org.au/" class="uri">https://www.ala.org.au/</a>. Here we provide a subset of the tools to be directly used within R.</p>
 <p>ALA4R enables the R community to directly access data and resources hosted by the ALA.</p>
 <div id="installing-ala4r" class="section level2">
 <h2 class="hasAnchor">
@@ -168,8 +168,11 @@ to_install &lt;-<span class="st"> </span>to_install[<span class="op">!</span><sp
 <div id="example-1-name-searching-and-taxonomic-trees" class="section level3">
 <h3 class="hasAnchor">
 <a href="#example-1-name-searching-and-taxonomic-trees" class="anchor"></a>Example 1: Name searching and taxonomic trees</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ape)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(phytools)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ape)</code></pre></div>
+<pre><code>## Warning: package 'ape' was built under R version 3.4.4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(phytools)</code></pre></div>
+<pre><code>## Warning: package 'phytools' was built under R version 3.4.4</code></pre>
+<pre><code>## Warning: package 'maps' was built under R version 3.4.4</code></pre>
 <p>Let’s say that we want to look at the taxonomic tree of penguins but we don’t know what the correct scientific name is. Start by searching for it:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_fulltext.html">search_fulltext</a></span>(<span class="st">"penguins"</span>)
 sx<span class="op">$</span>data <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(name, rank, commonName)</code></pre></div>
@@ -178,16 +181,14 @@ sx<span class="op">$</span>data <span class="op">%&gt;%</span><span class="st"> 
   
 ## keep only species and subspecies records
 tx &lt;-<span class="st"> </span>tx <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(rank <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"species"</span>,<span class="st">"subspecies"</span>))</code></pre></div>
-<pre><code>## [1] "package 'bindrcpp' was built under R version 3.4.4"</code></pre>
 <p>We can make a taxonomic tree plot using the <code>phytools</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## as.phylo requires the taxonomic columns to be factors
-tx &lt;-<span class="st"> </span>tx <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise_all.html">mutate_all</a></span>(as.factor)
+tx &lt;-<span class="st"> </span>tx <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_all</a></span>(as.factor)
 
 ## create phylo object of Scientific.Name nested within Genus
 ax &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ape/topics/as.phylo">as.phylo</a></span>(<span class="op">~</span>genus<span class="op">/</span>scientificName, <span class="dt">data=</span>tx)
 
 <span class="kw"><a href="https://www.rdocumentation.org/packages/phytools/topics/plotTree">plotTree</a></span>(ax, <span class="dt">type=</span><span class="st">"fan"</span>, <span class="dt">fsize=</span><span class="fl">0.7</span>) ## plot it</code></pre></div>
-<pre><code>## Warning: package 'bindrcpp' was built under R version 3.4.4</code></pre>
 <p><img src="ALA4R_files/figure-html/unnamed-chunk-20-1.png" width="864"></p>
 <p>We can also plot the tree with images of the different penguin species. We can first extract a species profile for each species identifier (guid) in our results:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  s &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_guids.html">search_guids</a></span>(tx<span class="op">$</span>guid)</code></pre></div>
@@ -247,7 +248,7 @@ wkt &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumen
 <span class="st">    </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(speciesName, commonName, occurrenceCount) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="dv">10</span>)</code></pre></div>
 <pre><code>##                         speciesName                   commonName occurrenceCount
-## 1  Calyptorhynchus (Zanda) funereus Yellow-Tailed Black-Cockatoo             259
+## 1  Calyptorhynchus (Zanda) funereus Yellow-Tailed Black-Cockatoo             281
 ## 2     Falco (Hierofalco) peregrinus             Peregrine Falcon              64
 ## 3      Hylacola pyrrhopygia parkeri                                           58
 ## 4            Eucalyptus fasciculosa                     Hill Gum              57
@@ -266,15 +267,15 @@ wkt &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumen
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(x)</code></pre></div>
 <pre><code>## number of original names: 8 
 ## number of taxonomically corrected names: 1 
-## number of observation records: 1695 
+## number of observation records: 1722 
 ## number of assertions listed: 16  -- ones with flagged issues are listed below
 ##  invalidCollectionDate: 413 records 
 ##  incompleteCollectionDate: 453 records 
 ##  firstOfCentury: 6 records 
-##  uncertaintyRangeMismatch: 17 records 
-##  firstOfYear: 34 records 
+##  uncertaintyRangeMismatch: 24 records 
+##  firstOfYear: 35 records 
 ##  altitudeInFeet: 2 records 
-##  geodeticDatumAssumedWgs84: 841 records 
+##  geodeticDatumAssumedWgs84: 848 records 
 ##  decimalLatLongConverted: 77 records 
 ##  unrecognisedOccurrenceStatus: 1 records 
 ##  coordinatePrecisionMismatch: 55 records 
@@ -283,7 +284,7 @@ wkt &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumen
 ##  stateCoordinateMismatch: 1 records 
 ##  habitatMismatch: 1 records -- considered fatal
 ##  inferredDuplicateRecord: 27 records 
-##  firstOfMonth: 78 records</code></pre>
+##  firstOfMonth: 79 records</code></pre>
 <p>You can see that some of the points have assertions that are considered “fatal” (i.e. the occurrence record in question is unlikely to be suitable for subsequent analysis). We can use the <code>occurrences_plot</code> function to create a PDF file with a plot of this data, showing the points with fatal assertions (this will create an “Rplots.pdf” file in your working directory; not run here):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/occurrences_plot.html">occurrences_plot</a></span>(x, <span class="dt">qa=</span><span class="st">"fatal"</span>)</code></pre></div>
 <p>There are many other ways of producing spatial plots in R. The <code>leaflet</code> package provides a simple method of producing browser-based maps iwth panning, zooming, and background layers (again, not run here):</p>
@@ -303,7 +304,7 @@ x_afrows &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdo
 these_assertions &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(x<span class="op">$</span>data)[x_afcols]
 
 ## make a link to th web page for each occurrence
-popup_link &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"&lt;a href=</span><span class="ch">\"</span><span class="st">http://biocache.ala.org.au/occurrences/"</span>, x<span class="op">$</span>data<span class="op">$</span>id, <span class="st">"</span><span class="ch">\"</span><span class="st">&gt;Link to occurrence record&lt;/a&gt;"</span>)
+popup_link &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"&lt;a href=</span><span class="ch">\"</span><span class="st">https://biocache.ala.org.au/occurrences/"</span>, x<span class="op">$</span>data<span class="op">$</span>id, <span class="st">"</span><span class="ch">\"</span><span class="st">&gt;Link to occurrence record&lt;/a&gt;"</span>)
 
 ## colour palette
 pal &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/grep">sub</a></span>(<span class="st">"FF$"</span>, <span class="st">""</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/grDevices/topics/palettes">heat.colors</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(these_assertions))))
@@ -324,6 +325,8 @@ m &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumenta
 <h3 class="hasAnchor">
 <a href="#example-4-community-composition-and-turnover" class="anchor"></a>Example 4: Community composition and turnover</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(vegan)</code></pre></div>
+<pre><code>## Warning: package 'vegan' was built under R version 3.4.4</code></pre>
+<pre><code>## Warning: package 'permute' was built under R version 3.4.4</code></pre>
 <p>Define our area of interest as a transect running westwards from the Sydney region, and download the occurrences of legumes (Fabaceae; a large family of flowering plants) in this area:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wkt &lt;-<span class="st"> "POLYGON((152.5 -35,152.5 -32,140 -32,140 -35,152.5 -35))"</span>
 
@@ -372,23 +375,23 @@ x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/occurrenc
 sppcols &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/setops.html">setdiff</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(xgridded),
                    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"longitude"</span>, <span class="st">"latitude"</span>, <span class="st">"precipitationAnnual"</span>, <span class="st">"temperatureAnnualMaxMean"</span>,
                      <span class="st">"richness"</span>))
-xgridded &lt;-<span class="st"> </span>xgridded <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise_all.html">mutate_at</a></span>(sppcols, <span class="cf">function</span>(z) <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ifelse">ifelse</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(z), <span class="dv">0</span>, z))</code></pre></div>
+xgridded &lt;-<span class="st"> </span>xgridded <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_at</a></span>(sppcols, <span class="cf">function</span>(z) <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ifelse">ifelse</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(z), <span class="dv">0</span>, z))</code></pre></div>
 <p>The end result:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xgridded</code></pre></div>
 <pre><code>## # A tibble: 175 x 847
-##    longitude latitude precipitationAnn… temperatureAnnual… richness `Acacia acinacea` `Acacia brachyb… `Acacia calamif…
-##        &lt;dbl&gt;    &lt;dbl&gt;             &lt;dbl&gt;              &lt;dbl&gt;    &lt;int&gt;             &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
-##  1       140    -35.0               303               22.5       24              1.00             1.00             1.00
-##  2       140    -34.5               276               23.0       32              0                1.00             1.00
-##  3       140    -34.0               247               23.5       44              0                1.00             0   
-##  4       140    -33.5               226               23.9       24              0                0                1.00
-##  5       140    -33.0               213               24.0       14              0                0                0   
-##  6       140    -32.5               221               23.3       18              0                0                0   
-##  7       140    -32.0               193               24.1       19              0                0                0   
-##  8       140    -35.0               294               22.6       33              0                1.00             1.00
-##  9       140    -34.5               256               23.4       69              1.00             1.00             0   
-## 10       140    -34.0               248               23.7       71              1.00             1.00             1.00
-## # ... with 165 more rows, and 839 more variables: `Acacia euthycarpa` &lt;dbl&gt;, `Acacia hakeoides` &lt;dbl&gt;, `Acacia
+##    longitude latitude precipitationAn… temperatureAnnu… richness `Acacia acinace… `Acacia brachyb… `Acacia calamif…
+##        &lt;dbl&gt;    &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;    &lt;int&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+##  1      140     -35               303.             22.5       24                1                1                1
+##  2      140     -34.5             276.             23.0       32                0                1                1
+##  3      140     -34               247.             23.5       44                0                1                0
+##  4      140     -33.5             226.             23.9       24                0                0                1
+##  5      140     -33               213              24.0       14                0                0                0
+##  6      140     -32.5             221.             23.3       18                0                0                0
+##  7      140     -32               193.             24.1       19                0                0                0
+##  8      140.    -35               294.             22.6       33                0                1                1
+##  9      140.    -34.5             256.             23.4       69                1                1                0
+## 10      140.    -34               248.             23.7       71                1                1                1
+## # … with 165 more rows, and 839 more variables: `Acacia euthycarpa` &lt;dbl&gt;, `Acacia hakeoides` &lt;dbl&gt;, `Acacia
 ## #   halliana` &lt;dbl&gt;, `Acacia ligulata` &lt;dbl&gt;, `Acacia lineata` &lt;dbl&gt;, `Acacia microcarpa` &lt;dbl&gt;, `Acacia
 ## #   notabilis` &lt;dbl&gt;, `Acacia pycnantha` &lt;dbl&gt;, `Acacia rigens` &lt;dbl&gt;, `Acacia sclerophylla var. sclerophylla` &lt;dbl&gt;,
 ## #   `Acacia spinescens` &lt;dbl&gt;, `Acacia wilhelmiana` &lt;dbl&gt;, `Aotus subspinescens` &lt;dbl&gt;, `Dillwynia hispida` &lt;dbl&gt;,
@@ -418,12 +421,12 @@ xgridded &lt;-<span class="st"> </span>xgridded <span class="op">%&gt;%</span><s
 ## #   pseudoacacia` &lt;dbl&gt;, `Senna artemisioides subsp. x petiolaris` &lt;dbl&gt;, …</code></pre>
 <p>Now we can start to examine the patterns in the data. Let’s plot richness as a function of longitude:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(xgridded, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(longitude, richness)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</code></pre></div>
+<span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(xgridded, <span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(longitude, richness)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>()</code></pre></div>
 <p><img src="ALA4R_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
 <p>The number of species is highest at the eastern end of the transect (the Sydney/Blue Mountains area). This probably reflects both higher species richness as well as greater sampling effort in this area compared to the western end of the transect.</p>
 <p>Species richness as a function of environment:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(xgridded, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(temperatureAnnualMaxMean, precipitationAnnual, <span class="dt">colour=</span>richness)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_colour_distiller</a></span>(<span class="dt">palette=</span><span class="st">"Spectral"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="dt">size=</span><span class="dv">8</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(xgridded, <span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(temperatureAnnualMaxMean, precipitationAnnual, <span class="dt">colour=</span>richness)) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/scale_brewer">scale_colour_distiller</a></span>(<span class="dt">palette=</span><span class="st">"Spectral"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="dt">size=</span><span class="dv">8</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>()</code></pre></div>
 <p><img src="ALA4R_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
 <p>Higher species richness in cooler, wetter areas (i.e. the Blue Mountains).</p>
 <p>How does the community composition change along the transect? Use clustering:</p>
@@ -449,13 +452,14 @@ xgridded<span class="op">$</span>grp &lt;-<span class="st"> </span><span class="
 ## colours for clusters
 thiscol &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"#1f77b4"</span>, <span class="st">"#ff7f0e"</span>, <span class="st">"#2ca02c"</span>, <span class="st">"#d62728"</span>, <span class="st">"#9467bd"</span>, <span class="st">"#8c564b"</span>, <span class="st">"#e377c2"</span>,
              <span class="st">"#7f7f7f"</span>, <span class="st">"#bcbd22"</span>, <span class="st">"#17becf"</span>)
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(xgridded, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(longitude, latitude, <span class="dt">colour=</span>grp)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="dt">size=</span><span class="dv">5</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_colour_manual</a></span>(<span class="dt">values=</span>thiscol) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</code></pre></div>
+<span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(xgridded, <span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(longitude, latitude, <span class="dt">colour=</span>grp)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="dt">size=</span><span class="dv">5</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/scale_manual">scale_colour_manual</a></span>(<span class="dt">values=</span>thiscol) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>()</code></pre></div>
 <p><img src="ALA4R_files/figure-html/unnamed-chunk-44-2.png" width="576"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## or a slightly nicer map plot
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(maps)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(mapdata)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/maps/topics/map">map</a></span>(<span class="st">"worldHires"</span>, <span class="st">"Australia"</span>, <span class="dt">xlim=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">105</span>, <span class="dv">155</span>), <span class="dt">ylim=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="op">-</span><span class="dv">45</span>, <span class="op">-</span><span class="dv">10</span>), <span class="dt">col=</span><span class="st">"gray90"</span>, <span class="dt">fill=</span><span class="ot">TRUE</span>)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(mapdata)</code></pre></div>
+<pre><code>## Warning: package 'mapdata' was built under R version 3.4.4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/maps/topics/map">map</a></span>(<span class="st">"worldHires"</span>, <span class="st">"Australia"</span>, <span class="dt">xlim=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">105</span>, <span class="dv">155</span>), <span class="dt">ylim=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="op">-</span><span class="dv">45</span>, <span class="op">-</span><span class="dv">10</span>), <span class="dt">col=</span><span class="st">"gray90"</span>, <span class="dt">fill=</span><span class="ot">TRUE</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/with">with</a></span>(xgridded, <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/points">points</a></span>(longitude, latitude, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">col=</span>thiscol[grp], <span class="dt">bg=</span>thiscol[grp], <span class="dt">cex=</span><span class="fl">0.75</span>))</code></pre></div>
 <p><img src="ALA4R_files/figure-html/unnamed-chunk-44-3.png" width="576"></p>
 </div>

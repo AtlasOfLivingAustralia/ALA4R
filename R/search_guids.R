@@ -2,7 +2,7 @@
 #' 
 #' Provides names, taxonomic classification, and other information for a list of GUIDs.
 #'
-#' @references The associated ALA web service: \url{http://api.ala.org.au/#ws87}
+#' @references The associated ALA web service: \url{https://api.ala.org.au/#ws87}
 #' 
 #' @param guids string: a single GUID or vector of GUIDs
 #' @param occurrence_count logical: if TRUE then also return the number of occurrences of each matched GUID.

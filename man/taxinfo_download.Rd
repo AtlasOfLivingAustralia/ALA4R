@@ -41,12 +41,12 @@ x <- taxinfo_download("rk_genus:Heleioporus")
 x <- taxinfo_download("rk_family:Fabaceae", fields=c("guid", "parentGuid", "rk_kingdom",
   "rk_phylum", "rk_class", "rk_order", "rk_family", "rk_genus", "scientificName"))
 
-## equivalent direct URL: http://bie.ala.org.au/ws/download?fields=guid,parentGuid,rk_kingdom,
+## equivalent direct URL: https://bie.ala.org.au/ws/download?fields=guid,parentGuid,rk_kingdom,
 ##    rk_phylum,rk_class,rk_order,rk_family,rk_genus,scientificName&q=rk_family:Fabaceae
 }
 }
 \references{
-Associated ALA web service: \url{http://api.ala.org.au/#ws2}
+Associated ALA web service: \url{https://api.ala.org.au/#ws2}
 }
 \seealso{
 \code{\link{ala_fields}}, \code{\link{ala_config}}
