@@ -23,7 +23,7 @@
                               base_url_logger="https://logger.ala.org.au/service/logger/", ## the base url for usage logging webservices
                               base_url_fieldguide="https://fieldguide.ala.org.au/",
                               base_url_lists="https://lists.ala.org.au/ws/",
-                              sslversion=6L ## see CURL_SSLVERSION_TLSv1_2 in curl doc))
+                              sslversion=6 ## see CURL_SSLVERSION_TLSv1_2 in curl doc
                               )
         if (!"ALA4R_server_config" %in% names(options())) options(ALA4R_server_config=server_config)
         
