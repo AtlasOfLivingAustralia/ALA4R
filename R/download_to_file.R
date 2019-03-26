@@ -28,7 +28,7 @@ download_to_file <- function(url, outfile, binary_file=FALSE, caching=ala_config
         }
         f <- CFILE(outfile, mode=file_mode)
         h <- basicHeaderGatherer()
-        curlPerform(url=url, sslversion=getOption("ALA4R_server_config")$sslversion, writedata = f@ref, useragent=ala_config()$user_agent, verbose=verbose, headerfunction=h$update, ...) ## can pass verbose=TRUE here for debug info if needed
+        curlPerform(url=url, writedata = f@ref, useragent=ala_config()$user_agent, verbose=verbose, headerfunction=h$update, ...) ## can pass verbose=TRUE here for debug info if needed
         close(f)
         ## check http status here
         ## if unsuccessful, delete the file from the cache first, after checking if there's any useful info in the file body

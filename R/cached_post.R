@@ -49,11 +49,10 @@ cached_post <- function(url, body, type="text", caching=ala_config()$caching, ve
         }
         f <- CFILE(thisfile, mode=file_mode)
         h <- basicHeaderGatherer()
-        sslversion <- getOption("ALA4R_server_config")$sslversion
         if (!missing(content_type)) {
-            curlPerform(url=url, postfields=body, sslversion=sslversion, post=1L, writedata=f@ref, useragent=ala_config()$user_agent, verbose=verbose, headerfunction=h$update, httpheader=c("Content-Type" = content_type), ...)
+            curlPerform(url=url, postfields=body, post=1L, writedata=f@ref, useragent=ala_config()$user_agent, verbose=verbose, headerfunction=h$update, httpheader=c("Content-Type" = content_type), ...)
         } else {
-            curlPerform(url=url, postfields=body, sslversion=sslversion, post=1L, writedata=f@ref, useragent=ala_config()$user_agent, verbose=verbose, headerfunction=h$update, ...)
+            curlPerform(url=url, postfields=body, post=1L, writedata=f@ref, useragent=ala_config()$user_agent, verbose=verbose, headerfunction=h$update, ...)
         }
         close(f)
         ## check http status here
