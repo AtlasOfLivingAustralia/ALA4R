@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ALA4R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
       </span>
     </div>
 
@@ -74,7 +74,7 @@
       <h1>ALA4R</h1>
                         <h4 class="author">Ben Raymond</h4>
             
-            <h4 class="date">2019-03-21</h4>
+            <h4 class="date">2019-04-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/vignettes/ALA4R.Rmd"><code>vignettes/ALA4R.Rmd</code></a></small>
       <div class="hidden name"><code>ALA4R.Rmd</code></div>
@@ -83,7 +83,9 @@
 
     
     
-<p>d # ALA4R</p>
+<div id="ala4r" class="section level1">
+<h1 class="hasAnchor">
+<a href="#ala4r" class="anchor"></a>ALA4R</h1>
 <p>The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from <a href="https://www.ala.org.au/" class="uri">https://www.ala.org.au/</a>. Here we provide a subset of the tools to be directly used within R.</p>
 <p>ALA4R enables the R community to directly access data and resources hosted by the ALA.</p>
 <div id="installing-ala4r" class="section level2">
@@ -249,12 +251,12 @@ wkt &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumen
 <span class="st">    </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="dv">10</span>)</code></pre></div>
 <pre><code>##                         speciesName                   commonName occurrenceCount
 ## 1  Calyptorhynchus (Zanda) funereus Yellow-Tailed Black-Cockatoo             281
-## 2     Falco (Hierofalco) peregrinus             Peregrine Falcon              64
+## 2     Falco (Hierofalco) peregrinus             Peregrine Falcon              71
 ## 3      Hylacola pyrrhopygia parkeri                                           58
 ## 4            Eucalyptus fasciculosa                     Hill Gum              57
 ## 5             Spyridium spathulatum         Spoon-Leaf Spyridium              42
 ## 6          Anthocercis angustifolia       Narrow-Leaf Ray-Flower              30
-## 7               Egernia cunninghami           Cunningham's Skink              27
+## 7               Egernia cunninghami           Cunningham's Skink              28
 ## 8         Austrostipa multispiculis    Many-Flowered Spear-Grass              21
 ## 9         Isoodon obesulus obesulus                                           21
 ## 10           Prasophyllum pruinosum                                           16</code></pre>
@@ -268,7 +270,7 @@ wkt &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumen
 <pre><code>## number of original names: 8 
 ## number of taxonomically corrected names: 1 
 ## number of observation records: 1722 
-## number of assertions listed: 16  -- ones with flagged issues are listed below
+## number of assertions listed: 14  -- ones with flagged issues are listed below
 ##  invalidCollectionDate: 413 records 
 ##  incompleteCollectionDate: 453 records 
 ##  firstOfCentury: 6 records 
@@ -282,8 +284,6 @@ wkt &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumen
 ##  countryInferredByCoordinates: 83 records 
 ##  assumedPresentOccurrenceStatus: 288 records 
 ##  stateCoordinateMismatch: 1 records 
-##  habitatMismatch: 1 records -- considered fatal
-##  inferredDuplicateRecord: 27 records 
 ##  firstOfMonth: 79 records</code></pre>
 <p>You can see that some of the points have assertions that are considered “fatal” (i.e. the occurrence record in question is unlikely to be suitable for subsequent analysis). We can use the <code>occurrences_plot</code> function to create a PDF file with a plot of this data, showing the points with fatal assertions (this will create an “Rplots.pdf” file in your working directory; not run here):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/occurrences_plot.html">occurrences_plot</a></span>(x, <span class="dt">qa=</span><span class="st">"fatal"</span>)</code></pre></div>
@@ -464,6 +464,7 @@ thiscol &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdoc
 <p><img src="ALA4R_files/figure-html/unnamed-chunk-44-3.png" width="576"></p>
 </div>
 </div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -471,10 +472,14 @@ thiscol &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdoc
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+<li>
+<a href="#ala4r">ALA4R</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#installing-ala4r">Installing ALA4R</a></li>
       <li><a href="#using-ala4r">Using ALA4R</a></li>
       <li><a href="#customizing">Customizing</a></li>
       <li><a href="#example-usage">Example usage</a></li>
+      </ul>
+</li>
       </ul>
 </div>
       </div>
