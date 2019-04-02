@@ -21,28 +21,24 @@ download_to_file <- function(url, outfile, binary_file=FALSE, caching=ala_config
     if ((caching %in% c("off", "refresh")) || (! file.exists(outfile))) {
         if (verbose && (caching != "off")) message(sprintf("Caching %s to file %s", url, outfile))
         ## either we are not using caching, or we want to refresh the cache, or the file doesn't exist in the cache
-        file_mode <- "w" ## text mode
-        if (binary_file) {
-            ## if we try and download binary files without this, it will fail on windows
-            file_mode <- "wb"
-        }
-        f <- CFILE(outfile, mode=file_mode)
-        h <- basicHeaderGatherer()
-        curlPerform(url=url, writedata = f@ref, useragent=ala_config()$user_agent, verbose=verbose, headerfunction=h$update, ...) ## can pass verbose=TRUE here for debug info if needed
-        close(f)
+        if (verbose) {
+          get <- GET(url, write_disk(outfile, overwrite=TRUE), user_agent(ala_config()$user_agent), verbose(data_out=FALSE, data_in=FALSE, info=FALSE, ssl=FALSE)) 
+        } else { 
+          get <- GET(url, write_disk(outfile, overwrite=TRUE), user_agent(ala_config()$user_agent)) }
+        status_code <- status_code(get)
         ## check http status here
         ## if unsuccessful, delete the file from the cache first, after checking if there's any useful info in the file body
         diag_message <- ""
-        if ((substr(h$value()[["status"]], 1, 1)=="5") || (substr(h$value()[["status"]], 1, 1)=="4")) {
-            content_length <- as.numeric(h$value()["Content-Length"])
-            if (!is.na(content_length) && content_length<10000) {
+        if ((substr(status_code, 1, 1)=="5") || (substr(status_code, 1, 1)=="4")) {
+          headers <- headers(get)
+          if (exists("content-length",where=headers) && (as.numeric(headers["content-length"][1])<10000)) {
                 ## if the file body is not too big, check to see if there's any useful diagnostic info in it
                 diag_message <- get_diag_message(outfile)
             }
             unlink(outfile)
         }
         ## check status code of response. Note that we execute the on_redirect etc functions, but we don't capture the output. might wish to implement this differently?
-        check_status_code(h$value()[["status"]], on_redirect=on_redirect, on_client_error=on_client_error, on_server_error=on_server_error, extra_info=diag_message)
+        check_status_code(status_code, on_redirect=on_redirect, on_client_error=on_client_error, on_server_error=on_server_error, extra_info=diag_message)
     } else {
         if (verbose) message(sprintf("Using cached file %s for %s", outfile, url))
     }
