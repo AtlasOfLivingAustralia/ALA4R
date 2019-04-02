@@ -1,7 +1,7 @@
 Package: ALA4R
 Type: Package
 Title: Atlas of Living Australia (ALA) Data and Resources in R
-Version: 1.6.3
+Version: 1.7.0
 Authors@R: c(person("Peggy", "Newman", email="peggy.newman@csiro.au", role=c("aut", "cre")),
              person("Ben", "Raymond", email="ben_ala@untan.gl", role="aut"),
              person("Jeremy", "VanDerWal", role="aut"),
@@ -16,7 +16,6 @@ Description: The Atlas of Living Australia (ALA) provides tools to enable users
     directly used within R. It enables the R community to directly access data
     and resources hosted by the ALA.
 Imports:
-    RCurl,
     assertthat,
     data.table,
     digest,

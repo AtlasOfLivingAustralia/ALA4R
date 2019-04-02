@@ -16,6 +16,7 @@
 # out <- cached_post(url="https://bie.ala.org.au/ws/species/lookup/bulk", body=jsonlite::toJSON(list(names=c("Heleioporus australiacus", "Grevillea"))), type="json")
 
 
+#orig: cached_post <- function(url, body, type="text", caching=ala_config()$caching, verbose=ala_config()$verbose, ...) {
 cached_post <- function(url, body, type="text", caching=ala_config()$caching, verbose=ala_config()$verbose, content_type, encoding=ala_config()$text_encoding, ...) {
     assert_that(is.notempty.string(url))
     assert_that(is.string(body))
@@ -42,33 +43,26 @@ cached_post <- function(url, body, type="text", caching=ala_config()$caching, ve
     if ((caching %in% c("off", "refresh")) || (! file.exists(thisfile))) {
         ## file does not exist, or we want to refresh it, so go ahead and get it and save to thisfile
         if (verbose) message(sprintf("Caching %s POST to file %s", url, thisfile))
-        file_mode <- "w" ## text mode
-        if (identical(type, "binary_filename")) {
-            file_mode <- "wb"
-            ## if we try and download binary files without this, it will fail on windows
-        }
-        f <- CFILE(thisfile, mode=file_mode)
-        h <- basicHeaderGatherer()
-        if (!missing(content_type)) {
-            curlPerform(url=url, postfields=body, post=1L, writedata=f@ref, useragent=ala_config()$user_agent, verbose=verbose, headerfunction=h$update, httpheader=c("Content-Type" = content_type), ...)
-        } else {
-            curlPerform(url=url, postfields=body, post=1L, writedata=f@ref, useragent=ala_config()$user_agent, verbose=verbose, headerfunction=h$update, ...)
-        }
-        close(f)
+        if (missing(content_type)) { content_type = type }
+        if (verbose) {
+          post <- POST(url, httr::content_type(content_type), body=body, write_disk(thisfile, overwrite=TRUE),user_agent(ala_config()$user_agent),config(followlocation = 0L),verbose()) } 
+        else { 
+          post <- POST(url, httr::content_type(content_type), body=body, write_disk(thisfile, overwrite=TRUE),user_agent(ala_config()$user_agent),config(followlocation = 0L)) }
+        status_code <- status_code(post)
         ## check http status here
         ## if unsuccessful, delete the file from the cache first, after checking if there's any useful info in the file body
         diag_message <- ""
-        if ((substr(h$value()[["status"]], 1, 1)=="5") || (substr(h$value()[["status"]], 1, 1)=="4")) {
-            content_length <- as.numeric(h$value()["Content-Length"])
-            if (!is.na(content_length) && content_length<10000 && !identical(type, "binary_filename")) {
-                ## if the file body is not too big, check to see if there's any useful diagnostic info in it
-                suppressWarnings(temp <- readLines(thisfile))
-                try(diag_message <- jsonlite::fromJSON(temp)$message, silent=TRUE)
-                if (is.null(diag_message)) diag_message <- ""
-            }
-            unlink(thisfile)
+        if ((substr(status_code, 1, 1)=="5") || (substr(status_code, 1, 1)=="4")) {
+          headers <- headers(post)
+          if (exists("content-length",where=headers) && (as.numeric(headers["content-length"][1])<10000)) {
+            ## if the file body is not too big, check to see if there's any useful diagnostic info in it
+            suppressWarnings(temp <- readLines(thisfile))
+            try(diag_message <- jsonlite::fromJSON(temp)$message, silent=TRUE)
+            if (is.null(diag_message)) diag_message <- ""
+          }
+          unlink(thisfile)
         }
-        check_status_code(h$value()[["status"]], extra_info=diag_message)
+        check_status_code(status_code, extra_info=diag_message)
     } else {
         if (verbose) message(sprintf("Using cached file %s for POST to %s", thisfile, url))
     }

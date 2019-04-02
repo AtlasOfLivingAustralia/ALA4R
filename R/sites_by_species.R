@@ -93,7 +93,7 @@ sites_by_species <- function(taxon, wkt, gridsize=0.1, SPdata.frame=FALSE, verbo
    
   this_cache_file <- ala_cache_filename(paste(url_str,body,sep="")) ## the file that will ultimately hold the results (even if we are not caching, it still gets saved to file)
   if ((ala_config()$caching %in% c("off", "refresh")) || (! file.exists(this_cache_file))) {
-    create_response <- cached_post(URLencode(url_str), body=body, type="json", caching="off", verbose=verbose) #returns json
+    create_response <- cached_post(URLencode(url_str), body=body, encoding="json", type="json", content_type="application/x-www-form-urlencoded", caching="off", verbose=verbose) #returns json
     id <- create_response$id
     if (is.null(id) || id=="") {
       ## error - but note that we may still get a STATUS 200 from the server in this case
@@ -112,14 +112,6 @@ sites_by_species <- function(taxon, wkt, gridsize=0.1, SPdata.frame=FALSE, verbo
         ## stop if there was an error
         ## first check the wkt string: if it was invalid (or unrecognized by our checker) then warn the user
         if (!missing(wkt) && !isTRUE(check_wkt(wkt))) warning("WKT string may not be valid: ", wkt)
-        # if (str_detect(status$message, "No occurrences found")) {
-        #   ## don't consider "No occurrences found" to be an error
-        #   message("") ## to get LF
-        #   if (ala_config()$warn_on_empty) {
-        #     warning("no occurrences found")
-        #   }
-        #   return(data.frame()) ## return empty results
-        # }
         stop(status_response$history)
       }
       Sys.sleep(2)
