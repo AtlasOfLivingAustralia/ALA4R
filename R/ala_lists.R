@@ -63,7 +63,7 @@ ala_list <- function(druid, kvp=TRUE, verbose=ala_config()$verbose) {
 #' }
 #'
 #' @export
-ala_lists <- function(guid, offset=0, max=500, verbose=ala_config()$verbose) {
+ala_lists <- function(guid, offset=0, max=5000, verbose=ala_config()$verbose) {
     assert_that(is.flag(verbose))
     if (!missing(guid)) {
         assert_that(is.string(guid))
