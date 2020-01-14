@@ -21,7 +21,7 @@ image_info <- function(id, verbose=ala_config()$verbose) {
         stop("No URL to the image database has been configured: see base_url_images in ", getOption("ALA4R_server_config")$config_function)
     }
     
-    image_data <- do.call(bind_rows, lapply(id, function(z) {
+    image_data <- do.call(rbind, lapply(id, function(z) {
       this_url <- paste0(getOption("ALA4R_server_config")$base_url_images, "ws/image/", z)
       data <- cached_get(URLencode(this_url), type="json", verbose=verbose, on_client_error=function(z)NULL, on_server_error=function(z)NULL)
       if (!is.null(data)) {

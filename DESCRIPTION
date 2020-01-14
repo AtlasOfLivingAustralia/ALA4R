@@ -20,7 +20,6 @@ Imports:
     data.table,
     digest,
     httr,
-    dplyr,
     jsonlite (>= 0.9.8),
     sp,
     stringr (>= 1.0.0),
@@ -28,6 +27,7 @@ Imports:
 Suggests:
     ape,
     covr,
+    dplyr,
     ggplot2,
     jpeg,
     knitr,
