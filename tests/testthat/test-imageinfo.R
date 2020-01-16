@@ -1,6 +1,6 @@
 context("Test image_info-related functions")
 
-expected_property_names <- sort(c('imageIdentifier', 'imageUrl', 'success','mimeType','originalFileName','sizeInBytes','rights','rightsHolder','dateUploaded','dateTaken','imageUrl','tileUrlPattern','mmPerPixel','height','width','tileZoomLevels','description','title','creator','license','recognisedLicence','recognisedLicence.acronym','recognisedLicence.id','recognisedLicence.imageUrl','recognisedLicence.name', 'recognisedLicence.url', 'dataResourceUid','occurrenceID'))
+expected_property_names <- sort(c('imageIdentifier', 'imageUrl', 'success','mimeType','originalFileName','sizeInBytes','rights','rightsHolder','dateUploaded','dateTaken','tileUrlPattern','mmPerPixel','height','width','tileZoomLevels','description','title','creator','license','recognisedLicence','recognisedLicence.acronym','recognisedLicence.id','recognisedLicence.imageUrl','recognisedLicence.name', 'recognisedLicence.url', 'dataResourceUid','occurrenceID'))
 
 thischeck <- function() {
     test_that("image_info works as expected on a single known record", {
@@ -29,7 +29,7 @@ thischeck <- function() {
         expect_equal(sort(names(mixed_image_info)), expected_property_names)
         unmatched_image_info <- image_info("this-is-an-invalid-image-id")
         expect_equal(nrow(unmatched_image_info), 1)
-        expect_equal(sort(names(unmatched_image_info)), c("imageIdentifier", "imageURL", "success"))
+        expect_equal(sort(names(unmatched_image_info)), expected_property_names)
     })
 }
 check_caching(thischeck)

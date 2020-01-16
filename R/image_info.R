@@ -34,10 +34,12 @@ image_info <- function(id, verbose=ala_config()$verbose) {
       else {
         data <- list(success = FALSE, imageUrl = this_url, imageIdentifier = z)
       }
-      # remove null values and replace with na to avoid errors converting to dataframe
-      as.data.frame(data, stringsAsFactors = FALSE)
+      
+      df <- as.data.frame(data, stringsAsFactors = FALSE)
+      cols <- c('imageIdentifier', 'imageUrl', 'success','mimeType','originalFileName','sizeInBytes','rights','rightsHolder','dateUploaded','dateTaken','tileUrlPattern','mmPerPixel','height','width','tileZoomLevels','description','title','creator','license','recognisedLicence','recognisedLicence.acronym','recognisedLicence.id','recognisedLicence.imageUrl','recognisedLicence.name', 'recognisedLicence.url', 'dataResourceUid','occurrenceID')
+      df[cols[!(cols %in% colnames(df))]] = NA
+      return(df)
     }))
     
     return(image_data)
 }
-
