@@ -1,50 +1,35 @@
 context("Test image_info-related functions")
 
-expected_property_names <- sort(c("imageIdentifier", "title", "creator", "dataResourceUID", "filename", "dimensionsWXH", "fileSize", "dateUploaded", "uploadedBy", "dateTakenCreated", "mimeType", "zoomLevels", "linearScale", "imageURL", "MD5Hash", "SHA1Hash", "sizeOnDiskIncludingAllArtifacts", "rights", "rightsHolder", "licence", "harvestedAsOccurrenceRecord"))
+expected_property_names <- sort(c('imageIdentifier', 'imageUrl', 'success','mimeType','originalFileName','sizeInBytes','rights','rightsHolder','dateUploaded','dateTaken','tileUrlPattern','mmPerPixel','height','width','tileZoomLevels','description','title','creator','license','recognisedLicence','recognisedLicence.acronym','recognisedLicence.id','recognisedLicence.imageUrl','recognisedLicence.name', 'recognisedLicence.url', 'dataResourceUid','occurrenceID'))
 
 thischeck <- function() {
-    test_that("extract_image_detail matches html as expected", {
-        skip_on_cran()
-        expect_equal(ALA4R:::extract_image_detail(c("<td>blah</td><td>thing</td>", "thiswillnotmatch"), "blah")[1, 1], "thing")
-        expect_equal(ALA4R:::extract_image_detail(c("<td>blah</td> <td>thing</td>", "thiswillnotmatch"), "blah")[2, 1], as.character(NA))
-        ## no matches at all: special case because extract_image_details enforces the columns imageURL and imageIdentifier ith stringr v0.6
-        expect_equal(nrow(ALA4R:::extract_image_detail(c("<td>blah</td> <td>thing</td>", "thiswillnotmatch"), "nomatches")), 0)
-    })
-}
-check_caching(thischeck)
-
-
-thischeck <- function() {
-    test_that("image_info works as expected on known records", {
+    test_that("image_info works as expected on a single known record", {
         skip_on_cran()
         known_image_info <- image_info("84654e14-dc35-4486-9e7c-40eb2f8d3faa")
         expect_equal(nrow(known_image_info), 1)
         expect_equal(sort(names(known_image_info)), expected_property_names)
-        known_image_info <- image_info(c("84654e14-dc35-4486-9e7c-40eb2f8d3faa", "39836d30-0761-473d-bac2-9ed9494fd37e"))
-        expect_equal(nrow(known_image_info), 2)
-        expect_equal(sort(names(known_image_info)), expected_property_names)    
     })
 }
 check_caching(thischeck)
+
+thischeck <- function() {
+    test_that("image info works as expected on multiple known records", {
+        skip_on_cran()
+        known_image_info <- image_info(c("84654e14-dc35-4486-9e7c-40eb2f8d3faa", "05436aca-bb91-4801-8633-3616c6a3077e"))
+        expect_equal(nrow(known_image_info), 2)
+        expect_equal(sort(colnames(known_image_info)), expected_property_names)  
+    })
+}
 
 thischeck <- function() {    
     test_that("image_info works with un-matched records", {
         skip_on_cran()
-        mixed_image_info <- image_info(c("84654e14-dc35-4486-9e7c-40eb2f8d3faa", "this-is-an-invalid-image-id", "39836d30-0761-473d-bac2-9ed9494fd37e", "this-is-also-an-invalid-image-id"))
+        mixed_image_info <- image_info(c("84654e14-dc35-4486-9e7c-40eb2f8d3faa", "this-is-an-invalid-image-id", "05436aca-bb91-4801-8633-3616c6a3077e", "this-is-also-an-invalid-image-id"))
         expect_equal(nrow(mixed_image_info), 4)
         expect_equal(sort(names(mixed_image_info)), expected_property_names)
         unmatched_image_info <- image_info("this-is-an-invalid-image-id")
         expect_equal(nrow(unmatched_image_info), 1)
-        expect_equal(sort(names(unmatched_image_info)), c("imageIdentifier", "imageURL"))
-    })
-}
-check_caching(thischeck)
-
-
-thischeck <- function() {
-    test_that("image_info handles embedded html in property value td block", {    
-        skip_on_cran()
-        expect_equal(sort(names(image_info("b8344134-254d-4116-a98d-4a37e7362a4e"))), expected_property_names)
+        expect_equal(sort(names(unmatched_image_info)), expected_property_names)
     })
 }
 check_caching(thischeck)
