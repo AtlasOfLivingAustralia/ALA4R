@@ -31,7 +31,7 @@
 #'  search_fulltext("oenanthe", sort_by="rk_kingdom", fq="rank:genus")
 #' }
 #' @export
-search_fulltext <- function(query, fq, output_format="simple", start, page_size, sort_by, sort_dir) {
+search_fulltext <- function(query, fq="idxtype:TAXON", output_format="simple", start, page_size, sort_by, sort_dir) {
     output_format <- match.arg(tolower(output_format), c("simple", "complete"))
     this_query <- list()
     if (!missing(query)) {
@@ -41,14 +41,25 @@ search_fulltext <- function(query, fq, output_format="simple", start, page_size,
         assert_that(is.character(query))
         this_query$q <- query
     }
-    if (!missing(fq)) {
-        assert_that(is.character(fq))
-        ## can have multiple fq parameters, need to specify in url as fq=a:b&fq=c:d&fq=...
-        check_fq(fq, type="general") ## check that fq fields are valid
-        fq <- as.list(fq)
-        names(fq) <- rep("fq", length(fq))
-        this_query <- c(this_query, fq)
+
+    ## need to check fq whether or not it has been specified
+    assert_that(is.character(fq))
+    ## can have multiple fq parameters, need to specify in url as fq=a:b&fq=c:d&fq=...
+    check_fq(fq, type="general") ## check that fq fields are valid
+    fq <- as.list(fq)
+    
+    ## check if index field has been specified 
+    idx <- which(sapply(fq, function(x) {
+        sub("\\:.*", "", x)
+        }) == "idxtype")
+    
+    if (length(idx) == 0) {
+        ## no default has been set so can restrict search to taxon
+        fq <- c(fq, "idxtype:TAXON")
     }
+    names(fq) <- rep("fq", length(fq))
+    this_query <- c(this_query, fq)
+    
     if (!missing(start)) {
         assert_that(is.count(start))
         this_query$start <- start-1 ## server-side is zero-based count, so subtract 1
@@ -73,7 +84,6 @@ search_fulltext <- function(query, fq, output_format="simple", start, page_size,
     }
     
     this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie, "search.json", query=this_query)
-    
     x <- cached_get(url=this_url, type="json")
     x <- as.list(x)
     ## server may return a message saying e.g. "400 error"
