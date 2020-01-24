@@ -4,8 +4,8 @@
 \alias{search_fulltext}
 \title{Full text search}
 \usage{
-search_fulltext(query, fq, output_format = "simple", start, page_size,
-  sort_by, sort_dir)
+search_fulltext(query, fq = "idxtype:TAXON", output_format = "simple",
+  start, page_size, sort_by, sort_dir)
 }
 \arguments{
 \item{query}{string: the search term}
