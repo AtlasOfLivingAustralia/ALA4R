@@ -24,7 +24,7 @@ thischeck=function() {
 check_caching(thischeck)
 
 thischeck=function() {
-    test_that("taxinfo_download fields thingies work", {
+    test_that("taxinfo_download downloads all fields", {
         skip_on_cran()
         f <- ala_fields("general")
         t <- taxinfo_download("rk_family:Spheniscidae",fields="all")
