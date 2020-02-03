@@ -1,12 +1,18 @@
 context("Test image search functions")
 setup({
-  # remove images folder if accidentally included 
+  # remove image and sound folders if accidentally included 
+  unlink("media", recursive = TRUE)
+  unlink("sounds", recursive = TRUE)
   unlink("images", recursive = TRUE)
 })
+
 teardown({
-  # remove images folder once testing is finished
+  # remove image and sound folders if accidentally included 
+  unlink("media", recursive = TRUE)
+  unlink("sounds", recursive = TRUE)
   unlink("images", recursive = TRUE)
 })
+
 this_check <- function() {
   test_that("images are downloaded as expected", {
     skip_on_cran()
@@ -57,6 +63,7 @@ check_caching(this_check)
 
 this_check <- function() {
   test_that("filter query filters correctly", {
+    result <- image_search(q="red kangaroo",fq="recognisedLicence:CC BY-NC 4.0", download = FALSE)
     expect_equal(unique(result$recognisedLicence),"CC BY-NC 4.0")
   })
 }
@@ -65,7 +72,19 @@ check_caching(this_check)
 
 this_check <- function() {
   test_that("sound data is downloaded correctly", {
-    
+    skip_on_cran()
+    result <- image_search(q = "kangaroo", fq = "fileType:sound", download_path = 'sounds')
+    file_count <- length(list.files('sounds'))
+    expect_equal(file_count, nrow(result))
   })
 }
 
+check_caching(this_check)
+
+this_check <- function() {
+  test_that("error is returned is no download file is provided", {
+    expect_error(download_images(image_ids = c("a2cc242b-1a5e-4855-aad1-c96a5911d729")))
+  })
+}
+
+check_caching(this_check)

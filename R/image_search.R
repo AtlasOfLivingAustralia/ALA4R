@@ -56,31 +56,49 @@ image_search <- function(q, fq, download=FALSE, download_path, sounds = FALSE, v
   image_data <- cached_get(url=this_url,type="json",caching="off",verbose=verbose)
   ## TODO: Check image data is correctly downloaded 
   
-  if (download) {
-    if(!missing(download_path)) {
-      download_images(image_data$images$imageIdentifier,download_path,verbose = verbose)
-    }
-    else {
-      warning(sprintf("No download path has been specified. images will downloaded in %s",file.path(getwd(),'images')))
-      image_dir <- file.path(getwd(),'images')
-      download_images(image_data$images$imageIdentifier,image_dir,verbose = verbose)
-    }
-    
+  if (download & missing(download_path)) {
+    message(sprintf("No download path has been specified. Media will be downloaded in %s",file.path(getwd(),'media')))
+    download_path <- file.path(getwd(),'media')
   }
-  return(image_data$images)
+  
+  if(!sounds) {
+    data <- image_data$images[image_data$images$fileType == 'image',]
+  }
+  else {
+    data <- image_data$images
+  }
+  
+  if (download) {
+    download_images(data=data,media_dir=download_path,verbose=verbose)
+  }
+  
+  return(data)
 }
 
-download_images <- function(image_ids, image_dir, verbose=verbose) {
-  assert_that(!missing(image_dir))
-  if(!file.exists(image_dir)) {
-    message(sprintf('Image directory does not exist, creating directory %s', image_dir))
-    dir.create(image_dir)
+download_images <- function(data, media_dir, verbose=verbose) {
+  
+  assert_that(!missing(media_dir))
+  
+  if(!file.exists(media_dir)) {
+    message(sprintf('Media directory does not exist, creating directory %s', media_dir))
+    dir.create(media_dir)
   }
-  for(id in image_ids) {
-    image_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_images, c('image', id, 'original'))
-    out_path <- file.path(image_dir,paste0(id,'.jpg'))
-    download_to_file(image_url, out_path, verbose = verbose)
+  
+  if (!missing(data)) {
+    for(r in 1:nrow(data)) {
+      id <- data[r,'imageIdentifier']
+      url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_images, c('image',id, 'original'))
+      if(data[r,'fileType'] == 'image') {
+        ext <- '.jpg'
+      }
+      else {
+        ext <- '.mp4'
+      }
+      out_path <- file.path(media_dir,paste0(id,ext))
+      download_to_file(url, out_path, verbose = verbose)
+    }
   }
+  
 }
 
 
