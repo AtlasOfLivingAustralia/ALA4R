@@ -76,7 +76,6 @@ ala_fields <- function(fields_type="occurrence", as_is=TRUE) {
                     #   build_url_from_parts(getOption("ALA4R_server_config")$base_url_biocache, "metadatakeys")
                     # }
   )
-  print(this_url)
   x <- cached_get(this_url, type="json")
   ## we have a list of unwanted columns that get removed from results
   ## since this function returns a list of field names, also remove the unwanted fields from the results list
