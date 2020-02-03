@@ -3,7 +3,7 @@
 check_fq <- function(fq, type) {
     assert_that(is.character(fq))
     assert_that(is.string(type))
-    type <- match.arg(tolower(type), c("general", "occurrence", "layers"))
+    type <- match.arg(tolower(type), c("general", "occurrence", "layers","images"))
     if (identical(type, "occurrence")) type <- "occurrence_indexed"
     field_names <- extract_fq_fieldnames(fq)
     if (is.null(field_names)) {

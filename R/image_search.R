@@ -26,6 +26,8 @@
 image_search <- function(q, fq, download=FALSE, download_path, sounds = FALSE, verbose=ala_config()$verbose) {
   this_query <- list()
   
+  assert_that(is.flag(verbose))
+  
   if (!missing(q)) {
     if (is.factor(q)) {
       q <- as.character(q)
@@ -53,25 +55,25 @@ image_search <- function(q, fq, download=FALSE, download_path, sounds = FALSE, v
   
   image_data <- cached_get(url=this_url,type="json",caching="off",verbose=verbose)
   ## TODO: Check image data is correctly downloaded 
-  print(names(image_data$images))
+  
   if (download) {
     if(!missing(download_path)) {
-      download_images(image_data$images$imageIdentifier,download_path)
+      download_images(image_data$images$imageIdentifier,download_path,verbose = verbose)
     }
     else {
       warning(sprintf("No download path has been specified. images will downloaded in %s",file.path(getwd(),'images')))
       image_dir <- file.path(getwd(),'images')
-      download_images(image_data$images$imageIdentifier,image_dir)
+      download_images(image_data$images$imageIdentifier,image_dir,verbose = verbose)
     }
     
   }
   return(image_data$images)
 }
 
-download_images <- function(image_ids, image_dir) {
+download_images <- function(image_ids, image_dir, verbose=verbose) {
   assert_that(!missing(image_dir))
   if(!file.exists(image_dir)) {
-    warning(sprintf('Image directory does not exist, creating directory %s', image_dir))
+    message(sprintf('Image directory does not exist, creating directory %s', image_dir))
     dir.create(image_dir)
   }
   for(id in image_ids) {
