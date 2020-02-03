@@ -82,7 +82,7 @@ this_check <- function() {
 check_caching(this_check)
 
 this_check <- function() {
-  test_that("error is returned is no download file is provided", {
+  test_that("error is returned if no download file is provided", {
     expect_error(download_images(image_ids = c("a2cc242b-1a5e-4855-aad1-c96a5911d729")))
   })
 }

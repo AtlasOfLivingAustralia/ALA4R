@@ -4,24 +4,21 @@
 #' \item Associated ALA web service for image search counts: \url{https://images.ala.org.au/ws#/Search/search}
 #' }
 #' 
-#' @param q
-#' @param fq
-#' @param keyword string: 
+#' @param q string: (optional) free text search query 
+#' @param fq string: (optional) character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". 
 #' @param download logical: if TRUE download all images and add location to dataframe
 #' @param download_path string: (optional) filepath to download images to. If not given and download param is TRUE, will create an images
 #' folder
-#' @param sounds: logical (optional) Image search also returns sound files. Ignored unless explicitly requested.
-#' 
+#' @param sounds logical (optional) Image search also returns sound files. Ignored unless explicitly requested.
+#' @param verbose logical: show additional progress information? [default is set by ala_config()]
 #' @return Data frame of image results
 #' 
 #' @examples 
-#' \dontrun {
+#' \dontrun{
 #' ## Download all kangaroo images with a CC BY-NC 4.0 licence
 #' image_search(q="kangaroo",fq="recognisedLicence:CC BY-NC 4.0",download=TRUE)
-#' 
-#' 
 #' }
-
+#' @export image_search
 
 image_search <- function(q, fq, download=FALSE, download_path, sounds = FALSE, verbose=ala_config()$verbose) {
   this_query <- list()
