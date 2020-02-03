@@ -50,7 +50,7 @@ ala_fields <- function(fields_type="occurrence", as_is=TRUE) {
   
   # Hard code images fields until we discover a nice way to retrieve this from the API
   if (identical(fields_type, "images")) {
-    fields <- c("dataResourceUid","dateUploadedYearMonth","format","imageSize","creator.keyword","fileType","recognisedLicence")
+    fields <- c("dataResourceUid","dateUploadedYearMonth","format","imageSize","creator.keyword","fileType","recognisedLicence","rightsHolder","thumbHeight","extension","imageIdentifier","dateUploaded","description","title","rights","contentMD5Hash","imageSize","height","harvestable","creator","dateUploadedYearMonth","format","thumbWidth","occurrenceID","zoomLevels","recognisedLicence","license","dataResourceUid","fileSize","width","originalFilename","dateTaken","fileType")
     df <- data.frame(fields)
     names(df) <- "name"
     return(df)
