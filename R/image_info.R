@@ -22,7 +22,7 @@ image_info <- function(id, verbose=ala_config()$verbose) {
     }
     
     image_data <- do.call(rbind, lapply(id, function(z) {
-      this_url <- paste0(getOption("ALA4R_server_config")$base_url_images, "image/", z)
+      this_url <- paste0(getOption("ALA4R_server_config")$base_url_images, "ws/image/", z)
       data <- cached_get(URLencode(this_url), type="json", verbose=verbose, on_client_error=function(z)NULL, on_server_error=function(z)NULL)
       if (!is.null(data)) {
         data$imageIdentifier <- z
