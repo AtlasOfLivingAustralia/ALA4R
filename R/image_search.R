@@ -18,6 +18,8 @@
 #' ## Download all kangaroo images with a CC BY-NC 4.0 licence
 #' image_search(q="kangaroo",fq="recognisedLicence:CC BY-NC 4.0",download=TRUE)
 #' }
+#' ## Download all frog sounds
+#' image_search(q="frog",fq="fileType:sound",download=TRUE, sounds=TRUE)
 #' @export image_search
 
 image_search <- function(q, fq, download=FALSE, download_path, sounds = FALSE, verbose=ala_config()$verbose) {
