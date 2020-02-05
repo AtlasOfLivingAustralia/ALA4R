@@ -10,16 +10,22 @@ image_search(q, fq, download = FALSE, download_path, sounds = FALSE,
 \arguments{
 \item{q}{string: (optional) free text search query}
 
-\item{fq}{string: (optional) character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi".}
+\item{fq}{string: (optional) character string or vector of strings,
+specifying filters to be applied to the original query. These are of the
+form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi".}
 
-\item{download}{logical: if TRUE download all images and add location to dataframe}
+\item{download}{logical: if TRUE download all images and add location to
+dataframe}
 
-\item{download_path}{string: (optional) filepath to download images to. If not given and download param is TRUE, will create an images
+\item{download_path}{string: (optional) filepath to download images to.
+If not given and download param is TRUE, will create an images
 folder}
 
-\item{sounds}{logical (optional) Image search also returns sound files. Ignored unless explicitly requested.}
+\item{sounds}{logical (optional) Image search also returns sound files.
+Ignored unless explicitly requested.}
 
-\item{verbose}{logical: show additional progress information? [default is set by ala_config()]}
+\item{verbose}{logical: show additional progress information?
+[default is set by ala_config()]}
 }
 \value{
 Data frame of image results
@@ -30,11 +36,15 @@ Query images based on search terms
 \examples{
 \dontrun{
 ## Download all kangaroo images with a CC BY-NC 4.0 licence
-image_search(q="kangaroo",fq="recognisedLicence:CC BY-NC 4.0",download=TRUE)
+image_search(q="kangaroo",fq="recognisedLicence:CC BY-NC 4.0",
+download=TRUE)
 }
+## Download all frog sounds
+image_search(q="frog",fq="fileType:sound",download=TRUE, sounds=TRUE)
 }
 \references{
 \itemize{
-\item Associated ALA web service for image search counts: \url{https://images.ala.org.au/ws#/Search/search}
+\item Associated ALA web service for image search counts:
+\url{https://images.ala.org.au/ws#/Search/search}
 }
 }
