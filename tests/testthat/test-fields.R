@@ -10,6 +10,7 @@ thischeck=function() {
         expect_gt(nrow(ala_fields(fields_type="general")),75)
         expect_gt(nrow(ala_fields(fields_type="assertions")),85)
         expect_gt(nrow(ala_fields(fields_type="layers")),410)
+        expect_gt(nrow(ala_fields(fields_type="images")),15)
         expect_error(ala_fields("b"))
         expect_error(ala_fields(1))
     })

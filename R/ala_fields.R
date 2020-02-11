@@ -18,6 +18,7 @@
 #' \item "layers" - fields associated with the environmental and contextual layers. For additional information 
 #' on layers, including metadata and licensing, see \code{\link{search_layers}}
 #' \item "assertions" - potential issues flagged on one or more occurrence record fields
+#' \item "images - for image search
 #' }
 #' @param as_is logical: if TRUE, leave the field names as they are returned from the ALA web services. Arguments that are passed
 #' directly to the ALA's web services (e.g. parameter \code{fq} in \code{\link{occurrences}}) should use field names in this format. If \code{as_is} is FALSE, the returned $names entries will be modified to make them consistent with the corresponding column names in R data.frames returned by e.g. \code{\link{occurrences}}. \code{as_is=FALSE} has no effect when \code{fields_type} is "layers". Note that prior to v1.20, \code{as_is=FALSE} did not work correctly. 
@@ -45,7 +46,16 @@
 ala_fields <- function(fields_type="occurrence", as_is=TRUE) {
   assert_that(is.string(fields_type))
   assert_that(is.flag(as_is), !is.na(as_is))
-  fields_type <- match.arg(tolower(fields_type), c("occurrence", "occurrence_stored", "occurrence_indexed", "general", "layers", "assertions"))
+  fields_type <- match.arg(tolower(fields_type), c("occurrence", "occurrence_stored", "occurrence_indexed", "general", "layers", "assertions", "images"))
+  
+  # Hard code images fields until we discover a nice way to retrieve this from the API
+  if (identical(fields_type, "images")) {
+    fields <- c("dateUploaded","dataResourceUid","license","recognisedLicence","imageSize","dateUploadedYearMonth","format","fileType","createdYear","creator","title","description","width","height","thumbHeight","thumbWidth")
+    df <- data.frame(fields)
+    names(df) <- "name"
+    return(df)
+  }
+  
   this_url <- switch(fields_type,
                      "general"={
                        build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie, c("admin", "indexFields"))
@@ -61,8 +71,11 @@ ala_fields <- function(fields_type="occurrence", as_is=TRUE) {
                      "assertions"={
                        build_url_from_parts(getOption("ALA4R_server_config")$base_url_biocache, c("assertions", "codes"))
                      }
+                     # this is possibly a way to retrieve fields
+                     #"images"={
+                    #   build_url_from_parts(getOption("ALA4R_server_config")$base_url_biocache, "metadatakeys")
+                    # }
   )
-  
   x <- cached_get(this_url, type="json")
   ## we have a list of unwanted columns that get removed from results
   ## since this function returns a list of field names, also remove the unwanted fields from the results list
@@ -84,6 +97,7 @@ ala_fields <- function(fields_type="occurrence", as_is=TRUE) {
   } else if (identical(fields_type, "occurrence_indexed")) {
     x <- x[x$indexed, ]
   }
+  
   if (!as_is) {
     ## old code ## names(x) <- rename_variables(names(x), type=fields_type)
     ## Nooooo! this should have been applied to x$name not names(x)

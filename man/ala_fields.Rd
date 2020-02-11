@@ -19,6 +19,7 @@ field_info(field_id, maxrows = 50, record_count_only = FALSE)
 \item "layers" - fields associated with the environmental and contextual layers. For additional information 
 on layers, including metadata and licensing, see \code{\link{search_layers}}
 \item "assertions" - potential issues flagged on one or more occurrence record fields
+\item "images - for image search
 }}
 
 \item{as_is}{logical: if TRUE, leave the field names as they are returned from the ALA web services. Arguments that are passed
