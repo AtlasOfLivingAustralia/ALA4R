@@ -396,7 +396,9 @@ pal <- c(sub("FF$", "", heat.colors(length(these_assertions))))
 
 ## map each data row to colour, depending on its assertions
 marker_colour <- rep("#00FF00", nrow(x$data))
-for (k in 1:length(these_assertions)) marker_colour[x$data[, x_afcols[k]]] <- pal[k]
+if (length(these_assertions)>0) {
+  for (k in 1:length(these_assertions)) marker_colour[x$data[, x_afcols[k]]] <- pal[k]
+}
 
 ## blank map, with imagery background
 m <- addProviderTiles(leaflet(), "Esri.WorldImagery")
