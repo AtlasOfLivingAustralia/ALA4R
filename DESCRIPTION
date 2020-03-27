@@ -6,6 +6,7 @@ Authors@R: c(person("Peggy", "Newman", email="peggy.newman@csiro.au", role=c("au
              person("Ben", "Raymond", email="ben_ala@untan.gl", role="aut"),
              person("Jeremy", "VanDerWal", role="aut"),
              person("Lee", "Belbin", role="aut"),
+             person("Matilda", "Stevenson", role="aut")
              person("Michael", "Sumner", role="ctb"),
              person("Tom", "August", role="ctb"),
              person("John", "Baumgartner", role="ctb"))
