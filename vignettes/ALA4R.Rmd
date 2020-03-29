@@ -180,7 +180,8 @@ if (bieServerUp) {
     tx <- tx %>% dplyr::filter(rank %in% c("species","subspecies"))
   },warning = function(w) {print(w$message)}
    ,error = function(e) {print(e$message)})
-}  
+}
+txExists <- !is.null(dim(tx))
 ```
 
 We can make a taxonomic tree plot using the `phytools` package:
@@ -194,8 +195,7 @@ ax <- as.phylo(~genus/scientificName, data=tx)
 plotTree(ax, type="fan", fsize=0.7) ## plot it
 ```
 
-```{r results="hide", fig.width=9, fig.height=9, echo=FALSE}
-txExists <- !is.null(dim(tx))
+```{r eval=FALSE, results="hide", fig.width=9, fig.height=9, echo=FALSE}
 if(txExists)
 {
   tx <- tx %>% mutate_all(as.factor)
