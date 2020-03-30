@@ -7,9 +7,11 @@ thischeck <- function() {
         expect_named(ala_reasons(),c("rkey","name","id"))
         expect_equal(nrow(ala_reasons()),12)
         expect_equal(sort(ala_reasons()$id),c(0:8,10:12))
-        expect_error(ala_reasons(TRUE)) ## this should throw and error because there is an unused argument
+        ## this should throw an error because there is an unused argument
+        expect_error(ala_reasons(TRUE)) 
         tmp <- ala_reasons()
-        expect_equal(ALA4R:::convert_reason("testing"),tmp$id[tmp$name=="testing"])
+        expect_equal(ALA4R:::convert_reason("testing"),
+                     tmp$id[tmp$name=="testing"])
         expect_error(ALA4R:::convert_reason("bilbobaggins"))
     })
 }
@@ -18,7 +20,10 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences summary works when no qa are present", {
         skip_on_cran()
-        expect_output(summary(occurrences(taxon="Amblyornis newtonianus",download_reason_id=10,qa="none")),"no assertion issues")
+        expect_output(summary(occurrences(taxon="Amblyornis newtonianus",
+                                          email="testing@test.org",
+                                          download_reason_id=10,
+                                          qa="none")),"no assertion issues")
     })
 }
 check_caching(thischeck)
@@ -26,12 +31,18 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences summary gives something sensible", {
         skip_on_cran()
-        occ <- occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)
+        occ <- occurrences(taxon="Amblyornis newtonianus",
+                           email="testing@test.org",
+                           download_reason_id=10)
         expect_output(summary(occ),"^number of original names")
         ## check that names required for summary.occurrences method are present
-        expect_true(all(c("scientificName","scientificNameOriginal") %in% names(occ$data)) || all(c("taxonName","taxonNameOriginal") %in% names(occ$data)))
+        expect_true(all(c("scientificName","scientificNameOriginal") %in% 
+                            names(occ$data)) || 
+                        all(c("taxonName","taxonNameOriginal") %in% 
+                                names(occ$data)))
         ## check that names required for unique.occurrences method are present
-        expect_true(all(c("scientificName","longitude","latitude","eventDate","month","year") %in% names(occ$data)))
+        expect_true(all(c("scientificName","longitude","latitude","eventDate",
+                          "month","year") %in% names(occ$data)))
     })
 }
 check_caching(thischeck)
@@ -39,8 +50,16 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences retrieves the fields specified", {
         skip_on_cran()
-        expect_equal(sort(names(occurrences(taxon="Eucalyptus gunnii",fields=c("latitude","longitude"),qa="none",fq="basis_of_record:LivingSpecimen",download_reason_id=10)$data)),c("latitude","longitude"))
-        expect_error(occurrences(taxon="Eucalyptus gunnii",fields=c("blahblahblah"),download_reason_id=10))
+        expect_equal(sort(names(
+            occurrences(taxon="Eucalyptus gunnii", email="testing@test.org",
+                        fields=c("latitude","longitude"),qa="none",
+                        fq="basis_of_record:LivingSpecimen",
+                        download_reason_id=10)$data)),
+            c("latitude","longitude"))
+        expect_error(occurrences(taxon="Eucalyptus gunnii",
+                                 email="testing@test.org",
+                                 fields=c("blahblahblah"),
+                                 download_reason_id=10))
     })
 }
 check_caching(thischeck)
@@ -49,7 +68,8 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences unique does something sensible", {
         skip_on_cran()
-        x <- occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)
+        x <- occurrences(taxon="Amblyornis newtonianus",
+                         email="testing@test.org",download_reason_id=10)
         xu <- unique(x,spatial=0.1)
         expect_is(xu,"list")
         expect_named(xu,c("data","meta"))
@@ -64,7 +84,8 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences subset does something sensible", {
         skip_on_cran()
-        x <- occurrences(taxon="Amblyornis newtonianus",download_reason_id=10)
+        x <- occurrences(taxon="Amblyornis newtonianus",
+                         email="testing@test.org",download_reason_id=10)
         xs <- subset(x)
         expect_is(xs,"list")
         expect_named(xs,c("data","meta"))
@@ -77,10 +98,14 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences checks required inputs", {
         skip_on_cran()
-        expect_error(occurrences(taxon="data_resource_uid:dr356",method="offline",download_reason_id="testing",email=""))
-        expect_error(occurrences(taxon="data_resource_uid:dr356",method="offline",download_reason_id="testing"))
-        expect_error(occurrences(taxon="data_resource_uid:dr356",method="offline",download_reason_id="testing",email=NULL))
-        expect_error(occurrences(taxon="Amblyornis newtonianus")) ## missing download_reason_id
+        expect_error(occurrences(taxon="data_resource_uid:dr356",
+                                 download_reason_id="testing",email=""))
+        expect_error(occurrences(taxon="data_resource_uid:dr356",
+                                 download_reason_id="testing"))
+        expect_error(occurrences(taxon="data_resource_uid:dr356",
+                                 download_reason_id="testing",email=NULL))
+        ## missing download_reason_id
+        expect_error(occurrences(taxon="Amblyornis newtonianus")) 
     })
 }
 check_caching(thischeck)
@@ -88,21 +113,11 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences warns for long URLs", {
         skip_on_cran()
-        expect_error(expect_warning(occurrences(taxon="data_resource_uid:dr356",method="offline",download_reason_id="testing",email="testing@test.org",fields="all"))) ## url string too long, 414 error and warning
-    })
-}
-check_caching(thischeck)
-
-thischeck <- function() {
-    test_that("occurrences gives same results for offline and indexed methods", {
-        skip_on_cran()
-        x1 <- occurrences(taxon="data_resource_uid:dr356", method="offline", download_reason_id="testing", email="ala4rtesting@test.org")
-        x2 <- occurrences(taxon="data_resource_uid:dr356", download_reason_id="testing")
-        x1 <- x1$data[order(x1$data$id), ]
-        x2 <- x2$data[order(x2$data$id), ]
-        rownames(x1) <- seq_len(nrow(x1)) ## to avoid non-identical rownames after ordering
-        rownames(x2) <- seq_len(nrow(x2))
-        expect_identical(x1, x2)
+        ## url string too long, 414 error and warning
+        expect_error(expect_warning(
+            occurrences(taxon="data_resource_uid:dr356",
+                        download_reason_id="testing",
+                        email="testing@test.org",fields="all"))) 
     })
 }
 check_caching(thischeck)
@@ -111,7 +126,8 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences works with records_count_only", {
         skip_on_cran()
-        x1 <- occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE)
+        x1 <- occurrences(taxon="data_resource_uid:dr356",
+                          record_count_only=TRUE)
         expect_true(is.numeric(x1))
         expect_gt(x1,100)
     })
