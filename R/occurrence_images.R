@@ -68,7 +68,6 @@ occurrence_images <- function(id, fq, download=FALSE, download_path,
     c("ws","/","search"),
     query=this_query)
   
-  print(this_url)
   image_data <- cached_get(url=this_url,type="json",caching="off",
                            verbose=verbose)
   
