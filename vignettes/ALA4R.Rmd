@@ -535,3 +535,23 @@ library(mapdata)
 map("worldHires", "Australia", xlim=c(105, 155), ylim=c(-45, -10), col="gray90", fill=TRUE)
 with(xgridded, points(longitude, latitude, pch=21, col=thiscol[grp], bg=thiscol[grp], cex=0.75))
 ```
+
+
+### Example 5: Search and download species occurrence records with images
+
+
+``` {r eval = FALSE}
+library(dplyr)
+
+# Identify records the occurrence records we are interested in and which have images associated with them.
+penguin_occs <- occurrences(taxon="taxon_name:\"Eudyptes chrysocome\"",
+                            fq="multimedia:Image", email = "test@ala-test.org", download_reason_id = "testing")
+
+# Select only human observation records
+image_ids <- penguin_occs$data %>%
+  filter(basisOfRecord == "HumanObservation") %>%
+  select(id) %>% pull(id)
+
+# Download images where the image is available under a creative commons 4.0 licence
+occurrence_images(image_ids, fq = "recognisedLicence:CC BY-NC 4.0", download = TRUE)
+```
