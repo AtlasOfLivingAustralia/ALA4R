@@ -29,19 +29,17 @@ Ignored unless explicitly requested.}
 }
 \value{
 Data frame of image results
-
-#' @examples 
+}
+\description{
+Find images using occurrence ids
+}
+\examples{
 \dontrun{
 ## Download all images for an occurrence with a CC BY-NC 4.0 licence
 occurrence_image_search(id="d201f3e0-3e1d-47f1-94ce-9fc226cbc5ec",
 fq="recognisedLicence:CC BY-NC 4.0",
 download=TRUE)
 }
-## Download all frog sounds
-image_search(q="frog",fq="fileType:sound",download=TRUE, sounds=TRUE)
-}
-\description{
-Find images using occurrence ids
 }
 \references{
 \itemize{
