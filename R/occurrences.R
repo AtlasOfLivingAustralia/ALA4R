@@ -74,7 +74,8 @@
 #' the download. Use \code{qa="all"} to include all available issues, or 
 #' \code{qa="none"} to include none. Otherwise see 
 #' \code{ala_fields("assertions",as_is=TRUE)} for valid values
-#' @param method string: "indexed" (default) or "offline". In "offline" mode,
+#' @param method string: This parameter is deprecated. Now all queries use
+#' offline method unless record_count_only == TRUE
 #'  more fields are available and larger datasets can be returned
 #' @param email string: the email address of the user performing the download 
 #' (required for \code{method="offline"}
