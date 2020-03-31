@@ -1,11 +1,12 @@
-#' Find images using occurrence ids
+#' Retrieve images uses image ids
 #' 
 #' @references \itemize{
-#' \item Associated ALA web service for image search counts:
+#' \item Associated ALA web service for image retrieval
 #' \url{https://images.ala.org.au/ws#/Search/search}
 #' }
-
-#' @param id character: IDs of occurrences as single sring or vector of strings
+#' 
+#' @param id character: IDs of images to be downloaded as single string or
+#' vector of strings
 #' @param fq string: (optional) character string or vector of strings,
 #' specifying filters to be applied to the original query. These are of the
 #' form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". 
@@ -20,32 +21,31 @@
 #' [default is set by ala_config()]
 #' @return Data frame of image results
 #' 
-#' #' @examples 
+#' @examples 
 #' \dontrun{
-#' ## Download all images for an occurrence with a CC BY-NC 4.0 licence
-#' occurrence_image_search(id="d201f3e0-3e1d-47f1-94ce-9fc226cbc5ec",
-#' fq="recognisedLicence:CC BY-NC 4.0",
-#' download=TRUE)
+#' ## Download all images with a CC BY-NC 4.0 licence
+#' images(id="da5fe120-e213-4cd6-9c5f-62346ed2e466",
+#' fq="recognisedLicence:CC BY-NC-SA 4.0", download=TRUE)
 #' }
-#' ## Download all frog sounds
-#' image_search(q="frog",fq="fileType:sound",download=TRUE, sounds=TRUE)
-#' @export occurrence_image
+#' @export images
 
-occurrence_image <- function(id, fq, download=FALSE, download_path,
-                                    sounds = FALSE,
-                                    verbose=ala_config()$verbose) {
+# Download all images from occurrence id list
+
+images <- function(id, fq, download=FALSE, download_path,
+                         sounds = FALSE,
+                         verbose=ala_config()$verbose) {
   this_query <- list()
   
   assert_that(is.flag(verbose))
   assert_that(is.flag(sounds))
   
   if(missing(id)) {
-    stop("Please provide a list of occurrence ids to retrieve images for")
+    stop("Please provide a list of images ids to retrieve")
   }
   
   assert_that(is.character(id))
   id_str  <- paste(id, collapse = '","')
-  this_query$q <- paste0("occurrenceID:",'"',id_str, '"')
+  this_query$q <- paste0("imageIdentifier:",'"',id_str, '"')
   
   if (!missing(fq)) {
     assert_that(is.character(fq))
@@ -64,15 +64,9 @@ occurrence_image <- function(id, fq, download=FALSE, download_path,
     c("ws","/","search"),
     query=this_query)
   
-  print(this_url)
+  
   image_data <- cached_get(url=this_url,type="json",caching="off",
                            verbose=verbose)
-  
-  # Warn that no images were found
-  if(length(image_data$images) == 0) {
-    warning("No images were found for the occurrence ids provided")
-    return()
-  }
   
   if(!sounds) {
     data <- image_data$images[image_data$images$fileType == 'image',]
@@ -92,4 +86,33 @@ occurrence_image <- function(id, fq, download=FALSE, download_path,
   }
   
   return(data)
+}
+
+
+download_images <- function(data, media_dir, verbose=verbose) {
+  
+  assert_that(!missing(media_dir))
+  
+  if(!file.exists(media_dir)) {
+    message(sprintf('Media directory does not exist, creating directory %s',
+                    media_dir))
+    dir.create(media_dir)
+  }
+  
+  if (!missing(data)) {
+    for(r in 1:nrow(data)) {
+      id <- data[r,'imageIdentifier']
+      base_url <- getOption("ALA4R_server_config")$base_url_images
+      url <- build_url_from_parts(base_url, c('image',id, 'original'))
+      if(data[r,'fileType'] == 'image') {
+        ext <- '.jpg'
+      }
+      else {
+        ext <- '.mp4'
+      }
+      out_path <- file.path(media_dir,paste0(id,ext))
+      download_to_file(url, out_path, verbose = verbose)
+    }
+  }
+  
 }
