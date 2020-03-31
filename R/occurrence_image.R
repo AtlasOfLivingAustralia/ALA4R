@@ -1,3 +1,7 @@
+
+
+
+
 occurrence_image_search <- function(id, fq, download=FALSE, download_path,
                                     sounds = FALSE,
                                     verbose=ala_config()$verbose) {
@@ -31,9 +35,15 @@ occurrence_image_search <- function(id, fq, download=FALSE, download_path,
     c("ws","/","search"),
     query=this_query)
   
-  
+  print(this_url)
   image_data <- cached_get(url=this_url,type="json",caching="off",
                            verbose=verbose)
+  
+  # Warn that no images were found
+  if(length(image_data$images) == 0) {
+    warning("No images were found for the occurrence ids provided")
+    return()
+  }
   
   if(!sounds) {
     data <- image_data$images[image_data$images$fileType == 'image',]
