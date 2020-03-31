@@ -29,9 +29,9 @@
 #' }
 #' ## Download all frog sounds
 #' image_search(q="frog",fq="fileType:sound",download=TRUE, sounds=TRUE)
-#' @export image_search
+#' @export occurrence_image
 
-occurrence_image_search <- function(id, fq, download=FALSE, download_path,
+occurrence_image <- function(id, fq, download=FALSE, download_path,
                                     sounds = FALSE,
                                     verbose=ala_config()$verbose) {
   this_query <- list()
