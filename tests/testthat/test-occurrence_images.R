@@ -15,7 +15,6 @@ thischeck <- function() {
     skip_on_cran()
     expect_error(occurrence_images(download=TRUE))
     
-    
   })
 }
 

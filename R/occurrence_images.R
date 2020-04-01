@@ -73,7 +73,6 @@ occurrence_images <- function(id, fq, download=FALSE, download_path,
       getOption("ALA4R_server_config")$base_url_images,
       c("ws","/","search"),
       query=this_query)
-    print(this_url)
     data <- cached_get(URLencode(this_url), type="json", verbose=verbose)
     
     # if no images are found for any given occurrence id, print a warning
