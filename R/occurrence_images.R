@@ -36,6 +36,7 @@ occurrence_images <- function(id, fq, download=FALSE, download_path,
   
   assert_that(is.flag(verbose))
   assert_that(is.flag(sounds))
+  assert_that(is.flag(download))
   
   if (is.null(getOption("ALA4R_server_config")$base_url_images) ||
       getOption("ALA4R_server_config")$base_url_images=="") {
@@ -48,8 +49,6 @@ occurrence_images <- function(id, fq, download=FALSE, download_path,
   }
   
   assert_that(is.character(id))
-  id_str  <- paste(id, collapse = '","')
-  this_query$q <- paste0("occurrenceID:",'"',id_str, '"')
   
   if (!missing(fq)) {
     assert_that(is.character(fq))
@@ -60,20 +59,37 @@ occurrence_images <- function(id, fq, download=FALSE, download_path,
     ## check that fq fields are valid
     fq <- as.list(fq)
     names(fq) <- rep("fq", length(fq))
-    this_query <- c(this_query, fq)
+  }
+  else {
+    fq <- NULL
   }
   
-  this_url <- build_url_from_parts(
-    getOption("ALA4R_server_config")$base_url_images,
-    c("ws","/","search"),
-    query=this_query)
+  image_data <- do.call(rbind, lapply(id, function(z) {
+    this_query <- list()
+    this_query$q <- paste0("occurrenceID:",'"',z, '"')
+    if(!is.null(fq)) { this_query <- c(this_query, fq)}
+    
+    this_url <- build_url_from_parts(
+      getOption("ALA4R_server_config")$base_url_images,
+      c("ws","/","search"),
+      query=this_query)
+    print(this_url)
+    data <- cached_get(URLencode(this_url), type="json", verbose=verbose)
+    
+    # if no images are found for any given occurrence id, print a warning
+    if (data$totalImageCount == 0) {
+      warning(paste0("No images were found for occurrence id ",z))
+    }
+    
+    df <- as.data.frame(data$images, stringsAsFactors = FALSE)
+    
+    # throttle API calls so ALA server is not overloaded
+    Sys.sleep(1)
+    return(df)
+  }))
   
-  image_data <- cached_get(url=this_url,type="json",caching="off",
-                           verbose=verbose)
-  
-  # Warn that no images were found
-  if(length(image_data$images) == 0) {
-    warning("No images were found for the occurrence ids provided")
+  if(length(image_data) == 0) {
+    warning("No images were found for any of the occurrence ids provided")
     return()
   }
   
@@ -91,8 +107,9 @@ occurrence_images <- function(id, fq, download=FALSE, download_path,
                       file.path(getwd(),'media')))
       download_path <- file.path(getwd(),'media')
     }
-    download_images(data=data,media_dir=download_path,verbose=verbose)
+    download_images(data=image_data,media_dir=download_path,verbose=verbose,
+                    sounds=sounds)
   }
   
-  return(data)
+  return(image_data)
 }

@@ -287,7 +287,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,email,
     this_url <- build_url_from_parts(
         getOption("ALA4R_server_config")$base_url_biocache,
         c("occurrences","offline","download"),query=this_query)
-        
+    print(this_url)  
 
     ## the file that will ultimately hold the results (even if we are not
     ## caching, it still gets saved to file)
