@@ -18,7 +18,7 @@ The text field is populated with the taxon name along with a handful of
 other commonly-used fields, and so just specifying your target
 taxon (e.g. taxon="Alaba vibex") will probably work. 
 However, for reliable results it is recommended to use a specific field 
-where possible (see \code{ala_fields("occurrence_indexed")}
+where possible (see \code{ala_fields("occurrence")}
 for valid fields). It is also good practice to quote the taxon name if it 
 contains multiple words, for example
 \code{taxon="taxon_name:\"Alaba vibex\""}}
@@ -30,7 +30,7 @@ spatial polygon within which to search, e.g. "POLYGON((140 -37,151 -37,151
 \item{fq}{string: (optional) character string or vector of strings, 
 specifying filters to be applied to the original query. These are of the 
 form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". 
-See \code{ala_fields("occurrence_indexed",as_is=TRUE)} for all the fields 
+See \code{ala_fields("occurrence",as_is=TRUE)} for all the fields 
 that are queryable. 
 NOTE that fq matches are case-sensitive, but sometimes the entries in the 
 fields are 
@@ -41,7 +41,7 @@ match records that have
 field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the 
 form c("field1:abc 
 OR field2:def"). See e.g. 
-\url{http://wiki.apache.org/solr/CommonQueryParameters} for more information
+\url{https://lucene.apache.org/solr/guide/6_6/common-query-parameters.html} for more information
 about filter queries}
 
 \item{fields}{string vector: (optional) a vector of field names to return. 
@@ -72,11 +72,11 @@ the download. Use \code{qa="all"} to include all available issues, or
 \code{ala_fields("assertions",as_is=TRUE)} for valid values}
 
 \item{method}{string: This parameter is deprecated. Now all queries use
-offline method unless record_count_only == TRUE
+offline method unless \code{record_count_only = TRUE}
  more fields are available and larger datasets can be returned}
 
 \item{email}{string: the email address of the user performing the download 
-(required for \code{method="offline"}}
+(required unless \code{record_count_only = TRUE}}
 
 \item{download_reason_id}{numeric or string: (required unless 
 record_count_only is TRUE) a reason code for the download, either as a 

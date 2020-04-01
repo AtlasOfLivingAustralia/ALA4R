@@ -1,7 +1,7 @@
 Package: ALA4R
 Type: Package
 Title: Atlas of Living Australia (ALA) Data and Resources in R
-Version: 1.7.0
+Version: 1.8.0
 Authors@R: c(person("Peggy", "Newman", email="peggy.newman@csiro.au", role=c("aut", "cre")),
              person("Ben", "Raymond", email="ben_ala@untan.gl", role="aut"),
              person("Jeremy", "VanDerWal", role="aut"),

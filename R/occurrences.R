@@ -44,7 +44,7 @@
 #' field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the 
 #' form c("field1:abc 
 #' OR field2:def"). See e.g. 
-#' \url{http://wiki.apache.org/solr/CommonQueryParameters} for more information
+#' \url{https://lucene.apache.org/solr/guide/6_6/common-query-parameters.html} for more information
 #' about filter queries
 #' @param fields string vector: (optional) a vector of field names to return. 
 #' Note that the columns of the returned data frame 
