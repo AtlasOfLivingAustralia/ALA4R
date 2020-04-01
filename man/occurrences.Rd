@@ -124,7 +124,7 @@ a valid query.
 ## count of records from this data provider
 x <- occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE)
 ## download records, with standard fields
-x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10)
+x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10, email='test@test.org')
 ## download records, with all fields
 x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,
   fields=ala_fields("occurrence_stored",as_is=TRUE)$name) 
@@ -142,22 +142,15 @@ y <- occurrences(taxon="taxon_name:\\"Alaba vibex\\"",fields=c("latitude",
 str(y)
 # equivalent direct webservice call 
 [see this by setting ala_config(verbose=TRUE)]:
-# https://biocache-ws.ala.org.au/ws/occurrences/index/
-download?q=taxon_name\%3A\%22Alaba\%20vibex\%22&
-# fields=latitude,longitude,el874&reasonTypeId=10&sourceTypeId=
-2001&esc=\%5C&sep=\%09&file=data
+# https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name\%3A\%22Alaba\%20vibex\%22&
+# fields=latitude,longitude,el874&reasonTypeId=10&sourceTypeId=2001&esc=\%5C&sep=\%09&file=data
 
 occurrences(taxon="taxon_name:\\"Eucalyptus gunnii\\"",
 fields=c("latitude","longitude"),
   qa="none",fq="basis_of_record:LivingSpecimen",
   download_reason_id=10)
-# equivalent direct webservice call 
-[see this by setting ala_config(verbose=TRUE)]:
-# https://biocache-ws.ala.org.au/ws/occurrences/index/download?
-q=taxon_name\%3A\%22Eucalyptus
-# \%20gunnii\%22&fq=basis_of_record\%3ALivingSpecimen&fields=latitude,
-longitude&qa=none&
-# reasonTypeId=10&sourceTypeId=2001&esc=\%5C&sep=\%09&file=data
+# equivalent direct webservice call [see this by setting ala_config(verbose=TRUE)]:
+# https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name\%3A\%22Eucalyptus\%20gunnii\%22&fq=basis_of_record\%3ALivingSpecimen&fields=latitude,longitude&qa=none&reasonTypeId=10&sourceTypeId=2001&esc=\%5C&sep=\%09&file=data
 }
 }
 \references{

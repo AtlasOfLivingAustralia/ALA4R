@@ -2,18 +2,14 @@
 % Please edit documentation in R/images.R
 \name{images}
 \alias{images}
-\title{Retrieve images uses image ids}
+\title{Retrieve image information using image ids, with an option to download}
 \usage{
-images(id, fq, download = FALSE, download_path, sounds = FALSE,
+images(id, download = FALSE, download_path,
   verbose = ala_config()$verbose)
 }
 \arguments{
 \item{id}{character: IDs of images to be downloaded as single string or
 vector of strings}
-
-\item{fq}{string: (optional) character string or vector of strings,
-specifying filters to be applied to the original query. These are of the
-form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi".}
 
 \item{download}{logical: if TRUE download all images and add location to
 dataframe}
@@ -22,9 +18,6 @@ dataframe}
 If not given and download param is TRUE, will create an images
 folder}
 
-\item{sounds}{logical (optional) Image search also returns sound files.
-Ignored unless explicitly requested.}
-
 \item{verbose}{logical: show additional progress information?
 [default is set by ala_config()]}
 }
@@ -32,18 +25,20 @@ Ignored unless explicitly requested.}
 Data frame of image results
 }
 \description{
-Retrieve images uses image ids
+Retrieve image information using image ids, with an option to download
 }
 \examples{
 \dontrun{
-## Download all images with a CC BY-NC 4.0 licence
-images(id="da5fe120-e213-4cd6-9c5f-62346ed2e466",
-fq="recognisedLicence:CC BY-NC-SA 4.0", download=TRUE)
+## Retrieve infomation about an image and download
+images(id="da5fe120-e213-4cd6-9c5f-62346ed2e466", download=TRUE)
 }
 }
 \references{
 \itemize{
-\item Associated ALA web service for image retrieval
-\url{https://images.ala.org.au/ws#/Search/search}
+\item Associated ALA web service for image information retrieval
+\url{https://images.ala.org.au/ws#/JSON%20services%20for%20accessing%20and%20updating%20metadata/image%2F%7BimageID%7D}
+}
+\item Associated ALA web service for image download
+\urlhttps://images.ala.org.au/ws#/Access%20to%20image%20derivatives%20(e.g.%20thumbnails%2C%20tiles%20and%20originals)/%7Bid%7D%2Foriginal}
 }
 }
