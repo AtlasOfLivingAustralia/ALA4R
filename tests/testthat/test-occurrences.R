@@ -24,7 +24,6 @@ thischeck <- function() {
                            email="testing@test.org",
                            download_reason_id=10,
                            qa="none")
-        print(occ)
         expect_output(summary(occ),"no assertion issues")
     })
 }
@@ -36,7 +35,6 @@ thischeck <- function() {
         occ <- occurrences(taxon="Amblyornis newtonianus",
                            email="testing@test.org",
                            download_reason_id=10)
-        print(occ)
         expect_output(summary(occ),"^number of original names")
         ## check that names required for summary.occurrences method are present
         expect_true(all(c("scientificName","scientificNameOriginal") %in% 
@@ -73,7 +71,6 @@ thischeck <- function() {
         skip_on_cran()
         x <- occurrences(taxon="Amblyornis newtonianus",
                          email="testing@test.org",download_reason_id=10)
-        print(x)
         xu <- unique(x,spatial=0.1)
         expect_is(xu,"list")
         expect_named(xu,c("data","meta"))
@@ -90,7 +87,6 @@ thischeck <- function() {
         skip_on_cran()
         x <- occurrences(taxon="Amblyornis newtonianus",
                          email="testing@test.org",download_reason_id=10)
-        print(x)
         xs <- subset(x)
         expect_is(xs,"list")
         expect_named(xs,c("data","meta"))
