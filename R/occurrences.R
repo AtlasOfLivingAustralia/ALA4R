@@ -2,10 +2,7 @@
 #' 
 #' Retrieve ALA occurrence data via the "occurrence download" web service.
 #' At least one of \code{taxon}, \code{wkt}, or \code{fq} must be supplied for 
-#' a valid query. Note that there is a limit of 500000 records per request 
-#' when using \code{method="indexed"}. Use the \code{method="offline"} for 
-#' larger requests. For small requests, \code{method="indexed"} likely to be 
-#' faster.
+#' a valid query. 
 #' 
 #' @references \itemize{
 #' \item Associated ALA web service for record counts: 
@@ -26,7 +23,7 @@
 #' other commonly-used fields, and so just specifying your target
 #' taxon (e.g. taxon="Alaba vibex") will probably work. 
 #' However, for reliable results it is recommended to use a specific field 
-#' where possible (see \code{ala_fields("occurrence_indexed")}
+#' where possible (see \code{ala_fields("occurrence")}
 #' for valid fields). It is also good practice to quote the taxon name if it 
 #' contains multiple words, for example
 #' \code{taxon="taxon_name:\"Alaba vibex\""}
@@ -36,7 +33,7 @@
 #' @param fq string: (optional) character string or vector of strings, 
 #' specifying filters to be applied to the original query. These are of the 
 #' form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". 
-#' See \code{ala_fields("occurrence_indexed",as_is=TRUE)} for all the fields 
+#' See \code{ala_fields("occurrence",as_is=TRUE)} for all the fields 
 #' that are queryable. 
 #' NOTE that fq matches are case-sensitive, but sometimes the entries in the 
 #' fields are 
@@ -53,13 +50,12 @@
 #' Note that the columns of the returned data frame 
 #' are not guaranteed to retain the ordering of the field names given here. If 
 #' not specified, a default list of fields will be returned. See 
-#' \code{ala_fields("occurrence_stored")} for valid field names with method 
-#' \code{indexed}, and \code{ala_fields("occurrence")} for valid field names 
-#' with method \code{offline}. Field names can be passed as full names 
-#' (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). 
+#' \code{ala_fields("occurrence")} for valid field names. Field names can be
+#' passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than 
+#' id ("el871"). 
 #' Use \code{fields="all"} to include all available fields, but note that 
-#' \code{"all"} will probably cause an error with \code{method="offline"} 
-#' because the request URL will exceed the maximum allowable length
+#' \code{"all"} will probably cause an error because the request URL will 
+#' exceed the maximum allowable length
 #' @param extra string vector: (optional) a vector of field names to include 
 #' in addition to those specified in \code{fields}. This is useful if you would
 #'  like the default list of fields (i.e. when \code{fields} parameter is not 
@@ -75,10 +71,10 @@
 #' \code{qa="none"} to include none. Otherwise see 
 #' \code{ala_fields("assertions",as_is=TRUE)} for valid values
 #' @param method string: This parameter is deprecated. Now all queries use
-#' offline method unless record_count_only == TRUE
+#' offline method unless \code{record_count_only = TRUE}
 #'  more fields are available and larger datasets can be returned
 #' @param email string: the email address of the user performing the download 
-#' (required for \code{method="offline"}
+#' (required unless \code{record_count_only = TRUE}
 #' @param download_reason_id numeric or string: (required unless 
 #' record_count_only is TRUE) a reason code for the download, either as a 
 #' numeric ID (currently 0--11) or a string (see \code{\link{ala_reasons}} for
@@ -218,6 +214,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,email,
         if (missing(email) || !is.string(email) || nchar(email)<1) {
             stop("email is required")
         }
+        this_query$email <- email
     }
     assert_that(is.flag(use_data_table))
     assert_that(is.flag(use_layer_names))
@@ -282,7 +279,6 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,email,
         this_query$reason <- reason
     }
     
-    this_query$email <- email
     this_query$reasonTypeId <- download_reason_id
     
     if (getOption("ALA4R_server_config")$biocache_version > "1.8.1") {

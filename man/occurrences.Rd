@@ -48,13 +48,12 @@ about filter queries}
 Note that the columns of the returned data frame 
 are not guaranteed to retain the ordering of the field names given here. If 
 not specified, a default list of fields will be returned. See 
-\code{ala_fields("occurrence_stored")} for valid field names with method 
-\code{indexed}, and \code{ala_fields("occurrence")} for valid field names 
-with method \code{offline}. Field names can be passed as full names 
-(e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). 
+\code{ala_fields("occurrence")} for valid field names. Field names can be
+passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than 
+id ("el871"). 
 Use \code{fields="all"} to include all available fields, but note that 
-\code{"all"} will probably cause an error with \code{method="offline"} 
-because the request URL will exceed the maximum allowable length}
+\code{"all"} will probably cause an error because the request URL will 
+exceed the maximum allowable length}
 
 \item{extra}{string vector: (optional) a vector of field names to include 
 in addition to those specified in \code{fields}. This is useful if you would
@@ -118,10 +117,7 @@ record. The columns of the dataframe will depend on the requested fields
 \description{
 Retrieve ALA occurrence data via the "occurrence download" web service.
 At least one of \code{taxon}, \code{wkt}, or \code{fq} must be supplied for 
-a valid query. Note that there is a limit of 500000 records per request 
-when using \code{method="indexed"}. Use the \code{method="offline"} for 
-larger requests. For small requests, \code{method="indexed"} likely to be 
-faster.
+a valid query.
 }
 \examples{
 \dontrun{
