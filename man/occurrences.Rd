@@ -167,10 +167,8 @@ longitude&qa=none&
 \item Associated ALA web service for occurence downloads: 
 \url{https://api.ala.org.au/#ws4}
 \item Field definitions: 
-\url{https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtc
-FVSM09qZ3c3N3ItUnBBc09TbHc}
-\item WKT reference: \url{http://www.geoapi.org/3.0/javadoc/org/opengis/
-referencing/doc-files/WKT.html}
+\url{https://docs.google.com/spreadsheet/ccc?key=0AjNtzhUIIHeNdHhtcFVSM09qZ3c3N3ItUnBBc09TbHc}
+\item WKT reference: \url{http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html}
 }
 }
 \seealso{

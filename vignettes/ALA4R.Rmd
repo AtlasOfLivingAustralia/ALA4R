@@ -352,13 +352,13 @@ specieslist(wkt=wkt, fq="state_conservation:*") %>%
 Data quality assertions are a suite of fields that are the result of a set of tests peformed on ALA data. Download occurrence data for the golden bowerbird (you should adjust the `download_reason_id` to match your purposes if using this function for your own analyses; see `ala_reasons()`):
 
 ```{r eval=FALSE}
-x <- occurrences(taxon="taxon_name:\"Amblyornis newtonianus\"", download_reason_id="testing")
+x <- occurrences(taxon="taxon_name:\"Amblyornis newtonianus\"", download_reason_id="testing", email="test@test.org")
 summary(x)
 ```
 
 ```{r echo=FALSE}
 tryCatch({
-  x <- occurrences(taxon="taxon_name:\"Amblyornis newtonianus\"", download_reason_id="testing")
+  x <- occurrences(taxon="taxon_name:\"Amblyornis newtonianus\"", download_reason_id="testing", email="test@test.org")
   summary(x)
 },warning = function(w) {print(w$message)}
  ,error = function(e) { print(e$message)})
@@ -431,7 +431,8 @@ env_layers <- c("Precipitation - annual","Temperature - annual max mean")
 ##   this function for your own analyses; see `ala_reasons()`
 
 x <- occurrences(taxon="family:Fabaceae", wkt=wkt, qa="none",
-                 download_reason_id="testing", extra=env_layers)
+                 download_reason_id="testing", extra=env_layers,
+                 email="test@test.org")
 ```
 
 Convert this to a sites-by-species data.frame:
