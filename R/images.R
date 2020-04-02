@@ -1,11 +1,8 @@
 #' Retrieve image information using image ids, with an option to download
 #' 
 #' @references \itemize{
-#' \item Associated ALA web service for image information retrieval
-#' \url{https://images.ala.org.au/ws#/JSON%20services%20for%20accessing%20and%20updating%20metadata/image%2F%7BimageID%7D}
-#' }
-#' \item Associated ALA web service for image download
-#' \urlhttps://images.ala.org.au/ws#/Access%20to%20image%20derivatives%20(e.g.%20thumbnails%2C%20tiles%20and%20originals)/%7Bid%7D%2Foriginal}
+#' \item Associated ALA web service for image information retrieval \url{https://images.ala.org.au/ws/image/}
+#' \item Associated ALA web service for image download \url{https://images.ala.org.au/image/original}
 #' }
 #' 
 #' @param id character: IDs of images to be downloaded as single string or
@@ -25,15 +22,9 @@
 #' images(id="da5fe120-e213-4cd6-9c5f-62346ed2e466", download=TRUE)
 #' }
 #' @export images
-#' @rdname image_info
-images(id, download, download_path, verbose) <- image_info(id, verbose)
 
 images <- function(id, download=FALSE, download_path,
                          verbose=ala_config()$verbose) {
-  
-  if (as.character(match.call()[[1]]) == "image_info") {
-    warning("please use images() instead of image_info()", call. = FALSE)
-  }
   
   this_query <- list()
   
@@ -61,7 +52,14 @@ images <- function(id, download=FALSE, download_path,
     }
     
     df <- as.data.frame(data, stringsAsFactors = FALSE)
-    cols <- c('imageIdentifier', 'imageUrl', 'success','mimeType','originalFileName','sizeInBytes','rights','rightsHolder','dateUploaded','dateTaken','tileUrlPattern','mmPerPixel','height','width','tileZoomLevels','description','title','creator','license','recognisedLicence','recognisedLicence.acronym','recognisedLicence.id','recognisedLicence.imageUrl','recognisedLicence.name', 'recognisedLicence.url', 'dataResourceUid','occurrenceID')
+    cols <- c('imageIdentifier', 'imageUrl', 'success','mimeType',
+              'originalFileName','sizeInBytes','rights','rightsHolder',
+              'dateUploaded','dateTaken','tileUrlPattern','mmPerPixel',
+              'height','width','tileZoomLevels','description','title',
+              'creator','license','recognisedLicence','recognisedLicence.acronym',
+              'recognisedLicence.id','recognisedLicence.imageUrl',
+              'recognisedLicence.name', 'recognisedLicence.url',
+              'dataResourceUid','occurrenceID')
     df[cols[!(cols %in% colnames(df))]] = NA
     return(df)
   }))
