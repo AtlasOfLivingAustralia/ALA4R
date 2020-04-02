@@ -26,7 +26,7 @@
 #' }
 #' @export images
 #' @rdname image_info
-images(x) <- image_info(x)
+images(id, download, download_path, verbose) <- image_info(id, verbose)
 
 images <- function(id, download=FALSE, download_path,
                          verbose=ala_config()$verbose) {
