@@ -124,14 +124,14 @@ a valid query.
 ## count of records from this data provider
 x <- occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE)
 ## download records, with standard fields
-x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10, email='test@test.org')
+x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10, email='your_email_here')
 ## download records, with all fields
 x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,
   fields=ala_fields("occurrence_stored",as_is=TRUE)$name) 
 ## download records, with specified fields
 x <- occurrences(taxon="genus:Heleioporus",fields=c("longitude","latitude",
   "common_name","taxon_name","el807"),download_reason_id=10)
- ## download records in polygon, with no quality assertion information
+## download records in polygon, with no quality assertion information
 x <- occurrences(taxon="genus:Heleioporus",
   wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",
   download_reason_id=10,qa="none")
@@ -141,10 +141,9 @@ y <- occurrences(taxon="taxon_name:\\"Alaba vibex\\"",fields=c("latitude",
   download_reason_id=10)
 str(y)
 # equivalent direct webservice call 
-[see this by setting ala_config(verbose=TRUE)]:
+# [see this by setting ala_config(verbose=TRUE)]:
 # https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name\%3A\%22Alaba\%20vibex\%22&
 # fields=latitude,longitude,el874&reasonTypeId=10&sourceTypeId=2001&esc=\%5C&sep=\%09&file=data
-
 occurrences(taxon="taxon_name:\\"Eucalyptus gunnii\\"",
 fields=c("latitude","longitude"),
   qa="none",fq="basis_of_record:LivingSpecimen",

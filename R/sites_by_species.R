@@ -21,32 +21,30 @@
 #'
 #' ## get the guid of the first species
 #' attr(ss,"guid")[1]
-#' 
-#' # Steps: 1. POST webservice creates a task (use single quotes around data-binary argument)
-#' curl 'https://spatial.ala.org.au/ws/tasks/create?userId=0' --data-binary name=PointsToGrid
-#' &input={"area":[{"name":"Current extent"
-#' ,"wkt":"POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))"}]
-#' ,"occurrenceDensity":false,"sitesBySpecies":true,"speciesRichness":false
-#' ,"species":{"q":["genus:Eucalyptus"]
-#' ,"bs":"https://biocache-ws.ala.org.au/ws/","name":"genus:Eucalyptus"}
-#' ,"gridCellSize":0.1,"resolution":0.01,"movingAverage":"1x1 (no moving average)"}'
+#' #' # Steps: 1. POST webservice creates a task (use single quotes around data-binary argument)
+#' #curl 'https://spatial.ala.org.au/ws/tasks/create?userId=0' --data-binary name=PointsToGrid
+#' #&input={"area":[{"name":"Current extent"
+#' #,"wkt":"POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))"}]
+#' #,"occurrenceDensity":false,"sitesBySpecies":true,"speciesRichness":false
+#' #,"species":{"q":["genus:Eucalyptus"]
+#' #,"bs":"https://biocache-ws.ala.org.au/ws/","name":"genus:Eucalyptus"}
+#' #,"gridCellSize":0.1,"resolution":0.01,"movingAverage":"1x1 (no moving average)"}'
 #' #resp eg '{"name":"PointsToGrid","created":1552881125953,"email":"null","history":{}
-#' ,"tag":"null","userId":"0","sessionId":"null","status":0,"id":<id>}
+#' #,"tag":"null","userId":"0","sessionId":"null","status":0,"id":<id>}
 #' # 2. check status values: 0 = in_queue, 1 = running, 2 = cancelled, 3 = error, 4 = finished 
-#' curl 'https://spatial.ala.org.au/ws/tasks/status/<id>'
-#' waiting: {"status":1,"message":"getting species data","id":<id>,"name":"PointsToGrid"}
-#' complete:{"status":4,"message":"finished","id":<id>,"name":"PointsToGrid"
-#' ,"history":{"1552879452131":"finished","1552879452155":"finished (id:<id>)"}
-#' ,"output":[{"name":"files","file":"SitesBySpecies.csv","taskId":<id>,"id":33111}
-#' ,{"name":"sxs_metadata.html","taskId":<id>,"file":"sxs_metadata.html","id":33109}
-#' ,{"file":"download.zip","taskId":<id>,"name":"download.zip","id":33110}]}
-#' failed:  {"status":4,"message":"finished","id":<id>,"name":"PointsToGrid"
-#' ,"history":{"1552881921817":"failed (id:<id>)"}}
+#' #curl 'https://spatial.ala.org.au/ws/tasks/status/<id>'
+#' #waiting: {"status":1,"message":"getting species data","id":<id>,"name":"PointsToGrid"}
+#' #complete:{"status":4,"message":"finished","id":<id>,"name":"PointsToGrid"
+#' #,"history":{"1552879452131":"finished","1552879452155":"finished (id:<id>)"}
+#' #,"output":[{"name":"files","file":"SitesBySpecies.csv","taskId":<id>,"id":33111}
+#' #,{"name":"sxs_metadata.html","taskId":<id>,"file":"sxs_metadata.html","id":33109}
+#' #,{"file":"download.zip","taskId":<id>,"name":"download.zip","id":33110}]}
+#' #failed:  {"status":4,"message":"finished","id":<id>,"name":"PointsToGrid"
+#' #,"history":{"1552881921817":"failed (id:<id>)"}}
 #' # 3. download the zip and extract the file
-#' https://spatial.ala.org.au/ws/tasks/output/<id>/download.zip
-#' https://spatial.ala.org.au/ws/tasks/output/<id>/SitesBySpecies.csv
+#' # https://spatial.ala.org.au/ws/tasks/output/<id>/download.zip
+#' # https://spatial.ala.org.au/ws/tasks/output/<id>/SitesBySpecies.csv
 #' }
-#' 
 #' 
 
 # TODO need way to better check input species query. If the query is incorrect, the call will fail with message along the lines of: "Error in sites_by_species(taxon = "gen:Eucalyptus", wkt = "POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))",  :   Error processing your Sites By Species request. Please try again or if problem persists, contact the Administrator."
