@@ -25,10 +25,16 @@
 #' images(id="da5fe120-e213-4cd6-9c5f-62346ed2e466", download=TRUE)
 #' }
 #' @export images
+#' @rdname image_info
 
 
 images <- function(id, download=FALSE, download_path,
                          verbose=ala_config()$verbose) {
+  
+  if (as.character(match.call()[[1]]) == "image_info") {
+    warning("please use images() instead of image_info()", call. = FALSE)
+  }
+  
   this_query <- list()
   
   assert_that(is.flag(verbose))
