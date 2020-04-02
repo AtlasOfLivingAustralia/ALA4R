@@ -24,6 +24,7 @@ thischeck <- function() {
                            email="testing@test.org",
                            download_reason_id=10,
                            qa="none")
+        Sys.sleep(20)
         expect_output(summary(occ),"no assertion issues")
     })
 }
@@ -71,6 +72,7 @@ thischeck <- function() {
         skip_on_cran()
         x <- occurrences(taxon="Amblyornis newtonianus",
                          email="testing@test.org",download_reason_id=10)
+        Sys.sleep(20)
         xu <- unique(x,spatial=0.1)
         expect_is(xu,"list")
         expect_named(xu,c("data","meta"))
@@ -87,6 +89,7 @@ thischeck <- function() {
         skip_on_cran()
         x <- occurrences(taxon="Amblyornis newtonianus",
                          email="testing@test.org",download_reason_id=10)
+        Sys.sleep(20)
         xs <- subset(x)
         expect_is(xs,"list")
         expect_named(xs,c("data","meta"))
