@@ -1,3 +1,9 @@
+# ALA4R 1.8.0
+* remove `method` parameter for `occurrences()` and only use `offline` method to make download more stable
+* rename `image_info()` to `images()` and add option to download images
+* `images()` makes use of new ALA images web service
+* added `occurrence_images()` function to retrieve image information and download images using occurrence ids
+
 # ALA4R 1.7.0
 * remove dependency on RCurl 
 
