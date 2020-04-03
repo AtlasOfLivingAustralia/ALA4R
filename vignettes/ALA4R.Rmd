@@ -540,19 +540,31 @@ with(xgridded, points(longitude, latitude, pch=21, col=thiscol[grp], bg=thiscol[
 
 ### Example 5: Search and download species occurrence records with images
 
+We can download images from the ALA's image service using the id field, which is the ALA's 
+record identifier. We first do an occurrence search using facets to filter the records we want, then call an image function to query the image service.
 
-``` {r eval = FALSE}
-library(dplyr)
+The image download is rate limited to 1 image/second to minimise server load.
 
-# Identify records the occurrence records we are interested in and which have images associated with them.
-penguin_occs <- occurrences(taxon="taxon_name:\"Eudyptes chrysocome\"",
-                            fq="multimedia:Image", email = "test@ala-test.org", download_reason_id = "testing")
+```{r warning=FALSE}
+library(magrittr)
+tryCatch({
+  magpie_occs <- ALA4R::occurrences(taxon="taxon_name:\"Gymnorhina tibicen\"",
+                            fq=c("multimedia:Image","license:\"CC0\""), 
+                            email = "test@ala-test.org", download_reason_id = "testing")
+  
+  # show the last 5
+  magpie_occs_top5 <- magpie_occs$data %>% dplyr::arrange(desc(eventDate)) %>% 
+    dplyr::select(id,basisOfRecord,dataResourceName,state,licence,eventDate) %>% 
+    head(5)
+  
+  # pass the occurrence id to the occurrence_images to 
+  # get the image metadata and optionally download to file
+  magpie_occ_images <- ALA4R::occurrence_images(magpie_occs_top5 %>% 
+    dplyr::pull(id), download=FALSE)
+  
+  magpie_occ_images %>% dplyr::mutate(occurrenceID=paste0(substring(occurrenceID,0,10),"..."), imageID = paste0(substring(imageIdentifier,0,10),"...")) %>%
+    dplyr::select(occurrenceID, imageID, format, fileSize, width, height)
 
-# Select only human observation records
-image_ids <- penguin_occs$data %>%
-  filter(basisOfRecord == "HumanObservation") %>%
-  select(id) %>% pull(id)
-
-# Download images where the image is available under a creative commons 4.0 licence
-occurrence_images(image_ids, fq = "recognisedLicence:CC BY-NC 4.0", download = TRUE)
+},warning = function(w) {print(w$message)}
+ ,error = function(e) { print(e$message)})
 ```
