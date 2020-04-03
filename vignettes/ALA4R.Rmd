@@ -152,16 +152,17 @@ sx <- search_fulltext("penguins")
 sx$data %>% dplyr::select(name, rank, commonName)
 ```
 
-```{r echo=FALSE}
-bieServerUp <- FALSE
-
+```{r}
 tryCatch({
   sx <- search_fulltext("penguins")
-  sx$data %>% dplyr::select(name, rank, commonName)
   bieServerUp <- TRUE
 },warning = function(w) {print(w$message)}
  ,error = function(e) {
    print(e$message)})
+
+if(bieServerUp) {
+  sx$data %>% dplyr::select(name, rank, commonName)
+}
 ```
 We can see that penguins correspond to the family "SPHENISCIDAE". Now we can download the taxonomic data (note that the search is case-sensitive):
 
@@ -565,6 +566,6 @@ tryCatch({
   magpie_occ_images %>% dplyr::mutate(occurrenceID=paste0(substring(occurrenceID,0,10),"..."), imageID = paste0(substring(imageIdentifier,0,10),"...")) %>%
     dplyr::select(occurrenceID, imageID, format, fileSize, width, height)
 
-},warning = function(w) {print(w$message)}
+}
  ,error = function(e) { print(e$message)})
 ```
