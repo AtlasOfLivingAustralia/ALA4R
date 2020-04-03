@@ -4,8 +4,7 @@
 \alias{search_guids}
 \title{Lookup of species identifiers}
 \usage{
-search_guids(guids = c(), occurrence_count = FALSE,
-  output_format = "simple")
+search_guids(guids = c(), occurrence_count = FALSE, output_format = "simple")
 }
 \arguments{
 \item{guids}{string: a single GUID or vector of GUIDs}

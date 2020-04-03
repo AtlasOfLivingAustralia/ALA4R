@@ -47,5 +47,5 @@ Maintainer: Peggy Newman <peggy.newman@csiro.au>
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Encoding: UTF-8

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Check assertions in occurrences object — check_assertions • ALA4R</title>
+<title>Find images using occurrence ids — occurrence_images • ALA4R</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Check assertions in occurrences object — check_assertions" />
-<meta property="og:description" content="This provides a data.frame detailing the assertions that are found in a dataset returned from occurrences." />
+<meta property="og:title" content="Find images using occurrence ids — occurrence_images" />
+<meta property="og:description" content="Find images using occurrence ids" />
 
 
 
@@ -114,47 +114,78 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Check assertions in occurrences object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/check_assertions.R'><code>R/check_assertions.R</code></a></small>
-    <div class="hidden name"><code>check_assertions.Rd</code></div>
+    <h1>Find images using occurrence ids</h1>
+    <small class="dont-index">Source: <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/occurrence_images.R'><code>R/occurrence_images.R</code></a></small>
+    <div class="hidden name"><code>occurrence_images.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This provides a data.frame detailing the assertions that are found in a dataset returned from <code><a href='occurrences.html'>occurrences</a></code>.</p>
+    <p>Find images using occurrence ids</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_assertions</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>occurrence_images</span>(
+  <span class='no'>id</span>,
+  <span class='no'>fq</span>,
+  <span class='kw'>download</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>download_path</span>,
+  <span class='kw'>sounds</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span>()$<span class='no'>verbose</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>list: an object returned from <code><a href='occurrences.html'>occurrences</a></code></p></td>
+      <th>id</th>
+      <td><p>character: IDs of occurrences as single sring or vector of strings</p></td>
+    </tr>
+    <tr>
+      <th>fq</th>
+      <td><p>string: (optional) character string or vector of strings,
+specifying filters to be applied to the original query. These are of the
+form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi".</p></td>
+    </tr>
+    <tr>
+      <th>download</th>
+      <td><p>logical: if TRUE download all images and add location to
+dataframe</p></td>
+    </tr>
+    <tr>
+      <th>download_path</th>
+      <td><p>string: (optional) filepath to download images to.
+If not given and download param is TRUE, will create an images
+folder</p></td>
+    </tr>
+    <tr>
+      <th>sounds</th>
+      <td><p>logical (optional) Image search also returns sound files.
+Ignored unless explicitly requested.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>logical: show additional progress information?
+[default is set by ala_config()]</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe of assertions column names, descriptions and categories/error codes. If no assertions are in the dataset, NULL is returned.</p>
+    <p>Data frame of image results</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><a href='https://api.ala.org.au/'>https://api.ala.org.au/</a>, <samp>https://biocache-ws.ala.org.au/ws/assertions/codes</samp></p>
+    
+<ul>
+<li><p>Associated ALA web service for image search counts:
+<a href='https://images.ala.org.au/ws#/Search/search'>https://images.ala.org.au/ws#/Search/search</a></p></li>
+</ul>
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
- <span class='co'>##download species data with all possible assertions</span>
-
- <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='occurrences.html'>occurrences</a></span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"golden bowerbird"</span>, <span class='kw'>download_reason_id</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>qa</span><span class='kw'>=</span><span class='fu'><a href='ala_fields.html'>ala_fields</a></span>(<span class='st'>"assertions"</span>)$<span class='no'>name</span>)
-
- <span class='no'>asserts</span> <span class='kw'>&lt;-</span> <span class='fu'>check_assertions</span>(<span class='no'>x</span>)
- <span class='co'>## this is a data.frame of assertions, their description and column names</span>
-
- <span class='co'>## list the descriptions of all (current) assertions</span>
- <span class='no'>asserts</span>$<span class='no'>description</span>
-
- <span class='no'>tmp</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>data</span>[, <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>x</span>$<span class='no'>data</span>) <span class='kw'>%in%</span> <span class='no'>asserts</span>$<span class='no'>name</span>] <span class='co'>## assertion columns from data</span>
- <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colSums</a></span>(<span class='no'>tmp</span>)<span class='kw'>&gt;</span><span class='fl'>0</span>) <span class='co'>## discard those not seen in the data</span>
+<span class='co'>## Download all images for an occurrence with a CC BY-NC 4.0 licence</span>
+<span class='fu'>occurrence_image_search</span>(<span class='kw'>id</span><span class='kw'>=</span><span class='st'>"d201f3e0-3e1d-47f1-94ce-9fc226cbc5ec"</span>,
+<span class='kw'>fq</span><span class='kw'>=</span><span class='st'>"recognisedLicence:CC BY-NC 4.0"</span>,
+<span class='kw'>download</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

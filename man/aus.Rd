@@ -6,7 +6,9 @@
 \title{Basic Australia raster for visualization
 A basic raster dataset in SpatialGridDataFrame (package sp) representing
 Australia at 0.05 degree (~5km) resolution.}
-\format{SpatialGridDataFrame (package sp)}
+\format{
+SpatialGridDataFrame (package sp)
+}
 \usage{
 data(aus)
 }

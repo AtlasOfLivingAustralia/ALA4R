@@ -9,13 +9,25 @@
 \usage{
 \method{summary}{occurrences}(object, ...)
 
-\method{unique}{occurrences}(x, incomparables = FALSE, spatial = 0,
-  temporal = NULL, na.rm = FALSE, ...)
+\method{unique}{occurrences}(
+  x,
+  incomparables = FALSE,
+  spatial = 0,
+  temporal = NULL,
+  na.rm = FALSE,
+  ...
+)
 
-\method{subset}{occurrences}(x, remove.fatal = TRUE,
-  exclude.spatial = "error", exclude.temporal = "error",
-  exclude.taxonomic = "error", max.spatial.uncertainty,
-  keep.missing.spatial.uncertainty = TRUE, ...)
+\method{subset}{occurrences}(
+  x,
+  remove.fatal = TRUE,
+  exclude.spatial = "error",
+  exclude.temporal = "error",
+  exclude.taxonomic = "error",
+  max.spatial.uncertainty,
+  keep.missing.spatial.uncertainty = TRUE,
+  ...
+)
 }
 \arguments{
 \item{object}{list: an 'occurrence' object that has been downloaded using \code{\link{occurrences}}}

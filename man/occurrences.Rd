@@ -4,10 +4,22 @@
 \alias{occurrences}
 \title{Get occurrence data}
 \usage{
-occurrences(taxon, wkt, fq, fields, extra, qa, method, email,
-  download_reason_id = ala_config()$download_reason_id, reason,
-  verbose = ala_config()$verbose, record_count_only = FALSE,
-  use_layer_names = TRUE, use_data_table = TRUE)
+occurrences(
+  taxon,
+  wkt,
+  fq,
+  fields,
+  extra,
+  qa,
+  method,
+  email,
+  download_reason_id = ala_config()$download_reason_id,
+  reason,
+  verbose = ala_config()$verbose,
+  record_count_only = FALSE,
+  use_layer_names = TRUE,
+  use_data_table = TRUE
+)
 }
 \arguments{
 \item{taxon}{string: (optional) query of the form field:value 
@@ -136,7 +148,7 @@ x <- occurrences(taxon="genus:Heleioporus",
   wkt="POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",
   download_reason_id=10,qa="none")
 
-y <- occurrences(taxon="taxon_name:\\"Alaba vibex\\"",fields=c("latitude",
+y <- occurrences(taxon="taxon_name:\"Alaba vibex\"",fields=c("latitude",
 "longitude","el874"),
   download_reason_id=10)
 str(y)
@@ -144,7 +156,7 @@ str(y)
 # [see this by setting ala_config(verbose=TRUE)]:
 # https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name\%3A\%22Alaba\%20vibex\%22&
 # fields=latitude,longitude,el874&reasonTypeId=10&sourceTypeId=2001&esc=\%5C&sep=\%09&file=data
-occurrences(taxon="taxon_name:\\"Eucalyptus gunnii\\"",
+occurrences(taxon="taxon_name:\"Eucalyptus gunnii\"",
 fields=c("latitude","longitude"),
   qa="none",fq="basis_of_record:LivingSpecimen",
   download_reason_id=10)

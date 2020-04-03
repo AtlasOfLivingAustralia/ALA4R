@@ -4,8 +4,7 @@
 \alias{ala_lists}
 \title{Find ALA species lists}
 \usage{
-ala_lists(guid, offset = 0, max = 5000,
-  verbose = ala_config()$verbose)
+ala_lists(guid, offset = 0, max = 5000, verbose = ala_config()$verbose)
 }
 \arguments{
 \item{guid}{string: (optional) if provided, return only lists in which this GUID appears}

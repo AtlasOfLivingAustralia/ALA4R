@@ -4,11 +4,9 @@
 \alias{images}
 \title{Retrieve image information using image ids, with an option to download}
 \usage{
-images(id, download = FALSE, download_path,
-  verbose = ala_config()$verbose)
+images(id, download = FALSE, download_path, verbose = ala_config()$verbose)
 
-images(id, download = FALSE, download_path,
-  verbose = ala_config()$verbose)
+images(id, download = FALSE, download_path, verbose = ala_config()$verbose)
 }
 \arguments{
 \item{id}{character: IDs of images to be downloaded as single string or

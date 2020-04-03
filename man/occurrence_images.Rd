@@ -4,8 +4,14 @@
 \alias{occurrence_images}
 \title{Find images using occurrence ids}
 \usage{
-occurrence_images(id, fq, download = FALSE, download_path,
-  sounds = FALSE, verbose = ala_config()$verbose)
+occurrence_images(
+  id,
+  fq,
+  download = FALSE,
+  download_path,
+  sounds = FALSE,
+  verbose = ala_config()$verbose
+)
 }
 \arguments{
 \item{id}{character: IDs of occurrences as single sring or vector of strings}

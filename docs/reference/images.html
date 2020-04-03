@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Check assertions in occurrences object — check_assertions • ALA4R</title>
+<title>Retrieve image information using image ids, with an option to download — images • ALA4R</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Check assertions in occurrences object — check_assertions" />
-<meta property="og:description" content="This provides a data.frame detailing the assertions that are found in a dataset returned from occurrences." />
+<meta property="og:title" content="Retrieve image information using image ids, with an option to download — images" />
+<meta property="og:description" content="Retrieve image information using image ids, with an option to download" />
 
 
 
@@ -114,47 +114,61 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Check assertions in occurrences object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/check_assertions.R'><code>R/check_assertions.R</code></a></small>
-    <div class="hidden name"><code>check_assertions.Rd</code></div>
+    <h1>Retrieve image information using image ids, with an option to download</h1>
+    <small class="dont-index">Source: <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/image_info.R'><code>R/image_info.R</code></a>, <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/images.R'><code>R/images.R</code></a></small>
+    <div class="hidden name"><code>images.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This provides a data.frame detailing the assertions that are found in a dataset returned from <code><a href='occurrences.html'>occurrences</a></code>.</p>
+    <p>Retrieve image information using image ids, with an option to download</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_assertions</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>images</span>(<span class='no'>id</span>, <span class='kw'>download</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>download_path</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span>()$<span class='no'>verbose</span>)
+
+<span class='fu'>images</span>(<span class='no'>id</span>, <span class='kw'>download</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>download_path</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span>()$<span class='no'>verbose</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>list: an object returned from <code><a href='occurrences.html'>occurrences</a></code></p></td>
+      <th>id</th>
+      <td><p>character: IDs of images to be downloaded as single string or
+vector of strings</p></td>
+    </tr>
+    <tr>
+      <th>download</th>
+      <td><p>logical: if TRUE download all images and add location to
+dataframe</p></td>
+    </tr>
+    <tr>
+      <th>download_path</th>
+      <td><p>string: (optional) filepath to download images to.
+If not given and download param is TRUE, will create an images
+folder</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>logical: show additional progress information?
+[default is set by ala_config()]</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe of assertions column names, descriptions and categories/error codes. If no assertions are in the dataset, NULL is returned.</p>
+    <p>Data frame of image results</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><a href='https://api.ala.org.au/'>https://api.ala.org.au/</a>, <samp>https://biocache-ws.ala.org.au/ws/assertions/codes</samp></p>
+    
+<ul>
+<li><p>Associated ALA web service for image information retrieval <a href='https://images.ala.org.au/ws/image/'>https://images.ala.org.au/ws/image/</a></p></li>
+<li><p>Associated ALA web service for image download <a href='https://images.ala.org.au/image/original'>https://images.ala.org.au/image/original</a></p></li>
+</ul>
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
- <span class='co'>##download species data with all possible assertions</span>
-
- <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='occurrences.html'>occurrences</a></span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"golden bowerbird"</span>, <span class='kw'>download_reason_id</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>qa</span><span class='kw'>=</span><span class='fu'><a href='ala_fields.html'>ala_fields</a></span>(<span class='st'>"assertions"</span>)$<span class='no'>name</span>)
-
- <span class='no'>asserts</span> <span class='kw'>&lt;-</span> <span class='fu'>check_assertions</span>(<span class='no'>x</span>)
- <span class='co'>## this is a data.frame of assertions, their description and column names</span>
-
- <span class='co'>## list the descriptions of all (current) assertions</span>
- <span class='no'>asserts</span>$<span class='no'>description</span>
-
- <span class='no'>tmp</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>data</span>[, <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>x</span>$<span class='no'>data</span>) <span class='kw'>%in%</span> <span class='no'>asserts</span>$<span class='no'>name</span>] <span class='co'>## assertion columns from data</span>
- <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colSums</a></span>(<span class='no'>tmp</span>)<span class='kw'>&gt;</span><span class='fl'>0</span>) <span class='co'>## discard those not seen in the data</span>
+<span class='co'>## Retrieve infomation about an image and download</span>
+<span class='fu'>images</span>(<span class='kw'>id</span><span class='kw'>=</span><span class='st'>"da5fe120-e213-4cd6-9c5f-62346ed2e466"</span>, <span class='kw'>download</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

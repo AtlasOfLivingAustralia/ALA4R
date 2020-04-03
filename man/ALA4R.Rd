@@ -3,7 +3,6 @@
 \docType{package}
 \name{ALA4R}
 \alias{ALA4R}
-\alias{ALA4R-package}
 \title{\pkg{ALA4R}}
 \description{
 This project enables the R community to access data and tools hosted by the 

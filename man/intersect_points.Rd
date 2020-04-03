@@ -4,8 +4,13 @@
 \alias{intersect_points}
 \title{Intersect environmental or contextual layers at a given a set of points (coordinates)}
 \usage{
-intersect_points(pnts, layers, SPdata.frame = FALSE,
-  use_layer_names = TRUE, verbose = ala_config()$verbose)
+intersect_points(
+  pnts,
+  layers,
+  SPdata.frame = FALSE,
+  use_layer_names = TRUE,
+  verbose = ala_config()$verbose
+)
 }
 \arguments{
 \item{pnts}{numeric: vector of latitude/longitude pairs, or a 2 column data.frame or matrix of lat, lons. NOTE: the number of locations must be less than 100000}

@@ -4,8 +4,16 @@
 \alias{occurrences_plot}
 \title{Quick geographic plot of occurrence data}
 \usage{
-occurrences_plot(x, filename = "Rplots.pdf", qa = c("fatal", "error"),
-  grouped = FALSE, taxon_level = "species", pch, cex = 0.75, ...)
+occurrences_plot(
+  x,
+  filename = "Rplots.pdf",
+  qa = c("fatal", "error"),
+  grouped = FALSE,
+  taxon_level = "species",
+  pch,
+  cex = 0.75,
+  ...
+)
 }
 \arguments{
 \item{x}{list: a list object that has been downloaded using \code{\link{occurrences}}}

@@ -4,8 +4,13 @@
 \alias{search_partial_name}
 \title{Partial-name search}
 \usage{
-search_partial_name(taxon, geo_only = FALSE, output_format = "simple",
-  index_type, limit)
+search_partial_name(
+  taxon,
+  geo_only = FALSE,
+  output_format = "simple",
+  index_type,
+  limit
+)
 }
 \arguments{
 \item{taxon}{string: part of the scientific, common name of the taxa}

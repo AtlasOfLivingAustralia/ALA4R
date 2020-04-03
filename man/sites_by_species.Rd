@@ -4,8 +4,13 @@
 \alias{sites_by_species}
 \title{Sites by species}
 \usage{
-sites_by_species(taxon, wkt, gridsize = 0.1, SPdata.frame = FALSE,
-  verbose = ala_config()$verbose)
+sites_by_species(
+  taxon,
+  wkt,
+  gridsize = 0.1,
+  SPdata.frame = FALSE,
+  verbose = ala_config()$verbose
+)
 }
 \arguments{
 \item{taxon}{string: the identifier to get the species data from the ala biocache. E.g. "genus:Heleioporus". See \code{ala_fields("occurrence_stored")} for valid field names}
