@@ -36,7 +36,6 @@ images(id="da5fe120-e213-4cd6-9c5f-62346ed2e466", download=TRUE)
 }
 \references{
 \itemize{
-\item Associated ALA web service for image information retrieval \url{https://images.ala.org.au/ws/image/}
-\item Associated ALA web service for image download \url{https://images.ala.org.au/image/original}
+\item Associated ALA web service for images \url{https://images.ala.org.au/ws}
 }
 }

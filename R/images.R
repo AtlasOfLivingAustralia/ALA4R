@@ -1,8 +1,7 @@
 #' Retrieve image information using image ids, with an option to download
 #' 
 #' @references \itemize{
-#' \item Associated ALA web service for image information retrieval \url{https://images.ala.org.au/ws/image/}
-#' \item Associated ALA web service for image download \url{https://images.ala.org.au/image/original}
+#' \item Associated ALA web service for images \url{https://images.ala.org.au/ws}
 #' }
 #' 
 #' @param id character: IDs of images to be downloaded as single string or

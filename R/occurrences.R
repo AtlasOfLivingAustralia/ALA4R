@@ -134,7 +134,9 @@
 #'   qa="none",fq="basis_of_record:LivingSpecimen",
 #'   download_reason_id=10)
 #' # equivalent direct webservice call [see this by setting ala_config(verbose=TRUE)]:
-#' # https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name%3A%22Eucalyptus%20gunnii%22&fq=basis_of_record%3ALivingSpecimen&fields=latitude,longitude&qa=none&reasonTypeId=10&sourceTypeId=2001&esc=%5C&sep=%09&file=data
+#' # https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name%3A%22
+#' # Eucalyptus%20gunnii%22&fq=basis_of_record%3ALivingSpecimen&fields=latitude,longitude&qa=none&
+#' # reasonTypeId=10&sourceTypeId=2001&esc=%5C&sep=%09&file=data
 #' }
 #' @export occurrences
 
