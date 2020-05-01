@@ -19,7 +19,6 @@
 data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
   
   this_query <- list()
-  
   assert_that(is.flag(verbose))
   
   if (is.null(getOption("ALA4R_server_config")$base_url_collectory)) {
@@ -31,7 +30,8 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
   
   if(missing(druid)) {
     this_url <- paste0(getOption("ALA4R_server_config")$base_url_biocache,
-                       "occurrence/facets?facets=data_resource_uid&flimit=",max)
+                       "occurrence/facets?facets=data_resource_uid&flimit=",
+                       max)
     drs <- cached_get(URLencode(this_url), type="json", verbose=verbose,
                       caching = "off")
     druid <- sapply(drs$fieldResult[[1]]$i18nCode, function(x) {
@@ -49,9 +49,10 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
       data <- as.data.frame(list(uid = z, totalRecords = 0))
     }
     else {
-      cols <- c("uid", "name", "licenseType", "dateCreated","lastUpdated","doi",
-                "Animalia","Bacteria", "Plantae","Chromista","Fungi","Protista",
-                "Protozoa","Virus","Unknown","totalDownloadedRecords")
+      cols <- c("uid", "name", "licenseType", "dateCreated","lastUpdated",
+                "doi","Animalia","Bacteria", "Plantae","Chromista","Fungi",
+                "Protista","Protozoa","Virus","Unknown",
+                "totalDownloadedRecords")
       data <- data[names(data) %in% cols]
       data[sapply(data, is.null)] <- NA
       
