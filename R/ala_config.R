@@ -182,14 +182,14 @@ ala_reasons <- function() {
     ## 11         logger.download.reason.citizen.science                  citizen science 11
     ## 12 logger.download.reason.restoration.remediation          restoration/remediation 12
     
-    out <- cached_get(build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,path="reasons"),type="json")
+    out <- cached_get(build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,path="'logger/reasons"),type="json")
     if (any(names(out)=="deprecated")) out <- out[!out$deprecated,]
     out[,!names(out)=="deprecated"]
 }
 
 ## internal function, used to define the ALA4R sourceTypeId parameter value, passed by occurrences download and possibly other functions
 ala_sourcetypeid <- function() {
-    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,path="sources")
+    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,path="logger/sources")
     sids <- cached_get(this_url,type="json")
     if ("ALA4R" %in% sids$name) {
         sids$id[sids$name=="ALA4R"]
