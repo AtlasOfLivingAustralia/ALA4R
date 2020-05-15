@@ -148,7 +148,8 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,email,
                         reason,verbose=ala_config()$verbose,
                         record_count_only=FALSE,use_layer_names=TRUE,
                         use_data_table=TRUE) {
-    ## check input parms are sensible
+    
+    ## check input params are sensible
     assert_that(is.flag(record_count_only))
     if (!missing(method)) {
         warning("Method is a deprecated field. All queries use offline method,
@@ -277,6 +278,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,email,
         ## only for more recent biocache versions
         this_query$sourceTypeId <- ala_sourcetypeid() 
     }
+
     ## force backslash-escaping of quotes rather than double-quote escaping
     this_query$esc <- "\\" 
     this_query$sep <- "\t" ## tab-delimited
@@ -288,7 +290,6 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,email,
     this_url <- build_url_from_parts(
         getOption("ALA4R_server_config")$base_url_biocache,
         c("occurrences","offline","download"),query=this_query)
-
     ## the file that will ultimately hold the results (even if we are not
     ## caching, it still gets saved to file)
     thisfile <- ala_cache_filename(this_url)

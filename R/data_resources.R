@@ -17,7 +17,6 @@
 #' @export data_resources
 
 data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
-  
   this_query <- list()
   assert_that(is.flag(verbose))
   
@@ -64,10 +63,10 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
     
     if (df$totalRecords>0) {
       # add lifeform counts
-      df <- cbind(df, lifeform_stats(z))
+      df <- cbind(df, lifeform_stats(z, verbose=verbose))
       
       # add download stats
-      df$totalDownloadedRecords <- download_stats(z)
+      df$totalDownloadedRecords <- download_stats(z, verbose=verbose)
     }
     else {
       # add missing cols so rows are of equal length
@@ -86,7 +85,7 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
 }
 
 
-download_stats <- function(id) {
+download_stats <- function(id,verbose=ala_config()$verbose) {
   temp_logger_url <- "https://logger.ala.org.au/service/"
   this_url <- paste0(temp_logger_url,
                      "reasonBreakdown?eventId=1002&entityUid=", id)
@@ -97,7 +96,7 @@ download_stats <- function(id) {
 
 # Return lifeform stats for data resource. 
 # It should also be possible to break down by other ranks in future 
-lifeform_stats <- function(id, rank = "lifeform") {
+lifeform_stats <- function(id, rank = "lifeform",verbose=ala_config()$verbose) {
   this_url <- paste0(getOption("ALA4R_server_config")$base_url_biocache,
                      "breakdown/dataResources/",id,"?rank=",rank)
   
