@@ -27,13 +27,19 @@ check_caching(thischeck)
 
 
 thischeck <- function() {
-  test_that("data resources behaves correctly with an invalid id", {
+  test_that("data resources behaves correctly with a single invalid id", {
     skip_on_cran()
     expect_warning(result <- data_resources('invalid-id'))
     expect_equal(ncol(result),length(cols))
-    
-    # one valid and one invalid id
-    expect_warning(result <- data_resources(c('invalid-id', 'dr345')))
+  })
+}
+
+check_caching(thischeck)
+
+thischeck <- function() {
+  test_that("data resources behaves correctly with one valid and one invalid id", {
+    skip_on_cran()
+    expect_warning(data_resources(c('invalid-id', 'dr345')))
   })
 }
 
