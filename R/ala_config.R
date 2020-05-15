@@ -182,7 +182,7 @@ ala_reasons <- function() {
     ## 11         logger.download.reason.citizen.science                  citizen science 11
     ## 12 logger.download.reason.restoration.remediation          restoration/remediation 12
     
-    out <- cached_get(build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,path="'logger/reasons"),type="json")
+    out <- cached_get(build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,path="logger/reasons"),type="json")
     if (any(names(out)=="deprecated")) out <- out[!out$deprecated,]
     out[,!names(out)=="deprecated"]
 }
