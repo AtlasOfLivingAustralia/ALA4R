@@ -32,14 +32,20 @@ search_partial_name <- function(taxon, geo_only=FALSE, output_format="simple", i
     }
     assert_that(is.flag(geo_only), noNA(geo_only))
     if (geo_only) {
-        this_query$geoOnly <- "true" #Check for taxa that have locations (some have no location)
+      # Check for taxa that have locations (some have no location)
+        this_query$geoOnly <- "true" 
     }
     if (!missing(index_type)) {
         assert_that(is.string(index_type))
-        index_type <- match.arg(toupper(index_type), c("TAXON", "REGION", "COLLECTION", "INSTITUTION", "DATASET"))
+        index_type <- match.arg(toupper(index_type), c("TAXON", "REGION",
+                                                       "COLLECTION",
+                                                       "INSTITUTION",
+                                                       "DATASET"))
         this_query$idxType <- index_type
     }
-    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie, c("search", "auto.json"), this_query)
+    this_url <- build_url_from_parts(
+      getOption("ALA4R_server_config")$base_url_bie, c("search", "auto.json"),
+      this_query)
     out <- cached_get(url=this_url, type="json") #get the data
     out <- out[[1]] #looking at the data
 	
@@ -50,12 +56,16 @@ search_partial_name <- function(taxon, geo_only=FALSE, output_format="simple", i
         }
         return(data.frame())
     } else {
-        ## matchedNames, commonNameMatches, and scientificNameMatches are all lists of strings
+        ## matchedNames, commonNameMatches, and scientificNameMatches are all
+        ## lists of strings
         ## convert each list to single string
         for (ii in 1:nrow(out)) {
-            out$matchedNames[ii] <- paste(out$matchedNames[[ii]], collapse=", ")
-            out$scientificNameMatches[ii] <- paste(out$scientificNameMatches[[ii]], collapse=", ")
-            out$commonNameMatches[ii] <- paste(out$commonNameMatches[[ii]], collapse=", ")
+            out$matchedNames[ii] <- paste(out$matchedNames[[ii]],
+                                          collapse=", ")
+            out$scientificNameMatches[ii] <-
+              paste(out$scientificNameMatches[[ii]], collapse=", ")
+            out$commonNameMatches[ii] <- paste(out$commonNameMatches[[ii]],
+                                               collapse=", ")
         }
         out$matchedNames <- unlist(out$matchedNames)
         out$scientificNameMatches <- unlist(out$scientificNameMatches)
@@ -65,16 +75,21 @@ search_partial_name <- function(taxon, geo_only=FALSE, output_format="simple", i
         ## remove some columns that are unlikely to ever be of value to R users
         xcols <- setdiff(names(out), unwanted_columns("general"))
         ## type check
-        if (is.logical(out$commonName)) out$commonName <- as.character(out$commonName)
+        if (is.logical(out$commonName)) {
+          out$commonName <-as.character(out$commonName)
+        }
         ## reorder columns, for minor convenience
-        firstcols <- intersect(c("name", "commonName", "guid", "rankString"), xcols)
+        firstcols <- intersect(c("name", "commonName", "guid", "rankString"),
+                               xcols)
         xcols <- c(firstcols, setdiff(xcols, firstcols))
         out <- subset(out, select=xcols)
         ## some names have non-breaking spaces
-        for (n in intersect(names(out), c("name", "matchedNames", "scientificNameMatches")))
+        for (n in intersect(names(out), c("name", "matchedNames",
+                                          "scientificNameMatches")))
             out[, n] <- replace_nonbreaking_spaces(out[, n])
     }
-    class(out) <- c("search_partial_name", class(out)) #add the search_partial_name class
+    # add the search_partial_name class
+    class(out) <- c("search_partial_name", class(out)) 
     attr(out, "output_format") <- output_format
     out
 }
