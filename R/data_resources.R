@@ -20,12 +20,8 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
   this_query <- list()
   assert_that(is.flag(verbose))
   
-  if (is.null(getOption("ALA4R_server_config")$base_url_collectory)) {
-    base_url <- "https://collections.ala.org.au/ws/"
-  }
-  else {
-    base_url <- getOption("ALA4R_server_config")$base_url_collectory
-  }
+
+  base_url <- getOption("ALA4R_server_config")$base_url_collectory
   
   if(missing(druid)) {
     this_url <- paste0(getOption("ALA4R_server_config")$base_url_biocache,
@@ -33,9 +29,9 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
                        max)
     drs <- cached_get(URLencode(this_url), type="json", verbose=verbose,
                       caching = "off")
-    druid <- sapply(drs$fieldResult[[1]]$i18nCode, function(x) {
+    druid <- vapply(drs$fieldResult[[1]]$i18nCode, function(x) {
       sub(".*\\.", "", x)
-      })
+      }, "")
   }
   
   assert_that(is.character(druid))
@@ -51,11 +47,11 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
       cols <- c("uid", "name", "licenseType", "dateCreated","lastUpdated",
                 "doi","Animalia","Bacteria", "Plantae","Chromista","Fungi",
                 "Protista","Protozoa","Virus","Unknown",
-                "totalDownloadedRecords")
+                "totalDownloadedRecords","resourceType", "gbifRegistryKey")
       data <- data[names(data) %in% cols]
-      data[sapply(data, is.null)] <- NA
+      data[vapply(data, is.null, logical(1))] <- NA
       
-      data$totalRecords <- occurrences(fq=paste0('data_resource_uid:',z),
+      data$totalRecords <- occurrences(fq=paste0 ('data_resource_uid:',z),
                                   record_count_only = TRUE)
     }
     
