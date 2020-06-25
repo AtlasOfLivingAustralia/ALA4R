@@ -41,16 +41,23 @@
 #' @export ala_fields
 
 # TODO: Summary of #fields returned
-# ids from https://spatial.ala.org.au/ws/layers are NUMERIC but lookup prepends "el" and "cl"! 
+# ids from https://spatial.ala.org.au/ws/layers are NUMERIC but lookup
+# prepends "el" and "cl"! 
 
 ala_fields <- function(fields_type="occurrence", as_is=TRUE) {
   assert_that(is.string(fields_type))
   assert_that(is.flag(as_is), !is.na(as_is))
-  fields_type <- match.arg(tolower(fields_type), c("occurrence", "occurrence_stored", "occurrence_indexed", "general", "layers", "assertions", "images"))
+  fields_type <- match.arg(tolower(fields_type),
+                           c("occurrence", "occurrence_stored",
+                             "occurrence_indexed", "general", "layers",
+                             "assertions", "images"))
   
-  # Hard code images fields until we discover a nice way to retrieve this from the API
+  # Hard code images fields until the API returns this nicely
   if (identical(fields_type, "images")) {
-    fields <- c("dateUploaded","dataResourceUid","license","recognisedLicence","imageSize","dateUploadedYearMonth","format","fileType","createdYear","creator","title","description","width","height","thumbHeight","thumbWidth")
+    fields <- c("dateUploaded","dataResourceUid","license","recognisedLicence",
+                "imageSize","dateUploadedYearMonth","format","fileType",
+                "createdYear","creator","title","description","width","height",
+                "thumbHeight","thumbWidth")
     df <- data.frame(fields)
     names(df) <- "name"
     return(df)
@@ -58,40 +65,55 @@ ala_fields <- function(fields_type="occurrence", as_is=TRUE) {
   
   this_url <- switch(fields_type,
                      "general"={
-                       build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie, c("admin", "indexFields"))
+                       bie_url <- 
+                         build_url_from_parts(getOption("ALA4R_server_config")$
+                                                base_url_bie,
+                                              c("admin", "indexFields"))
                      },
                      "occurrence_indexed"=,
                      "occurrence_stored"=,
                      "occurrence"={
-                       build_url_from_parts(getOption("ALA4R_server_config")$base_url_biocache, c("index", "fields"))
+                       build_url_from_parts(getOption("ALA4R_server_config")$
+                                              base_url_biocache,
+                                            c("index", "fields"))
                      },
                      "layers"={
-                       build_url_from_parts(getOption("ALA4R_server_config")$base_url_spatial, "fields")
+                       build_url_from_parts(getOption("ALA4R_server_config")$
+                                              base_url_spatial,
+                                            "fields")
                      },
                      "assertions"={
-                       build_url_from_parts(getOption("ALA4R_server_config")$base_url_biocache, c("assertions", "codes"))
+                       build_url_from_parts(getOption("ALA4R_server_config")$
+                                              base_url_biocache,
+                                            c("assertions", "codes"))
                      }
-                     # this is possibly a way to retrieve fields
-                     #"images"={
-                    #   build_url_from_parts(getOption("ALA4R_server_config")$base_url_biocache, "metadatakeys")
-                    # }
   )
   x <- cached_get(this_url, type="json")
   ## we have a list of unwanted columns that get removed from results
-  ## since this function returns a list of field names, also remove the unwanted fields from the results list
+  ## since this function returns a list of field names, also remove the
+  ## unwanted fields from the results list
   x <- x[!x$name %in% unwanted_columns(fields_type), ]
   
-  ## for "layers", shorter, more manageable names are provided from https://spatial.ala.org.au/ws/layers in API. Add these as an extra column: shortName
+  ## for "layers", shorter, more manageable names are provided from
+  ## https://spatial.ala.org.au/ws/layers in API. Add these as an extra
+  ## column: shortName
   if (identical(fields_type, "layers")) {
-    more_x <- cached_get(url=build_url_from_parts(getOption("ALA4R_server_config")$base_url_spatial, "layers"), type="json")
-    ## just pull out the bits that we want and construct ids here that match the field names in x
-    more_x$id <- paste(substr(tolower(more_x$type), 1, 1), "l", more_x$id, sep="")
+    more_x <- cached_get(build_url_from_parts(getOption("ALA4R_server_config")$
+                                                base_url_spatial, "layers"),
+                         type="json")
+    ## just pull out the bits that we want and construct ids here that match
+    ## the field names in x
+    more_x$id <- paste(substr(tolower(more_x$type), 1, 1),
+                       "l",
+                       more_x$id,
+                       sep="")
     more_x <- more_x[, c("name", "id")]
     names(more_x) <- c("shortName", "id")
     x <- merge(x, more_x, by="id")
     x$type[x$type=="c"] <- "Contextual"
-    x$type[x$type=="b"] <- "Contextual" ## there is an errant "b" here that should be "c"
-    x$type[x$type=="e"] <- "Environmental" ## for consistency with search_layers
+    ## there is an errant "b" here that should be "c"
+    x$type[x$type=="b"] <- "Contextual" 
+    x$type[x$type=="e"] <- "Environmental" ##for consistency with search_layers
   } else if (identical(fields_type, "occurrence_stored")) {
     x <- x[x$stored, ]
   } else if (identical(fields_type, "occurrence_indexed")) {
@@ -101,9 +123,11 @@ ala_fields <- function(fields_type="occurrence", as_is=TRUE) {
   if (!as_is) {
     ## old code ## names(x) <- rename_variables(names(x), type=fields_type)
     ## Nooooo! this should have been applied to x$name not names(x)
-    ## as_is now defaults to TRUE (v1.20) to keep default behaviour the same as with previous versions
+    ## as_is now defaults to TRUE (v1.20) to keep default behaviour the same as
+    ## with previous versions
     if (!(fields_type %in% c("layers"))) {
-      ## don't apply when fields_type is layers,  because we want name left as full name 
+      ## don't apply when fields_type is layers,  because we want name left as
+      ## full name 
       x$name <- rename_variables(x$name, type=fields_type)
     }
   }
@@ -126,15 +150,23 @@ field_info  <-  function(field_id, maxrows=50, record_count_only=FALSE) {
     maxrows <- 0
   }
   field_id <- fields_name_to_id(fields=field_id, fields_type="layers")
-  this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_spatial, c("field", field_id), query=list(pageSize=maxrows))
+  this_url <-
+    build_url_from_parts(getOption("ALA4R_server_config")$base_url_spatial,
+                         c("field", field_id), query=list(pageSize=maxrows))
   tryCatch({
-    out  <-  cached_get(url=this_url, type="json") ## retrieve a max of 50 objects by default
+    ## retrieve a max of 50 objects by default
+    out  <-  cached_get(url=this_url, type="json") 
     if (substr(field_id, 1, 2) == 'cl') {
       if (record_count_only) {
         return(out$number_of_objects)
       } else if (nrow(out$objects)<out$number_of_objects) {
-        ## we retrieved a subset of the full record set for this field, so let the user know
-        warning("field_info retrieved ", nrow(out$objects), " rows out of a total of ", out$number_of_objects, " for this field. You may wish to increase the maxrows parameter, but be aware that a very large number of rows may crash R")
+        ## we retrieved a subset of the full record set for this field, so let
+        ## the user know
+        warning("field_info retrieved ", nrow(out$objects),
+                " rows out of a total of ", out$number_of_objects,
+                " for this field. You may wish to increase the maxrows
+                parameter, but be aware that a very large number of rows
+                may crash R")
       }
       out  <-  out$objects #keep only the content
     } else if (substr(field_id, 1, 2) == 'el') {
@@ -147,7 +179,8 @@ field_info  <-  function(field_id, maxrows=50, record_count_only=FALSE) {
     }
     names(out) <- rename_variables(names(out), type="layers")
     out
-  },warning = function(w) {  ## un-matched field name, return an empty data frame
+  },warning = function(w) {
+    ## un-matched field name, return an empty data frame
     field_empty_warning()
     data.frame()} 
   ,error = function(e) {
@@ -159,84 +192,122 @@ field_info  <-  function(field_id, maxrows=50, record_count_only=FALSE) {
 ## private function to issue warning if unmatched field name
 field_empty_warning <- function() {
   if (ala_config()$warn_on_empty) {
-    warning("No information returned. Please check field_id is valid using ", getOption("ALA4R_server_config")$fields_function, "(\"layers\").")
+    warning("No information returned. Please check field_id is valid using ",
+            getOption("ALA4R_server_config")$fields_function,
+            "(\"layers\").")
   }
 }
 
 
-## private function to replace any full field names (descriptions) with their id values
+## private function to replace any full field names (descriptions) with
+## their id values
 ## e.g. "Radiation - lowest period (Bio22)" to id "el871"
 fields_name_to_id <- function(fields, fields_type, make_names=FALSE) {
   assert_that(is.character(fields))
   assert_that(is.string(fields_type))
-  assert_that(is.flag(make_names)) ## if TRUE, apply make.names to variable names before matching
-  fields_type <- match.arg(tolower(fields_type), c("occurrence", "general", "layers", "assertions"))
+  ## if TRUE, apply make.names to variable names before matching
+  assert_that(is.flag(make_names)) 
+  fields_type <- match.arg(tolower(fields_type), c("occurrence", "general",
+                                                   "layers", "assertions"))
   valid_fields <- ala_fields(fields_type=fields_type)
-  ## merge differently for "layers" fields, because those column names differ from other fields_type
-  ## for layers, the long name is in "desc", with the id in "id" (and "name" is something different)
+  ## merge differently for "layers" fields, because those column names differ
+  ## from other fields_type
+  ## for layers, the long name is in "desc", with the id in "id" (and "name"
+  ## is something different)
   ## ** as of 17-Jun-2014, "desc" is now renamed "description"
-  ## for "occurrence" and "assertions", long name is in "description" and id is in "name"
+  ## for "occurrence" and "assertions", long name is in "description" and id
+  ## is in "name"
   ## for general, there is no long name (description)
   ## for each one, warn if multiple matches on long name are found
   if (make_names) {
     valid_fields$description <- switch(fields_type,
                                        "layers"=,
                                        "occurrence"=,
-                                       "assertions"=make.names(valid_fields$description)
+                                       "assertions"=
+                                         make.names(valid_fields$description)
     )
   }
   switch(fields_type,
-         "layers"=vapply(fields, function(z) ifelse(z %in% valid_fields$description & (!z %in% valid_fields$id), {
-           if (sum(valid_fields$description==z, na.rm=TRUE)>1) {
-             if (nchar(z)>0) { ## don't warn if field name is degenerate ""
-               warning(" multiple ", fields_type, " fields match the name \"", z, "\", using first")
+         "layers"=vapply(fields, function(z) {
+           if (z %in% valid_fields$description & (!z %in% valid_fields$id)) {
+             if (sum(valid_fields$description==z, na.rm=TRUE)>1) {
+               if (nchar(z)>0) { ## don't warn if field name is degenerate ""
+                 warning(" multiple ", fields_type,
+                         " fields match the name \"", z, "\", using first")
+               }
              }
+             valid_fields$id[which(valid_fields$description==z)[1]]
            }
-           valid_fields$id[which(valid_fields$description==z)[1]]
-         }, z), FUN.VALUE="", USE.NAMES=FALSE),
+           else {
+             z
+           }
+         }, FUN.VALUE="", USE.NAMES=FALSE),
          "occurrence"=,
-         "assertions"=vapply(fields, function(z) ifelse(z %in% valid_fields$description & (!z %in% valid_fields$name), {
-           if (sum(valid_fields$description==z, na.rm=TRUE)>1) {
-             if (nchar(z)>0) {
-               warning(" multiple ", fields_type, " fields match the name \"", z, "\", using first")
+         "assertions"=vapply(fields, function(z) {
+           if (z %in% valid_fields$description & (!z %in% valid_fields$name)) {
+             if (sum(valid_fields$description==z, na.rm=TRUE)>1) {
+               if (nchar(z)>0) {
+                 warning(" multiple ", fields_type," fields match the name \"",
+                         z, "\", using first")
+               }
              }
+             valid_fields$name[which(valid_fields$description==z)[1]]
            }
-           valid_fields$name[which(valid_fields$description==z)[1]]
-         }, z), FUN.VALUE="", USE.NAMES=FALSE),
+           else {
+             z
+           }
+         } , FUN.VALUE="", USE.NAMES=FALSE),
          fields ## default to just returning the fields as supplied 
   )
 }
 
-## private function to replace any id values with their full field names (descriptions)
+## private function to replace any id values with their full field
+## names (descriptions)
 fields_id_to_name <- function(fields, fields_type) {
   assert_that(is.character(fields))
   assert_that(is.string(fields_type))
-  fields_type <- match.arg(tolower(fields_type), c("occurrence", "general", "layers", "assertions"))
+  fields_type <- match.arg(tolower(fields_type),
+                           c("occurrence", "general", "layers", "assertions"))
   valid_fields <- ala_fields(fields_type=fields_type)
-  ## merge differently for "layers" fields, because those column names differ from other fields_type
-  ## for layers, the long name is in "desc", with the id in "id" (and "name" is something different)
+  ## merge differently for "layers" fields, because those column names differ
+  ## from other fields_type
+  ## for layers, the long name is in "desc", with the id in "id" (and "name"
+  ## is something different)
   ## ** as of 17-Jun-2014, "desc" is now renamed "description"
-  ## for "occurrence" and "assertions", long name is in "description" and id is in "name"
+  ## for "occurrence" and "assertions", long name is in "description" and id is
+  ## in "name"
   ## for general, there is no long name (description)
   ## for each one, warn if multiple matches on long name are found
   switch(fields_type,
-         "layers"=vapply(fields, function(z) ifelse(z %in% valid_fields$id & (!z %in% valid_fields$description), {
-           if (sum(valid_fields$id==z, na.rm=TRUE)>1) {
-             if (nchar(z)>0) {
-               warning(" multiple ", fields_type, " fields match the id \"", z, "\", using first")
+         "layers"=vapply(fields, function(z) {
+           if(z %in% valid_fields$id &(!z %in% valid_fields$description)) {
+             if (sum(valid_fields$id==z, na.rm=TRUE)>1) {
+               if (nchar(z)>0) {
+                 warning(" multiple ", fields_type, " fields match the id \"",
+                         z, "\", using first")
+               }
              }
+             valid_fields$description[which(valid_fields$id==z)[1]]
            }
-           valid_fields$description[which(valid_fields$id==z)[1]]
-         }, z), FUN.VALUE="", USE.NAMES=FALSE),
+           else {
+             z
+           }
+         }, FUN.VALUE="", USE.NAMES=FALSE),
          "occurrence"=,
-         "assertions"=vapply(fields, function(z) ifelse(z %in% valid_fields$name & (!z %in% valid_fields$description), {
-           if (sum(valid_fields$name==z, na.rm=TRUE)>1) {
-             if (nchar(z)>0) {
-               warning(" multiple ", fields_type, " fields match the id \"", z, "\", using first")
+         "assertions"=vapply(fields, function(z) {
+           if(z %in% valid_fields$name & (!z %in% valid_fields$description)) {
+             if (sum(valid_fields$name==z, na.rm=TRUE)>1) {
+               if (nchar(z)>0) {
+                 warning(" multiple ", fields_type, " fields match the id \"",
+                         z, "\", using first")
+               }
              }
+             valid_fields$description[which(valid_fields$name==z)[1]]
            }
-           valid_fields$description[which(valid_fields$name==z)[1]]
-         }, z), FUN.VALUE="", USE.NAMES=FALSE),
+           else {
+             z
+           }
+         }, FUN.VALUE="", USE.NAMES=FALSE),
          fields ## default to just returning the fields as supplied 
   )
 }
