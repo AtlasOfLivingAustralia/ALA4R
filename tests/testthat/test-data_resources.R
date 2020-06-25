@@ -2,7 +2,8 @@ context("Test data resource information retrieval functions")
 
 cols <- c("uid", "name", "licenseType", "dateCreated","lastUpdated","doi",
           "Animalia","Bacteria", "Plantae","Chromista","Fungi","Protista",
-          "Protozoa","Virus","Unknown","totalDownloadedRecords","totalRecords")
+          "Protozoa","Virus","Unknown","totalDownloadedRecords","totalRecords",
+          "resourceType", "gbifRegistryKey")
 
 thischeck <- function() {
   test_that("data resources returns correct data columns", {
