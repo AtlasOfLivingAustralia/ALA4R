@@ -109,7 +109,8 @@
 #' ## count of records from this data provider
 #' x <- occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE)
 #' ## download records, with standard fields
-#' x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10, email='your_email_here')
+#' x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,
+#' email='your_email_here')
 #' ## download records, with all fields
 #' x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,
 #'   fields=ala_fields("occurrence_stored",as_is=TRUE)$name) 
@@ -143,7 +144,7 @@
 ## TODO: more extensive testing, particularly of the csv-conversion process
 ## TODO LATER: add params: lat, lon, radius (for specifying a search circle)
 
-occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,email,
+occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,generateDoi=FALSE,email,
                         download_reason_id=ala_config()$download_reason_id,
                         reason,verbose=ala_config()$verbose,
                         record_count_only=FALSE,use_layer_names=TRUE,
@@ -237,6 +238,11 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,email,
         }
         this_query$fields <- str_c(fields,collapse=",")
     }
+    
+    if (generateDoi) {
+      this_query$mintDoi <- 'true'
+    }
+
     if (!missing(extra)) {
         assert_that(is.character(extra))
         valid_fields <- ala_fields(fields_type=valid_fields_type,as_is=TRUE)
@@ -290,6 +296,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,email,
     this_url <- build_url_from_parts(
         getOption("ALA4R_server_config")$base_url_biocache,
         c("occurrences","offline","download"),query=this_query)
+    
     ## the file that will ultimately hold the results (even if we are not
     ## caching, it still gets saved to file)
     thisfile <- ala_cache_filename(this_url)
@@ -450,25 +457,47 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,email,
             xc <- "No citation information was returned, try again later"
             found_citation <- FALSE
             try({
-                suppressWarnings(xc <- read.table(unz(thisfile,"citation.csv"),
-                                                  header=TRUE,comment.char="",
-                                                  as.is=TRUE))
+              suppressWarnings(xc <- read.table(unz(thisfile,"citation.csv"),
+                                                header=TRUE,comment.char="",
+                                                as.is=TRUE))
+              found_citation <- TRUE},
+              silent=TRUE)
+            if (!found_citation) {
+              ## as of around July 2016 the citation.csv file appears to have
+              ## been replaced by README.html
+              try({
+                suppressWarnings(xc <- scan(unz(thisfile,"README.html"),
+                                            what="character",sep="$",
+                                            quiet=TRUE))
+                xc <- data.frame(citation=paste(xc,collapse=""))
                 found_citation <- TRUE},
                 silent=TRUE)
-            if (!found_citation) {
-                ## as of around July 2016 the citation.csv file appears to have
-                ## been replaced by README.html
-                try({
-                    suppressWarnings(xc <- scan(unz(thisfile,"README.html"),
-                                                what="character",sep="$",
-                                                quiet=TRUE))
-                    xc <- data.frame(citation=paste(xc,collapse=""))
-                    found_citation <- TRUE},
-                    silent=TRUE)
             }
             if (!found_citation & nrow(x)>0) {
                 warning("citation file not found within downloaded zip file")
             }
+            # look for doi if one was requested
+            found_readme <- FALSE
+            found_doi <- FALSE
+            
+            doi <- "DOI was not requested or could not be found"
+            if(generateDoi) {
+              tryCatch({
+                doi <- as.character(read.table(
+                  unz('~/Downloads/data (74).zip','doi.txt'))$V1)
+                found_doi <- TRUE
+              },
+              warning = function(e) {
+                warning('No DOI was generated for download. The DOI server may
+                        be down. Please try again later')
+              },
+              error = function(e) {
+                warning('No DOI was generated for download. The DOI server may
+                        be down. Please try again later')
+              })
+            }
+            
+            
         } else {
             if (ala_config()$warn_on_empty) {
                 warning("no matching records were returned")
@@ -477,8 +506,10 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,email,
                 warning("WKT string may not be valid: ",wkt)
             }
             xc <- NULL
+            doi <- NULL
         }
-        x <- list(data=x,meta=xc)
+        meta <- list(citation = xc, doi = doi)
+        x <- list(data=x,meta=meta)
     }
     class(x) <- c('occurrences',class(x)) #add the occurrences class
     x
