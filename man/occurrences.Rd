@@ -12,6 +12,7 @@ occurrences(
   extra,
   qa,
   method,
+  generateDoi = FALSE,
   email,
   download_reason_id = ala_config()$download_reason_id,
   reason,
@@ -136,7 +137,8 @@ a valid query.
 ## count of records from this data provider
 x <- occurrences(taxon="data_resource_uid:dr356",record_count_only=TRUE)
 ## download records, with standard fields
-x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10, email='your_email_here')
+x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,
+email='your_email_here')
 ## download records, with all fields
 x <- occurrences(taxon="data_resource_uid:dr356",download_reason_id=10,
   fields=ala_fields("occurrence_stored",as_is=TRUE)$name) 
