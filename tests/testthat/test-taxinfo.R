@@ -55,7 +55,7 @@ thischeck=function() {
                            fields = "all")
     f <- ala_fields("general")
     expect_equal(ncol(tx),nrow(f))
-    expect_equal(unique(x$taxonomicStatus), "accepted")
+    expect_equal(unique(tx$taxonomicStatus), "accepted")
   })
 }
 check_caching(thischeck)
