@@ -45,6 +45,7 @@ thischeck <- function() {
         ## check that names required for unique.occurrences method are present
         expect_true(all(c("scientificName","longitude","latitude","eventDate",
                           "month","year") %in% names(occ$data)))
+        
     })
 }
 check_caching(thischeck)
@@ -80,6 +81,14 @@ thischeck <- function() {
         expect_lt(nrow(xu$data),nrow(x$data))
         xu <- unique(x,spatial=0,temporal="yearmonth")
         expect_lt(nrow(xu$data),nrow(x$data))
+        
+        
+        xu <- unique(x, temporal = "full")
+        expect_true('eventDate' %in% names(xu$data))
+        expect_error(unique(x, temporal = "y"))
+        #drop scientific name
+        x$data <- x$data[, !names(x$data) == 'scientificName']
+        expect_error(unique(x))
     })
 }
 check_caching(thischeck)
@@ -94,6 +103,12 @@ thischeck <- function() {
         expect_is(xs,"list")
         expect_named(xs,c("data","meta"))
         expect_is(xs$data,"data.frame")
+        expect_lt(nrow(xs$data),nrow(x$data))
+        expect_error(subset(x, exclude.spatial = 'some'))
+        xs <- subset(x, exclude.taxonomic = 'warning')
+        expect_lt(nrow(xs$data),nrow(x$data))
+        expect_error(subset(x, max.spatial.uncertainty = ""))
+        xs <- subset(x, max.spatial.uncertainty = 2)
         expect_lt(nrow(xs$data),nrow(x$data))
     })
 }
@@ -137,3 +152,13 @@ thischeck <- function() {
     })
 }
 check_caching(thischeck)
+
+thischeck <- function() {
+  test_that("occurrences generates a doi if requested", {
+    skip("Skip except for manual testing to avoid clogging up doi system with
+         unnecessary dois.")
+  
+  x <- occurrences(taxon = "Acacia podalyriifolia", email = 'test@test.org',
+                   download_reason_id = 'testing', generateDoi = TRUE)  
+    })
+}
