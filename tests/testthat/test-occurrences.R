@@ -5,8 +5,8 @@ thischeck <- function() {
     test_that("ala_reasons works as expected", {
         skip_on_cran()
         expect_named(ala_reasons(),c("rkey","name","id"))
-        expect_equal(nrow(ala_reasons()),12)
-        expect_equal(sort(ala_reasons()$id),c(0:8,10:12))
+        expect_equal(nrow(ala_reasons()),13)
+        expect_equal(sort(ala_reasons()$id),c(0:8,10:13))
         ## this should throw an error because there is an unused argument
         expect_error(ala_reasons(TRUE)) 
         tmp <- ala_reasons()
@@ -117,6 +117,9 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences checks required inputs", {
         skip_on_cran()
+        expect_error(occurrences())
+        expect_error(occurrences(taxon="data_resource_uid:dr356",
+                                 reason=10,email="testing@test.org"))
         expect_error(occurrences(taxon="data_resource_uid:dr356",
                                  download_reason_id="testing",email=""))
         expect_error(occurrences(taxon="data_resource_uid:dr356",
@@ -125,9 +128,44 @@ thischeck <- function() {
                                  download_reason_id="testing",email=NULL))
         ## missing download_reason_id
         expect_error(occurrences(taxon="Amblyornis newtonianus")) 
+        
+        expect_warning(occurrences(taxon="Amblyornis newtonianus",
+                                   email="testing@test.org",download_reason_id=10,
+                                   method = "indexed"))
+        # bad download reason
+        expect_error(occurrences(taxon="Amblyornis newtonianus",
+                     email="testing@test.org",download_reason_id=20))
+        
+        # bad qa fields
+        expect_error(occurrences(taxon="Amblyornis newtonianus",
+                                 email="testing@test.org",download_reason_id=10,
+                                 qa = "bad_assertion"))
     })
 }
 check_caching(thischeck)
+
+
+thischeck <- function() {
+  test_that("occurrences handles fields correctly", {
+    occ <- occurrences(taxon = as.factor("Amblyornis newtonianus"),
+                                         email="testing@test.org",
+                                         download_reason_id=10)
+    expect_is(occ$data,"data.frame")
+    
+    occ <- occurrences(taxon="Amblyornis newtonianus",
+                       email="testing@test.org",download_reason_id=10,
+                       wkt = "POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
+    expect_is(occ$data,"data.frame")
+    
+    expect_true('acceptedNameUsage' %in%
+                  names(occurrences(taxon = "Amblyornis newtonianus",
+                                    email="testing@test.org",
+                                    download_reason_id=10,
+                                    extra = 'accepted_name_usage')$data))
+    
+  })
+}
+
 
 thischeck <- function() {
     test_that("occurrences warns for long URLs", {
@@ -162,3 +200,4 @@ thischeck <- function() {
                    download_reason_id = 'testing', generateDoi = TRUE)  
     })
 }
+
