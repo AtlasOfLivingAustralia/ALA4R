@@ -20,8 +20,12 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
   this_query <- list()
   assert_that(is.flag(verbose))
   
-
-  base_url <- getOption("ALA4R_server_config")$base_url_collectory
+  if (is.null(getOption("ALA4R_server_config")$base_url_collectory)) {
+    base_url <- 'https://collections.ala.org.au/ws/'
+  }
+  else {
+    base_url <- getOption("ALA4R_server_config")$base_url_collectory    
+  }
   
   if(missing(druid)) {
     this_url <- paste0(getOption("ALA4R_server_config")$base_url_biocache,
@@ -37,6 +41,11 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
   assert_that(is.character(druid))
   
   dr_data <- do.call(rbind, lapply(druid, function(z) {
+    cols <- c("uid", "name", "licenseType", "dateCreated","lastUpdated",
+              "doi","Animalia","Bacteria", "Plantae","Chromista","Fungi",
+              "Protista","Protozoa","Virus","Unknown",
+              "totalDownloadedRecords","resourceType", "gbifRegistryKey")
+    
     this_url <- paste0(base_url, "dataResource/", z)
     data <- cached_get(URLencode(this_url), type="json", verbose=verbose,
                        on_server_error = function(z){NULL})
@@ -44,10 +53,6 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
       data <- as.data.frame(list(uid = z, totalRecords = 0))
     }
     else {
-      cols <- c("uid", "name", "licenseType", "dateCreated","lastUpdated",
-                "doi","Animalia","Bacteria", "Plantae","Chromista","Fungi",
-                "Protista","Protozoa","Virus","Unknown",
-                "totalDownloadedRecords","resourceType", "gbifRegistryKey")
       data <- data[names(data) %in% cols]
       data[vapply(data, is.null, logical(1))] <- NA
       
