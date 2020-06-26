@@ -36,7 +36,6 @@ specieslist <- function(taxon, wkt, fq) {
     this_query <- list()
     if (!missing(taxon)) {
         assert_that(is.notempty.string(taxon))
-        # taxon <- clean_string(taxon) ## clean up the taxon name ## no, don't: this can be of the form index:value
         this_query$q <- taxon
     }
     if (!missing(wkt)) {
@@ -48,7 +47,8 @@ specieslist <- function(taxon, wkt, fq) {
     }    
     if (!missing(fq)) {
         assert_that(is.character(fq))
-        ## can have multiple fq parameters, need to specify in url as fq=a:b&fq=c:d&fq=...
+        ## can have multiple fq parameters, need to specify in url as
+        ## fq=a:b&fq=c:d&fq=...
         check_fq(fq, type="occurrence") ## check that fq fields are valid
         fq <- as.list(fq)
         names(fq) <- rep("fq", length(fq))
@@ -56,31 +56,48 @@ specieslist <- function(taxon, wkt, fq) {
     }
     if (length(this_query)==0) {
         ## not a valid request!
-        stop("invalid request: need to supply at least one of taxon, wkt, or fq parameter")
+        stop("invalid request: need to supply at least one of taxon, wkt, 
+             or fq parameter")
     }
-    ## update March 2017: the service will actually accept a request with no parameters, so it's not strictly invalid.
-    ## But it's probably not a good idea to allow it, since it will be an enormous request.
+    ## update March 2017: the service will actually accept a request with no 
+    ## parameters, so it's not strictly invalid.
+    ## But it's probably not a good idea to allow it, since it will be an 
+    ## enormous request.
     ## If a user really needs to do it they can specify taxon="*"
     
-    this_query$facets <- "taxon_concept_lsid" ## or "species_guid" to avoid genus and higher records
-    this_query$lookup <- "true" ## "set to true if you would like the download include the scientific names and higher classification for the supplied guids. Downloads that include this param will take extra time as a lookup need to be performed"
+    ## or "species_guid" to avoid genus and higher records
+    this_query$facets <- "taxon_concept_lsid" 
+    ## "set to true if you would like the download include the scientific
+    ## names and higher classification for the supplied guids. Downloads
+    ## that include this param will take extra time as a lookup need to be
+    ## performed"
+    this_query$lookup <- "true" 
     this_query$count <- "true"
     
-    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_biocache, c("occurrences", "facets", "download"), this_query)
-    ## these downloads can potentially be large, so we want to download directly to file and then read the file
+    this_url <- build_url_from_parts(
+      getOption("ALA4R_server_config")$base_url_biocache, 
+      c("occurrences", "facets", "download"), this_query)
+    ## these downloads can potentially be large, so we want to download 
+    ## directly to file and then read the file
     thisfile <- cached_get(url=this_url, type="filename")
     ## check for zero-sized file
     if (file.info(thisfile)$size>0) {
-        x <- read.table(thisfile, sep=",", header=TRUE, comment.char="", stringsAsFactors=FALSE)
-        ## rename "X..Occurrences" (which was "# Occurrences" in the csv file), or "Number.of.records" (later webservice) or "count" (current web service!)
-        names(x)[names(x) %in% c("count", "X..Occurrences", "Number.of.records")] <- "occurrenceCount"
+        x <- read.table(thisfile, sep=",", header=TRUE, comment.char="", 
+                        stringsAsFactors=FALSE)
+        ## rename "X..Occurrences" (which was "# Occurrences" in the csv file),
+        ## or "Number.of.records" (later webservice) or
+        ## "count" (current web service!)
+        names(x)[names(x) %in% c("count", "X..Occurrences", 
+                                 "Number.of.records")] <- "occurrenceCount"
         names(x) <- rename_variables(names(x), type="occurrence")
     } else {
         if (ala_config()$warn_on_empty) {
             warning("no occurrences found")
         }
-        if (!missing(wkt) && !isTRUE(check_wkt(wkt))) warning("WKT string may not be valid: ", wkt)
-        x <- data.frame() ## return empty data frame, rather than NULL as in previous version
+        if (!missing(wkt) && !isTRUE(check_wkt(wkt))) {
+          warning("WKT string may not be valid: ", wkt)
+        }
+        x <- data.frame()
     }
     x
 }
