@@ -73,15 +73,26 @@ occurrence_images <- function(id, fq, download=FALSE, download_path,
       getOption("ALA4R_server_config")$base_url_images,
       c("ws","/","search"),
       query=this_query)
+
     data <- cached_get(URLencode(this_url), type="json", verbose=verbose)
-    
+
     # if no images are found for any given occurrence id, print a warning
     if (data$totalImageCount == 0) {
       warning(paste0("No images were found for occurrence id ",z))
     }
-    
-    df <- as.data.frame(data$images, stringsAsFactors = FALSE)
-    
+    image_list <- data$images
+    cols <- c('imageIdentifier', 'imageUrl', 'success','mimeType',
+              'originalFileName','sizeInBytes','rights','rightsHolder',
+              'dateUploaded','dateTaken','tileUrlPattern','mmPerPixel',
+              'height','width','tileZoomLevels','description','title',
+              'creator','license','recognisedLicence','recognisedLicence.acronym',
+              'recognisedLicence.id','recognisedLicence.imageUrl',
+              'recognisedLicence.name', 'recognisedLicence.url',
+              'dataResourceUid','occurrenceID', 'created','thumbHeight','extension',
+              'harvestable')
+    image_list <- image_list[names(image_list) %in% cols]
+    image_list[cols[!(cols %in% colnames(image_list))]] = NA
+    df <- as.data.frame(image_list, stringsAsFactors = FALSE)
     # throttle API calls so ALA server is not overloaded
     Sys.sleep(1)
     return(df)
