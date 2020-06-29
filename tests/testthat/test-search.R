@@ -44,7 +44,7 @@ check_caching(thischeck)
 
 
 thischeck <- function() {
-    test_that("search_fulltext sort_by parm works as expected", {
+    test_that("search_fulltext sort_by param works as expected", {
         skip_on_cran()
         expect_error(search_fulltext("red",page_size=10,sort_by="blurg"))
         ## sort by scientific name
@@ -79,6 +79,18 @@ thischeck <- function() {
     })
 }
 check_caching(thischeck)
+
+thischeck <- function() {
+  test_that('print search_layers works as expected', {
+    skip_on_cran()
+    l <- search_layers(type = 'all', query = "fire")
+    expect_output(print(l),"name")
+    # source link should not appear in the output
+    expect_equal(length(grep("sourceLink",
+                             capture.output(
+                               print(l)))),0) 
+  })
+}
 
 ## not tested yet: S3method(print,search_layers)
 
