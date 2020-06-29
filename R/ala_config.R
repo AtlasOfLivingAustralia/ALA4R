@@ -135,7 +135,7 @@ ala_config <- function(...) {
                         ## it, but this is probably better left to the user
                         ## to manage
                         stop("cache directory ",user_options[[i]],
-                             " does not exist");
+                             " does not exist")
                     }
                 }
                 if (identical(this_option_name,"user_agent")) {
