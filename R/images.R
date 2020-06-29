@@ -95,7 +95,12 @@ download_images <- function(data, media_dir, verbose=verbose, sounds = FALSE) {
       id <- data[r,'imageIdentifier']
       base_url <- getOption("ALA4R_server_config")$base_url_images
       url <- build_url_from_parts(base_url, c('image',id, 'original'))
-      ext <- strsplit(data[r,'mimeType'],"/")[[1]][1]
+      if (is.na(data[r,'mimeType'])) {
+        ext <- data[r,'extension']
+      }
+      else {
+        ext <- strsplit(data[r,'mimeType'],"/")[[1]][1]
+      }
       
       out_path <- file.path(media_dir,paste0(id,ext))
       download_to_file(url, out_path, verbose = verbose)
