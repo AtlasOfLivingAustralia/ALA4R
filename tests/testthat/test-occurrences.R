@@ -5,8 +5,8 @@ thischeck <- function() {
     test_that("ala_reasons works as expected", {
         skip_on_cran()
         expect_named(ala_reasons(),c("rkey","name","id"))
-        expect_equal(nrow(ala_reasons()),13)
-        expect_equal(sort(ala_reasons()$id),c(0:8,10:13))
+        expect_equal(nrow(ala_reasons()),12)
+        expect_equal(sort(ala_reasons()$id),c(0:8,10:12))
         ## this should throw an error because there is an unused argument
         expect_error(ala_reasons(TRUE)) 
         tmp <- ala_reasons()
