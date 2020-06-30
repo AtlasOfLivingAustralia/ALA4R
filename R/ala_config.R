@@ -217,7 +217,7 @@ ala_sourcetypeid <- function() {
 
     this_url <- build_url_from_parts(
       getOption("ALA4R_server_config")$base_url_logger,path="logger/sources")
-    print(this_url)
+
     sids <- cached_get(this_url,type="json")
     if ("ALA4R" %in% sids$name) {
         sids$id[sids$name=="ALA4R"]
