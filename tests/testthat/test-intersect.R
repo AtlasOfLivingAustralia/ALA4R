@@ -48,3 +48,29 @@ thischeck <- function() {
     })
 }
 check_caching(thischeck)
+
+thischeck <- function() {
+  test_that("intersect_points gives errors for bad inputs", {
+    skip_on_cran()
+    layers <- c("cl22", "cl23", "el773")
+    pnts <- c(-23.1)
+    expect_error(intersect_points(pnts, layers))
+    pnts <- c(-23.1, 149.1)
+    expect_error(intersect_points(as.data.frame(pnts), layers))
+    
+  })
+}
+check_caching(thischeck)
+
+thischeck <- function() {
+  test_that('intersect points returns spatial dataframe if requested', {
+    layers <- c('el773','cl10925')
+    pnts <- c(-20,130)
+    out<-intersect_points(pnts,layers, SPdata.frame = TRUE)
+    expect_is(out,"SpatialPointsDataFrame")
+  })
+}
+
+check_caching(thischeck)
+
+

@@ -45,6 +45,7 @@ thischeck <- function() {
         ## check that names required for unique.occurrences method are present
         expect_true(all(c("scientificName","longitude","latitude","eventDate",
                           "month","year") %in% names(occ$data)))
+        
     })
 }
 check_caching(thischeck)
@@ -80,6 +81,14 @@ thischeck <- function() {
         expect_lt(nrow(xu$data),nrow(x$data))
         xu <- unique(x,spatial=0,temporal="yearmonth")
         expect_lt(nrow(xu$data),nrow(x$data))
+        
+        
+        xu <- unique(x, temporal = "full")
+        expect_true('eventDate' %in% names(xu$data))
+        expect_error(unique(x, temporal = "y"))
+        #drop scientific name
+        x$data <- x$data[, !names(x$data) == 'scientificName']
+        expect_error(unique(x))
     })
 }
 check_caching(thischeck)
@@ -95,6 +104,12 @@ thischeck <- function() {
         expect_named(xs,c("data","meta"))
         expect_is(xs$data,"data.frame")
         expect_lt(nrow(xs$data),nrow(x$data))
+        expect_error(subset(x, exclude.spatial = 'some'))
+        xs <- subset(x, exclude.taxonomic = 'warning')
+        expect_lt(nrow(xs$data),nrow(x$data))
+        expect_error(subset(x, max.spatial.uncertainty = ""))
+        xs <- subset(x, max.spatial.uncertainty = 2)
+        expect_lt(nrow(xs$data),nrow(x$data))
     })
 }
 check_caching(thischeck)
@@ -102,6 +117,9 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences checks required inputs", {
         skip_on_cran()
+        expect_error(occurrences())
+        expect_error(occurrences(taxon="data_resource_uid:dr356",
+                                 reason=10,email="testing@test.org"))
         expect_error(occurrences(taxon="data_resource_uid:dr356",
                                  download_reason_id="testing",email=""))
         expect_error(occurrences(taxon="data_resource_uid:dr356",
@@ -110,9 +128,44 @@ thischeck <- function() {
                                  download_reason_id="testing",email=NULL))
         ## missing download_reason_id
         expect_error(occurrences(taxon="Amblyornis newtonianus")) 
+        
+        expect_warning(occurrences(taxon="Amblyornis newtonianus",
+                                   email="testing@test.org",download_reason_id=10,
+                                   method = "indexed"))
+        # bad download reason
+        expect_error(occurrences(taxon="Amblyornis newtonianus",
+                     email="testing@test.org",download_reason_id=20))
+        
+        # bad qa fields
+        expect_error(occurrences(taxon="Amblyornis newtonianus",
+                                 email="testing@test.org",download_reason_id=10,
+                                 qa = "bad_assertion"))
     })
 }
 check_caching(thischeck)
+
+
+thischeck <- function() {
+  test_that("occurrences handles fields correctly", {
+    occ <- occurrences(taxon = as.factor("Amblyornis newtonianus"),
+                                         email="testing@test.org",
+                                         download_reason_id=10)
+    expect_is(occ$data,"data.frame")
+    
+    occ <- occurrences(taxon="Amblyornis newtonianus",
+                       email="testing@test.org",download_reason_id=10,
+                       wkt = "POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
+    expect_is(occ$data,"data.frame")
+    
+    expect_true('acceptedNameUsage' %in%
+                  names(occurrences(taxon = "Amblyornis newtonianus",
+                                    email="testing@test.org",
+                                    download_reason_id=10,
+                                    extra = 'accepted_name_usage')$data))
+    
+  })
+}
+
 
 thischeck <- function() {
     test_that("occurrences warns for long URLs", {
@@ -137,3 +190,14 @@ thischeck <- function() {
     })
 }
 check_caching(thischeck)
+
+thischeck <- function() {
+  test_that("occurrences generates a doi if requested", {
+    skip("Skip except for manual testing to avoid clogging up doi system with
+         unnecessary dois.")
+  
+  x <- occurrences(taxon = "Acacia podalyriifolia", email = 'test@test.org',
+                   download_reason_id = 'testing', generateDoi = TRUE)  
+    })
+}
+

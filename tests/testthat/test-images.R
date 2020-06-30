@@ -43,19 +43,26 @@ thischeck <- function() {
                                 download_path = 'media', download = TRUE)
     file_count <- length(list.files('media'))
     expect_equal(file_count, nrow(result))
+    
+    # check handles no directory being provided
+    unlink("media/*")
+    result <- images("36ebaa23-7307-4d21-8e9f-3fb78bceabea",
+                     download = TRUE)
+    unlink("media/*")
   })
 }
 
 check_caching(thischeck)
 
 thischeck <- function() {
-  test_that("images downloads multiple images", {
+  test_that("images downloads multiple images and sounds", {
     skip_on_cran()
     result <- images(c("36ebaa23-7307-4d21-8e9f-3fb78bceabea",
-                                  "1b404d9e-5878-43d1-9319-cfef6e89b367"),
+                                  "88f61b16-a847-46f8-b15d-75abe0696844"),
                                 download_path = 'media', download = TRUE)
     file_count <- length(list.files('media'))
     expect_equal(file_count, nrow(result))
+    unlink("media/*")
   })
 }
 

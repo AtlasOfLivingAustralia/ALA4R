@@ -31,7 +31,8 @@
 #' }
 #' @export
 
-taxinfo_download <- function(query, fq, fields, verbose=ala_config()$verbose, use_data_table=TRUE) {
+taxinfo_download <- function(query, fq, fields, verbose=ala_config()$verbose,
+                             use_data_table=TRUE) {
     assert_that(is.flag(use_data_table))
     this_query <- list()
     ## have we specified a query?
@@ -48,7 +49,8 @@ taxinfo_download <- function(query, fq, fields, verbose=ala_config()$verbose, us
     }
     if (!missing(fq)) {
         assert_that(is.character(fq))
-        ## can have multiple fq parameters, need to specify in url as fq=a:b&fq=c:d&fq=...
+        ## can have multiple fq parameters, need to specify in url as
+        ## fq=a:b&fq=c:d&fq=...
         check_fq(fq, type="general") ## check that fq fields are valid
         fq <- as.list(fq)
         names(fq) <- rep("fq", length(fq))
@@ -61,15 +63,20 @@ taxinfo_download <- function(query, fq, fields, verbose=ala_config()$verbose, us
         if (identical(tolower(fields), "all")) fields <- valid_fields$name
         unknown <- setdiff(fields, valid_fields$name)
         if (length(unknown)>0) {
-            stop("invalid fields requested: ", str_c(unknown, collapse=", "), ". See ", getOption("ALA4R_server_config")$fields_function, "(\"general\", as_is=TRUE)")
+            stop("invalid fields requested: ", str_c(unknown, collapse=", "),
+                 ". See ", getOption("ALA4R_server_config")$fields_function,
+                 "(\"general\", as_is=TRUE)")
         }
         this_query$fields <- str_c(fields, collapse=",")
     }
     
-    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_bie, "download", this_query)
+    this_url <- build_url_from_parts(
+      getOption("ALA4R_server_config")$base_url_bie, "download", this_query)
     
-    ## these downloads can potentially be large, so we want to download directly to file and then read the file
-    thisfile <- cached_get(url=this_url, type="binary_filename", verbose=verbose)
+    ## these downloads can potentially be large, so we want to download
+    ## directly to file and then read the file
+    thisfile <- cached_get(url=this_url, type="binary_filename",
+                           verbose=verbose)
 
     if (!(file.info(thisfile)$size>0)) {
         ## empty file
@@ -78,26 +85,35 @@ taxinfo_download <- function(query, fq, fields, verbose=ala_config()$verbose, us
         read_ok <- FALSE
         if (use_data_table) {
             tryCatch({
-                x <- data.table::fread(thisfile, data.table=FALSE, stringsAsFactors=FALSE, header=TRUE, verbose=verbose, na.strings="NA", logical01=FALSE)
+                x <- data.table::fread(thisfile, data.table=FALSE,
+                                       stringsAsFactors=FALSE, header=TRUE,
+                                       verbose=verbose, na.strings="NA",
+                                       logical01=FALSE)
                 names(x) <- make.names(names(x))
                 if (!empty(x)) {
                     ## convert column data types
-                    ## ALA supplies *all* values as quoted text, even numeric, and they appear here as character type
-                    ## we will convert whatever looks like numeric or logical to those classes
+                    ## ALA supplies *all* values as quoted text, even numeric,
+                    ## and they appear here as character type
+                    ## we will convert whatever looks like numeric or logical
+                    ## to those classes
                     for (cl in seq_len(ncol(x))) x[, cl] <- convert_dt(x[, cl])
                 }
                 read_ok <- TRUE
             }, error=function(e) {
-                warning("reading of csv as data.table failed, will fall back to read.table (may be slow). The error message was: ", e)
+                warning("reading of csv as data.table failed, will fall back 
+                        to read.table (may be slow). The error message was: ",
+                        e)
                 read_ok <- FALSE
             })
         }
         if (!read_ok) {
-            x <- read.table(thisfile, sep=",", header=TRUE, comment.char="", as.is=TRUE)
+            x <- read.table(thisfile, sep=",", header=TRUE, comment.char="",
+                            as.is=TRUE)
             if (!empty(x)) {
                 ## convert column data types
                 ## read.table handles quoted numerics but not quoted logicals
-                for (cl in seq_len(ncol(x))) x[, cl] <- convert_dt(x[, cl], test_numeric=FALSE)
+                for (cl in seq_len(ncol(x))) x[, cl] <-
+                    convert_dt(x[, cl],test_numeric=FALSE)
             }
         }
 
@@ -110,7 +126,8 @@ taxinfo_download <- function(query, fq, fields, verbose=ala_config()$verbose, us
         xcols <- setdiff(names(x), unwanted_columns(type="general"))
         x <- subset(x, select=xcols)
         names(x) <- rename_variables(names(x), type="general")
-        names(x)[tolower(names(x))=="taxonid"] <- "guid" ## guid is called taxonid
+        ## guid is called taxonid
+        names(x)[tolower(names(x))=="taxonid"] <- "guid" 
     }
     x
 }

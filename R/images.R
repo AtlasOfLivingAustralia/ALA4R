@@ -37,8 +37,11 @@ images <- function(id, download=FALSE, download_path,
   id_str  <- paste(id, collapse = '","')
   
   image_data <- do.call(rbind, lapply(id, function(z) {
-    this_url <- paste0(getOption("ALA4R_server_config")$base_url_images, "ws/image/", z)
-    data <- cached_get(URLencode(this_url), type="json", verbose=verbose, on_server_error = function(z){NULL}, on_client_error =  function(z){NULL})
+    this_url <- paste0(getOption("ALA4R_server_config")$base_url_images, 
+                       "ws/image/", z)
+    data <- cached_get(URLencode(this_url), type="json", verbose=verbose,
+                       on_server_error = function(z){NULL}, 
+                       on_client_error =  function(z){NULL})
     if (!is.null(data)) {
       data$imageIdentifier <- z
       if (is.null(data$recognisedLicence)) {
@@ -92,12 +95,13 @@ download_images <- function(data, media_dir, verbose=verbose, sounds = FALSE) {
       id <- data[r,'imageIdentifier']
       base_url <- getOption("ALA4R_server_config")$base_url_images
       url <- build_url_from_parts(base_url, c('image',id, 'original'))
-      if (sounds && data[r,'fileType'] == 'sound') {
-        ext <- '.mp4'
+      if (is.na(data[r,'mimeType'])) {
+        ext <- data[r,'extension']
       }
       else {
-        ext <- '.jpg'
+        ext <- strsplit(data[r,'mimeType'],"/")[[1]][1]
       }
+      
       out_path <- file.path(media_dir,paste0(id,ext))
       download_to_file(url, out_path, verbose = verbose)
       

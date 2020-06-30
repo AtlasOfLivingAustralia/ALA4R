@@ -43,13 +43,16 @@
 #'
 ala_config <- function(...) {
     ## get or set options that control ALA4R behaviour
-    ## options are stored as a global option with the name defined in ala_option_name
+    ## options are stored as a global option with the name defined
+    ## in ala_option_name
     ala_option_name <- "ALA4R_config"
     user_options <- list(...) ## the options passed by the user
 
     ## default user-agent string
     version_string <- "version unknown"
-    suppressWarnings(try(version_string<-utils::packageDescription('ALA4R')[["Version"]],silent=TRUE)) ## get the ALA4R version, if we can
+    suppressWarnings(
+      try(version_string<-utils::packageDescription('ALA4R')[["Version"]],
+          silent=TRUE)) ## get the ALA4R version, if we can
     user_agent_string <- paste0("ALA4R ",version_string)
 
     ## set default options
@@ -64,8 +67,12 @@ ala_config <- function(...) {
     )
 
     ## define allowed options, for those that have restricted values
-    allowed_options <- list(caching=c("on","off","refresh"),download_reason_id=c(0:8,10:12))
-    ## ideally, the valid download_reason_id values should be populated dynamically from the ala_reasons() function. However if that is called (from here) before the AL4R_config option has been set, then we get infinite recursion. To be addressed later ...
+    allowed_options <- list(caching=c("on","off","refresh"),
+                            download_reason_id=c(0:8,10:12))
+    ## ideally, the valid download_reason_id values should be populated 
+    ## dynamically from the ala_reasons() function. However if that is
+    ## called (from here) before the AL4R_config option has been set,
+    ## then we get infinite recursion. To be addressed later ...
 
     ## has the user asked to reset options to defaults?
     if (identical(tolower(user_options),"reset")) {
@@ -78,7 +85,8 @@ ala_config <- function(...) {
         known_options <- names(default_options)
         unknown <- setdiff(names(user_options),known_options)
         if (length(unknown)>0) {
-            stop("unknown ",getOption("ALA4R_server_config")$brand," options: ", str_c(unknown,collapse=", "))
+            stop("unknown ",getOption("ALA4R_server_config")$brand,
+                 " options: ", str_c(unknown,collapse=", "))
         }
 
         current_options <- getOption(ala_option_name)
@@ -93,7 +101,8 @@ ala_config <- function(...) {
 
         ## convert reason from char to numeric if needed
         if (!is.null(user_options$download_reason_id)) {
-            user_options$download_reason_id <- convert_reason(user_options$download_reason_id)
+            user_options$download_reason_id <-
+              convert_reason(user_options$download_reason_id)
         }
 
         ## override any defaults with user-specified options
@@ -101,10 +110,16 @@ ala_config <- function(...) {
             for (i in 1:length(user_options)) {
                 this_option_name <- names(user_options)[i]
                 if (! is.null(allowed_options[[this_option_name]])) {
-                    ## there are restrictions on the allowed values for this option
+                    ## there are restrictions on the allowed values for
+                    ## this option
                     ## could use match.arg here but the output is a bit obscure
-                    if (! (user_options[[i]] %in% allowed_options[[this_option_name]])) {
-                        stop("value \"",user_options[[i]],"\" is not a valid choice for ",this_option_name," (should be one of ", str_c(allowed_options[[this_option_name]],collapse=", "),")")
+                    if (! (user_options[[i]] %in%
+                           allowed_options[[this_option_name]])) {
+                        stop("value \"",user_options[[i]],
+                             "\" is not a valid choice for ",this_option_name,
+                             " (should be one of ",
+                             str_c(allowed_options[[this_option_name]],
+                                   collapse=", "),")")
                     }
                 }
                 ## any other specific checks ...
@@ -114,9 +129,13 @@ ala_config <- function(...) {
                     }
                     ## strip trailing file separator, if there is one
                     user_options[[i]] <- sub("[/\\]+$","",user_options[[i]])
-                    if (! (file.exists(user_options[[i]]) && file.info(user_options[[i]])$isdir)) {
-                        ## cache directory does not exist. We could create it, but this is probably better left to the user to manage
-                        stop("cache directory ",user_options[[i]]," does not exist");
+                    if (! (file.exists(user_options[[i]]) &&
+                           file.info(user_options[[i]])$isdir)) {
+                        ## cache directory does not exist. We could create
+                        ## it, but this is probably better left to the user
+                        ## to manage
+                        stop("cache directory ",user_options[[i]],
+                             " does not exist")
                     }
                 }
                 if (identical(this_option_name,"user_agent")) {
@@ -142,7 +161,8 @@ ala_config <- function(...) {
             names(temp) <- ala_option_name
             options(temp)
         } else {
-            ## no user options were provided, so user is asking for current options to be returned
+            ## no user options were provided, so user is asking for current
+            ## options to be returned
             current_options
         }
     }
@@ -182,19 +202,28 @@ ala_reasons <- function() {
     ## 11         logger.download.reason.citizen.science                  citizen science 11
     ## 12 logger.download.reason.restoration.remediation          restoration/remediation 12
     
-    out <- cached_get(build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,path="logger/reasons"),type="json")
+
+    out <- cached_get(
+      build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,
+                           path="reasons"),type="json")
+
     if (any(names(out)=="deprecated")) out <- out[!out$deprecated,]
     out[,!names(out)=="deprecated"]
 }
 
-## internal function, used to define the ALA4R sourceTypeId parameter value, passed by occurrences download and possibly other functions
+## internal function, used to define the ALA4R sourceTypeId parameter value,
+## passed by occurrences download and possibly other functions
 ala_sourcetypeid <- function() {
-    this_url <- build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,path="logger/sources")
+
+    this_url <- build_url_from_parts(
+      getOption("ALA4R_server_config")$base_url_logger,path="sources")
     sids <- cached_get(this_url,type="json")
     if ("ALA4R" %in% sids$name) {
         sids$id[sids$name=="ALA4R"]
     } else {
-        warning("could not retrieve ",getOption("ALA4R_server_config")$brand," source type from ",this_url,". ",getOption("ALA4R_server_config")$notify)
+        warning("could not retrieve ",getOption("ALA4R_server_config")$brand,
+                " source type from ",this_url,". ",
+                getOption("ALA4R_server_config")$notify)
         2001 ## default value
     }
 }
@@ -207,7 +236,11 @@ convert_reason <- function(reason) {
         tryCatch({ reason<-match.arg(tolower(reason),valid_reasons$name)
                    reason<-valid_reasons$id[valid_reasons$name==reason]
                },
-                 error=function(e){ stop("could not match download_reason_id string \"",reason,"\" to valid reason string: see ",getOption("ALA4R_server_config")$reasons_function,"()") }
+                 error=function(e){
+                   stop("could not match download_reason_id string \"",
+                        reason,"\" to valid reason string: see ",
+                        getOption("ALA4R_server_config")$reasons_function,"()")
+                   }
                  )
     }
     reason
