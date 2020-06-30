@@ -10,6 +10,8 @@
 #' }
 #' 
 #' @param druid string: data resource UID of the data resource(s)
+#' #' @param verbose logical: show additional progress information? 
+#' [default is set by ala_config()]
 #' @param max integer: (optional) if all data resources are requested, max 
 #' number to return, sorted by record count. Default is top 100 
 #'
