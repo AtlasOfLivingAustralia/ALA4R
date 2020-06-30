@@ -7,8 +7,9 @@
 data_resources(druid, verbose = ala_config()$verbose, max = 100)
 }
 \arguments{
-\item{druid}{string: data resource UID of the data resource(s)
-#' @param verbose logical: show additional progress information? 
+\item{druid}{string: data resource UID of the data resource(s)}
+
+\item{verbose}{logical: show additional progress information? 
 [default is set by ala_config()]}
 
 \item{max}{integer: (optional) if all data resources are requested, max 
