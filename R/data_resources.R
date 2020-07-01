@@ -22,13 +22,6 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
   this_query <- list()
   assert_that(is.flag(verbose))
   
-  if (is.null(getOption("ALA4R_server_config")$base_url_collectory)) {
-    base_url <- 'https://collections.ala.org.au/ws/'
-  }
-  else {
-    base_url <- getOption("ALA4R_server_config")$base_url_collectory    
-  }
-  
   if(missing(druid)) {
     this_url <- paste0(getOption("ALA4R_server_config")$base_url_biocache,
                        "occurrence/facets?facets=data_resource_uid&flimit=",
@@ -48,7 +41,8 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
               "Protista","Protozoa","Virus","Unknown",
               "totalDownloadedRecords","resourceType", "gbifRegistryKey")
     
-    this_url <- paste0(base_url, "dataResource/", z)
+    this_url <- paste0(getOption("ALA4R_server_config")$base_url_collectory,
+                       "dataResource/", z)
     data <- cached_get(URLencode(this_url), type="json", verbose=verbose,
                        on_server_error = function(z){NULL})
     if (is.null(data)) {
@@ -99,7 +93,8 @@ download_stats <- function(id,verbose=ala_config()$verbose) {
 
 # Return lifeform stats for data resource. 
 # It should also be possible to break down by other ranks in future 
-lifeform_stats <- function(id, rank = "lifeform",verbose=ala_config()$verbose) {
+lifeform_stats <- function(id, rank = "lifeform",
+                           verbose=ala_config()$verbose) {
   this_url <- paste0(getOption("ALA4R_server_config")$base_url_biocache,
                      "breakdown/dataResources/",id,"?rank=",rank)
   

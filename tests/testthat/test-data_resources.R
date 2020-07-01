@@ -20,6 +20,8 @@ thischeck <- function() {
     skip_on_cran()
     result <- data_resources(c('dr375','dr8128','dr743'))
     expect_equal(nrow(result),3)
+    result <- data_resources(max = 3)
+    expect_equal(nrow(result),3)
   })
 }
 
