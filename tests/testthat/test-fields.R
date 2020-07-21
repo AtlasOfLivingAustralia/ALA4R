@@ -9,7 +9,7 @@ thischeck=function() {
         expect_lt(nrow(ala_fields(fields_type="occurrence_stored")),nrow(ala_fields(fields_type="occurrence")))
         expect_gt(nrow(ala_fields(fields_type="general")),75)
         expect_gt(nrow(ala_fields(fields_type="assertions")),85)
-        expect_gt(nrow(ala_fields(fields_type="layers")),410)
+        expect_gt(nrow(ala_fields(fields_type="layers")),320)
         expect_gt(nrow(ala_fields(fields_type="images")),15)
         expect_gt(nrow(ala_fields(as_is = FALSE, fields_type = "occurrence")),700)
         expect_error(ala_fields("b"))

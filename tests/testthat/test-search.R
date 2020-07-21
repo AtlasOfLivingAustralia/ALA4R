@@ -70,7 +70,7 @@ thischeck <- function() {
         expect_that(search_layers(type="all"),is_a('data.frame'))
         expect_that(search_layers(type="all",output_format="complete"),
                     is_a('data.frame'))
-        expect_that(nrow(search_layers(type="all")),is_more_than(400))
+        expect_that(nrow(search_layers(type="all")),is_more_than(320))
         expect_that(nrow(search_layers(type="all",query="bilbobaggins")),
                     equals(0))
         expect_error(search_layers(type="bilbobaggins"))
