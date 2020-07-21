@@ -1,10 +1,9 @@
 #' Get a list of current data resources
 #'
 #' Retrieve a list of all existing data resources, and basic information
-#' for each data resource. For data resource stats, use
-#' `data_resource_details.R`
+#' for each data resource.
 #'
-#' @references \itemize {
+#' @references \itemize{
 #' \item Associated ALA web service for listing data resources:
 #' \url{https://collections.ala.org.au/ws/dataResource}
 #' }
