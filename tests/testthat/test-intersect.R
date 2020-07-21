@@ -27,10 +27,10 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("intersect_points gives same answers for single-location and batch methods", {
         skip_on_cran()
-        layers <- c('el773','cl10925')
+        layers <- c('el767','cl10925')
         pnts <- c(-20,130)
         out1<-intersect_points(pnts,layers)
-        expect_that(out1$waterSurplusMonthMax,is_a("numeric")) ## this can incorrectly be character under some json parsing (when bulk lookup not used for intersect points)
+        expect_that(out1$evaporationMonthMax,is_a("numeric")) ## this can incorrectly be character under some json parsing (when bulk lookup not used for intersect points)
         pnts <- c(-20,130,-30,140)
         out2 <- intersect_points(pnts,layers)
         expect_equal(out1,out2[1,])
@@ -41,10 +41,10 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("intersect_points works for largeish number of points", {
         skip_on_cran()
-        layers <- c('el773','cl10925')
+        layers <- c('el767','cl10925')
         pnts <- cbind(lat = runif(1000, -40, -12), long = runif(1000, 115, 148))
         out1 <- intersect_points(pnts,layers)
-        expect_that(out1$waterSurplusMonthMax,is_a("numeric"))
+        expect_that(out1$evaporationMonthMax,is_a("numeric"))
     })
 }
 check_caching(thischeck)
@@ -52,7 +52,7 @@ check_caching(thischeck)
 thischeck <- function() {
   test_that("intersect_points gives errors for bad inputs", {
     skip_on_cran()
-    layers <- c("cl22", "cl23", "el773")
+    layers <- c("cl22", "cl23", "el767")
     pnts <- c(-23.1)
     expect_error(intersect_points(pnts, layers))
     pnts <- c(-23.1, 149.1)
@@ -64,7 +64,7 @@ check_caching(thischeck)
 
 thischeck <- function() {
   test_that('intersect points returns spatial dataframe if requested', {
-    layers <- c('el773','cl10925')
+    layers <- c('el767','cl10925')
     pnts <- c(-20,130)
     out<-intersect_points(pnts,layers, SPdata.frame = TRUE)
     expect_is(out,"SpatialPointsDataFrame")
