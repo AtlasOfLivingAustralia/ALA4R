@@ -25,6 +25,11 @@ The Atlas of Living Australia (ALA) provides tools to enable users of biodiversi
 ALA4R enables the R community to directly access data and resources hosted by the ALA.
 
 The use-examples presented at the [2014 ALA Science Symposium](http://www.ala.org.au/blogs-news/2014-atlas-of-living-australia-science-symposium/) are available in the package vignette, via (in R): `vignette("ALA4R")`, or [browse it online](https://atlasoflivingaustralia.github.io/ALA4R/articles/ALA4R.html).
+## Citing ALA4R 
+To generate a citation for ALA4R run: 
+```r
+citation(package = "ALA4R")
+```
 
 ## Installing
 
