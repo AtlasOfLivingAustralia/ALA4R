@@ -15,6 +15,15 @@
 #' number to return, sorted by record count. Default is top 100 
 #'
 #' @return data frame of data resources
+#' 
+#' @examples
+#' \dontrun{
+#' # Retrieve information for a dataset
+#' dr_info <- data_resources('dr375')
+#' 
+#' # Retrieve stats for all data resources
+#' 
+#' }
 #' @export data_resources
 
 data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
@@ -34,51 +43,46 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
   
   assert_that(is.character(druid))
   
-  dr_data <- do.call(rbind, lapply(druid, function(z) {
-    cols <- c("uid", "name", "licenseType", "dateCreated","lastUpdated",
-              "doi","Animalia","Bacteria", "Plantae","Chromista","Fungi",
-              "Protista","Protozoa","Virus","Unknown",
-              "totalDownloadedRecords","resourceType", "gbifRegistryKey")
-    
+  dr_data <- rbindlist(lapply(druid, function(z) {
     this_url <- paste0(getOption("ALA4R_server_config")$base_url_collectory,
                        "dataResource/", z)
     data <- cached_get(URLencode(this_url), type="json", verbose=verbose,
                        on_server_error = function(z){NULL})
     if (is.null(data)) {
-      data <- as.data.frame(list(uid = z, totalRecords = 0))
+      df <- as.data.frame(list(uid = z, totalRecords = 0))
     }
     else {
-      data <- data[names(data) %in% cols]
+      data$totalRecords <- as.integer(occurrences(fq=paste0 ('data_resource_uid:',z),
+                                                  record_count_only = TRUE))
       data[vapply(data, is.null, logical(1))] <- NA
-      
-      data$totalRecords <- occurrences(fq=paste0 ('data_resource_uid:',z),
-                                  record_count_only = TRUE)
+      # remove lists of lists 
+      data <- data[!(names(data) %in% 
+                       c('taxonomyCoverageHints','attributions',
+                         'connectionParameters','defaultDarwinCoreValues',
+                         'hubMembership','address','logoRef','imageMetadata',
+                         'linkedRecordConsumers'))]
+      # handle nested lists
+      df <- as.data.frame(t(unlist(data)), stringsAsFactors = FALSE)
     }
     
-    df <- as.data.frame(data)
-    
-    if (df$totalRecords>0) {
+    if (as.integer(df$totalRecords) > 0) {
       # add lifeform counts
-      df <- cbind(df, lifeform_stats(z, verbose=verbose))
+      df <- cbind(df, breakdown_stats(z, verbose=verbose))
       
       # add download stats
       df$totalDownloadedRecords <- download_stats(z, verbose=verbose)
     }
-    else {
-      # add missing cols so rows are of equal length
-      df[cols[!(cols %in% colnames(df))]] = NA
-    }
-    
     return(df)
-    }))
+  }),fill = TRUE)
   row.names(dr_data) <- NULL
   # Warn if any data resources were invalid
-  if(NA %in% unique(dr_data$name)) {
+  if(NA %in% unique(dr_data$name) | ncol(dr_data) < 3) {
     warning("One or more of the data resources requested is invalid or
             has been deleted")
   }
   dr_data
 }
+
 
 
 download_stats <- function(id,verbose=ala_config()$verbose) {
@@ -90,27 +94,19 @@ download_stats <- function(id,verbose=ala_config()$verbose) {
   
 }
 
-# Return lifeform stats for data resource. 
+# Return kingdom stats for data resource. 
 # It should also be possible to break down by other ranks in future 
-lifeform_stats <- function(id, rank = "lifeform",
-                           verbose=ala_config()$verbose) {
+breakdown_stats <- function(id, rank = "kingdom",
+                            verbose=ala_config()$verbose) {
   this_url <- paste0(getOption("ALA4R_server_config")$base_url_biocache,
                      "breakdown/dataResources/",id,"?rank=",rank)
   
   data <- cached_get(URLencode(this_url), type="json", verbose=verbose)
- 
-  kingdoms <- c("Animalia","Bacteria", "Plantae","Chromista",
-                   "Fungi","Protista","Protozoa","Virus","Unknown")
   
   # label count with no kingdom
-  data$taxa$label <- sub("^$", "Unknown", data$taxa$label)
+  data$taxa$label <- sub("^$", "kingdom_unknown", data$taxa$label)
   counts <- data$taxa$count
   names(counts) <- data$taxa$label
   
-  
-  # add 0 counts for kingdoms not present
-  zero_counts <- rep(0,length(kingdoms[!(kingdoms %in% names(counts))]))
-  names(zero_counts) <- kingdoms[!(kingdoms %in% names(counts))]
-  
-  return(as.list(append(counts,zero_counts)))
+  return(as.list(counts))
 }

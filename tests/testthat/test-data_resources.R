@@ -1,14 +1,13 @@
 context("Test data resource information retrieval functions")
 
 cols <- c("uid", "name", "licenseType", "dateCreated","lastUpdated","doi",
-          "Animalia","Bacteria", "Plantae","Chromista","Fungi","Protista",
-          "Protozoa","Virus","Unknown","totalDownloadedRecords","totalRecords",
+          "totalDownloadedRecords","totalRecords",
           "resourceType", "gbifRegistryKey")
 
 thischeck <- function() {
   test_that("data resources returns correct data columns", {
     skip_on_cran()
-    expect_equal(sort(cols),sort(names(data_resources('dr375'))))
+    expect_true(all(cols %in% names(data_resources('dr375'))))
   })
 }
 
@@ -46,4 +45,3 @@ thischeck <- function() {
 }
 
 check_caching(thischeck)
-
