@@ -15,9 +15,9 @@
                               config_function="ala_config", ## the ala_config or equivalent function name
                               base_url_spatial="https://spatial.ala.org.au/ws/", ## the base url for spatial web services
                               base_url_bie="https://bie.ala.org.au/ws/", ## the base url for BIE web services
-                              base_url_biocache="https://biocache-ws.ala.org.au/ws/", ## the base url for biocache web services
+                              base_url_biocache="https://biocache-ws-test.ala.org.au/ws/", ## the base url for biocache web services
                               base_url_collectory="https://collections.ala.org.au/ws/",
-                              base_url_biocache_download="https://biocache.ala.org.au/biocache-download/", ## the base url for biocache downloads (used by offline occurrence downloads)
+                              base_url_biocache_download="https://biocache-test.ala.org.au/biocache-download/", ## the base url for biocache downloads (used by offline occurrence downloads)
                               biocache_version="2.1.16",
                               base_url_alaspatial="https://spatial.ala.org.au/alaspatial/ws/", ## the base url for older ALA spatial services
                               base_url_images="https://images.ala.org.au/", ## the base url for the images database. Set to NULL or empty string if not available
