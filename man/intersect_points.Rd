@@ -41,15 +41,15 @@ slow: a large number of points may take quite some time. Be warned.
 \examples{
 \dontrun{
  ## single point with multiple layers
- layers <- c("cl22", "cl23", "el773")
+ layers <- c("cl22", "cl23", "el767")
  pnts <- c(-23.1, 149.1)
  intersect_points(pnts, layers)
 
  ## equivalent direct web service call:
- ## https://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  
+ ## https://spatial.ala.org.au/ws/intersect/cl22,cl23,el663/-23.1/149.1  
 
  ## multiple points as a grid sampling multiple layers
- layers <- c("cl22", "cl23", "el773")
+ layers <- c("cl22", "cl23", "el767")
  pnts <- data.frame(expand.grid(lat=seq(-29, -19, by=2), lon=seq(130, 140, by=2)))
  intersect_points(pnts, layers)
 }
