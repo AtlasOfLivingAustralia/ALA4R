@@ -92,8 +92,8 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
           remaining <- total - nrow(data)
         }
         
-        colnames(facet_cols) <- data$label
         facet_cols <- data.frame(t(data))[2,]
+        colnames(facet_cols) <- data$label
         df <- cbind(df, facet_cols, row.names = NULL)
       }
      
