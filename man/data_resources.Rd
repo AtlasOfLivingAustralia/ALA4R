@@ -4,7 +4,7 @@
 \alias{data_resources}
 \title{Get a list of current data resources}
 \usage{
-data_resources(druid, verbose = ala_config()$verbose, max = 100)
+data_resources(druid, verbose = ala_config()$verbose, max = 100, extra)
 }
 \arguments{
 \item{druid}{string: data resource UID of the data resource(s)}
@@ -14,6 +14,9 @@ data_resources(druid, verbose = ala_config()$verbose, max = 100)
 
 \item{max}{integer: (optional) if all data resources are requested, max 
 number to return, sorted by record count. Default is top 100}
+
+\item{extra:}{string: (optional) additional field to retrieve information for
+the data resource. Must be a valid field.}
 }
 \value{
 data frame of data resources
@@ -21,6 +24,15 @@ data frame of data resources
 \description{
 Retrieve a list of all existing data resources, and basic information
 for each data resource.
+}
+\examples{
+\dontrun{
+# Retrieve information for a dataset
+dr_info <- data_resources('dr375')
+
+# Retrieve stats for all data resources
+
+}
 }
 \references{
 \itemize{

@@ -3,30 +3,34 @@
 #' Retrieve a list of all existing data resources, and basic information
 #' for each data resource.
 #'
-#' @references \itemize{
-#' \item Associated ALA web service for listing data resources:
-#' \url{https://collections.ala.org.au/ws/dataResource}
-#' }
 #' 
 #' @param druid string: data resource UID of the data resource(s)
 #' @param verbose logical: show additional progress information? 
 #' [default is set by ala_config()]
 #' @param max integer: (optional) if all data resources are requested, max 
 #' number to return, sorted by record count. Default is top 100 
+#' @param extra: string: (optional) additional field to retrieve information for
+#' the data resource. Must be a valid field. 
 #'
 #' @return data frame of data resources
+#' 
+#' @references \itemize{
+#' \item Associated ALA web service for listing data resources:
+#' \url{https://collections.ala.org.au/ws/dataResource}
+#' }
 #' 
 #' @examples
 #' \dontrun{
 #' # Retrieve information for a dataset
 #' dr_info <- data_resources('dr375')
 #' 
-#' # Retrieve stats for all data resources
-#' 
+#' # Retrieve stats for top 10 data resources wuth assertions breakdown
+#' dr_info <- data_resources(max = 10, extra = 'assertions')
 #' }
 #' @export data_resources
 
-data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
+data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
+                           extra) {
   this_query <- list()
   assert_that(is.flag(verbose))
   
@@ -42,8 +46,11 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
   }
   
   assert_that(is.character(druid))
-  
-  dr_data <- rbindlist(lapply(druid, function(z) {
+  facet_search <- FALSE
+  if (!missing(extra)) {
+    facet_search <- TRUE
+  }
+  dr_data <- data.table::rbindlist(lapply(druid, function(z) {
     this_url <- paste0(getOption("ALA4R_server_config")$base_url_collectory,
                        "dataResource/", z)
     data <- cached_get(URLencode(this_url), type="json", verbose=verbose,
@@ -66,9 +73,30 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
     }
     
     if (as.integer(df$totalRecords) > 0) {
-      # add lifeform counts
-      df <- cbind(df, breakdown_stats(z, verbose=verbose))
-      
+      # add extra cols
+      if (facet_search) {
+        # paginate facet search
+        facet_result <- occurrence_facets(query = 
+                                            paste0("data_resource_uid:", z), 
+                                          facet =  extra,
+                                          verbose = verbose)
+        total <- facet_result$meta$count
+        remaining <- total - nrow(facet_result$data)
+        data <- facet_result$data
+        
+        while(remaining > 0) {
+          facet_result <- occurrence_facets(query = paste0("data_resource_uid", z),
+                                   facet = extra, start = nrow(data),
+                                   verbose = verbose)
+          data <- rbind(data, facet_result$data)
+          remaining <- total - nrow(data)
+        }
+        
+        colnames(facet_cols) <- data$label
+        facet_cols <- data.frame(t(data))[2,]
+        df <- cbind(df, facet_cols, row.names = NULL)
+      }
+     
       # add download stats
       df$totalDownloadedRecords <- download_stats(z, verbose=verbose)
     }
@@ -84,7 +112,6 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
 }
 
 
-
 download_stats <- function(id,verbose=ala_config()$verbose) {
   temp_logger_url <- "https://logger.ala.org.au/service/"
   this_url <- paste0(temp_logger_url,
@@ -94,19 +121,3 @@ download_stats <- function(id,verbose=ala_config()$verbose) {
   
 }
 
-# Return kingdom stats for data resource. 
-# It should also be possible to break down by other ranks in future 
-breakdown_stats <- function(id, rank = "kingdom",
-                            verbose=ala_config()$verbose) {
-  this_url <- paste0(getOption("ALA4R_server_config")$base_url_biocache,
-                     "breakdown/dataResources/",id,"?rank=",rank)
-  
-  data <- cached_get(URLencode(this_url), type="json", verbose=verbose)
-  
-  # label count with no kingdom
-  data$taxa$label <- sub("^$", "kingdom_unknown", data$taxa$label)
-  counts <- data$taxa$count
-  names(counts) <- data$taxa$label
-  
-  return(as.list(counts))
-}
