@@ -15,15 +15,16 @@ occurrence_facets(
 \arguments{
 \item{facet}{string: facet to be used. Currently only one facet is supported}
 
-\item{query}{string: query of the form field:value e.g. q=genus:Macropus or 
-a free text search e.g. q=Macropus}
+\item{query}{string: query of the form field:value e.g. q = genus:Macropus
+or a free text search e.g. q = Macropus}
 
-\item{start}{numeric: (optional) (positive integer) start offset for the results}
+\item{start}{numeric: (optional) (positive integer) start offset for the
+results}
 
-\item{page_size}{numeric: (optional) (positive integer) maximum number of records 
-to return. Defaults to the server-side value - currently 30}
+\item{page_size}{numeric: (optional) (positive integer) maximum number of
+records to return. Defaults to the server-side value - currently 30}
 
-\item{verbose}{logical: show additional progress information? 
+\item{verbose}{logical: show additional progress information?
 [default is set by ala_config()]}
 }
 \description{
