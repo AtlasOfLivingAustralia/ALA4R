@@ -205,7 +205,7 @@ ala_reasons <- function() {
 
     out <- cached_get(
       build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,
-                           path="logger/reasons"),type="json")
+                           path="reasons"),type="json")
 
     if (any(names(out)=="deprecated")) out <- out[!out$deprecated,]
     out[,!names(out)=="deprecated"]
@@ -216,7 +216,7 @@ ala_reasons <- function() {
 ala_sourcetypeid <- function() {
 
     this_url <- build_url_from_parts(
-      getOption("ALA4R_server_config")$base_url_logger,path="logger/sources")
+      getOption("ALA4R_server_config")$base_url_logger,path="sources")
 
     sids <- cached_get(this_url,type="json")
     if ("ALA4R" %in% sids$name) {

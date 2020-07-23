@@ -21,7 +21,7 @@
                               biocache_version="2.1.16",
                               base_url_alaspatial="https://spatial.ala.org.au/alaspatial/ws/", ## the base url for older ALA spatial services
                               base_url_images="https://images.ala.org.au/", ## the base url for the images database. Set to NULL or empty string if not available
-                              base_url_logger="https://logger.ala.org.au/service/", ## the base url for usage logging webservices
+                              base_url_logger="https://logger.ala.org.au/service/logger", ## the base url for usage logging webservices
                               base_url_fieldguide="https://fieldguide.ala.org.au/",
                               base_url_lists="https://lists.ala.org.au/ws/",
                               base_url_collectory="https://collections.ala.org.au/ws/"
