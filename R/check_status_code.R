@@ -1,8 +1,8 @@
 # Check HTTP status code
-# 
+#
 # Generic check function that checks HTTP status codes coming back from ALA
 # requests.
-# 
+#
 # @param x string: a status code, or an object of class "response"
 # (from e.g. httr's GET)
 # @param on_redirect function: optional function to evaluate in the case of a

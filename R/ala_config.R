@@ -204,7 +204,7 @@ ala_sourcetypeid <- function() {
         sids$id[sids$name == "ALA4R"]
     } else {
         warning("could not retrieve ", getOption("ALA4R_server_config")$brand,
-                " source type from ", nthis_url, ". ",
+                " source type from ", this_url, ". ",
                 getOption("ALA4R_server_config")$notify)
         2001 ## default value
     }

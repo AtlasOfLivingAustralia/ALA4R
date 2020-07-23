@@ -94,8 +94,8 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
           data <- rbind(data, facet_result$data)
           remaining <- total - nrow(data)
         }
-        
-        facet_cols <- data.frame(t(data))[2,]
+
+        facet_cols <- data.frame(t(data))[2, ]
         colnames(facet_cols) <- data$label
         df <- cbind(df, facet_cols, row.names = NULL)
       }
@@ -107,7 +107,7 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
   }), fill = TRUE)
   row.names(dr_data) <- NULL
   # Warn if any data resources were invalid
-  if(NA %in% unique(dr_data$name) | ncol(dr_data) < 3) {
+  if (NA %in% unique(dr_data$name) | ncol(dr_data) < 3) {
     warning("One or more of the data resources requested is invalid or
             has been deleted")
   }
@@ -115,7 +115,7 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
 }
 
 
-download_stats <- function(id,verbose = ala_config()$verbose) {
+download_stats <- function(id, verbose = ala_config()$verbose) {
   temp_logger_url <- "https://logger.ala.org.au/service/"
   this_url <- paste0(temp_logger_url,
                      "reasonBreakdown?eventId=1002&entityUid=", id)
