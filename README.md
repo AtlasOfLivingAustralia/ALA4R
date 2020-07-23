@@ -5,12 +5,13 @@
 
 [![Travis-CI Build
 Status](https://travis-ci.org/AtlasOfLivingAustralia/ALA4R.svg?branch=master)](https://travis-ci.org/AtlasOfLivingAustralia/ALA4R)
-[![Appveyor Build status](https://ci.appveyor.com/api/projects/status/g9pudc4l7053w4vn/branch/master?svg=true)](https://ci.appveyor.com/project/PeggyNewman/ala4r/branch/master)
+[![AppVeyor Build
+status](https://ci.appveyor.com/api/projects/status/g9pudc4l7053w4vn/branch/master?svg=true)](https://ci.appveyor.com/project/PeggyNewman/ala4r/branch/master)
 [![codecov](https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R/branch/master/graph/badge.svg)](https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R)
 [![CRAN
 Status](http://www.r-pkg.org/badges/version/ALA4R)](http://www.r-pkg.org/pkg/ALA4R)
-[![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ALA4R)](https://CRAN.R-project.org/package=ALA4R)
-[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/ALA4R)](https://github.com/metacran/cranlogs.app)
+[![CRAN
+Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ALA4R)](https://cran.rstudio.com/web/packages/ALA4R/index.html)
 
 The Atlas of Living Australia (ALA) provides tools to enable users of
 biodiversity information to find, access, combine and visualise data on
@@ -26,6 +27,11 @@ Symposium](http://www.ala.org.au/blogs-news/2014-atlas-of-living-australia-scien
 are available in the package vignette, via (in R): `vignette("ALA4R")`,
 or [browse it
 online](https://atlasoflivingaustralia.github.io/ALA4R/articles/ALA4R.html).
+\#\# Citing ALA4R To generate a citation for ALA4R run:
+
+``` r
+citation(package = "ALA4R")
+```
 
 ## Installing
 

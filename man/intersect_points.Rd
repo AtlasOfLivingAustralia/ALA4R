@@ -2,7 +2,8 @@
 % Please edit documentation in R/intersect_points.R
 \name{intersect_points}
 \alias{intersect_points}
-\title{Intersect environmental or contextual layers at a given a set of points (coordinates)}
+\title{Intersect environmental or contextual layers at a given a set of 
+points (coordinates)}
 \usage{
 intersect_points(
   pnts,
@@ -27,23 +28,28 @@ intersect_points(
 A SpatialPointsDataFrame containing the intersecting data information. Missing data or incorrectly identified layer id values will result in NA data
 }
 \description{
-This function allows the user to sample environmental/contextual layers at arbitrary locations. It complements 
-the \code{\link{occurrences}} function, which allows values of the same set of layers to be downloaded at 
+This function allows the user to sample environmental/contextual layers 
+at arbitrary locations. It complements 
+the \code{\link{occurrences}} function, which allows values of the same 
+set of layers to be downloaded at 
 species occurrence locations. 
-NOTE: Requests are currently processed in a *single queue* on the ALA servers. Processing times may be slow if there are many requests in the queue. Note also that the actual processing of batch requests is inherently slow: a large number of points may take quite some time. Be warned.
+NOTE: Requests are currently processed in a *single queue* on the ALA 
+servers. Processing times may be slow if there are many requests in the 
+queue. Note also that the actual processing of batch requests is inherently 
+slow: a large number of points may take quite some time. Be warned.
 }
 \examples{
 \dontrun{
  ## single point with multiple layers
- layers <- c("cl22", "cl23", "el773")
+ layers <- c("cl22", "cl23", "el767")
  pnts <- c(-23.1, 149.1)
  intersect_points(pnts, layers)
 
  ## equivalent direct web service call:
- ## https://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  
+ ## https://spatial.ala.org.au/ws/intersect/cl22,cl23,el663/-23.1/149.1  
 
  ## multiple points as a grid sampling multiple layers
- layers <- c("cl22", "cl23", "el773")
+ layers <- c("cl22", "cl23", "el767")
  pnts <- data.frame(expand.grid(lat=seq(-29, -19, by=2), lon=seq(130, 140, by=2)))
  intersect_points(pnts, layers)
 }

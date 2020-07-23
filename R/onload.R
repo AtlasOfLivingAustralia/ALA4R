@@ -23,7 +23,8 @@
                               base_url_images="https://images.ala.org.au/", ## the base url for the images database. Set to NULL or empty string if not available
                               base_url_logger="https://logger.ala.org.au/service/", ## the base url for usage logging webservices
                               base_url_fieldguide="https://fieldguide.ala.org.au/",
-                              base_url_lists="https://lists.ala.org.au/ws/"
+                              base_url_lists="https://lists.ala.org.au/ws/",
+                              base_url_collectory="https://collections.ala.org.au/ws/"
                               )
         if (!"ALA4R_server_config" %in% names(options())) options(ALA4R_server_config=server_config)
         

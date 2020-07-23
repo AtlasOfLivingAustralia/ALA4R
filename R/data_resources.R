@@ -1,32 +1,37 @@
 #' Get a list of current data resources
 #'
 #' Retrieve a list of all existing data resources, and basic information
-#' for each data resource. 
-#'
-#' @references \itemize {
-#' \item Associated ALA web service for listing data resources:
-#' \url{https://collections.ala.org.au/ws/dataResource}
-#' }
+#' for each data resource.
 #' 
 #' @param druid string: data resource UID of the data resource(s)
 #' @param verbose logical: show additional progress information? 
 #' [default is set by ala_config()]
 #' @param max integer: (optional) if all data resources are requested, max 
 #' number to return, sorted by record count. Default is top 100 
+#' @param extra: string: (optional) additional field to retrieve information for
+#' the data resource. Must be a valid field. 
 #'
 #' @return data frame of data resources
+#' 
+#' @references \itemize{
+#' \item Associated ALA web service for listing data resources:
+#' \url{https://collections.ala.org.au/ws/dataResource}
+#' }
+#' 
+#' @examples
+#' \dontrun{
+#' # Retrieve information for a dataset
+#' dr_info <- data_resources('dr375')
+#' 
+#' # Retrieve stats for top 10 data resources wuth assertions breakdown
+#' dr_info <- data_resources(max = 10, extra = 'assertions')
+#' }
 #' @export data_resources
 
-data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
+data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
+                           extra) {
   this_query <- list()
   assert_that(is.flag(verbose))
-  
-  if (is.null(getOption("ALA4R_server_config")$base_url_collectory)) {
-    base_url <- 'https://collections.ala.org.au/ws/'
-  }
-  else {
-    base_url <- getOption("ALA4R_server_config")$base_url_collectory    
-  }
   
   if(missing(druid)) {
     this_url <- paste0(getOption("ALA4R_server_config")$base_url_biocache,
@@ -40,46 +45,66 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100) {
   }
   
   assert_that(is.character(druid))
-  
-  dr_data <- do.call(rbind, lapply(druid, function(z) {
-    cols <- c("uid", "name", "licenseType", "dateCreated","lastUpdated",
-              "doi","Animalia","Bacteria", "Plantae","Chromista","Fungi",
-              "Protista","Protozoa","Virus","Unknown",
-              "totalDownloadedRecords","resourceType", "gbifRegistryKey")
-    
-    this_url <- paste0(base_url, "dataResource/", z)
+
+  facet_search <- FALSE
+  if (!missing(extra)) {
+    facet_search <- TRUE
+  }
+  dr_data <- data.table::rbindlist(lapply(druid, function(z) {
+    this_url <- paste0(getOption("ALA4R_server_config")$base_url_collectory,
+                       "dataResource/", z)
     data <- cached_get(URLencode(this_url), type="json", verbose=verbose,
                        on_server_error = function(z){NULL})
     if (is.null(data)) {
-      data <- as.data.frame(list(uid = z, totalRecords = 0))
+      df <- as.data.frame(list(uid = z, totalRecords = 0))
     }
     else {
-      data <- data[names(data) %in% cols]
+      data$totalRecords <- as.integer(occurrences(fq=paste0 ('data_resource_uid:',z),
+                                                  record_count_only = TRUE))
       data[vapply(data, is.null, logical(1))] <- NA
-      
-      data$totalRecords <- occurrences(fq=paste0 ('data_resource_uid:',z),
-                                  record_count_only = TRUE)
+      # remove lists of lists 
+      data <- data[!(names(data) %in% 
+                       c('taxonomyCoverageHints','attributions',
+                         'connectionParameters','defaultDarwinCoreValues',
+                         'hubMembership','address','logoRef','imageMetadata',
+                         'linkedRecordConsumers'))]
+      # handle nested lists
+      df <- as.data.frame(t(unlist(data)), stringsAsFactors = FALSE)
     }
     
-    df <- as.data.frame(data)
-    
-    if (df$totalRecords>0) {
-      # add lifeform counts
-      df <- cbind(df, lifeform_stats(z, verbose=verbose))
-      
+    if (as.integer(df$totalRecords) > 0) {
+      # add extra cols
+      if (facet_search) {
+        # paginate facet search
+        facet_result <- occurrence_facets(query = 
+                                            paste0("data_resource_uid:", z), 
+                                          facet =  extra,
+                                          verbose = verbose)
+        total <- facet_result$meta$count
+        remaining <- total - nrow(facet_result$data)
+        data <- facet_result$data
+        
+        while(remaining > 0) {
+          facet_result <- occurrence_facets(query = paste0("data_resource_uid", z),
+                                   facet = extra, start = nrow(data),
+                                   verbose = verbose)
+          data <- rbind(data, facet_result$data)
+          remaining <- total - nrow(data)
+        }
+        
+        colnames(facet_cols) <- data$label
+        facet_cols <- data.frame(t(data))[2,]
+        df <- cbind(df, facet_cols, row.names = NULL)
+      }
+     
       # add download stats
       df$totalDownloadedRecords <- download_stats(z, verbose=verbose)
     }
-    else {
-      # add missing cols so rows are of equal length
-      df[cols[!(cols %in% colnames(df))]] = NA
-    }
-    
     return(df)
-    }))
+  }),fill = TRUE)
   row.names(dr_data) <- NULL
   # Warn if any data resources were invalid
-  if(NA %in% unique(dr_data$name)) {
+  if(NA %in% unique(dr_data$name) | ncol(dr_data) < 3) {
     warning("One or more of the data resources requested is invalid or
             has been deleted")
   }
@@ -94,28 +119,4 @@ download_stats <- function(id,verbose=ala_config()$verbose) {
   data <- cached_get(URLencode(this_url), type="json", verbose=verbose)
   return(data$all$records)
   
-}
-
-# Return lifeform stats for data resource. 
-# It should also be possible to break down by other ranks in future 
-lifeform_stats <- function(id, rank = "lifeform",verbose=ala_config()$verbose) {
-  this_url <- paste0(getOption("ALA4R_server_config")$base_url_biocache,
-                     "breakdown/dataResources/",id,"?rank=",rank)
-  
-  data <- cached_get(URLencode(this_url), type="json", verbose=verbose)
- 
-  kingdoms <- c("Animalia","Bacteria", "Plantae","Chromista",
-                   "Fungi","Protista","Protozoa","Virus","Unknown")
-  
-  # label count with no kingdom
-  data$taxa$label <- sub("^$", "Unknown", data$taxa$label)
-  counts <- data$taxa$count
-  names(counts) <- data$taxa$label
-  
-  
-  # add 0 counts for kingdoms not present
-  zero_counts <- rep(0,length(kingdoms[!(kingdoms %in% names(counts))]))
-  names(zero_counts) <- kingdoms[!(kingdoms %in% names(counts))]
-  
-  return(as.list(append(counts,zero_counts)))
 }

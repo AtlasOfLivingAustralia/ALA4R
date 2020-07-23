@@ -36,7 +36,7 @@
 #'  a <- ala_fields("assertions")
 #'  a$description
 #'  field_info("cl22")
-#'  field_info("el773")
+#'  field_info("el767")
 #' }
 #' @export ala_fields
 
