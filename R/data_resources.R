@@ -9,7 +9,7 @@
 #' [default is set by ala_config()]
 #' @param max integer: (optional) if all data resources are requested, max 
 #' number to return, sorted by record count. Default is top 100 
-#' @param extra: string: (optional) additional field to retrieve information for
+#' @param extra string: (optional) additional field to retrieve information for
 #' the data resource. Must be a valid field. 
 #'
 #' @return data frame of data resources

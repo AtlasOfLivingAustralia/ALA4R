@@ -15,7 +15,7 @@ data_resources(druid, verbose = ala_config()$verbose, max = 100, extra)
 \item{max}{integer: (optional) if all data resources are requested, max 
 number to return, sorted by record count. Default is top 100}
 
-\item{extra:}{string: (optional) additional field to retrieve information for
+\item{extra}{string: (optional) additional field to retrieve information for
 the data resource. Must be a valid field.}
 }
 \value{
@@ -30,8 +30,8 @@ for each data resource.
 # Retrieve information for a dataset
 dr_info <- data_resources('dr375')
 
-# Retrieve stats for all data resources
-
+# Retrieve stats for top 10 data resources wuth assertions breakdown
+dr_info <- data_resources(max = 10, extra = 'assertions')
 }
 }
 \references{
