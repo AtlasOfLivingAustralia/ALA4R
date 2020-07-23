@@ -8,6 +8,9 @@ thischeck <- function() {
   test_that("data resources returns correct data columns", {
     skip_on_cran()
     expect_true(all(cols %in% names(data_resources("dr375"))))
+    
+    result <- data_resources("dr375", extra = "assertions")
+    expect_gt(ncol(result), 50)
   })
 }
 
