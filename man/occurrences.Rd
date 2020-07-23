@@ -14,6 +14,7 @@ occurrences(
   method,
   generateDoi = FALSE,
   email,
+  email_notify = TRUE,
   download_reason_id = ala_config()$download_reason_id,
   reason,
   verbose = ala_config()$verbose,
@@ -88,8 +89,15 @@ the download. Use \code{qa="all"} to include all available issues, or
 offline method unless \code{record_count_only = TRUE}
  more fields are available and larger datasets can be returned}
 
+\item{generateDoi}{logical: by default no DOI will be generated. Set to
+true if you intend to use the data in a publication or similar}
+
 \item{email}{string: the email address of the user performing the download 
 (required unless \code{record_count_only = TRUE}}
+
+\item{email_notify}{logical: by default an email with the download
+information will be sent to the `email` specified. Set to `FALSE` if you are 
+doing a large number of downloads}
 
 \item{download_reason_id}{numeric or string: (required unless 
 record_count_only is TRUE) a reason code for the download, either as a 
@@ -162,7 +170,8 @@ occurrences(taxon="taxon_name:\"Eucalyptus gunnii\"",
 fields=c("latitude","longitude"),
   qa="none",fq="basis_of_record:LivingSpecimen",
   download_reason_id=10)
-# equivalent direct webservice call [see this by setting ala_config(verbose=TRUE)]:
+# equivalent direct webservice call
+# [see this by setting ala_config(verbose=TRUE)]:
 # https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name\%3A\%22
 # Eucalyptus\%20gunnii\%22&fq=basis_of_record\%3ALivingSpecimen&fields=latitude,longitude&qa=none&
 # reasonTypeId=10&sourceTypeId=2001&esc=\%5C&sep=\%09&file=data

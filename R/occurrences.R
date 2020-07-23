@@ -71,8 +71,13 @@
 #' @param method string: This parameter is deprecated. Now all queries use
 #' offline method unless \code{record_count_only = TRUE}
 #'  more fields are available and larger datasets can be returned
+#' @param generateDoi logical: by default no DOI will be generated. Set to
+#' true if you intend to use the data in a publication or similar
 #' @param email string: the email address of the user performing the download 
 #' (required unless \code{record_count_only = TRUE}
+#' @param email_notify logical: by default an email with the download
+#' information will be sent to the `email` specified. Set to `FALSE` if you are 
+#' doing a large number of downloads
 #' @param download_reason_id numeric or string: (required unless 
 #' record_count_only is TRUE) a reason code for the download, either as a 
 #' numeric ID (currently 0--11) or a string (see \code{\link{ala_reasons}} for
@@ -134,7 +139,8 @@
 #' fields=c("latitude","longitude"),
 #'   qa="none",fq="basis_of_record:LivingSpecimen",
 #'   download_reason_id=10)
-#' # equivalent direct webservice call [see this by setting ala_config(verbose=TRUE)]:
+#' # equivalent direct webservice call
+#' # [see this by setting ala_config(verbose=TRUE)]:
 #' # https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name%3A%22
 #' # Eucalyptus%20gunnii%22&fq=basis_of_record%3ALivingSpecimen&fields=latitude,longitude&qa=none&
 #' # reasonTypeId=10&sourceTypeId=2001&esc=%5C&sep=%09&file=data
@@ -144,11 +150,12 @@
 ## TODO: more extensive testing, particularly of the csv-conversion process
 ## TODO LATER: add params: lat, lon, radius (for specifying a search circle)
 
-occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,generateDoi=FALSE,email,
-                        download_reason_id=ala_config()$download_reason_id,
-                        reason,verbose=ala_config()$verbose,
-                        record_count_only=FALSE,use_layer_names=TRUE,
-                        use_data_table=TRUE) {
+occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
+                        generateDoi = FALSE, email, email_notify=TRUE,
+                        download_reason_id = ala_config()$download_reason_id,
+                        reason,verbose = ala_config()$verbose,
+                        record_count_only = FALSE, use_layer_names = TRUE,
+                        use_data_table = TRUE) {
     
     ## check input params are sensible
     assert_that(is.flag(record_count_only))
@@ -193,8 +200,6 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,generateDoi=FALSE,em
 
     ## check the number of records
     if (record_count_only) {
-        ## check using e.g. https://biocache-ws.ala.org.au/ws/occurrences/se
-        ## arch?q=*:*&pageSize=0&facet=off
         temp_query <- this_query
         temp_query$pageSize <- 0
         temp_query$facet <- "off"
@@ -209,6 +214,10 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,generateDoi=FALSE,em
             stop("email is required")
         }
         this_query$email <- email
+    }
+    assert_that(is.flag(email_notify))
+    if (!email_notify) {
+        this_query$emailNotify <- 'false'
     }
     assert_that(is.flag(use_data_table))
     assert_that(is.flag(use_layer_names))
@@ -279,7 +288,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,generateDoi=FALSE,em
     }
     
     this_query$reasonTypeId <- download_reason_id
-    
+
     if (getOption("ALA4R_server_config")$biocache_version > "1.8.1") {
         ## only for more recent biocache versions
         this_query$sourceTypeId <- ala_sourcetypeid() 
@@ -296,7 +305,7 @@ occurrences <- function(taxon,wkt,fq,fields,extra,qa,method,generateDoi=FALSE,em
     this_url <- build_url_from_parts(
         getOption("ALA4R_server_config")$base_url_biocache,
         c("occurrences","offline","download"),query=this_query)
-    
+
     ## the file that will ultimately hold the results (even if we are not
     ## caching, it still gets saved to file)
     thisfile <- ala_cache_filename(this_url)
