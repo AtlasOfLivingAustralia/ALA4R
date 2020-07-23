@@ -32,3 +32,15 @@ thischeck <- function() {
 }
 
 check_caching(thischeck)
+
+thischeck <- function() {
+  test_that("occurrence facets handles factor input", {
+    skip_on_cran()
+    expect_error(occurrence_facets(facet = factor('basis_of_record')))
+    result <- occurrence_facets(facet = 'basis_of_record',
+                                query = factor('data_resource_uid:dr375'))
+    expect_equal(nrow(result$data), 1)
+  })
+}
+
+check_caching(thischeck)
