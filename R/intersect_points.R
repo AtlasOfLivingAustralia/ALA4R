@@ -2,10 +2,9 @@
 #' (coordinates)
 #'
 #' This function allows the user to sample environmental/contextual layers at
-#' arbitrary locations. It complements 
+#' arbitrary locations. It complements
 #' the \code{\link{occurrences}} function, which allows values of the same set
-#' of layers to be downloaded at 
-#' species occurrence locations. 
+#' of layers to be downloaded at species occurrence locations.
 #' NOTE: Requests are currently processed in a *single queue* on the ALA
 #' servers. Processing times may be slow if there are many requests in the
 #' queue. Note also that the actual processing of batch requests is inherently
@@ -42,7 +41,7 @@
 #'  intersect_points(pnts, layers)
 #'
 #'  ## equivalent direct web service call:
-#'  ## https://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  
+#'  ## https://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1
 #'
 #'  ## multiple points as a grid sampling multiple layers
 #'  layers <- c("cl22", "cl23", "el773")
@@ -53,193 +52,127 @@
 
 ## Previous limits of 1000 points and 299 layers have been increased here to
 ## reflect the increase on the service end. The batch version uses POST now to
-## avoid 414 (URL too long) errors. 
+## avoid 414 (URL too long) errors.
 
 #' @export
-intersect_points <- function(pnts, layers, SPdata.frame=FALSE,
-                             use_layer_names=TRUE,
-                             verbose=ala_config()$verbose) {
+intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
+                             use_layer_names = TRUE,
+                             verbose = ala_config()$verbose) {
     ## input parameter checking
     assert_that(is.numeric(pnts) || all(apply(pnts, 2, is.numeric)))
     assert_that(is.character(layers))
     assert_that(is.flag(SPdata.frame))
     assert_that(is.flag(verbose))
 
-    num_points_limit <- 100000 # was previously 1000
-    num_layers_limit <- 700 # was previously 300
-    
-    #get the base url
-    base_url <- getOption("ALA4R_server_config")$base_url_spatial 
-    bulk <- FALSE #set the default to not bulk
-    ## force to use the bulk method even if only one point provided
-    ## (avoids some type problems with json parsing under single-point
-    ## method, also ensures that output always consistent between the
-    ## two methods)
-    force_bulk <- TRUE 
+    num_points_limit <- 100000
+    num_layers_limit <- 700
 
-    ##check and format the points
-    if (is.data.frame(pnts) | is.matrix(pnts)) {
-        ## convert to a vector if a data.frame or matrix and setup the string 
-        ## for the url
-        if (dim(pnts)[2] != 2) {
-          stop("data.frame or matrix of points must have 2 columns ordered 
-               lat, lon") #check the dimensions
-        }
-        #this is for a single coordinate pair
-        if (!force_bulk && (nrow(pnts) == 1)) { 
-            #setup the points str for the url
-            pnts_str <- paste(pnts[1, ], collapse="/", sep="") 
-        } else {
-            # this is for the bulk intersect process where there is more
-            # than 1 coordinate pairs
-            if (nrow(pnts) > (num_points_limit + 1)) {
-              stop("number of locations checked must be less than ",
-                   num_points_limit) #ensure maximum limit is not breached
-            } 
-            # setup the points str for the url
-            pnts_str <- paste(paste(pnts[, 1], pnts[, 2], sep = ","),
-                              collapse = ",", sep = "")
-            bulk <- TRUE #this is a bulk set of points
-        }
-    } else {
-      #format the vector as a string for the url
-        if (length(pnts) %% 2 == 1) {
-          stop("vector of points must be paired locations ... 
+    if (!is.data.frame(pnts) & !is.matrix(pnts)) {
+      # convert to matrix
+      # must be an even number of points
+      if (length(pnts) %% 2 == 1) {
+        stop("vector of points must be paired locations ...
                the length of this vector must be even")
-        }
-        if (!force_bulk && (length(pnts) == 2)) { 
-          #this is for the single coordinate pair
-          #setup the points str for the url
-            pnts_str <- paste(pnts, collapse = "/", sep = "") 
-        } else {
-          #this is for the bulk intersect process where there is more than 1
-          #coordinate pairs
-            if (length(pnts) > (num_points_limit * 2 + 1)) {
-              stop("number of locations checked must be less than ",
-                   num_points_limit) #ensure maximum limit is not breached
-            }
-            #setup the points str for the url
-            pnts_str <- paste(pnts, collapse = ",", sep = "") 
-            bulk <- TRUE #this is a bulk set of points
-        }
-    }
-    ##format the layers string
-    valid_layers <- ala_fields("layers") #get a list of valid fields
-    ##if (identical(tolower(layers), "all")) layers <- valid_layers$name
-    valid_layers <- valid_layers$id
-    ## replace long names with ids
-    layers <- fields_name_to_id(fields = layers, fields_type = "layers") 
-    if (bulk) { 
-      if (length(layers) > (num_layers_limit - 1)) {
-        #ensure no more than 300 layers when bulk
-        stop("the number of layers must be <", num_layers_limit,
-             " if intersecting more than a single location")
-        } 
       }
+      pnts <- matrix(pnts, nrow = length(pnts) / 2, byrow = TRUE)
+    }
+
+    # check the dimensions
+    if (dim(pnts)[2] != 2) {
+      stop("data.frame or matrix of points must have 2 columns ordered
+             lat, lon")
+    }
+    if (nrow(pnts) > (num_points_limit + 1)) {
+      stop("number of locations checked must be less than ",
+           num_points_limit)
+    }
+    # build points string
+    pnts_str <- paste(paste(pnts[, 1], pnts[, 2], sep = ","), collapse = ",",
+                      sep = "")
+
+    ##format the layers string
+    valid_layers <- ala_fields("layers")$id
+    ## replace long names with ids
+    layers <- fields_name_to_id(fields = layers, fields_type = "layers")
+    if (length(layers) > (num_layers_limit - 1)) {
+      #ensure no more than 300 layers when bulk
+      stop("the number of layers must be <", num_layers_limit,
+           " if intersecting more than a single location")
+    }
+
     unknown <- setdiff(layers, valid_layers) #get the different layers
-    if (length(unknown) > 0) { 
-        #warn user of bad layer ids
-        warning(paste(paste(unknown, collapse = ", "), "are invalid layer ids")) 
-        layers <- layers[-which(layers %in% unknown)] #remove offending layers
+    if (length(unknown) > 0) {
+      # warn user of bad layer ids
+      warning(paste(paste(unknown, collapse = ", "), "are invalid layer ids"))
+      layers <- layers[-which(layers %in% unknown)] #remove offending layers
     }
-    #nothing returned if no valid IDs provided
-    if (length(layers)<1) stop("all layer ids provided were invalid") 
-    if (length(layers)>1) {
-        layers_str <- paste(layers, collapse = ",", sep = "")
-    } else {
-        layers_str <- layers
-    }
-    ##download the data
-    if (bulk) { #get the results if it is a bulk request
-        ## define the URL if we were using GET (we need this for both GET 
-        ## and POST operations)
-        GET_url_str <- build_url_from_parts(base_url, c("intersect", "batch"), 
-                                            query = list(fids = layers_str, 
-                                                       points = pnts_str))
-        url_str <- build_url_from_parts(base_url, c("intersect", "batch"))
-        ## we are POSTing, so the fids and points parms don't form part of the 
-        ## URL string
-        ## make sure these are accounted for in the cache file name, though, 
-        ## by using the GET version of the URL to construct our cache file name
-        this_cache_file <- ala_cache_filename(GET_url_str)
-        if ((ala_config()$caching %in% c("off", "refresh")) || 
-            (! file.exists(this_cache_file))) {
-            ## fetch the data from the server
-            status_url <- jsonlite::fromJSON(cached_post(url_str, 
-                                                         body = paste("fids=", 
-                                                                    layers_str,
-                                                                    "&points=",
-                                                                    pnts_str, 
-                                                                    sep = ""), 
-                                                        type = "text"))$statusUrl
-            #get the data url
-            data_url <- cached_get(status_url, type = "json", caching = "off") 
-            while (data_url$status != "finished") { 
-              #keep checking the status until finished
-                if (data_url$status == "error" ) { 
-                  stop("batch intersect has returned an error; please check 
+    # nothing returned if no valid IDs provided
+    if (length(layers) < 1) stop("all layer ids provided were invalid")
+    layers_str <- paste(layers, collapse = ",", sep = "")
+
+    url <- build_url_from_parts(getOption("ALA4R_server_config")$
+                                  base_url_spatial, c("intersect", "batch"))
+    body <- paste0("fids=", layers_str, "&points=", pnts_str)
+
+    # include points and layers in cache filename
+    cache_file <- build_url_from_parts(base_url, c("intersect", "batch"),
+                                       query = list(fids = layers_str,
+                                                    points = pnts_str))
+
+    this_cache_file <- ala_cache_filename(cache_file)
+
+    if ((ala_config()$caching %in% c("off", "refresh")) ||
+        (! file.exists(this_cache_file))) {
+      ## fetch the data from the server
+      status_url <- jsonlite::fromJSON(cached_post(url, body = body,
+                                                   type = "text"))$statusUrl
+      # get the data url
+      data_url <- cached_get(status_url, type = "json", caching = "off")
+      while (data_url$status != "finished") {
+        #keep checking the status until finished
+        if (data_url$status == "error") {
+          stop("batch intersect has returned an error; please check
                        your inputs. ", getOption("ALA4R_server_config")$notify)
-                  }
-                if (verbose) {
-                    if (data_url$status == "waiting") {
-                        if (data_url$waiting == "In queue") {
-                            message("Your job is in queue... please wait")
-                        } else {
-                            message("Your job is processing... please be 
+        }
+        if (verbose) {
+          if (data_url$status == "waiting" & data_url$waiting == "In queue") {
+            message("Your job is in queue... please wait")
+          } else {
+            message("Your job is processing... please be
                                     patient")
-                        }
-                    } else {
-                        message("Your job is still processing... please be 
-                                patient")
-                    }
-                }
-                Sys.sleep(5)
-                data_url <- cached_get(status_url, type = "json", 
-                                       caching = "off") #get the data url
-            }
-            download_to_file(data_url$downloadUrl, outfile = this_cache_file, 
-                             binary_file = TRUE)
-        } else {
-            ## we are using the existing cached file
-            if (verbose) message(sprintf("Using cached file %s", 
-                                         this_cache_file))
+          }
         }
-        ## read in the csv data from the zip file but suppress warnings about 
-        ## "incomplete final line"
-        ##  (which is just due to a missing final line break on some files - 
-        ## but the file reads OK anyway)
-        out <- read_csv_quietly(unz(this_cache_file, "sample.csv"), 
-                                as.is=TRUE, na.strings=c("NA", "n/a"))
-        
-    } else { #get results if just a single location
-        url_str <- build_url_from_parts(base_url, 
-                                        c("intersect", layers_str, pnts_str))
-        out <- cached_get(url_str, type="json") #get the data
-        tt <- t(out$value)
-        colnames(tt) <- out$field
-        # define the output the same as the bulk output
-        out <- data.frame(latitude = pnts[1], longitude = pnts[2], tt, 
-                          stringsAsFactors = FALSE) 
+        Sys.sleep(5)
+        data_url <- cached_get(status_url, type = "json",
+                               caching = "off") #get the data url
+      }
+      download_to_file(data_url$downloadUrl, outfile = this_cache_file,
+                       binary_file = TRUE)
+    } else {
+      ## use the existing cached file
+      if (verbose) message(sprintf("Using cached file %s",
+                                   this_cache_file))
     }
-    out[out=="n/a"] <- NA
-    ##deal with SpatialPointsDataFrame
+    out <- read_csv_quietly(unz(this_cache_file, "sample.csv"),
+                            as.is = TRUE, na.strings = c("NA", "n/a"))
+    out[out == "n/a"] <- NA
     if (SPdata.frame) { #if output is requested as a SpatialPointsDataFrame
-        ## coerce to SpatialPointsDataFrame class
-        if (nrow(out)>0) {
-            out <- SpatialPointsDataFrame(coords = out[, c("longitude",
-                                                         "latitude")],
-                                          proj4string = CRS("+proj=longlat 
-                                                          +ellps=WGS84"), 
-                                          data = out)
-        }
+      ## coerce to SpatialPointsDataFrame class
+      if (nrow(out) > 0) {
+        out <- SpatialPointsDataFrame(coords = out[, c("longitude",
+                                                       "latitude")],
+                                      proj4string =
+                                        CRS("+proj=longlat +ellps=WGS84"),
+                                      data = out)
+      }
     }
-    ##final formatting before return
+    ## final formatting before return
     if (use_layer_names) {
-        names(out) <- make.names(fields_id_to_name(names(out), "layers"))
+      names(out) <- make.names(fields_id_to_name(names(out), "layers"))
     }
     ## rename vars for consistency
-    names(out) <- rename_variables(names(out), type = "layers") 
-    
+    names(out) <- rename_variables(names(out), type = "layers")
+
     ##return the output
     out
 }
