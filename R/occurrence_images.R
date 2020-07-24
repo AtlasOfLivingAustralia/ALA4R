@@ -76,19 +76,20 @@ occurrence_images <- function(occ_id, fq, download = FALSE, download_path,
 
     # if no images are found for any given occurrence id, print a warning
     if (data$totalImageCount == 0) {
-      warning(paste0("No images were found for occurrence id ", z))
+      message(paste0("No images were found for occurrence id ", z))
     }
-    image_list <- data$images
 
-    df <- as.data.frame(image_list, stringsAsFactors = FALSE)
+    df <- as.data.frame(data$images, stringsAsFactors = FALSE)
     # throttle API calls so ALA server is not overloaded
     Sys.sleep(1)
     return(df)
   }), fill = TRUE)
 
   if (length(image_data) == 0) {
-    warning("No images were found for any of the occurrence ids provided")
-    return()
+    if (ala_config()$warn_on_empty) {
+      warning("No images were found for any of the occurrence ids provided")
+    }
+    return(image_data)
   }
 
   if (!sounds) {

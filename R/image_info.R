@@ -1,6 +1,5 @@
 #' Fetch information about an image, given its image ID
 #'
-#' 
 #' @param id character: IDs of images (e.g. as returned by 
 #' \code{\link{occurrences}}  in the imageUrl column). Each ID will be of a 
 #' format something like "84654e14-dc35-4486-9e7c-40eb2f8d3faa"
