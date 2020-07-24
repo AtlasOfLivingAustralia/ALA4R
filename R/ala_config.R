@@ -85,7 +85,7 @@ ala_config <- function(...) {
                             download_reason_id = c(0:8, 10:12))
     ## ideally, the valid download_reason_id values should be populated
     ## dynamically from the ala_reasons() function. However if that is
-    ## called (from here) before the AL4R_config option has been set,
+    ## called (from here) before the ALA4R_config option has been set,
     ## then we get infinite recursion. To be addressed later ...
 
     ## has the user asked to reset options to defaults?
@@ -120,65 +120,63 @@ ala_config <- function(...) {
         }
 
         ## override any defaults with user-specified options
-        if (length(user_options) > 0) {
-          for (i in seq_len(length(user_options))) {
-                this_option_name <- names(user_options)[i]
-                if (! is.null(allowed_options[[this_option_name]])) {
-                    ## there are restrictions on the allowed values for
-                    ## this option
-                    ## could use match.arg here but the output is a bit obscure
-                    if (! (user_options[[i]] %in%
-                           allowed_options[[this_option_name]])) {
-                        stop("value \"", user_options[[i]],
-                             "\" is not a valid choice for ", this_option_name,
-                             " (should be one of ",
-                             str_c(allowed_options[[this_option_name]],
-                                   collapse = ", "), ")")
-                    }
-                }
-                ## any other specific checks ...
-                if (identical(this_option_name, "cache_directory")) {
-                    if (!see_if(is.notempty.string(user_options[[i]]))) {
-                        stop("cache_directory should be a string")
-                    }
-                    ## strip trailing file separator, if there is one
-                    user_options[[i]] <- sub("[/\\]+$", "", user_options[[i]])
-                    if (! (file.exists(user_options[[i]]) &&
-                           file.info(user_options[[i]])$isdir)) {
-                        ## cache directory does not exist. We could create
-                        ## it, but this is probably better left to the user
-                        ## to manage
-                        stop("cache directory ", user_options[[i]],
-                             " does not exist")
-                    }
-                }
-                if (identical(this_option_name, "user_agent")) {
-                    if (!see_if(is.string(user_options[[i]]))) {
-                        stop("user_agent should be a string")
-                    }
-                }
-                if (identical(this_option_name, "verbose")) {
-                    if (!see_if(is.flag(user_options[[i]]))) {
-                        stop("verbose should be TRUE or FALSE")
-                    }
-                }
-                if (identical(this_option_name, "warn_on_empty")) {
-                    if (!see_if(is.flag(user_options[[i]]))) {
-                        stop("warn_on_empty should be TRUE or FALSE")
-                    }
-                }
-
-                current_options[this_option_name] <- user_options[[i]]
-            }
-            ## set the global option
-            temp <- list(current_options)
-            names(temp) <- ala_option_name
-            options(temp)
-        } else {
-            ## no user options were provided, so user is asking for current
-            ## options to be returned
-            current_options
+        if (length(user_options) == 0) {
+          return(current_options)
         }
+        for (i in seq_len(length(user_options))) {
+              this_option_name <- names(user_options)[i]
+              if (! is.null(allowed_options[[this_option_name]])) {
+                  ## there are restrictions on the allowed values for
+                  ## this option
+                  ## could use match.arg here but the output is a bit obscure
+                  if (! (user_options[[i]] %in%
+                         allowed_options[[this_option_name]])) {
+                      stop("value \"", user_options[[i]],
+                           "\" is not a valid choice for ", this_option_name,
+                           " (should be one of ",
+                           str_c(allowed_options[[this_option_name]],
+                                 collapse = ", "), ")")
+                  }
+              }
+              ## any other specific checks ...
+              if (identical(this_option_name, "cache_directory")) {
+                  if (!see_if(is.notempty.string(user_options[[i]]))) {
+                      stop("cache_directory should be a string")
+                  }
+                  ## strip trailing file separator, if there is one
+                  user_options[[i]] <- sub("[/\\]+$", "", user_options[[i]])
+                  if (! (file.exists(user_options[[i]]) &&
+                         file.info(user_options[[i]])$isdir)) {
+                      ## cache directory does not exist. We could create
+                      ## it, but this is probably better left to the user
+                      ## to manage
+                      stop("cache directory ", user_options[[i]],
+                           " does not exist")
+                  }
+              }
+              if (identical(this_option_name, "user_agent")) {
+                  if (!see_if(is.string(user_options[[i]]))) {
+                      stop("user_agent should be a string")
+                  }
+              }
+              if (identical(this_option_name, "verbose")) {
+                  if (!see_if(is.flag(user_options[[i]]))) {
+                      stop("verbose should be TRUE or FALSE")
+                  }
+              }
+              if (identical(this_option_name, "warn_on_empty")) {
+                  if (!see_if(is.flag(user_options[[i]]))) {
+                      stop("warn_on_empty should be TRUE or FALSE")
+                  }
+              }
+
+              current_options[this_option_name] <- user_options[[i]]
+          }
+          ## set the global option
+          temp <- list(current_options)
+          names(temp) <- ala_option_name
+          options(temp)
+
     }
 }
 
@@ -228,4 +226,8 @@ convert_reason <- function(reason) {
                  )
     }
     reason
+}
+
+validate_option <- function(opt) {
+  
 }
