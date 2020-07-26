@@ -24,8 +24,8 @@ thischeck <- function() {
         temp <- intersect_points(pnts = data.frame(lat = c(-23.1, -42),
                                                  lon = c(149.1, 148)),
                                  layers = "cl10925")
-        expect_true(all(temp$australianStatesAndTerritories ==
-                          c("Queensland", "Tasmania")))
+        expect_true(all(temp$PSMAStates2016 ==
+                          c("QUEENSLAND", "TASMANIA")))
     })
 }
 check_caching(thischeck)

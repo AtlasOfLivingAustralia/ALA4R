@@ -107,7 +107,10 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
       layers <- layers[-which(layers %in% unknown)] #remove offending layers
     }
     # nothing returned if no valid IDs provided
-    if (length(layers) < 1) stop("all layer ids provided were invalid")
+    if (length(layers) < 1) {
+      stop("all layer ids provided were invalid")
+    }
+   
     layers_str <- paste(layers, collapse = ",", sep = "")
 
     url <- build_url_from_parts(getOption("ALA4R_server_config")$
@@ -172,7 +175,6 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
     }
     ## rename vars for consistency
     names(out) <- rename_variables(names(out), type = "layers")
-
     ##return the output
     out
 }
