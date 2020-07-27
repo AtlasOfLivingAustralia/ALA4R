@@ -94,6 +94,7 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
     valid_layers <- ala_fields("layers")$id
     ## replace long names with ids
     layers <- fields_name_to_id(fields = layers, fields_type = "layers")
+
     if (length(layers) > (num_layers_limit - 1)) {
       #ensure no more than 300 layers when bulk
       stop("the number of layers must be <", num_layers_limit,
@@ -118,7 +119,8 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
     body <- paste0("fids=", layers_str, "&points=", pnts_str)
 
     # include points and layers in cache filename
-    cache_file <- build_url_from_parts(base_url, c("intersect", "batch"),
+    cache_file <- build_url_from_parts(getOption("ALA4R_server_config")$
+                                         base_url_spatial, c("intersect", "batch"),
                                        query = list(fids = layers_str,
                                                     points = pnts_str))
 
@@ -158,7 +160,8 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
     }
     out <- read_csv_quietly(unz(this_cache_file, "sample.csv"),
                             as.is = TRUE, na.strings = c("NA", "n/a"))
-    out[out == "n/a"] <- NA
+
+    
     if (SPdata.frame) { #if output is requested as a SpatialPointsDataFrame
       ## coerce to SpatialPointsDataFrame class
       if (nrow(out) > 0) {
@@ -175,6 +178,7 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
     }
     ## rename vars for consistency
     names(out) <- rename_variables(names(out), type = "layers")
+    out[out == "n/a"] <- NA
     ##return the output
     out
 }
