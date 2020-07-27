@@ -11,7 +11,7 @@
 #' @param verbose logical: show additional progress information?
 #' [default is set by ala_config()]
 #' @return A named list (named by uuid), each element of which is a list
-#' containing the details for that uuid. This inner list will be empty if no 
+#' containing the details for that uuid. This inner list will be empty if no
 #' match is found for the supplied uuid
 #' @seealso \code{\link{occurrences}} \code{\link{ala_config}}
 #' @examples
@@ -67,6 +67,6 @@ occurrence_details <- function(uuid, verbose=ala_config()$verbose) {
             out[[k]] <- list()
         }
     }
-    names(out) <- uuid   
+    names(out) <- uuid
     out
 }
