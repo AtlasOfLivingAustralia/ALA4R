@@ -171,6 +171,8 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
                                         CRS("+proj=longlat +ellps=WGS84"),
                                       data = out)
       }
+    } else {
+      out[out == "n/a"] <- NA
     }
     ## final formatting before return
     if (use_layer_names) {
@@ -178,7 +180,6 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
     }
     ## rename vars for consistency
     names(out) <- rename_variables(names(out), type = "layers")
-    out[out == "n/a"] <- NA
     ##return the output
     out
 }
