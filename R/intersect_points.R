@@ -111,7 +111,7 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
     if (length(layers) < 1) {
       stop("all layer ids provided were invalid")
     }
-   
+
     layers_str <- paste(layers, collapse = ",", sep = "")
 
     url <- build_url_from_parts(getOption("ALA4R_server_config")$
@@ -120,7 +120,8 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
 
     # include points and layers in cache filename
     cache_file <- build_url_from_parts(getOption("ALA4R_server_config")$
-                                         base_url_spatial, c("intersect", "batch"),
+                                         base_url_spatial,
+                                       c("intersect", "batch"),
                                        query = list(fids = layers_str,
                                                     points = pnts_str))
 
@@ -161,7 +162,6 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
     out <- read_csv_quietly(unz(this_cache_file, "sample.csv"),
                             as.is = TRUE, na.strings = c("NA", "n/a"))
 
-    
     if (SPdata.frame) { #if output is requested as a SpatialPointsDataFrame
       ## coerce to SpatialPointsDataFrame class
       if (nrow(out) > 0) {

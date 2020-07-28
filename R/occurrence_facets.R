@@ -11,6 +11,11 @@
 #' @param verbose logical: show additional progress information?
 #' [default is set by ala_config()]
 #'
+#' @return a named list with the components "meta" (search metadata), and
+#' "data" (the search results, in the form of a data frame). The contents
+#' (column names) of the data frame will vary depending on the details of the
+#' search and the results.
+#'
 #' @references Associated ALA web service for facet counts \itemize{
 #' \item \url{https://api.ala.org.au/#ws3}
 #' }
@@ -63,7 +68,8 @@ occurrence_facets <- function(facet, query, start, page_size,
  out$meta$facet <- x$fieldName
  data <- x$fieldResult[[1]]
 
- out$data <- data[names(data) %in% c("label", "count")]
+ out$data <- data.frame(data[names(data) %in% c("label", "count")],
+                        stringsAsFactors = FALSE)
+ out$data$label <- rename_variables(out$data$label, type = "general")
  return(out)
-
 }

@@ -10,7 +10,8 @@
 #' @param max integer: (optional) if all data resources are requested, max
 #' number to return, sorted by record count. Default is top 100
 #' @param extra string: (optional) additional field to retrieve information for
-#' the data resource. Must be a valid field.
+#' the data resource. Must be a valid indexed field (see
+#' \code{ala_fields("occurrence_indexed")}
 #'
 #' @return data frame of data resources
 #'
@@ -24,7 +25,7 @@
 #' # Retrieve information for a dataset
 #' dr_info <- data_resources('dr375')
 #'
-#' # Retrieve stats for top 10 data resources wuth assertions breakdown
+#' # Retrieve stats for top 10 data resources with assertions breakdown
 #' dr_info <- data_resources(max = 10, extra = 'assertions')
 #' }
 #' @export data_resources
@@ -85,19 +86,20 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
         total <- facet_result$meta$count
         remaining <- total - nrow(facet_result$data)
         data <- facet_result$data
-
         while (remaining > 0) {
           facet_result <- occurrence_facets(query =
                                               paste0("data_resource_uid", z),
                                    facet = extra, start = nrow(data),
                                    verbose = verbose)
-          data <- rbind(data, facet_result$data)
+          data <- rbind.data.frame(data, facet_result$data, stringsAsFactors = FALSE)
+          print(facet_result)
           remaining <- total - nrow(data)
         }
 
         facet_cols <- data.frame(t(data))[2, ]
         colnames(facet_cols) <- data$label
-        df <- cbind(df, facet_cols, row.names = NULL)
+        df <- cbind.data.frame(df, facet_cols, row.names = NULL,
+                               stringsAsFactors = FALSE)
       }
 
       # add download stats
@@ -111,6 +113,7 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
     warning("One or more of the data resources requested is invalid or
             has been deleted")
   }
+  names(dr_data) <- rename_variables(names(dr_data), type = "general")
   dr_data
 }
 

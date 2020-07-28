@@ -36,7 +36,7 @@ check_status_code <- function(x, on_redirect = NULL, on_client_error = NULL,
         xstatus <- x$headers$status
         if (is.null(xstatus)) {
             ## newer httr has changed, try this
-            xstatus <- as.character(x$status_code) 
+            xstatus <- as.character(x$status_code)
             was_full_response <- FALSE
         }
         ## check again
@@ -59,7 +59,7 @@ check_status_code <- function(x, on_redirect = NULL, on_client_error = NULL,
         }
         xstatus <- x
     }
-    switch (substr(xstatus, 1, 1),
+    switch(substr(xstatus, 1, 1),
             "2" = { ## 2xx are all success codes
                 return(0) },
             "3" = { ## 3xx are redirection codes
@@ -98,7 +98,7 @@ check_status_code <- function(x, on_redirect = NULL, on_client_error = NULL,
                                               x$message, sep = " ")
                         }
                     } else {
-                        if (nchar(extra_info)>0) {
+                        if (nchar(extra_info) > 0) {
                             diag_msg <- paste(diag_msg, "\n  Some additional
                                               diagnostic information that might
                                               help:", extra_info, sep = " ")
@@ -125,12 +125,12 @@ check_status_code <- function(x, on_redirect = NULL, on_client_error = NULL,
                                               x$message, sep = " ")
                         }
                     } else {
-                        if (nchar(extra_info)>0) {
+                        if (nchar(extra_info) > 0) {
                             diag_msg <- paste(diag_msg, "\n  Some additional
                                               diagnostic information that might
                                               help:", extra_info, sep = " ")
                         }
-                    }                        
+                    }                 
                     stop("HTTP status code ", xstatus, " received.\n",
                          diag_msg)
                 }

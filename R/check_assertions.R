@@ -38,7 +38,7 @@ check_assertions <- function(x) {
              getOption("ALA4R_server_config")$occurrences_function,
              "() in the ", getOption("ALA4R_server_config")$brand, " package")
     }
-    ass <- ala_fields("assertions", as_is=TRUE) ## get all assertion fields
+    ass <- ala_fields("assertions", as_is = TRUE) ## get all assertion fields
     ass$occurColnames <- NA
     temp_description <- rename_variables(ass$description, type = "assertions")
     for (coi in colnames(x$data)) {
@@ -48,7 +48,7 @@ check_assertions <- function(x) {
             ass$occurColnames[tt[1]] <- coi #place the colname
     }
     ass <- na.omit(ass)
-    if (nrow(ass)<1) {
+    if (nrow(ass) < 1) {
         if (ala_config()$warn_on_empty) {
             warning("no assertions in data")
         }

@@ -33,14 +33,14 @@ fieldguide <- function(guids, title = "Field guide",
         stop("file exists: delete it or specify overwrite = TRUE")
     }
     verbose <- ala_config()$verbose
-    
+
     ## we initially make a request to the /generate service, which generates
     ## the PDF on the server and returns the PDF file name to download
     this_url <- build_url_from_parts(getOption("ALA4R_server_config")
                                      $base_url_fieldguide, "generate")
     temp <- jsonlite::toJSON(list(title = title, guids = guids))
     ## use md5 hash of url plus body as cache filename
-    cache_file <- digest(paste(this_url, temp)) 
+    cache_file <- digest(paste(this_url, temp))
     caching <- ala_config()$caching
     fileid <- NULL
     if (caching %in% c("on") && file.exists(cache_file)) {
@@ -59,7 +59,7 @@ fieldguide <- function(guids, title = "Field guide",
             cached_pdf_file <- ala_cache_filename(this_url)
             ## if cached pdf file does not exist, re-generate the whole thing
             if (!file.exists(cached_pdf_file) ||
-                (!(file.info(cached_pdf_file)$size>0))) fileid <- NULL
+                (!(file.info(cached_pdf_file)$size > 0))) fileid <- NULL
         }, silent = TRUE)
     }
     if (is.null(fileid)) {
