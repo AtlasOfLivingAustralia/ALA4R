@@ -227,7 +227,3 @@ convert_reason <- function(reason) {
     }
     reason
 }
-
-validate_option <- function(opt) {
-  
-}

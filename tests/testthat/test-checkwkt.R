@@ -31,4 +31,3 @@ thischeck <- function() {
     })
 }
 check_caching(thischeck)
-    

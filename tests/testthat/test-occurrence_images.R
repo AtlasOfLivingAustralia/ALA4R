@@ -59,9 +59,9 @@ check_caching(thischeck)
 thischeck <- function() {
   test_that("image search warns if no images are found", {
     skip_on_cran()
-    ala_config("warn_on_empty"=TRUE)
+    ala_config("warn_on_empty" = TRUE)
     expect_warning(occurrence_images("invalid-id"))
-    ala_config("warn_on_empty"=FALSE)
+    ala_config("warn_on_empty" = FALSE)
     expect_message(occurrence_images("invalid-id"),
                    "No images were found for occurrence id invalid-id")
   })
