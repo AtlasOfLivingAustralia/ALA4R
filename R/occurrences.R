@@ -426,7 +426,7 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method, email,
             names(x) <- rename_variables(names(x), type = "occurrence")
             ## remove unwanted columns
             xcols <- setdiff(names(x), unwanted_columns("occurrence"))
-            x <- subset(x,select = xcols)
+            x <- subset(x, select = xcols)
             ## also read the citation info
             ## this file won't exist if there are no rows in the data.csv file,
             ## so only do it if nrow(x)>0
