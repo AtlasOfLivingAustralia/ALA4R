@@ -31,8 +31,20 @@ thischeck <- function() {
     expect_error(check_status_code(resp))
   })
 }
+
 check_caching(thischeck)
 
+thischeck <- function() {
+  test_that("check status code handles 400 codes", {
+    skip_on_cran()
+    expect_error(check_status_code(400))
+    resp <- GET("https://bie-ws.ala.org.au/ws/admin/indexFields")
+    # force a 500 response
+    resp$status_code <- "400"
+    expect_error(check_status_code(resp))
+  })
+}
+check_caching(thischeck)
 
 thischeck <- function() {
   test_that("check status code handles full response", {
