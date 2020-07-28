@@ -15,7 +15,7 @@ occurrence_details(uuid, verbose = ala_config()$verbose)
 }
 \value{
 A named list (named by uuid), each element of which is a list
-containing the details for that uuid. This inner list will be empty if no 
+containing the details for that uuid. This inner list will be empty if no
 match is found for the supplied uuid
 }
 \description{

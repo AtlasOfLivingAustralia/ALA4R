@@ -10,16 +10,20 @@ check_assertions(x)
 \item{x}{list: an object returned from \code{\link{occurrences}}}
 }
 \value{
-A dataframe of assertions column names, descriptions and categories/error codes. If no assertions are in the dataset, NULL is returned.
+A dataframe of assertions column names, descriptions and
+categories/error codes. If no assertions are in the dataset, NULL is
+returned.
 }
 \description{
-This provides a data.frame detailing the assertions that are found in a dataset returned from \code{\link{occurrences}}.
+This provides a data.frame detailing the assertions that are found
+in a dataset returned from \code{\link{occurrences}}.
 }
 \examples{
 \dontrun{
  ##download species data with all possible assertions
 
- x <- occurrences(taxon="golden bowerbird", download_reason_id=10, qa=ala_fields("assertions")$name)
+ x <- occurrences(taxon="golden bowerbird", download_reason_id=10,
+ qa=ala_fields("assertions")$name)
 
  asserts <- check_assertions(x)
  ## this is a data.frame of assertions, their description and column names
@@ -27,10 +31,12 @@ This provides a data.frame detailing the assertions that are found in a dataset 
  ## list the descriptions of all (current) assertions
  asserts$description
 
- tmp <- x$data[, names(x$data) \%in\% asserts$name] ## assertion columns from data
- which(colSums(tmp)>0) ## discard those not seen in the data
+ ## assertion columns from data
+ tmp <- x$data[, names(x$data) \%in\% asserts$name]
+ which(colSums(tmp) > 0) ## discard those not seen in the data
 }
 }
 \references{
-\url{https://api.ala.org.au/}, \samp{https://biocache-ws.ala.org.au/ws/assertions/codes}
+\url{https://api.ala.org.au/},
+\samp{https://biocache-ws.ala.org.au/ws/assertions/codes}
 }

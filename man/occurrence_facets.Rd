@@ -27,6 +27,12 @@ records to return. Defaults to the server-side value - currently 30}
 \item{verbose}{logical: show additional progress information?
 [default is set by ala_config()]}
 }
+\value{
+a named list with the components "meta" (search metadata), and
+"data" (the search results, in the form of a data frame). The contents
+(column names) of the data frame will vary depending on the details of the
+search and the results.
+}
 \description{
 Get facet counts for occurrence data
 }
