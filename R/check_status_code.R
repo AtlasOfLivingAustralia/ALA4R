@@ -37,7 +37,7 @@ check_status_code <- function(x, on_redirect = NULL, on_client_error = NULL,
         if (is.null(xstatus)) {
             ## newer httr has changed, try this
             xstatus <- as.character(x$status_code)
-            was_full_response <- FALSE
+            was_full_response <- TRUE
         }
         ## check again
         if (is.null(xstatus)) {
@@ -91,7 +91,8 @@ check_status_code <- function(x, on_redirect = NULL, on_client_error = NULL,
                                        " package, or the servers are down. ",
                                        getOption("ALA4R_server_config")$notify)
                     if (was_full_response) {
-                        x <- jsonlite::fromJSON(content(x, type = "text"))
+                        x <- jsonlite::fromJSON(content(x, type = "text",
+                                                        encoding = "UTF-8"))
                         if (!is.null(x$message)) {
                             diag_msg <- paste(diag_msg,
                                               "\nThe error message was:",
@@ -118,7 +119,8 @@ check_status_code <- function(x, on_redirect = NULL, on_client_error = NULL,
                                        (try again later). ",
                                        getOption("ALA4R_server_config")$notify)
                     if (was_full_response) {
-                        x <- jsonlite::fromJSON(content(x, type = "text"))
+                        x <- jsonlite::fromJSON(content(x, type = "text",
+                                                        encoding = "UTF-8"))
                         if (!is.null(x$message)) {
                             diag_msg <- paste(diag_msg,
                                               "\nThe error message was:",
@@ -130,7 +132,7 @@ check_status_code <- function(x, on_redirect = NULL, on_client_error = NULL,
                                               diagnostic information that might
                                               help:", extra_info, sep = " ")
                         }
-                    }                 
+                    }
                     stop("HTTP status code ", xstatus, " received.\n",
                          diag_msg)
                 }
