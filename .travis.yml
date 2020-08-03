@@ -20,15 +20,16 @@ matrix:
     - R_CODECOV=true
 env:
 - NOT_CRAN=true
+  global:
+  - MAKEFLAGS="-j 2"
+  - COMPILER=g++-8
+  - CC=gcc-8
+  - CXX=g++-8
 warnings_are_errors: true
 script:
 - |
   R CMD build .
   travis_wait 20 R CMD check ALA4R*tar.gz
-before_install:
-  - mkdir -p ~/.R/
-  - echo "CXX14=g++ -std=c++1y -fPIC" >> ~/.R/Makevars
-  - echo "CXX14FLAGS = -mtune=native -march=native -Wno-unused-variable -Wno-unused-function -Wno-unused-local-typedefs -Wno-ignored-attributes -Wno-deprecated-declarations -Wno-attributes -O3" >> ~/.R/Makevars
 after_success:
 - if [[ "${R_CODECOV}" ]]; then travis_wait 20 Rscript -e 'covr::codecov()'; fi
 notifications:
