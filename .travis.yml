@@ -9,6 +9,9 @@ addons:
     packages:
     - libv8-3.14-dev
     - libmagick++-dev
+    - gcc-8
+    - g++-8
+    - gfortran-8
 matrix:
   include:
   - os: linux
@@ -20,11 +23,6 @@ matrix:
     - R_CODECOV=true
 env:
 - NOT_CRAN=true
-  global:
-  - MAKEFLAGS="-j 2"
-  - COMPILER=g++-8
-  - CC=gcc-8
-  - CXX=g++-8
 warnings_are_errors: true
 script:
 - |
