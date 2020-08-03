@@ -40,6 +40,7 @@ Suggests:
     testthat,
     tidyr (== 1.0.0),
     vegan
+SystemRequirements: C++11
 License: MPL-2.0
 URL: https://github.com/AtlasOfLivingAustralia/ALA4R
 BugReports: https://github.com/AtlasOfLivingAustralia/ALA4R/issues
