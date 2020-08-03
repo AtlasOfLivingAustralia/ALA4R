@@ -38,7 +38,7 @@ Suggests:
     phytools,
     rmarkdown,
     testthat,
-    tidyr (== 1.0.0),
+    tidyr,
     vegan
 SystemRequirements: C++11
 License: MPL-2.0
