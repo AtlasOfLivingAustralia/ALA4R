@@ -23,6 +23,16 @@ matrix:
     - R_CODECOV=true
 env:
 - NOT_CRAN=true
+before_install:
+  - mkdir -p ~/.R && touch ~/.R/Makevars
+  - VER=-8
+  - echo "CC=gcc$(VER)"    >> ~/.R/Makevars
+  - echo "CXX=g++$(VER)"   >> ~/.R/Makevars
+  - echo "CXX1X=g++$(VER)" >> ~/.R/Makevars
+  - echo "FC=gfortran$(VER)"       >> ~/.R/Makevars
+  - echo "F77=gfortran$(VER)"      >> ~/.R/Makevars
+  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-8
+  - sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-8 60
 warnings_are_errors: true
 script:
 - |
