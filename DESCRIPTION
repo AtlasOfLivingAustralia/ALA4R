@@ -40,8 +40,6 @@ Suggests:
     testthat,
     tidyr,
     vegan
-LinkingTo: 
-    cpp11
 License: MPL-2.0
 URL: https://github.com/AtlasOfLivingAustralia/ALA4R
 BugReports: https://github.com/AtlasOfLivingAustralia/ALA4R/issues
