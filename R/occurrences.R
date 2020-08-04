@@ -70,15 +70,15 @@
 #' @param method string: This parameter is deprecated. Now all queries use
 #' offline method unless \code{record_count_only = TRUE}
 #'  more fields are available and larger datasets can be returned
-#' @param generateDoi logical: by default no DOI will be generated. Set to
+#' @param generate_doi logical: by default no DOI will be generated. Set to
 #' true if you intend to use the data in a publication or similar
-#' @param email string: the email address of the user performing the download 
+#' @param email string: the email address of the user performing the download
 #' (required unless \code{record_count_only = TRUE}
 #' @param email_notify logical: by default an email with the download
-#' information will be sent to the `email` specified. Set to `FALSE` if you are 
+#' information will be sent to the `email` specified. Set to `FALSE` if you are
 #' doing a large number of downloads
-#' @param download_reason_id numeric or string: (required unless 
-#' record_count_only is TRUE) a reason code for the download, either as a 
+#' @param download_reason_id numeric or string: (required unless
+#' record_count_only is TRUE) a reason code for the download, either as a
 #' numeric ID (currently 0--11) or a string (see \code{\link{ala_reasons}} for
 #'  a list of valid ID codes and names). The download_reason_id can be passed
 #'  directly to this function, or alternatively set using
@@ -152,12 +152,12 @@
 ## TODO LATER: add params: lat, lon, radius (for specifying a search circle)
 
 occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
-                        generateDoi = FALSE, email, email_notify=TRUE,
+                        generate_doi = FALSE, email, email_notify=TRUE,
                         download_reason_id = ala_config()$download_reason_id,
-                        reason,verbose = ala_config()$verbose,
+                        reason, verbose = ala_config()$verbose,
                         record_count_only = FALSE, use_layer_names = TRUE,
                         use_data_table = TRUE) {
-    
+
     ## check input params are sensible
     assert_that(is.flag(record_count_only))
     if (!missing(method)) {
@@ -218,7 +218,7 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
     }
     assert_that(is.flag(email_notify))
     if (!email_notify) {
-        this_query$emailNotify <- 'false'
+        this_query$emailNotify <- "false"
     }
     assert_that(is.flag(use_data_table))
     assert_that(is.flag(use_layer_names))
@@ -249,9 +249,9 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
         }
         this_query$fields <- str_c(fields, collapse = ",")
     }
-    
-    if (generateDoi) {
-      this_query$mintDoi <- 'true'
+
+    if (generate_doi) {
+      this_query$mintDoi <- "true"
     }
 
     if (!missing(extra)) {
@@ -310,7 +310,6 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
     this_url <- build_url_from_parts(
         getOption("ALA4R_server_config")$base_url_biocache,
         c("occurrences", "offline", "download"), query = this_query)
-
     ## the file that will ultimately hold the results (even if we are not
     ## caching, it still gets saved to file)
     thisfile <- ala_cache_filename(this_url)
@@ -451,47 +450,32 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
             xc <- "No citation information was returned, try again later"
             found_citation <- FALSE
             try({
-              suppressWarnings(xc <- read.table(unz(thisfile,"citation.csv"),
-                                                header=TRUE,comment.char="",
-                                                as.is=TRUE))
+              suppressWarnings(xc <- read.table(unz(thisfile, "citation.csv"),
+                                                header = TRUE,
+                                                comment.char = "",
+                                                as.is = TRUE))
               found_citation <- TRUE},
-              silent=TRUE)
-            if (!found_citation) {
-              ## as of around July 2016 the citation.csv file appears to have
-              ## been replaced by README.html
-              try({
-                suppressWarnings(xc <- read.table(unz(thisfile, "citation.csv"),
-                                                  header = TRUE,
-                                                  comment.char = "",
-                                                  as.is = TRUE))
-                found_citation <- TRUE},
-                silent = TRUE)
-            }
+              silent = TRUE)
+
             if (!found_citation & nrow(x) > 0) {
                 warning("citation file not found within downloaded zip file")
             }
             # look for doi if one was requested
-            found_readme <- FALSE
-            found_doi <- FALSE
-            
             doi <- "DOI was not requested or could not be found"
-            if(generateDoi) {
+            if (generate_doi) {
               tryCatch({
-                doi <- as.character(read.table(
-                  unz('~/Downloads/data (74).zip','doi.txt'))$V1)
-                found_doi <- TRUE
+                  doi <- as.character(read.table(
+                  unz(thisfile, "doi.txt"))$V1)
               },
               warning = function(e) {
-                warning('No DOI was generated for download. The DOI server may
-                        be down. Please try again later')
+                warning("No DOI was generated for download. The DOI server may
+                        be down. Please try again later")
               },
               error = function(e) {
-                warning('No DOI was generated for download. The DOI server may
-                        be down. Please try again later')
+                warning("No DOI was generated for download. The DOI server may
+                        be down. Please try again later")
               })
             }
-            
-            
         } else {
             if (ala_config()$warn_on_empty) {
                 warning("no matching records were returned")

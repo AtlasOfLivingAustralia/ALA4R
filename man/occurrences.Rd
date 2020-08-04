@@ -12,7 +12,7 @@ occurrences(
   extra,
   qa,
   method,
-  generateDoi = FALSE,
+  generate_doi = FALSE,
   email,
   email_notify = TRUE,
   download_reason_id = ala_config()$download_reason_id,
@@ -87,7 +87,7 @@ the download. Use \code{qa = "all"} to include all available issues, or
 offline method unless \code{record_count_only = TRUE}
  more fields are available and larger datasets can be returned}
 
-\item{generateDoi}{logical: by default no DOI will be generated. Set to
+\item{generate_doi}{logical: by default no DOI will be generated. Set to
 true if you intend to use the data in a publication or similar}
 
 \item{email}{string: the email address of the user performing the download 
