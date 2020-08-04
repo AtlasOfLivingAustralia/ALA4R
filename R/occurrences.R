@@ -460,12 +460,6 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
               ## as of around July 2016 the citation.csv file appears to have
               ## been replaced by README.html
               try({
-                suppressWarnings(xc <- scan(unz(thisfile,"README.html"),
-                                            what="character",sep="$",
-                                            quiet=TRUE))
-                xc <- data.frame(citation=paste(xc,collapse=""))
-                found_citation <- TRUE},
-                silent=TRUE)
                 suppressWarnings(xc <- read.table(unz(thisfile, "citation.csv"),
                                                   header = TRUE,
                                                   comment.char = "",
