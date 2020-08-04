@@ -7,11 +7,13 @@
 ala_lists(guid, offset = 0, max = 5000, verbose = ala_config()$verbose)
 }
 \arguments{
-\item{guid}{string: (optional) if provided, return only lists in which this GUID appears}
+\item{guid}{string: (optional) if provided, return only lists in which this
+GUID appears}
 
 \item{offset}{integer: the number of lists to skip. This supports paging}
 
-\item{max}{integer: the maximum number of lists to return. This supports paging}
+\item{max}{integer: the maximum number of lists to return. This supports
+paging}
 
 \item{verbose}{logical: show additional progress information?}
 }
@@ -19,7 +21,8 @@ ala_lists(guid, offset = 0, max = 5000, verbose = ala_config()$verbose)
 data.frame of list name and other details
 }
 \description{
-Returns all available species lists. See \code{\link{ala_list}} to retrieve a specified list.
+Returns all available species lists. See \code{\link{ala_list}} to retrieve
+a specified list.
 }
 \examples{
 \dontrun{
@@ -30,7 +33,8 @@ Returns all available species lists. See \code{\link{ala_list}} to retrieve a sp
 
 }
 \references{
-\url{https://lists.ala.org.au} and the associated web services at \url{https://lists.ala.org.au/ws}
+\url{https://lists.ala.org.au} and the associated web services
+at \url{https://lists.ala.org.au/ws}
 }
 \seealso{
 \code{\link{ala_list}}

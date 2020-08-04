@@ -15,16 +15,23 @@ occurrence_facets(
 \arguments{
 \item{facet}{string: facet to be used. Currently only one facet is supported}
 
-\item{query}{string: query of the form field:value e.g. q=genus:Macropus or 
-a free text search e.g. q=Macropus}
+\item{query}{string: query of the form field:value e.g. q = genus:Macropus
+or a free text search e.g. q = Macropus}
 
-\item{start}{numeric: (optional) (positive integer) start offset for the results}
+\item{start}{numeric: (optional) (positive integer) start offset for the
+results}
 
-\item{page_size}{numeric: (optional) (positive integer) maximum number of records 
-to return. Defaults to the server-side value - currently 30}
+\item{page_size}{numeric: (optional) (positive integer) maximum number of
+records to return. Defaults to the server-side value - currently 30}
 
-\item{verbose}{logical: show additional progress information? 
+\item{verbose}{logical: show additional progress information?
 [default is set by ala_config()]}
+}
+\value{
+a named list with the components "meta" (search metadata), and
+"data" (the search results, in the form of a data frame). The contents
+(column names) of the data frame will vary depending on the details of the
+search and the results.
 }
 \description{
 Get facet counts for occurrence data

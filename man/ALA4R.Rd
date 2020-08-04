@@ -5,11 +5,11 @@
 \alias{ALA4R}
 \title{\pkg{ALA4R}}
 \description{
-This project enables the R community to access data and tools hosted by the 
-Atlas of Living Australia. The goal of the project is 
-to enable basic species and related information to be queried and output in 
-standard formats for R. ALA4R is based around the extensive web services provided 
-by the Atlas; see the API link below.
+This project enables the R community to access data and tools hosted by the
+Atlas of Living Australia. The goal of the project is
+to enable basic species and related information to be queried and output in
+standard formats for R. ALA4R is based around the extensive web services
+provided by the Atlas; see the API link below.
 }
 \references{
 \url{https://api.ala.org.au/}

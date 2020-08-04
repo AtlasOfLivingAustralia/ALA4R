@@ -7,9 +7,11 @@
 ala_list(druid, kvp = TRUE, verbose = ala_config()$verbose)
 }
 \arguments{
-\item{druid}{string: data resource UID of the list (i.e. the list identifier)}
+\item{druid}{string: data resource UID of the list (i.e. the list
+identifier)}
 
-\item{kvp}{logical: include key-value pairs? Some lists contain information about the species in the form of key-value pairs}
+\item{kvp}{logical: include key-value pairs? Some lists contain information
+about the species in the form of key-value pairs}
 
 \item{verbose}{logical: show additional progress information?}
 }
@@ -17,10 +19,14 @@ ala_list(druid, kvp = TRUE, verbose = ala_config()$verbose)
 data.frame
 }
 \description{
-Retrieves a specified species list. See \code{\link{ala_lists}} to find all available species lists.
+Retrieves a specified species list. See \code{\link{ala_lists}} to find all
+available species lists.
 }
 \details{
-Note that this refers to pre-generated lists of species stored on the ALA servers. The similarly-named but different function \code{\link{specieslist}} provides a different function, namely listing the species matching a query or recorded as present in a search area.
+Note that this refers to pre-generated lists of species stored on the ALA
+servers. The similarly-named but different function
+\code{\link{specieslist}} provides a different function, namely listing
+the species matching a query or recorded as present in a search area.
 }
 \examples{
 \dontrun{
@@ -29,12 +35,13 @@ Note that this refers to pre-generated lists of species stored on the ALA server
  all_lists[grep("Field Guide", all_lists$listName), ]
 
  ## download the vertebrates one
- l <- ala_list(druid="dr1146")
+ l <- ala_list(druid = "dr1146")
 }
 
 }
 \references{
-\url{https://lists.ala.org.au} and the associated web services at \url{https://lists.ala.org.au/ws}
+\url{https://lists.ala.org.au} and the associated web services
+at \url{https://lists.ala.org.au/ws}
 }
 \seealso{
 \code{\link{specieslist}}, \code{\link{ala_lists}}

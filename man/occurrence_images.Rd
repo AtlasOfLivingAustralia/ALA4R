@@ -5,7 +5,7 @@
 \title{Find images using occurrence ids}
 \usage{
 occurrence_images(
-  id,
+  occ_id,
   fq,
   download = FALSE,
   download_path,
@@ -14,7 +14,8 @@ occurrence_images(
 )
 }
 \arguments{
-\item{id}{character: IDs of occurrences as single sring or vector of strings}
+\item{occ_id}{character: IDs of occurrences as single sring or vector of
+strings}
 
 \item{fq}{string: (optional) character string or vector of strings,
 specifying filters to be applied to the original query. These are of the
@@ -42,9 +43,9 @@ Find images using occurrence ids
 \examples{
 \dontrun{
 ## Download all images for an occurrence with a CC BY-NC 4.0 licence
-occurrence_image_search(id="d201f3e0-3e1d-47f1-94ce-9fc226cbc5ec",
-fq="recognisedLicence:CC BY-NC 4.0",
-download=TRUE)
+occurrence_image_search(id = "d201f3e0-3e1d-47f1-94ce-9fc226cbc5ec",
+fq = "recognisedLicence:CC BY-NC 4.0",
+download = TRUE)
 }
 }
 \references{

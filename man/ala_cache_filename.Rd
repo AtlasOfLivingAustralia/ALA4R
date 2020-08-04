@@ -2,8 +2,9 @@
 % Please edit documentation in R/ala_cache_filename.R
 \name{ala_cache_filename}
 \alias{ala_cache_filename}
-\title{Returns the name of the cache file associated with the given URL. Note that this file 
-may not actually exist, this function just provides the mapping from URL to filename}
+\title{Returns the name of the cache file associated with the given URL.
+Note that this file may not actually exist, this function just provides
+the mapping from URL to filename}
 \usage{
 ala_cache_filename(url)
 }
@@ -14,8 +15,9 @@ ala_cache_filename(url)
 string: the file path and name
 }
 \description{
-Returns the name of the cache file associated with the given URL. Note that this file 
-may not actually exist, this function just provides the mapping from URL to filename
+Returns the name of the cache file associated with the given URL.
+Note that this file may not actually exist, this function just provides
+the mapping from URL to filename
 }
 \examples{
 ala_cache_filename("https://biocache-ws.ala.org.au/ws/index/fields")
@@ -25,5 +27,6 @@ ala_cache_filename("https://biocache-ws.ala.org.au/ws/index/fields")
 \url{https://api.ala.org.au/}
 }
 \seealso{
-\code{ala_config} for cache settings, particularly the cache directory
+\code{ala_config} for cache settings, particularly the cache
+directory
 }

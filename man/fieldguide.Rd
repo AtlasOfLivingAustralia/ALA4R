@@ -29,7 +29,8 @@ Generate a PDF field guide using the ALA's field guide generator
 \examples{
 \dontrun{
 fieldguide(guids=
-  c("urn:lsid:biodiversity.org.au:afd.taxon:95773568-053d-44de-a624-5699f0ac4a59",
+  c("urn:lsid:biodiversity.org.au:afd.taxon:
+  95773568-053d-44de-a624-5699f0ac4a59",
   "http://id.biodiversity.org.au/node/apni/2890970"))
 }
 

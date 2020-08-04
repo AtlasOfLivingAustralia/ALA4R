@@ -7,14 +7,18 @@
 species_info(scientificname, guid, verbose = ala_config()$verbose)
 }
 \arguments{
-\item{scientificname}{string: scientific name of the taxon of interest (species, genus, family etc)}
+\item{scientificname}{string: scientific name of the taxon of interest
+(species, genus, family etc)}
 
 \item{guid}{string: The Life Science Identifier of the taxon of interest}
 
-\item{verbose}{logical: show additional progress information? [default is set by ala_config()]}
+\item{verbose}{logical: show additional progress information?
+[default is set by ala_config()]}
 }
 \value{
-A species profile in the form of a named list, each element of which is generally a data frame. An empty list is returned if no match is found for the supplied name or guid
+A species profile in the form of a named list, each element of
+which is generally a data frame. An empty list is returned if no match is
+found for the supplied name or guid
 }
 \description{
 Fetch a taxon profile given a scientific name or LSID (GUID)
@@ -22,8 +26,8 @@ Fetch a taxon profile given a scientific name or LSID (GUID)
 \examples{
 \dontrun{
  species_info("Grevillea humilis subsp. maritima")
- species_info(guid="http://id.biodiversity.org.au/node/apni/2890970")
- species_info("Alaba", verbose=TRUE)
+ species_info(guid = "http://id.biodiversity.org.au/node/apni/2890970")
+ species_info("Alaba", verbose = TRUE)
 }
 }
 \references{

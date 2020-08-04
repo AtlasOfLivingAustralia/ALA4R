@@ -13,26 +13,40 @@ taxinfo_download(
 )
 }
 \arguments{
-\item{query}{string: (optional) query of the form field:value (e.g. "genus:Heleioporus") or a free text search ("Alaba vibex")}
+\item{query}{string: (optional) query of the form field:value
+(e.g. "genus:Heleioporus") or a free text search ("Alaba vibex")}
 
-\item{fq}{string: character string or vector of strings, specifying filters to be applied to the original query. 
-These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See \code{ala_fields("general", as_is=TRUE)} for all the 
-fields that are queryable. NOTE that fq matches are case-sensitive, but sometimes the entries in the fields are 
-not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA"). fq matches are ANDed 
-by default (e.g. c("field1:abc", "field2:def") will match records that have field1 value "abc" and field2 value "def"). 
+\item{fq}{string: character string or vector of strings, specifying filters
+to be applied to the original query.
+These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See
+\code{ala_fields("general", as_is=TRUE)} for all the
+fields that are queryable. NOTE that fq matches are case-sensitive, but
+sometimes the entries in the fields are
+not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae"
+but "ANIMALIA"). fq matches are ANDed
+by default (e.g. c("field1:abc", "field2:def") will match records that have
+field1 value "abc" and field2 value "def").
 To obtain OR behaviour, use the form c("field1:abc OR field2:def")}
 
-\item{fields}{string vector: (optional) a vector of field names to return. Note that the columns of the returned data 
-frame are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of 
-fields will be returned. See \code{ala_fields("general", as_is=TRUE)} for valid field names. Use \code{fields="all"} to include all available fields}
+\item{fields}{string vector: (optional) a vector of field names to return.
+Note that the columns of the returned data
+frame are not guaranteed to retain the ordering of the field names given
+here. If not specified, a default list of
+fields will be returned. See \code{ala_fields("general", as_is=TRUE)} for
+valid field names. Use \code{fields="all"} to include all available fields}
 
-\item{verbose}{logical: show additional progress information? [default is set by ala_config()]}
+\item{verbose}{logical: show additional progress information?
+[default is set by ala_config()]}
 
-\item{use_data_table}{logical: if TRUE, attempt to read the data.csv file using the fread function from the 
-data.table package. If this fails, or use_data_table is FALSE, then read.table will be used (which may be slower)}
+\item{use_data_table}{logical: if TRUE, attempt to read the data.csv file
+using the fread function from the
+data.table package. If this fails, or use_data_table is FALSE, then
+read.table will be used (which may be slower)}
 }
 \value{
-data frame of results, containing one row per taxon, typically with name, guid, and taxonomic information. The columns returned will depend on the field requested
+data frame of results, containing one row per taxon, typically with
+name, guid, and taxonomic information. The columns returned will depend on
+the field requested
 }
 \description{
 Download taxonomic data
@@ -43,11 +57,10 @@ Download taxonomic data
 x <- taxinfo_download("rk_genus:Heleioporus")
 
 ## Data for Fabaceae with specified fields
-x <- taxinfo_download("rk_family:Fabaceae", fields=c("guid", "parentGuid", "rk_kingdom",
-  "rk_phylum", "rk_class", "rk_order", "rk_family", "rk_genus", "scientificName"))
-
-## equivalent direct URL: https://bie.ala.org.au/ws/download?fields=guid,parentGuid,rk_kingdom,
-##    rk_phylum,rk_class,rk_order,rk_family,rk_genus,scientificName&q=rk_family:Fabaceae
+x <- taxinfo_download("rk_family:Fabaceae", fields=c("guid", "parentGuid",
+"rk_kingdom",
+  "rk_phylum", "rk_class", "rk_order", "rk_family", "rk_genus",
+  "scientificName"))
 }
 }
 \references{
