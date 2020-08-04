@@ -154,7 +154,7 @@ thischeck <- function() {
                   names(occurrences(taxon = "Amblyornis newtonianus",
                                     email = "testing@test.org",
                                     download_reason_id = 10,
-                                    extra = "accepted_name_usage")))
+                                    extra = "accepted_name_usage")$data))
   })
 }
 check_caching(thischeck)
