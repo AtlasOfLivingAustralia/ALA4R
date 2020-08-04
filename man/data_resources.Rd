@@ -24,6 +24,9 @@ number to return, sorted by record count. Default is top 100}
 \item{extra}{string: (optional) additional field to retrieve information for
 the data resource. Must be a valid indexed field (see
 \code{ala_fields("occurrence_indexed")}}
+
+\item{include_download_stats}{logical: Include download statistics? Download
+stats use logger which can be slow, so default is `FALSE`.}
 }
 \value{
 data frame of data resources
