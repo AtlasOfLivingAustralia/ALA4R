@@ -2,10 +2,10 @@ library(testthat)
 library(ALA4R)
 
 ## run each test with and without caching
-check_caching=function(f) {
-    ala_config(caching="off")
+check_caching <- function(f) {
+    ala_config(caching = "off")
     f()
-    ala_config(caching="on")
+    ala_config(caching = "on")
     f()
     f()
 }
