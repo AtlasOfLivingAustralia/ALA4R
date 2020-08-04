@@ -3,7 +3,6 @@
 #' Retrieve a list of all existing data resources, and basic information
 #' for each data resource.
 #'
-#'
 #' @param druid string: data resource UID of the data resource(s)
 #' @param verbose logical: show additional progress information?
 #' [default is set by ala_config()]
@@ -47,6 +46,7 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
   }
 
   assert_that(is.character(druid))
+
   facet_search <- FALSE
   if (!missing(extra)) {
     facet_search <- TRUE

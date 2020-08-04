@@ -195,6 +195,7 @@ ala_reasons <- function() {
 ## internal function, used to define the ALA4R sourceTypeId parameter value,
 ## passed by occurrences download and possibly other functions
 ala_sourcetypeid <- function() {
+
     this_url <- build_url_from_parts(
       getOption("ALA4R_server_config")$base_url_logger, path = "sources")
     sids <- cached_get(this_url, type = "json")

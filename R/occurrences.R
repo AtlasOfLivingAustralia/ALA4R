@@ -70,10 +70,15 @@
 #' @param method string: This parameter is deprecated. Now all queries use
 #' offline method unless \code{record_count_only = TRUE}
 #'  more fields are available and larger datasets can be returned
-#' @param email string: the email address of the user performing the download
+#' @param generateDoi logical: by default no DOI will be generated. Set to
+#' true if you intend to use the data in a publication or similar
+#' @param email string: the email address of the user performing the download 
 #' (required unless \code{record_count_only = TRUE}
-#' @param download_reason_id numeric or string: (required unless
-#' record_count_only is TRUE) a reason code for the download, either as a
+#' @param email_notify logical: by default an email with the download
+#' information will be sent to the `email` specified. Set to `FALSE` if you are 
+#' doing a large number of downloads
+#' @param download_reason_id numeric or string: (required unless 
+#' record_count_only is TRUE) a reason code for the download, either as a 
 #' numeric ID (currently 0--11) or a string (see \code{\link{ala_reasons}} for
 #'  a list of valid ID codes and names). The download_reason_id can be passed
 #'  directly to this function, or alternatively set using
@@ -131,11 +136,12 @@
 #' # [see this by setting ala_config(verbose = TRUE)]:
 #' # https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name%3A%22Alaba%20vibex%22&
 #' # fields=latitude,longitude,el874&reasonTypeId=10&sourceTypeId=2001&esc=%5C&sep=%09&file=data
-#' occurrences(taxon = "taxon_name:\"Eucalyptus gunnii\"",
-#' fields = c("latitude","longitude"),
-#'   qa = "none",fq = "basis_of_record:LivingSpecimen",
-#'   download_reason_id = 10)
-#' # equivalent direct webservice call [see this by setting ala_config(verbose = TRUE)]:
+#' occurrences(taxon="taxon_name:\"Eucalyptus gunnii\"",
+#' fields=c("latitude","longitude"),
+#'   qa="none",fq="basis_of_record:LivingSpecimen",
+#'   download_reason_id=10)
+#' # equivalent direct webservice call
+#' # [see this by setting ala_config(verbose=TRUE)]:
 #' # https://biocache-ws.ala.org.au/ws/occurrences/index/download?q=taxon_name%3A%22
 #' # Eucalyptus%20gunnii%22&fq=basis_of_record%3ALivingSpecimen&fields=latitude,longitude&qa=none&
 #' # reasonTypeId=10&sourceTypeId=2001&esc=%5C&sep=%09&file=data
@@ -145,12 +151,14 @@
 ## TODO: more extensive testing, particularly of the csv-conversion process
 ## TODO LATER: add params: lat, lon, radius (for specifying a search circle)
 
-occurrences <- function(taxon, wkt, fq, fields, extra, qa, method, email,
+occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
+                        generateDoi = FALSE, email, email_notify=TRUE,
                         download_reason_id = ala_config()$download_reason_id,
-                        reason, verbose = ala_config()$verbose,
+                        reason,verbose = ala_config()$verbose,
                         record_count_only = FALSE, use_layer_names = TRUE,
                         use_data_table = TRUE) {
-    ## check input parms are sensible
+    
+    ## check input params are sensible
     assert_that(is.flag(record_count_only))
     if (!missing(method)) {
         warning("Method is a deprecated field. All queries use offline method,
@@ -193,8 +201,6 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method, email,
 
     ## check the number of records
     if (record_count_only) {
-        ## check using e.g. https://biocache-ws.ala.org.au/ws/occurrences/se
-        ## arch?q=*:*&pageSize=0&facet=off
         temp_query <- this_query
         temp_query$pageSize <- 0
         temp_query$facet <- "off"
@@ -209,6 +215,10 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method, email,
             stop("email is required")
         }
         this_query$email <- email
+    }
+    assert_that(is.flag(email_notify))
+    if (!email_notify) {
+        this_query$emailNotify <- 'false'
     }
     assert_that(is.flag(use_data_table))
     assert_that(is.flag(use_layer_names))
@@ -239,6 +249,11 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method, email,
         }
         this_query$fields <- str_c(fields, collapse = ",")
     }
+    
+    if (generateDoi) {
+      this_query$mintDoi <- 'true'
+    }
+
     if (!missing(extra)) {
         assert_that(is.character(extra))
         valid_fields <- ala_fields(fields_type = valid_fields_type,
@@ -283,6 +298,7 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method, email,
         ## only for more recent biocache versions
         this_query$sourceTypeId <- ala_sourcetypeid()
     }
+
     ## force backslash-escaping of quotes rather than double-quote escaping
     this_query$esc <- "\\"
     this_query$sep <- "\t" ## tab-delimited
@@ -435,26 +451,53 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method, email,
             xc <- "No citation information was returned, try again later"
             found_citation <- FALSE
             try({
+              suppressWarnings(xc <- read.table(unz(thisfile,"citation.csv"),
+                                                header=TRUE,comment.char="",
+                                                as.is=TRUE))
+              found_citation <- TRUE},
+              silent=TRUE)
+            if (!found_citation) {
+              ## as of around July 2016 the citation.csv file appears to have
+              ## been replaced by README.html
+              try({
+                suppressWarnings(xc <- scan(unz(thisfile,"README.html"),
+                                            what="character",sep="$",
+                                            quiet=TRUE))
+                xc <- data.frame(citation=paste(xc,collapse=""))
+                found_citation <- TRUE},
+                silent=TRUE)
                 suppressWarnings(xc <- read.table(unz(thisfile, "citation.csv"),
                                                   header = TRUE,
                                                   comment.char = "",
                                                   as.is = TRUE))
                 found_citation <- TRUE},
                 silent = TRUE)
-            if (!found_citation) {
-                ## as of around July 2016 the citation.csv file appears to have
-                ## been replaced by README.html
-                try({
-                    suppressWarnings(xc <- scan(unz(thisfile, "README.html"),
-                                                what = "character", sep = "$",
-                                                quiet = TRUE))
-                    xc <- data.frame(citation = paste(xc, collapse = ""))
-                    found_citation <- TRUE},
-                    silent = TRUE)
             }
             if (!found_citation & nrow(x) > 0) {
                 warning("citation file not found within downloaded zip file")
             }
+            # look for doi if one was requested
+            found_readme <- FALSE
+            found_doi <- FALSE
+            
+            doi <- "DOI was not requested or could not be found"
+            if(generateDoi) {
+              tryCatch({
+                doi <- as.character(read.table(
+                  unz('~/Downloads/data (74).zip','doi.txt'))$V1)
+                found_doi <- TRUE
+              },
+              warning = function(e) {
+                warning('No DOI was generated for download. The DOI server may
+                        be down. Please try again later')
+              },
+              error = function(e) {
+                warning('No DOI was generated for download. The DOI server may
+                        be down. Please try again later')
+              })
+            }
+            
+            
         } else {
             if (ala_config()$warn_on_empty) {
                 warning("no matching records were returned")
@@ -463,8 +506,11 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method, email,
                 warning("WKT string may not be valid: ", wkt)
             }
             xc <- NULL
+            doi <- NULL
         }
-        x <- list(data = x, meta = xc)
+        meta <- list(citation = xc, doi = doi)
+        x <- list(data = x, meta = meta)
+
     }
     class(x) <- c("occurrences", class(x)) #add the occurrences class
     x

@@ -44,7 +44,7 @@ check_caching(thischeck)
 
 
 thischeck <- function() {
-    test_that("search_fulltext sort_by param works as expected", {
+  test_that("search_fulltext sort_by param works as expected", {
         skip_on_cran()
         expect_error(search_fulltext("red",page_size=10,sort_by="blurg"))
         ## sort by scientific name
