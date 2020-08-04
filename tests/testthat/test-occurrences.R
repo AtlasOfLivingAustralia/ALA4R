@@ -143,12 +143,12 @@ check_caching(thischeck)
 
 thischeck <- function() {
   test_that("occurrences handles fields correctly", {
-    #occ <- occurrences(
-    #  taxon = as.factor("Amblyornis newtonianus"), email = "testing@test.org",
-    #  download_reason_id = 10, extra = "accepted_name_usage",
-    #  wkt = "POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
-    #expect_is(occ$data, "data.frame")
-   # expect_true("acceptedNameUsage" %in% names(occ$data))
+    occ <- occurrences(
+      taxon = as.factor("Amblyornis newtonianus"), email = "testing@test.org",
+      download_reason_id = 10, extra = "accepted_name_usage",
+      wkt = "POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")
+    expect_is(occ$data, "data.frame")
+    expect_true("acceptedNameUsage" %in% names(occ$data))
   })
 }
 check_caching(thischeck)
