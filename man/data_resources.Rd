@@ -4,7 +4,13 @@
 \alias{data_resources}
 \title{Get a list of current data resources}
 \usage{
-data_resources(druid, verbose = ala_config()$verbose, max = 100, extra)
+data_resources(
+  druid,
+  verbose = ala_config()$verbose,
+  max = 100,
+  extra,
+  include_download_stats = FALSE
+)
 }
 \arguments{
 \item{druid}{string: data resource UID of the data resource(s)}

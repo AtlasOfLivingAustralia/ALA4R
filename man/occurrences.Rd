@@ -90,15 +90,15 @@ offline method unless \code{record_count_only = TRUE}
 \item{generate_doi}{logical: by default no DOI will be generated. Set to
 true if you intend to use the data in a publication or similar}
 
-\item{email}{string: the email address of the user performing the download 
+\item{email}{string: the email address of the user performing the download
 (required unless \code{record_count_only = TRUE}}
 
 \item{email_notify}{logical: by default an email with the download
-information will be sent to the `email` specified. Set to `FALSE` if you are 
+information will be sent to the `email` specified. Set to `FALSE` if you are
 doing a large number of downloads}
 
-\item{download_reason_id}{numeric or string: (required unless 
-record_count_only is TRUE) a reason code for the download, either as a 
+\item{download_reason_id}{numeric or string: (required unless
+record_count_only is TRUE) a reason code for the download, either as a
 numeric ID (currently 0--11) or a string (see \code{\link{ala_reasons}} for
  a list of valid ID codes and names). The download_reason_id can be passed
  directly to this function, or alternatively set using

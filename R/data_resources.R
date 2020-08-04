@@ -30,9 +30,10 @@
 #' @export data_resources
 
 data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
-                           extra) {
+                           extra, include_download_stats = FALSE) {
 
   assert_that(is.flag(verbose))
+  assert_that(is.flag(include_download_stats))
 
   if (missing(druid)) {
     this_url <- paste0(getOption("ALA4R_server_config")$base_url_biocache,
@@ -54,6 +55,8 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
   dr_data <- data.table::rbindlist(lapply(druid, function(z) {
     this_url <- paste0(getOption("ALA4R_server_config")$base_url_collectory,
                        "dataResource/", z)
+    #this_url <- paste0("https://collections.ala.org.au/ws/","dataResource/", z)
+    #print(this_url)
     data <- cached_get(URLencode(this_url), type = "json", verbose = verbose,
                        on_server_error = function(z) {
                          NULL })
@@ -103,7 +106,9 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
       }
 
       # add download stats
-      df$totalDownloadedRecords <- download_stats(z, verbose = verbose)
+      if (include_download_stats) {
+        df$totalDownloadedRecords <- download_stats(z, verbose = verbose)
+      }
     }
     return(df)
   }), fill = TRUE)
