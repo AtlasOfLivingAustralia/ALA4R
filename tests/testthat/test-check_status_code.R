@@ -6,6 +6,8 @@ thischeck <- function() {
     expect_equal(check_status_code(200), 0)
     expect_equal(check_status_code("200"), 0)
     expect_error(check_status_code(c()))
+    # expect a warning for an invalid code
+    expect_warning(check_status_code(600))
   })
 }
 check_caching(thischeck)
