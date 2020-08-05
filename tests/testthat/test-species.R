@@ -25,6 +25,13 @@ thischeck <- function() {
         # empty result should still be a list
         expect_is(species_info(guid = "bilbobaggins"), "list")
         expect_is(species_info("bilbobaggins"), "list")
+        expect_error(species_info())
+        expect_error(species_info(
+          scientificname = "Grevillea humilis subsp. maritima",
+          guid = "https://id.biodiversity.org.au/node/apni/2915203"))
+        ala_config(warn_on_empty = TRUE)
+        expect_warning(species_info(scientificname = "bilbobaggins"))
+        ala_config(warn_on_empty = FALSE)
     })
     test_that("text encoding works as expected", {
         skip_on_cran()

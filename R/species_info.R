@@ -41,7 +41,7 @@ species_info <- function(scientificname, guid,
     if (!missing(scientificname)) {
         guid <- search_names(scientificname, vernacular = FALSE,
                              guids_only = TRUE)
-        if (length(guid) < 1) {
+        if (length(guid) < 1 || is.na(guid)) {
             if (ala_config()$warn_on_empty) {
                 warning("no results found")
             }
