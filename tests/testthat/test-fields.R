@@ -14,7 +14,7 @@ thischeck <- function() {
         expect_gt(nrow(ala_fields(fields_type = "layers")), 320)
         expect_gt(nrow(ala_fields(fields_type = "images")), 15)
         expect_gt(nrow(ala_fields(as_is = FALSE, fields_type = "occurrence")),
-                  667)
+                  661)
         expect_error(ala_fields("b"))
         expect_error(ala_fields(1))
     })
