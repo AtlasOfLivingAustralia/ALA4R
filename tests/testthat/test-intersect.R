@@ -65,6 +65,14 @@ thischeck <- function() {
     expect_error(intersect_points(pnts, layers))
     pnts <- c(-23.1, 149.1)
     expect_error(intersect_points(as.data.frame(pnts), layers))
+
+    # should get errors when input is too long
+    pnts <- cbind(lat = runif(100002, -40, -12),
+                  long = runif(100002, 115, 148))
+    expect_error(intersect_points(pnts, layers))
+    pnts <- c(-20, 130, -30, 140)
+    layers <- rep("el767", 700)
+    expect_error(intersect_points(pnts, layers))
   })
 }
 check_caching(thischeck)

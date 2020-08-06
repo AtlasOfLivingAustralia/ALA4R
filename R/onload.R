@@ -33,7 +33,7 @@
             base_url_fieldguide = "https://fieldguide.ala.org.au/",
             base_url_lists = "https://lists.ala.org.au/ws/",
             base_url_collectory = "https://collections.ala.org.au/ws/"
-                              )
+        )
         if (!"ALA4R_server_config" %in% names(options())) {
             options(ALA4R_server_config = server_config)
         }

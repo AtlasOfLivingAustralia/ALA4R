@@ -97,8 +97,7 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
 
     if (length(layers) > (num_layers_limit - 1)) {
       #ensure no more than 300 layers when bulk
-      stop("the number of layers must be <", num_layers_limit,
-           " if intersecting more than a single location")
+      stop("the number of layers must be <", num_layers_limit)
     }
 
     unknown <- setdiff(layers, valid_layers) #get the different layers
@@ -132,7 +131,9 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
       ## fetch the data from the server
       status_url <- jsonlite::fromJSON(cached_post(url, body = body,
                                                    type = "text"))$statusUrl
+      print(body)
       # get the data url
+      print(status_url)
       data_url <- cached_get(status_url, type = "json", caching = "off")
       while (data_url$status != "finished") {
         #keep checking the status until finished
@@ -159,8 +160,8 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
       if (verbose) message(sprintf("Using cached file %s",
                                    this_cache_file))
     }
-    out <- read_csv_quietly(unz(this_cache_file, "sample.csv"),
-                            as.is = TRUE, na.strings = c("NA", "n/a"))
+    suppressWarnings(out <- read_csv_quietly(unz(this_cache_file, "sample.csv"),
+                            as.is = TRUE, na.strings = c("NA", "n/a")))
 
     if (SPdata.frame) { #if output is requested as a SpatialPointsDataFrame
       ## coerce to SpatialPointsDataFrame class

@@ -323,12 +323,6 @@ fields_id_to_name <- function(fields, fields_type) {
   switch(fields_type,
          "layers" = vapply(fields, function(z) {
            if (z %in% valid_fields$id & (!z %in% valid_fields$description)) {
-             if (sum(valid_fields$id == z, na.rm = TRUE) > 1) {
-               if (nchar(z) > 0) {
-                 warning(" multiple ", fields_type, " fields match the id \"",
-                         z, "\", using first")
-               }
-             }
              valid_fields$description[which(valid_fields$id == z)[1]]
            }
            else {
@@ -339,13 +333,7 @@ fields_id_to_name <- function(fields, fields_type) {
          "occurrence" =,
          "assertions" = vapply(fields, function(z) {
            if (z %in% valid_fields$name & (!z %in% valid_fields$description)) {
-             if (sum(valid_fields$name == z, na.rm = TRUE) > 1) {
-               if (nchar(z) > 0) {
-                 warning(" multiple ", fields_type, " fields match the id \"",
-                         z, "\", using first")
-               }
-             }
-             valid_fields$description[which(valid_fields$name == z)[1]]
+             valid_fields$name[which(valid_fields$name == z)[1]]
            }
            else {
              z
