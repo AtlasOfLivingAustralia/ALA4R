@@ -83,17 +83,18 @@
 
 <p>The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from <a href="http://www.ala.org.au/" class="uri">http://www.ala.org.au/</a>. Here we provide a subset of the tools to be directly used within R.</p>
 <p>ALA4R enables the R community to directly access data and resources hosted by the ALA.</p>
-<p>The use-examples presented at the <a href="http://www.ala.org.au/blogs-news/2014-atlas-of-living-australia-science-symposium/">2014 ALA Science Symposium</a> are available in the package vignette, via (in R): <code><a href="articles/ALA4R.html">vignette("ALA4R")</a></code>, or <a href="https://atlasoflivingaustralia.github.io/ALA4R/articles/ALA4R.html">browse it online</a>.</p>
+<p>The use-examples presented at the <a href="http://www.ala.org.au/blogs-news/2014-atlas-of-living-australia-science-symposium/">2014 ALA Science Symposium</a> are available in the package vignette, via (in R): <code><a href="articles/ALA4R.html">vignette("ALA4R")</a></code>, or <a href="https://atlasoflivingaustralia.github.io/ALA4R/articles/ALA4R.html">browse it online</a>. ## Citing ALA4R To generate a citation for ALA4R run:</p>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/citation.html">citation</a></span>(<span class="kw">package</span> <span class="kw">=</span> <span class="st">"ALA4R"</span>)</pre></div>
 <div id="installing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installing" class="anchor"></a>Installing</h2>
 <p>Stable version from CRAN:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"ALA4R"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"ALA4R"</span>)</pre></div>
 <p>Or the development version from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)
+<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)
 <span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"AtlasOfLivingAustralia/ALA4R"</span>)</pre></div>
 <p>On Linux you will first need to ensure that <code>libcurl</code> and <code>v8</code> (version &lt;= 3.15) are installed on your system — e.g. on Ubuntu/Debian, open a terminal and do:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">sudo</span> apt-get install libcurl4-openssl-dev libv8-3.14-dev</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">sudo</span> apt-get install libcurl4-openssl-dev libv8-3.14-dev</span></code></pre></div>
 <p>or install via the Software Centre.</p>
 </div>
 <div id="usage" class="section level2">
@@ -122,6 +123,12 @@
 <li><a href="https://www.mozilla.org/en-US/MPL/2.0/">MPL-2.0</a></li>
 </ul>
 </div>
+<div class="citation">
+<h2>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html">Citing ALA4R</a></li>
+</ul>
+</div>
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
@@ -138,10 +145,10 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/AtlasOfLivingAustralia/ALA4R"><img src="https://travis-ci.org/AtlasOfLivingAustralia/ALA4R.svg?branch=master" alt="Travis-CI Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/PeggyNewman/ala4r/branch/master"><img src="https://ci.appveyor.com/api/projects/status/g9pudc4l7053w4vn/branch/master?svg=true" alt="Appveyor Build status"></a></li>
+<li><a href="https://ci.appveyor.com/project/PeggyNewman/ala4r/branch/master"><img src="https://ci.appveyor.com/api/projects/status/g9pudc4l7053w4vn/branch/master?svg=true" alt="AppVeyor Build status"></a></li>
 <li><a href="https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R"><img src="https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R/branch/master/graph/badge.svg" alt="codecov"></a></li>
 <li><a href="http://www.r-pkg.org/pkg/ALA4R"><img src="http://www.r-pkg.org/badges/version/ALA4R" alt="CRAN Status"></a></li>
-<li><a href="https://CRAN.R-project.org/package=ALA4R"><img src="https://cranlogs.r-pkg.org/badges/grand-total/ALA4R" alt="CRAN Downloads"></a></li>
+<li><a href="https://cran.rstudio.com/web/packages/ALA4R/index.html"><img src="https://cranlogs.r-pkg.org/badges/grand-total/ALA4R" alt="CRAN Downloads"></a></li>
 </ul>
 </div>
 </div>

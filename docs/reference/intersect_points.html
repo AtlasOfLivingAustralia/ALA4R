@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Intersect environmental or contextual layers at a given a set of points (coordinates) — intersect_points • ALA4R</title>
+<title>Intersect environmental or contextual layers at a given a set of points
+(coordinates) — intersect_points • ALA4R</title>
 
 
 <!-- jquery -->
@@ -39,11 +40,16 @@
 
 
 
-<meta property="og:title" content="Intersect environmental or contextual layers at a given a set of points (coordinates) — intersect_points" />
-<meta property="og:description" content="This function allows the user to sample environmental/contextual layers at arbitrary locations. It complements 
-the occurrences function, which allows values of the same set of layers to be downloaded at 
-species occurrence locations. 
-NOTE: Requests are currently processed in a *single queue* on the ALA servers. Processing times may be slow if there are many requests in the queue. Note also that the actual processing of batch requests is inherently slow: a large number of points may take quite some time. Be warned." />
+<meta property="og:title" content="Intersect environmental or contextual layers at a given a set of points
+(coordinates) — intersect_points" />
+<meta property="og:description" content="This function allows the user to sample environmental/contextual layers at
+arbitrary locations. It complements
+the occurrences function, which allows values of the same set
+of layers to be downloaded at species occurrence locations.
+NOTE: Requests are currently processed in a *single queue* on the ALA
+servers. Processing times may be slow if there are many requests in the
+queue. Note also that the actual processing of batch requests is inherently
+slow: a large number of points may take quite some time. Be warned." />
 
 
 
@@ -117,16 +123,21 @@ NOTE: Requests are currently processed in a *single queue* on the ALA servers. P
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Intersect environmental or contextual layers at a given a set of points (coordinates)</h1>
+    <h1>Intersect environmental or contextual layers at a given a set of points
+(coordinates)</h1>
     <small class="dont-index">Source: <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/intersect_points.R'><code>R/intersect_points.R</code></a></small>
     <div class="hidden name"><code>intersect_points.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function allows the user to sample environmental/contextual layers at arbitrary locations. It complements 
-the <code><a href='occurrences.html'>occurrences</a></code> function, which allows values of the same set of layers to be downloaded at 
-species occurrence locations. 
-NOTE: Requests are currently processed in a *single queue* on the ALA servers. Processing times may be slow if there are many requests in the queue. Note also that the actual processing of batch requests is inherently slow: a large number of points may take quite some time. Be warned.</p>
+    <p>This function allows the user to sample environmental/contextual layers at
+arbitrary locations. It complements
+the <code><a href='occurrences.html'>occurrences</a></code> function, which allows values of the same set
+of layers to be downloaded at species occurrence locations.
+NOTE: Requests are currently processed in a *single queue* on the ALA
+servers. Processing times may be slow if there are many requests in the
+queue. Note also that the actual processing of batch requests is inherently
+slow: a large number of points may take quite some time. Be warned.</p>
     </div>
 
     <pre class="usage"><span class='fu'>intersect_points</span>(
@@ -142,33 +153,47 @@ NOTE: Requests are currently processed in a *single queue* on the ALA servers. P
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>pnts</th>
-      <td><p>numeric: vector of latitude/longitude pairs, or a 2 column data.frame or matrix of lat, lons. NOTE: the number of locations must be less than 100000</p></td>
+      <td><p>numeric: vector of latitude/longitude pairs, or a 2 column
+data.frame or matrix of lat, lons. NOTE: the number of locations must be
+less than 100000</p></td>
     </tr>
     <tr>
       <th>layers</th>
-      <td><p>string vector: ids of layers to be intersected. The list of possible layers is available from <code><a href='ala_fields.html'>ala_fields("layers")</a></code>. Names can be passed as full layer names (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871"). Note: if more than one location has been provided in <code>pnts</code>, the number of layers must be less than 700</p></td>
+      <td><p>string vector: ids of layers to be intersected. The list of
+possible layers is available from <code><a href='ala_fields.html'>ala_fields("layers")</a></code>. Names can be
+passed as full layer names (e.g. "Radiation - lowest period (Bio22)") rather
+than id ("el871"). Note: if more than one location has been provided in
+<code>pnts</code>, the number of layers must be less than 700</p></td>
     </tr>
     <tr>
       <th>SPdata.frame</th>
-      <td><p>logical: should the output should be returned as a SpatialPointsDataFrame of the sp package or simply as a data.frame?</p></td>
+      <td><p>logical: should the output should be returned as a
+SpatialPointsDataFrame of the sp package or simply as a data.frame?</p></td>
     </tr>
     <tr>
       <th>use_layer_names</th>
-      <td><p>logical: if TRUE, layer names will be used as column names in the returned data frame (e.g. "radiationLowestPeriodBio22"). Otherwise, layer id value will be used for column names (e.g. "el871")</p></td>
+      <td><p>logical: if TRUE, layer names will be used as column
+names in the returned data frame (e.g. "radiationLowestPeriodBio22").
+Otherwise, layer id value will be used for column names (e.g. "el871")</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>logical: show additional progress information? [default is set by <code><a href='ala_config.html'>ala_config</a></code>]</p></td>
+      <td><p>logical: show additional progress information?
+[default is set by <code><a href='ala_config.html'>ala_config</a></code>]</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A SpatialPointsDataFrame containing the intersecting data information. Missing data or incorrectly identified layer id values will result in NA data</p>
+    <p>A SpatialPointsDataFrame containing the intersecting data
+information. Missing data or incorrectly identified layer id values will
+result in NA data</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>The associated ALA web service: <a href='https://api.ala.org.au/#ws84'>https://api.ala.org.au/#ws84</a></p>
-<p>Descriptions of the spatial layers: <a href='https://spatial.ala.org.au/layers/'>https://spatial.ala.org.au/layers/</a></p>
+    <p>The associated ALA web service:
+<a href='https://api.ala.org.au/#ws84'>https://api.ala.org.au/#ws84</a></p>
+<p>Descriptions of the spatial layers:
+<a href='https://spatial.ala.org.au/layers/'>https://spatial.ala.org.au/layers/</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='ala_config.html'>ala_config</a></code></p></div>
@@ -181,11 +206,12 @@ NOTE: Requests are currently processed in a *single queue* on the ALA servers. P
  <span class='fu'>intersect_points</span>(<span class='no'>pnts</span>, <span class='no'>layers</span>)
 
  <span class='co'>## equivalent direct web service call:</span>
- <span class='co'>## https://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1  </span>
+ <span class='co'>## https://spatial.ala.org.au/ws/intersect/cl22,cl23,el773/-23.1/149.1</span>
 
  <span class='co'>## multiple points as a grid sampling multiple layers</span>
  <span class='no'>layers</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"cl22"</span>, <span class='st'>"cl23"</span>, <span class='st'>"el773"</span>)
- <span class='no'>pnts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='kw'>lat</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(-<span class='fl'>29</span>, -<span class='fl'>19</span>, <span class='kw'>by</span><span class='kw'>=</span><span class='fl'>2</span>), <span class='kw'>lon</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>130</span>, <span class='fl'>140</span>, <span class='kw'>by</span><span class='kw'>=</span><span class='fl'>2</span>)))
+ <span class='no'>pnts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='kw'>lat</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(-<span class='fl'>29</span>, -<span class='fl'>19</span>, <span class='kw'>by</span><span class='kw'>=</span><span class='fl'>2</span>),
+ <span class='kw'>lon</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>130</span>, <span class='fl'>140</span>, <span class='kw'>by</span><span class='kw'>=</span><span class='fl'>2</span>)))
  <span class='fu'>intersect_points</span>(<span class='no'>pnts</span>, <span class='no'>layers</span>)
 }</div></pre>
   </div>

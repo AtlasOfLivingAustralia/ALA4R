@@ -40,7 +40,10 @@
 
 
 <meta property="og:title" content="Sites by species — sites_by_species" />
-<meta property="og:description" content="A data.frame is returned as grid cells by species with values in each cell being the number of occurrences of each species. No null (all zero) species should be returned. The coordinates returned are the TOP-LEFT corner of the grid cell." />
+<meta property="og:description" content="A data.frame is returned as grid cells by species with values in each cell
+being the number of occurrences of each species. No null (all zero
+species should be returned. The coordinates returned are the TOP-LEFT
+corner of the grid cell." />
 
 
 
@@ -120,7 +123,10 @@
     </div>
 
     <div class="ref-description">
-    <p>A data.frame is returned as grid cells by species with values in each cell being the number of occurrences of each species. No null (all zero) species should be returned. The coordinates returned are the TOP-LEFT corner of the grid cell.</p>
+    <p>A data.frame is returned as grid cells by species with values in each cell
+being the number of occurrences of each species. No null (all zero
+species should be returned. The coordinates returned are the TOP-LEFT
+corner of the grid cell.</p>
     </div>
 
     <pre class="usage"><span class='fu'>sites_by_species</span>(
@@ -136,45 +142,61 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>taxon</th>
-      <td><p>string: the identifier to get the species data from the ala biocache. E.g. "genus:Heleioporus". See <code><a href='ala_fields.html'>ala_fields("occurrence_stored")</a></code> for valid field names</p></td>
+      <td><p>string: the identifier to get the species data from the ala
+biocache. E.g. "genus:Heleioporus". See
+<code><a href='ala_fields.html'>ala_fields("occurrence_stored")</a></code> for valid field names</p></td>
     </tr>
     <tr>
       <th>wkt</th>
-      <td><p>string: Bounding area in Well Known Text (WKT) format. E.g. "POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))".</p></td>
+      <td><p>string: Bounding area in Well Known Text (WKT) format. E.g.
+"POLYGON((118 -30,146 -30,146 -11,118 -11,118 -30))".</p></td>
     </tr>
     <tr>
       <th>gridsize</th>
-      <td><p>numeric: size of output grid cells in decimal degrees. E.g. 0.1 (=~10km)</p></td>
+      <td><p>numeric: size of output grid cells in decimal degrees.
+E.g. 0.1 (=~10km)</p></td>
     </tr>
     <tr>
       <th>SPdata.frame</th>
-      <td><p>logical: should the output be returned as a SpatialPointsDataFrame of the sp package?</p></td>
+      <td><p>logical: should the output be returned as a
+SpatialPointsDataFrame of the sp package?</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>logical: show additional progress information? [default is set by ala_config()]</p></td>
+      <td><p>logical: show additional progress information?
+[default is set by ala_config()]</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe or a SpatialPointsDataFrame containing the species by sites data. Columns will include longitude, latitude, and each species present. Values for species are record counts (i.e. number of recorded occurrences of that taxon in each grid cell). The <code>guid</code> attribute of the data frame gives the guids of the species (columns) as a named character vector</p>
+    <p>A dataframe or a SpatialPointsDataFrame containing the species by
+sites data. Columns will include longitude, latitude, and each species
+present. Values for species are record counts (i.e. number of recorded
+occurrences of that taxon in each grid cell). The <code>guid</code> attribute of
+the data frame gives the guids of the species (columns) as a named
+character vector</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Associated web services: <a href='https://spatial.ala.org.au/ws/capabilities'>https://spatial.ala.org.au/ws/capabilities</a> see PointsToGrid/sitesBySpecies</p>
+    <p>Associated web services:
+<a href='https://spatial.ala.org.au/ws/capabilities'>https://spatial.ala.org.au/ws/capabilities</a> see
+PointsToGrid/sitesBySpecies</p>
 <p><a href='http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html'>http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># Eucalyptus in Tasmania based on a 0.1 degree grid</span>
-<span class='no'>ss</span> <span class='kw'>&lt;-</span> <span class='fu'>sites_by_species</span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"genus:Eucalyptus"</span>, <span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"POLYGON((144 -43,148 -43,148 -40,
-  144 -40,144 -43))"</span>, <span class='kw'>gridsize</span><span class='kw'>=</span><span class='fl'>0.1</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='no'>ss</span> <span class='kw'>&lt;-</span> <span class='fu'>sites_by_species</span>(<span class='kw'>taxon</span> <span class='kw'>=</span> <span class='st'>"genus:Eucalyptus"</span>,
+<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>"POLYGON((144 -43,148 -43,148 -40,
+  144 -40,144 -43))"</span>, <span class='kw'>gridsize</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>ss</span>[, <span class='fl'>1</span>:<span class='fl'>6</span>])
 
 <span class='co'>## get the guid of the first species</span>
 <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>ss</span>,<span class='st'>"guid"</span>)[<span class='fl'>1</span>]
-<span class='co'>#' # Steps: 1. POST webservice creates a task (use single quotes around data-binary argument)</span>
-<span class='co'>#curl 'https://spatial.ala.org.au/ws/tasks/create?userId=0' --data-binary name=PointsToGrid</span>
+<span class='co'># Steps: 1. POST webservice creates a task</span>
+<span class='co'># (use single quotes around data-binary argument)</span>
+<span class='co'>#curl 'https://spatial.ala.org.au/ws/tasks/create?userId=0'</span>
+<span class='co'># --data-binary name=PointsToGrid</span>
 <span class='co'>#&amp;input={"area":[{"name":"Current extent"</span>
 <span class='co'>#,"wkt":"POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))"}]</span>
 <span class='co'>#,"occurrenceDensity":false,"sitesBySpecies":true,"speciesRichness":false</span>
@@ -183,7 +205,7 @@
 <span class='co'>#,"gridCellSize":0.1,"resolution":0.01,"movingAverage":"1x1 (no moving average)"}'</span>
 <span class='co'>#resp eg '{"name":"PointsToGrid","created":1552881125953,"email":"null","history":{}</span>
 <span class='co'>#,"tag":"null","userId":"0","sessionId":"null","status":0,"id":&lt;id&gt;}</span>
-<span class='co'># 2. check status values: 0 = in_queue, 1 = running, 2 = cancelled, 3 = error, 4 = finished </span>
+<span class='co'># 2. check status values: 0 = in_queue, 1 = running, 2 = cancelled, 3 = error, 4 = finished</span>
 <span class='co'>#curl 'https://spatial.ala.org.au/ws/tasks/status/&lt;id&gt;'</span>
 <span class='co'>#waiting: {"status":1,"message":"getting species data","id":&lt;id&gt;,"name":"PointsToGrid"}</span>
 <span class='co'>#complete:{"status":4,"message":"finished","id":&lt;id&gt;,"name":"PointsToGrid"</span>

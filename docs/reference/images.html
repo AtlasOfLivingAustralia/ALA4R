@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Retrieve image information using image ids, with an option to download</h1>
-    <small class="dont-index">Source: <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/image_info.R'><code>R/image_info.R</code></a>, <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/images.R'><code>R/images.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/images.R'><code>R/images.R</code></a></small>
     <div class="hidden name"><code>images.Rd</code></div>
     </div>
 
@@ -123,17 +123,20 @@
     <p>Retrieve image information using image ids, with an option to download</p>
     </div>
 
-    <pre class="usage"><span class='fu'>images</span>(<span class='no'>id</span>, <span class='kw'>download</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>download_path</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span>()$<span class='no'>verbose</span>)
-
-<span class='fu'>images</span>(<span class='no'>id</span>, <span class='kw'>download</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>download_path</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span>()$<span class='no'>verbose</span>)</pre>
+    <pre class="usage"><span class='fu'>images</span>(
+  <span class='no'>image_id</span>,
+  <span class='kw'>download</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>download_path</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span>()$<span class='no'>verbose</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>id</th>
-      <td><p>character: IDs of images to be downloaded as single string or
-vector of strings</p></td>
+      <th>image_id</th>
+      <td><p>character: IDs of images to be downloaded as single
+string or vector of strings</p></td>
     </tr>
     <tr>
       <th>download</th>
@@ -160,7 +163,8 @@ folder</p></td>
 
     
 <ul>
-<li><p>Associated ALA web service for images <a href='https://images.ala.org.au/ws'>https://images.ala.org.au/ws</a></p></li>
+<li><p>Associated ALA web service for images
+<a href='https://images.ala.org.au/ws'>https://images.ala.org.au/ws</a></p></li>
 </ul>
 
 

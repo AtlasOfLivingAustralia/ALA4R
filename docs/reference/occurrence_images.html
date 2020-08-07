@@ -124,7 +124,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>occurrence_images</span>(
-  <span class='no'>id</span>,
+  <span class='no'>occ_id</span>,
   <span class='no'>fq</span>,
   <span class='kw'>download</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='no'>download_path</span>,
@@ -136,8 +136,9 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>id</th>
-      <td><p>character: IDs of occurrences as single sring or vector of strings</p></td>
+      <th>occ_id</th>
+      <td><p>character: IDs of occurrences as single sring or vector of
+strings</p></td>
     </tr>
     <tr>
       <th>fq</th>
@@ -183,9 +184,9 @@ Ignored unless explicitly requested.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'>## Download all images for an occurrence with a CC BY-NC 4.0 licence</span>
-<span class='fu'>occurrence_image_search</span>(<span class='kw'>id</span><span class='kw'>=</span><span class='st'>"d201f3e0-3e1d-47f1-94ce-9fc226cbc5ec"</span>,
-<span class='kw'>fq</span><span class='kw'>=</span><span class='st'>"recognisedLicence:CC BY-NC 4.0"</span>,
-<span class='kw'>download</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='fu'>occurrence_image_search</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"d201f3e0-3e1d-47f1-94ce-9fc226cbc5ec"</span>,
+<span class='kw'>fq</span> <span class='kw'>=</span> <span class='st'>"recognisedLicence:CC BY-NC 4.0"</span>,
+<span class='kw'>download</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

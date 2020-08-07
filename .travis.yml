@@ -12,6 +12,7 @@ addons:
     - libmagick++-dev
     - gcc-8
     - g++-8
+    - gfortran-8
 matrix:
   include:
   - os: linux
@@ -34,16 +35,16 @@ before_install:
   - echo "CC=gcc$(VER)"    >> ~/.R/Makevars
   - echo "CXX=g++$(VER)"   >> ~/.R/Makevars
   - echo "CXX1X=g++$(VER)" >> ~/.R/Makevars
+  - echo "FC=gfortran$(VER)"       >> ~/.R/Makevars
+  - echo "F77=gfortran$(VER)"      >> ~/.R/Makevars
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-8
+  - sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-8 60
 warnings_are_errors: true
 script:
 - |
   R CMD build .
-  travis_wait 30 R CMD check ALA4R*tar.gz
+  travis_wait 40 R CMD check ALA4R*tar.gz
 after_success:
 - if [[ "${R_CODECOV}" ]]; then travis_wait 20 Rscript -e 'covr::codecov()'; fi
 notifications:
   slack: atlaslivingaustralia:IPdEJ1wsRcGOF6PhqrgD7Ny4
-  hipchat:
-    rooms:
-      secure: GcAsJ2ZSa1p3xGaYU1dqVXn1y08yRVTm/ADJJx3PU8s/SCk8CVjMcKGzBqPw66EYrYkBcaa+6vvFfJHyeJclbQgp9EIBxgqrvp4mNHxZPa9XVkTpCNNE7s26zkXmDZyH1UzD9o0AJfuEhwvCBawjckxArfAMSUgXZ3Ago/l8R24=

@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Get list of taxa and their occurrence counts — specieslist" />
-<meta property="og:description" content="Retrieve a list of taxa matching a search query, within a spatial search area, or both." />
+<meta property="og:description" content="Retrieve a list of taxa matching a search query, within a spatial search
+area, or both." />
 
 
 
@@ -120,7 +121,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Retrieve a list of taxa matching a search query, within a spatial search area, or both.</p>
+    <p>Retrieve a list of taxa matching a search query, within a spatial search
+area, or both.</p>
     </div>
 
     <pre class="usage"><span class='fu'>specieslist</span>(<span class='no'>taxon</span>, <span class='no'>wkt</span>, <span class='no'>fq</span>)</pre>
@@ -130,49 +132,73 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>taxon</th>
-      <td><p>string: (optional) query of the form field:value (e.g. "genus:Heleioporus") or a free text search (e.g. "macropodidae").
-For reliable results it is recommended to use a specific field where possible (see <code><a href='ala_fields.html'>ala_fields("occurrence_indexed")</a></code>
-for valid fields). It is also good practice to quote the taxon name if it contains multiple words, for example
-<code>taxon="taxon_name:\"Alaba vibex\""</code> (noting, however, that multi-word names are unlikely in the context of a specieslist
-search, where one would typically be searching for all species within, say, a genus or family)</p></td>
+      <td><p>string: (optional) query of the form field:value (e.g.
+"genus:Heleioporus") or a free text search (e.g. "macropodidae").
+For reliable results it is recommended to use a specific field where
+possible (see <code><a href='ala_fields.html'>ala_fields("occurrence_indexed")</a></code>
+for valid fields). It is also good practice to quote the taxon name if it
+contains multiple words, for example
+<code>taxon = "taxon_name:\"Alaba vibex\""</code> (noting, however, that multi-word
+names are unlikely in the context of a specieslist
+search, where one would typically be searching for all species within, say,
+a genus or family)</p></td>
     </tr>
     <tr>
       <th>wkt</th>
-      <td><p>string: WKT (well-known text) defining a polygon within which to limit taxon search, e.g. "POLYGON((140 -37,151 -37,151 -26,140 -26,140 -37))"</p></td>
+      <td><p>string: WKT (well-known text) defining a polygon within which to
+limit taxon search, e.g.
+"POLYGON((140 -37,151 -37,151 -26,140 -26,140 -37))"</p></td>
     </tr>
     <tr>
       <th>fq</th>
-      <td><p>string: character string or vector of strings, specifying filters to be applied to the original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See <code><a href='ala_fields.html'>ala_fields("occurrence_indexed", as_is=TRUE)</a></code> for all the fields that are queryable. NOTE that fq matches are case-sensitive, but sometimes the entries in the fields are not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA"). fq matches are ANDed by default (e.g. c("field1:abc", "field2:def") will match records that have field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form c("field1:abc OR field2:def")</p></td>
+      <td><p>string: character string or vector of strings, specifying filters
+to be applied to the original query. These are of the form
+"INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See
+<code><a href='ala_fields.html'>ala_fields("occurrence_indexed", as_is = TRUE)</a></code> for all the fields
+that are queryable. NOTE that fq matches are case-sensitive, but sometimes
+the entries in the fields are not consistent in terms of case (e.g. kingdom
+names "Fungi" and "Plantae" but "ANIMALIA"). fq matches are ANDed by
+default (e.g. c("field1:abc", "field2:def") will match records that have
+field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the
+form c("field1:abc OR field2:def")</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data frame of results, where each row is a taxon, its classification information, and its occurrence count</p>
+    <p>data frame of results, where each row is a taxon, its
+classification information, and its occurrence count</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>NOTE March 2017: the response object might include records with missing taxonomic information. This is an issue with the ALA server-side systems; see https://github.com/AtlasOfLivingAustralia/bie-index/issues/134</p>
+    <p>NOTE March 2017: the response object might include records with missing
+taxonomic information. This is an issue with the ALA server-side systems;
+see https://github.com/AtlasOfLivingAustralia/bie-index/issues/134</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Associated ALA web service: <a href='https://api.ala.org.au/#ws106'>https://api.ala.org.au/#ws106</a></p>
 <p><a href='http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html'>http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='ala_fields.html'>ala_fields</a></code> for occurrence fields that are queryable via the <code>fq</code> parameter</p></div>
+    <div class='dont-index'><p><code><a href='ala_fields.html'>ala_fields</a></code> for occurrence fields that are queryable
+via the <code>fq</code> parameter</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"genus:Hakea"</span>, <span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))"</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>taxon</span> <span class='kw'>=</span> <span class='st'>"genus:Hakea"</span>, <span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>"POLYGON((145 -37,150 -37,
+150 -30,145 -30,145 -37))"</span>)
 
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,147.70 -42.86,
-  147.62 -42.83))"</span>, <span class='kw'>fq</span><span class='kw'>=</span><span class='st'>"rank:species"</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>"POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,
+147.70 -42.86,
+  147.62 -42.83))"</span>, <span class='kw'>fq</span> <span class='kw'>=</span> <span class='st'>"rank:species"</span>)
 
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))"</span>, <span class='kw'>fq</span><span class='kw'>=</span><span class='st'>"genus:Heleioporus"</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>"POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))"</span>,
+<span class='kw'>fq</span> <span class='kw'>=</span> <span class='st'>"genus:Heleioporus"</span>)
 
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"POLYGON((152.38 -30.43,152.5 -30.43,152.5 -30.5,152.38 -30.5,152.38 -30.43))"</span>,
-    <span class='kw'>fq</span><span class='kw'>=</span><span class='st'>"kingdom:Plantae"</span>)
-<span class='co'>## NOTE that this response might include records with empty or NA kingdom, phylum, or</span>
-<span class='co'>##  class values, as per the note above.</span>
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>"POLYGON((152.38 -30.43,152.5 -30.43,152.5 -30.5,
+152.38 -30.5,152.38 -30.43))"</span>,
+    <span class='kw'>fq</span> <span class='kw'>=</span> <span class='st'>"kingdom:Plantae"</span>)
+<span class='co'>## NOTE that this response might include records with empty or NA kingdom,</span>
+<span class='co'>## phylum, or class values, as per the note above.</span>
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

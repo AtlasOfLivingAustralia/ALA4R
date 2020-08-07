@@ -19,10 +19,7 @@ check_caching(thischeck)
 
 thischeck <- function() {
     test_that("occurrences summary works when no qa are present", {
-        #skip_on_cran()
-        skip("takes too long")
-        
-        #Sys.sleep(20)
+        skip_on_cran()
         expect_output(summary(occurrences(taxon = "Amblyornis newtonianus",
                                           email = "testing@test.org",
                                           download_reason_id = 10,
@@ -33,25 +30,25 @@ check_caching(thischeck)
 
 thischeck <- function() {
     test_that("occurrences summary gives something sensible", {
-        #occ <- occurrences(taxon = "Amblyornis newtonianus",
-        #                   email = "testing@test.org",
-        #                   download_reason_id = 10)
-        #expect_output(summary(occ), "^number of original names")
+        occ <- occurrences(taxon = "Amblyornis newtonianus",
+                           email = "testing@test.org",
+                           download_reason_id = 10)
+        expect_output(summary(occ), "^number of original names")
         ## check that names required for summary.occurrences method are present
-        #expect_true(all(c("scientificName", "scientificNameOriginal") %in%
-         #                   names(occ$data)) ||
-          #              all(c("taxonName", "taxonNameOriginal") %in%
-           #                     names(occ$data)))
+        expect_true(all(c("scientificName", "scientificNameOriginal") %in%
+                            names(occ$data)) ||
+                        all(c("taxonName", "taxonNameOriginal") %in%
+                                names(occ$data)))
         ## check that names required for unique.occurrences method are present
-        #expect_true(all(c("scientificName", "longitude", "latitude",
-        #                  "eventDate", "month", "year") %in% names(occ$data)))
+        expect_true(all(c("scientificName", "longitude", "latitude",
+                          "eventDate", "month", "year") %in% names(occ$data)))
     })
 }
 check_caching(thischeck)
 
 thischeck <- function() {
     test_that("occurrences retrieves the fields specified", {
-        skip("takes too long")
+        skip_on_cran()
         expect_equal(sort(names(
             occurrences(taxon = "Eucalyptus gunnii", email = "testing@test.org",
                         fields = c("latitude", "longitude"), qa = "none",
@@ -143,7 +140,7 @@ check_caching(thischeck)
 
 thischeck <- function() {
   test_that("occurrences handles fields correctly", {
-    skip("Takes too long")
+    skip_on_cran()
     expect_is(
       occurrences(taxon = as.factor("Amblyornis newtonianus"),
                   email = "testing@test.org",
@@ -186,7 +183,9 @@ thischeck <- function() {
   test_that("occurrences generates a doi if requested", {
     skip("Skip except for manual testing to avoid clogging up doi system with
          unnecessary dois.")
-    #expect_equal(occurrences(taxon = "Acacia podalyriifolia", email = "test@test.org",
-     #                download_reason_id = "testing", generateDoi = TRUE), 
+    expect_true("doi" %in% occurrences(taxon = "Acacia podalyriifolia",
+                                       email = "test@test.org",
+                                       download_reason_id = "testing",
+                                       generateDoi = TRUE)$meta$doi)
     })
 }

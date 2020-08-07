@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Partial-name search — search_partial_name • ALA4R</title>
+<title>Get facet counts for occurrence data — occurrence_facets • ALA4R</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,8 @@
 
 
 
-<meta property="og:title" content="Partial-name search — search_partial_name" />
-<meta property="og:description" content="A partial-name search for species names &amp;amp; identifiers used at the ALA.
-If searching for a taxon name, and the scientific name or common name of
-the taxon are known, use search_names instead." />
+<meta property="og:title" content="Get facet counts for occurrence data — occurrence_facets" />
+<meta property="og:description" content="Get facet counts for occurrence data" />
 
 
 
@@ -116,79 +114,65 @@ the taxon are known, use search_names instead." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Partial-name search</h1>
-    <small class="dont-index">Source: <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/search_partial_name.R'><code>R/search_partial_name.R</code></a></small>
-    <div class="hidden name"><code>search_partial_name.Rd</code></div>
+    <h1>Get facet counts for occurrence data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/occurrence_facets.R'><code>R/occurrence_facets.R</code></a></small>
+    <div class="hidden name"><code>occurrence_facets.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A partial-name search for species names &amp; identifiers used at the ALA.
-If searching for a taxon name, and the scientific name or common name of
-the taxon are known, use <code><a href='search_names.html'>search_names</a></code> instead.</p>
+    <p>Get facet counts for occurrence data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>search_partial_name</span>(
-  <span class='no'>taxon</span>,
-  <span class='kw'>geo_only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"simple"</span>,
-  <span class='no'>index_type</span>,
-  <span class='no'>limit</span>
+    <pre class="usage"><span class='fu'>occurrence_facets</span>(
+  <span class='no'>facet</span>,
+  <span class='no'>query</span>,
+  <span class='no'>start</span>,
+  <span class='no'>page_size</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span>()$<span class='no'>verbose</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>taxon</th>
-      <td><p>string: part of the scientific, common name of the taxa</p></td>
+      <th>facet</th>
+      <td><p>string: facet to be used. Currently only one facet is supported</p></td>
     </tr>
     <tr>
-      <th>geo_only</th>
-      <td><p>logical: if TRUE, only results that have geospatial
-occurrence records will be included</p></td>
+      <th>query</th>
+      <td><p>string: query of the form field:value e.g. q = genus:Macropus
+or a free text search e.g. q = Macropus</p></td>
     </tr>
     <tr>
-      <th>output_format</th>
-      <td><p>string: controls the print method for the returned
-object. Either "complete" (the complete data structure is displayed), or
-"simple" (a simplified version is displayed). Note that the complete data
-structure exists in both cases: this option only controls what is displayed
-when the object is printed to the console. The default output format is
-"simple"</p></td>
+      <th>start</th>
+      <td><p>numeric: (optional) (positive integer) start offset for the
+results</p></td>
     </tr>
     <tr>
-      <th>index_type</th>
-      <td><p>string: the index type to limit. Values include: TAXON
-REGION COLLECTION INSTITUTION DATASET. By default, no index_type limit is
-applied</p></td>
+      <th>page_size</th>
+      <td><p>numeric: (optional) (positive integer) maximum number of
+records to return. Defaults to the server-side value - currently 30</p></td>
     </tr>
     <tr>
-      <th>limit</th>
-      <td><p>numeric: the maximum number of matches returned (defaults to
-the server-side value - currently 10)</p></td>
+      <th>verbose</th>
+      <td><p>logical: show additional progress information?
+[default is set by ala_config()]</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe of results. The contents (column names) of the data
-frame will vary depending on the details of the search and the results.</p>
+    <p>a named list with the components "meta" (search metadata), and
+"data" (the search results, in the form of a data frame). The contents
+(column names) of the data frame will vary depending on the details of the
+search and the results.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Associated ALA web service: <a href='https://api.ala.org.au/#ws25'>https://api.ala.org.au/#ws25</a></p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <p>Associated ALA web service for facet counts</p><ul>
+<li><p><a href='https://api.ala.org.au/#ws3'>https://api.ala.org.au/#ws3</a></p></li>
+</ul>
 
-    <div class='dont-index'><p><code><a href='search_names.html'>search_names</a></code> for searching known scientific or common
-taxonomic names</p></div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='co'># find any names containing "allaba"</span>
-<span class='fu'>search_partial_name</span>(<span class='st'>"allaba"</span>, <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"simple"</span>)
-
-<span class='co'># retrieve only species that have geolocated occurrence records</span>
-<span class='fu'>search_partial_name</span>(<span class='st'>"Gallaba"</span>, <span class='kw'>geo_only</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

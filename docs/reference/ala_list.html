@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Species lists — ala_list" />
-<meta property="og:description" content="Retrieves a specified species list. See ala_lists to find all available species lists." />
+<meta property="og:description" content="Retrieves a specified species list. See ala_lists to find all
+available species lists." />
 
 
 
@@ -120,7 +121,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Retrieves a specified species list. See <code><a href='ala_lists.html'>ala_lists</a></code> to find all available species lists.</p>
+    <p>Retrieves a specified species list. See <code><a href='ala_lists.html'>ala_lists</a></code> to find all
+available species lists.</p>
     </div>
 
     <pre class="usage"><span class='fu'>ala_list</span>(<span class='no'>druid</span>, <span class='kw'>kvp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span>()$<span class='no'>verbose</span>)</pre>
@@ -130,11 +132,13 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>druid</th>
-      <td><p>string: data resource UID of the list (i.e. the list identifier)</p></td>
+      <td><p>string: data resource UID of the list (i.e. the list
+identifier)</p></td>
     </tr>
     <tr>
       <th>kvp</th>
-      <td><p>logical: include key-value pairs? Some lists contain information about the species in the form of key-value pairs</p></td>
+      <td><p>logical: include key-value pairs? Some lists contain information
+about the species in the form of key-value pairs</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -147,10 +151,14 @@
     <p>data.frame</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Note that this refers to pre-generated lists of species stored on the ALA servers. The similarly-named but different function <code><a href='specieslist.html'>specieslist</a></code> provides a different function, namely listing the species matching a query or recorded as present in a search area.</p>
+    <p>Note that this refers to pre-generated lists of species stored on the ALA
+servers. The similarly-named but different function
+<code><a href='specieslist.html'>specieslist</a></code> provides a different function, namely listing
+the species matching a query or recorded as present in a search area.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><a href='https://lists.ala.org.au'>https://lists.ala.org.au</a> and the associated web services at <a href='https://lists.ala.org.au/ws'>https://lists.ala.org.au/ws</a></p>
+    <p><a href='https://lists.ala.org.au'>https://lists.ala.org.au</a> and the associated web services
+at <a href='https://lists.ala.org.au/ws'>https://lists.ala.org.au/ws</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='specieslist.html'>specieslist</a></code>, <code><a href='ala_lists.html'>ala_lists</a></code></p></div>
@@ -162,7 +170,7 @@
  <span class='no'>all_lists</span>[<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span>(<span class='st'>"Field Guide"</span>, <span class='no'>all_lists</span>$<span class='no'>listName</span>), ]
 
  <span class='co'>## download the vertebrates one</span>
- <span class='no'>l</span> <span class='kw'>&lt;-</span> <span class='fu'>ala_list</span>(<span class='kw'>druid</span><span class='kw'>=</span><span class='st'>"dr1146"</span>)
+ <span class='no'>l</span> <span class='kw'>&lt;-</span> <span class='fu'>ala_list</span>(<span class='kw'>druid</span> <span class='kw'>=</span> <span class='st'>"dr1146"</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

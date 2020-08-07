@@ -86,7 +86,8 @@ the aggregation.
 \examples{
 \dontrun{
 #download some observations
-x <- occurrences(taxon = "Amblyornis newtonianus",download_reason_id = 10)
+x <- occurrences(taxon = "Amblyornis newtonianus",download_reason_id = 10,
+email = "test@test.org")
 
 #summarize the occurrences
 summary(x)
@@ -96,7 +97,7 @@ tt <- unique(x,spatial = 0.01)
 summary(tt)
 
 #keep spatially unique data that is also unique year/month for the
-collection date
+#collection date
 tt <- unique(x,spatial = 0,temporal = 'yearmonth')
 summary(tt)
 
@@ -108,6 +109,5 @@ summary(tt)
 \references{
 \url{https://api.ala.org.au/}
 
-\url{http://stat.ethz.ch/R-manual/R-devel/library/methods/html/
-Methods.html}
+\url{http://stat.ethz.ch/R-manual/R-devel/library/methods/html/Methods.html}
 }

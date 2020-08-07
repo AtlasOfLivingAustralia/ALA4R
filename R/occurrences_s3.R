@@ -6,8 +6,7 @@
 #' issues ALA has identified), spatial and temporal data.
 #'
 #' @references \url{https://api.ala.org.au/}
-#' @references \url{http://stat.ethz.ch/R-manual/R-devel/library/methods/html/
-#' Methods.html}
+#' @references \url{http://stat.ethz.ch/R-manual/R-devel/library/methods/html/Methods.html}
 #'
 #' @param object list: an 'occurrence' object that has been downloaded using
 #' \code{\link{occurrences}}
@@ -47,7 +46,8 @@
 #' @examples
 #' \dontrun{
 #' #download some observations
-#' x <- occurrences(taxon = "Amblyornis newtonianus",download_reason_id = 10)
+#' x <- occurrences(taxon = "Amblyornis newtonianus",download_reason_id = 10,
+#' email = "test@test.org")
 #'
 #' #summarize the occurrences
 #' summary(x)
@@ -57,7 +57,7 @@
 #' summary(tt)
 #'
 #' #keep spatially unique data that is also unique year/month for the
-#' collection date
+#' #collection date
 #' tt <- unique(x,spatial = 0,temporal = 'yearmonth')
 #' summary(tt)
 #'

@@ -136,37 +136,51 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>query</th>
-      <td><p>string: (optional) query of the form field:value (e.g. "genus:Heleioporus") or a free text search ("Alaba vibex")</p></td>
+      <td><p>string: (optional) query of the form field:value
+(e.g. "genus:Heleioporus") or a free text search ("Alaba vibex")</p></td>
     </tr>
     <tr>
       <th>fq</th>
-      <td><p>string: character string or vector of strings, specifying filters to be applied to the original query. 
-These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See <code><a href='ala_fields.html'>ala_fields("general", as_is=TRUE)</a></code> for all the 
-fields that are queryable. NOTE that fq matches are case-sensitive, but sometimes the entries in the fields are 
-not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA"). fq matches are ANDed 
-by default (e.g. c("field1:abc", "field2:def") will match records that have field1 value "abc" and field2 value "def"). 
+      <td><p>string: character string or vector of strings, specifying filters
+to be applied to the original query.
+These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See
+<code><a href='ala_fields.html'>ala_fields("general", as_is=TRUE)</a></code> for all the
+fields that are queryable. NOTE that fq matches are case-sensitive, but
+sometimes the entries in the fields are
+not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae"
+but "ANIMALIA"). fq matches are ANDed
+by default (e.g. c("field1:abc", "field2:def") will match records that have
+field1 value "abc" and field2 value "def").
 To obtain OR behaviour, use the form c("field1:abc OR field2:def")</p></td>
     </tr>
     <tr>
       <th>fields</th>
-      <td><p>string vector: (optional) a vector of field names to return. Note that the columns of the returned data 
-frame are not guaranteed to retain the ordering of the field names given here. If not specified, a default list of 
-fields will be returned. See <code><a href='ala_fields.html'>ala_fields("general", as_is=TRUE)</a></code> for valid field names. Use <code>fields="all"</code> to include all available fields</p></td>
+      <td><p>string vector: (optional) a vector of field names to return.
+Note that the columns of the returned data
+frame are not guaranteed to retain the ordering of the field names given
+here. If not specified, a default list of
+fields will be returned. See <code><a href='ala_fields.html'>ala_fields("general", as_is=TRUE)</a></code> for
+valid field names. Use <code>fields="all"</code> to include all available fields</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>logical: show additional progress information? [default is set by ala_config()]</p></td>
+      <td><p>logical: show additional progress information?
+[default is set by ala_config()]</p></td>
     </tr>
     <tr>
       <th>use_data_table</th>
-      <td><p>logical: if TRUE, attempt to read the data.csv file using the fread function from the 
-data.table package. If this fails, or use_data_table is FALSE, then read.table will be used (which may be slower)</p></td>
+      <td><p>logical: if TRUE, attempt to read the data.csv file
+using the fread function from the
+data.table package. If this fails, or use_data_table is FALSE, then
+read.table will be used (which may be slower)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data frame of results, containing one row per taxon, typically with name, guid, and taxonomic information. The columns returned will depend on the field requested</p>
+    <p>data frame of results, containing one row per taxon, typically with
+name, guid, and taxonomic information. The columns returned will depend on
+the field requested</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Associated ALA web service: <a href='https://api.ala.org.au/#ws2'>https://api.ala.org.au/#ws2</a></p>
@@ -180,11 +194,10 @@ data.table package. If this fails, or use_data_table is FALSE, then read.table w
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>taxinfo_download</span>(<span class='st'>"rk_genus:Heleioporus"</span>)
 
 <span class='co'>## Data for Fabaceae with specified fields</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>taxinfo_download</span>(<span class='st'>"rk_family:Fabaceae"</span>, <span class='kw'>fields</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"guid"</span>, <span class='st'>"parentGuid"</span>, <span class='st'>"rk_kingdom"</span>,
-  <span class='st'>"rk_phylum"</span>, <span class='st'>"rk_class"</span>, <span class='st'>"rk_order"</span>, <span class='st'>"rk_family"</span>, <span class='st'>"rk_genus"</span>, <span class='st'>"scientificName"</span>))
-
-<span class='co'>## equivalent direct URL: https://bie.ala.org.au/ws/download?fields=guid,parentGuid,rk_kingdom,</span>
-<span class='co'>##    rk_phylum,rk_class,rk_order,rk_family,rk_genus,scientificName&amp;q=rk_family:Fabaceae</span>
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>taxinfo_download</span>(<span class='st'>"rk_family:Fabaceae"</span>, <span class='kw'>fields</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"guid"</span>, <span class='st'>"parentGuid"</span>,
+<span class='st'>"rk_kingdom"</span>,
+  <span class='st'>"rk_phylum"</span>, <span class='st'>"rk_class"</span>, <span class='st'>"rk_order"</span>, <span class='st'>"rk_family"</span>, <span class='st'>"rk_genus"</span>,
+  <span class='st'>"scientificName"</span>))
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

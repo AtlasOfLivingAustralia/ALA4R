@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Check assertions in occurrences object — check_assertions" />
-<meta property="og:description" content="This provides a data.frame detailing the assertions that are found in a dataset returned from occurrences." />
+<meta property="og:description" content="This provides a data.frame detailing the assertions that are found
+in a dataset returned from occurrences." />
 
 
 
@@ -120,7 +121,8 @@
     </div>
 
     <div class="ref-description">
-    <p>This provides a data.frame detailing the assertions that are found in a dataset returned from <code><a href='occurrences.html'>occurrences</a></code>.</p>
+    <p>This provides a data.frame detailing the assertions that are found
+in a dataset returned from <code><a href='occurrences.html'>occurrences</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>check_assertions</span>(<span class='no'>x</span>)</pre>
@@ -136,16 +138,20 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe of assertions column names, descriptions and categories/error codes. If no assertions are in the dataset, NULL is returned.</p>
+    <p>A dataframe of assertions column names, descriptions and
+categories/error codes. If no assertions are in the dataset, NULL is
+returned.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><a href='https://api.ala.org.au/'>https://api.ala.org.au/</a>, <samp>https://biocache-ws.ala.org.au/ws/assertions/codes</samp></p>
+    <p><a href='https://api.ala.org.au/'>https://api.ala.org.au/</a>,
+<samp>https://biocache-ws.ala.org.au/ws/assertions/codes</samp></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
  <span class='co'>##download species data with all possible assertions</span>
 
- <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='occurrences.html'>occurrences</a></span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"golden bowerbird"</span>, <span class='kw'>download_reason_id</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>qa</span><span class='kw'>=</span><span class='fu'><a href='ala_fields.html'>ala_fields</a></span>(<span class='st'>"assertions"</span>)$<span class='no'>name</span>)
+ <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='occurrences.html'>occurrences</a></span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"golden bowerbird"</span>, <span class='kw'>download_reason_id</span><span class='kw'>=</span><span class='fl'>10</span>,
+ <span class='kw'>qa</span><span class='kw'>=</span><span class='fu'><a href='ala_fields.html'>ala_fields</a></span>(<span class='st'>"assertions"</span>)$<span class='no'>name</span>)
 
  <span class='no'>asserts</span> <span class='kw'>&lt;-</span> <span class='fu'>check_assertions</span>(<span class='no'>x</span>)
  <span class='co'>## this is a data.frame of assertions, their description and column names</span>
@@ -153,8 +159,9 @@
  <span class='co'>## list the descriptions of all (current) assertions</span>
  <span class='no'>asserts</span>$<span class='no'>description</span>
 
- <span class='no'>tmp</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>data</span>[, <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>x</span>$<span class='no'>data</span>) <span class='kw'>%in%</span> <span class='no'>asserts</span>$<span class='no'>name</span>] <span class='co'>## assertion columns from data</span>
- <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colSums</a></span>(<span class='no'>tmp</span>)<span class='kw'>&gt;</span><span class='fl'>0</span>) <span class='co'>## discard those not seen in the data</span>
+ <span class='co'>## assertion columns from data</span>
+ <span class='no'>tmp</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>data</span>[, <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>x</span>$<span class='no'>data</span>) <span class='kw'>%in%</span> <span class='no'>asserts</span>$<span class='no'>name</span>]
+ <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colSums</a></span>(<span class='no'>tmp</span>) <span class='kw'>&gt;</span> <span class='fl'>0</span>) <span class='co'>## discard those not seen in the data</span>
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

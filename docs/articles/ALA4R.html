@@ -70,13 +70,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="ALA4R_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>ALA4R</h1>
                         <h4 class="author">Ben Raymond</h4>
             
-            <h4 class="date">2020-04-03</h4>
+            <h4 class="date">2020-08-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/vignettes/ALA4R.Rmd"><code>vignettes/ALA4R.Rmd</code></a></small>
       <div class="hidden name"><code>ALA4R.Rmd</code></div>
@@ -246,16 +246,16 @@
     <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">speciesName</span>, <span class="no">commonName</span>, <span class="no">occurrenceCount</span>) <span class="kw">%&gt;%</span>
     <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">10</span>)</pre></body></html></div>
 <pre><code>##                         speciesName                   commonName occurrenceCount
-## 1  Calyptorhynchus (Zanda) funereus Yellow-Tailed Black-Cockatoo             290
-## 2     Falco (Hierofalco) peregrinus             Peregrine Falcon              72
-## 3            Eucalyptus fasciculosa                     Hill Gum              56
-## 4             Spyridium spathulatum         Spoon-Leaf Spyridium              45
-## 5          Anthocercis angustifolia       Narrow-Leaf Ray-Flower              31
-## 6               Egernia cunninghami           Cunningham's Skink              28
-## 7         Austrostipa multispiculis    Many-Flowered Spear-Grass              20
-## 8         Isoodon obesulus obesulus                                           20
-## 9               Antechinus flavipes     Yellow-Footed Antechinus              14
-## 10           Prasophyllum pruinosum                                           13</code></pre>
+## 1  Calyptorhynchus (Zanda) funereus Yellow-Tailed Black-Cockatoo             288
+## 2  Calamanthus pyrrhopygius parkeri                                           77
+## 3     Falco (Hierofalco) peregrinus             Peregrine Falcon              73
+## 4            Eucalyptus fasciculosa                     Hill Gum              59
+## 5             Spyridium spathulatum         Spoon-Leaf Spyridium              56
+## 6          Anthocercis angustifolia       Narrow-Leaf Ray-Flower              40
+## 7               Egernia cunninghami           Cunningham's Skink              28
+## 8         Austrostipa multispiculis    Many-Flowered Spear-Grass              20
+## 9         Isoodon obesulus obesulus                                           20
+## 10    Correa glabra var. leucoclada                  Rock Correa              14</code></pre>
 </div>
 <div id="example-3-quality-assertions" class="section level3">
 <h3 class="hasAnchor">
@@ -265,22 +265,24 @@
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">x</span>)</pre></body></html></div>
 <pre><code>## number of original names: 6 
 ## number of taxonomically corrected names: 1 
-## number of observation records: 1727 
-## number of assertions listed: 16  -- ones with flagged issues are listed below
+## number of observation records: 1733 
+## number of assertions listed: 18  -- ones with flagged issues are listed below
 ##  invalidCollectionDate: 398 records 
 ##  incompleteCollectionDate: 436 records 
 ##  firstOfCentury: 6 records 
-##  unrecognisedInstitutionCode: 1 records 
+##  unrecognisedInstitutionCode: 6 records 
 ##  uncertaintyRangeMismatch: 24 records 
 ##  firstOfYear: 35 records 
+##  unknownCountry: 1 records 
 ##  altitudeInFeet: 2 records 
-##  dataAreGeneralised: 1 records 
-##  geodeticDatumAssumedWgs84: 946 records 
-##  decimalLatLongConverted: 78 records 
-##  coordinatePrecisionMismatch: 56 records 
-##  countryInferredByCoordinates: 93 records 
-##  unrecognisedCollectionCode: 1 records 
-##  assumedPresentOccurrenceStatus: 195 records 
+##  dataAreGeneralised: 6 records 
+##  geodeticDatumAssumedWgs84: 947 records 
+##  decimalLatLongConverted: 83 records 
+##  coordinatePrecisionMismatch: 60 records 
+##  countryInferredByCoordinates: 94 records 
+##  unrecognisedCollectionCode: 6 records 
+##  assumedPresentOccurrenceStatus: 196 records 
+##  recordedByUnparsable: 1 records 
 ##  stateCoordinateMismatch: 1 records 
 ##  firstOfMonth: 80 records</code></pre>
 <p>You can see that some of the points have assertions that are considered “fatal” (i.e. the occurrence record in question is unlikely to be suitable for subsequent analysis). We can use the <code>occurrences_plot</code> function to create a PDF file with a plot of this data, showing the points with fatal assertions (this will create an “Rplots.pdf” file in your working directory; not run here):</p>
@@ -363,7 +365,7 @@
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span>() <span class="kw">%&gt;%</span>
 
     <span class="co">## calculate species richness</span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">richness</span><span class="kw">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/n.html">n</a></span>()) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">richness</span><span class="kw">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span>()) <span class="kw">%&gt;%</span>
 
     <span class="co">## convert to wide format (sites by species)</span>
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">present</span><span class="kw">=</span><span class="fl">1</span>) <span class="kw">%&gt;%</span>
@@ -371,7 +373,7 @@
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span>()
 
 <span class="co">## where a species was not present, it will have NA: convert these to 0</span>
-<span class="no">sppcols</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/setops.html">setdiff</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">xgridded</span>),
+<span class="no">sppcols</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">setdiff</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">xgridded</span>),
                    <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"longitude"</span>, <span class="st">"latitude"</span>, <span class="st">"precipitationAnnual"</span>, <span class="st">"temperatureAnnualMaxMean"</span>,
                      <span class="st">"richness"</span>))
 <span class="no">xgridded</span> <span class="kw">&lt;-</span> <span class="no">xgridded</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_at</a></span>(<span class="no">sppcols</span>, <span class="kw">function</span>(<span class="no">z</span>) <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">z</span>), <span class="fl">0</span>, <span class="no">z</span>))</pre></body></html></div>
@@ -471,28 +473,22 @@
 <div class="sourceCode" id="cb41"><html><body><pre class="r"><span class="no">magpie_occs_top5</span> <span class="kw">&lt;-</span> <span class="no">magpie_occs</span>$<span class="no">data</span> <span class="kw">%&gt;%</span>
     <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">id</span>,<span class="no">basisOfRecord</span>,<span class="no">dataResourceName</span>,<span class="no">state</span>,<span class="no">licence</span>,<span class="no">eventDate</span>) <span class="kw">%&gt;%</span>
     <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">5</span>)</pre></body></html></div>
-<pre><code>##           occId    basisOfRecord dataResourceName           state licence  eventDate
-## 1 1279974c-3... HumanObservation  eBird Australia      Queensland     CC0 2014-06-01
-## 2 6b6e6afb-1... HumanObservation  eBird Australia New South Wales     CC0 2014-03-23
-## 3 e735985d-e... HumanObservation  eBird Australia      Queensland     CC0 2014-02-10
-## 4 f9e80004-9... HumanObservation  eBird Australia New South Wales     CC0 2013-10-01
-## 5 094f8ff1-d... HumanObservation  eBird Australia New South Wales     CC0 2013-10-01</code></pre>
 <p>We then call the occurrence_images() function to query the image service using the occurrence ids.</p>
-<div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="no">magpie_occ_images</span> <span class="kw">&lt;-</span> <span class="kw pkg">ALA4R</span><span class="kw ns">::</span><span class="fu"><a href="../reference/occurrence_images.html">occurrence_images</a></span>(<span class="no">magpie_occs_top5</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb42"><html><body><pre class="r"><span class="no">magpie_occ_images</span> <span class="kw">&lt;-</span> <span class="kw pkg">ALA4R</span><span class="kw ns">::</span><span class="fu"><a href="../reference/occurrence_images.html">occurrence_images</a></span>(<span class="no">magpie_occs_top5</span> <span class="kw">%&gt;%</span>
     <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span>(<span class="no">id</span>), <span class="kw">download</span><span class="kw">=</span><span class="fl">FALSE</span>)</pre></body></html></div>
-<pre><code>##    occurrenceID       imageID     format fileSize width height
-## 1 1279974c-3... 62d51bb4-e... image/jpeg   364231   640    480
-## 2 6b6e6afb-1... 1692a027-6... image/jpeg    84129   387    500
-## 3 6b6e6afb-1... 6e57c91f-4... image/jpeg    84975   282    500
-## 4 f9e80004-9... 2884794f-f... image/jpeg   146577   640    427
-## 5 f9e80004-9... 1fc9aaf8-1... image/jpeg   131624   640    427
-## 6 f9e80004-9... 2c30ba65-3... image/jpeg   121681   640    427
-## 7 094f8ff1-d... 4e6a5784-8... image/jpeg   131624   640    427
-## 8 094f8ff1-d... c3f60c0e-6... image/jpeg   121681   640    427
-## 9 094f8ff1-d... 115e7506-d... image/jpeg   146577   640    427</code></pre>
+<pre><code>## [1] "object 'magpie_occs_top5' not found"</code></pre>
 <p>Set the download flag in the occurrence_images() function and optionally specify a file path to download the images to local disk. The image download is rate limited to 1 image/second to minimise server load.</p>
-<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="no">magpie_occ_images</span> <span class="kw">&lt;-</span> <span class="kw pkg">ALA4R</span><span class="kw ns">::</span><span class="fu"><a href="../reference/occurrence_images.html">occurrence_images</a></span>(<span class="no">magpie_occs_top5</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb44"><html><body><pre class="r"><span class="no">magpie_occ_images</span> <span class="kw">&lt;-</span> <span class="kw pkg">ALA4R</span><span class="kw ns">::</span><span class="fu"><a href="../reference/occurrence_images.html">occurrence_images</a></span>(<span class="no">magpie_occs_top5</span> <span class="kw">%&gt;%</span>
     <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span>(<span class="no">id</span>), <span class="kw">download</span><span class="kw">=</span><span class="fl">TRUE</span>, <span class="kw">download_path</span> <span class="kw">=</span> <span class="st">"my/local/directory"</span>)</pre></body></html></div>
+</div>
+<div id="example-6-retrieve-statistics-data-resources" class="section level3">
+<h3 class="hasAnchor">
+<a href="#example-6-retrieve-statistics-data-resources" class="anchor"></a>Example 6: Retrieve statistics data resources</h3>
+<p>Retrieve the top 10 (by number of records) data resources, with information on the data quality assertions for each resource.</p>
+<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="no">limit</span> <span class="kw">&lt;-</span> <span class="fl">1</span>
+<span class="no">drs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/data_resources.html">data_resources</a></span>(<span class="kw">max</span> <span class="kw">=</span> <span class="no">limit</span>, <span class="kw">extra</span> <span class="kw">=</span> <span class="st">'assertions'</span>)
+
+<span class="co"># tidy the data to just get assertion counts for each data resource</span></pre></body></html></div>
 </div>
 </div>
 </div>

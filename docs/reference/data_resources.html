@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Partial-name search — search_partial_name • ALA4R</title>
+<title>Get a list of current data resources — data_resources • ALA4R</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,9 @@
 
 
 
-<meta property="og:title" content="Partial-name search — search_partial_name" />
-<meta property="og:description" content="A partial-name search for species names &amp;amp; identifiers used at the ALA.
-If searching for a taxon name, and the scientific name or common name of
-the taxon are known, use search_names instead." />
+<meta property="og:title" content="Get a list of current data resources — data_resources" />
+<meta property="og:description" content="Retrieve a list of all existing data resources, and basic information
+for each data resource." />
 
 
 
@@ -116,78 +115,73 @@ the taxon are known, use search_names instead." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Partial-name search</h1>
-    <small class="dont-index">Source: <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/search_partial_name.R'><code>R/search_partial_name.R</code></a></small>
-    <div class="hidden name"><code>search_partial_name.Rd</code></div>
+    <h1>Get a list of current data resources</h1>
+    <small class="dont-index">Source: <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/data_resources.R'><code>R/data_resources.R</code></a></small>
+    <div class="hidden name"><code>data_resources.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A partial-name search for species names &amp; identifiers used at the ALA.
-If searching for a taxon name, and the scientific name or common name of
-the taxon are known, use <code><a href='search_names.html'>search_names</a></code> instead.</p>
+    <p>Retrieve a list of all existing data resources, and basic information
+for each data resource.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>search_partial_name</span>(
-  <span class='no'>taxon</span>,
-  <span class='kw'>geo_only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"simple"</span>,
-  <span class='no'>index_type</span>,
-  <span class='no'>limit</span>
+    <pre class="usage"><span class='fu'>data_resources</span>(
+  <span class='no'>druid</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span>()$<span class='no'>verbose</span>,
+  <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+  <span class='no'>extra</span>,
+  <span class='kw'>include_download_stats</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>taxon</th>
-      <td><p>string: part of the scientific, common name of the taxa</p></td>
+      <th>druid</th>
+      <td><p>string: data resource UID of the data resource(s)</p></td>
     </tr>
     <tr>
-      <th>geo_only</th>
-      <td><p>logical: if TRUE, only results that have geospatial
-occurrence records will be included</p></td>
+      <th>verbose</th>
+      <td><p>logical: show additional progress information?
+[default is set by ala_config()]</p></td>
     </tr>
     <tr>
-      <th>output_format</th>
-      <td><p>string: controls the print method for the returned
-object. Either "complete" (the complete data structure is displayed), or
-"simple" (a simplified version is displayed). Note that the complete data
-structure exists in both cases: this option only controls what is displayed
-when the object is printed to the console. The default output format is
-"simple"</p></td>
+      <th>max</th>
+      <td><p>integer: (optional) if all data resources are requested, max
+number to return, sorted by record count. Default is top 100</p></td>
     </tr>
     <tr>
-      <th>index_type</th>
-      <td><p>string: the index type to limit. Values include: TAXON
-REGION COLLECTION INSTITUTION DATASET. By default, no index_type limit is
-applied</p></td>
+      <th>extra</th>
+      <td><p>string: (optional) additional field to retrieve information for
+the data resource. Must be a valid indexed field (see
+<code><a href='ala_fields.html'>ala_fields("occurrence_indexed")</a></code></p></td>
     </tr>
     <tr>
-      <th>limit</th>
-      <td><p>numeric: the maximum number of matches returned (defaults to
-the server-side value - currently 10)</p></td>
+      <th>include_download_stats</th>
+      <td><p>logical: Include download statistics? Download
+stats use logger which can be slow, so default is `FALSE`.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe of results. The contents (column names) of the data
-frame will vary depending on the details of the search and the results.</p>
+    <p>data frame of data resources</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Associated ALA web service: <a href='https://api.ala.org.au/#ws25'>https://api.ala.org.au/#ws25</a></p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    
+<ul>
+<li><p>Associated ALA web service for listing data resources:
+<a href='https://collections.ala.org.au/ws/dataResource'>https://collections.ala.org.au/ws/dataResource</a></p></li>
+</ul>
 
-    <div class='dont-index'><p><code><a href='search_names.html'>search_names</a></code> for searching known scientific or common
-taxonomic names</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='co'># find any names containing "allaba"</span>
-<span class='fu'>search_partial_name</span>(<span class='st'>"allaba"</span>, <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"simple"</span>)
+<span class='co'># Retrieve information for a dataset</span>
+<span class='no'>dr_info</span> <span class='kw'>&lt;-</span> <span class='fu'>data_resources</span>(<span class='st'>'dr375'</span>)
 
-<span class='co'># retrieve only species that have geolocated occurrence records</span>
-<span class='fu'>search_partial_name</span>(<span class='st'>"Gallaba"</span>, <span class='kw'>geo_only</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='co'># Retrieve stats for top 10 data resources with assertions breakdown</span>
+<span class='no'>dr_info</span> <span class='kw'>&lt;-</span> <span class='fu'>data_resources</span>(<span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>extra</span> <span class='kw'>=</span> <span class='st'>'assertions'</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

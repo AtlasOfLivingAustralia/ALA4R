@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Lookup of taxonomic names — search_names" />
-<meta property="og:description" content="Provides GUID, taxonomic classification, and other information for a list of names. 
+<meta property="og:description" content="Provides GUID, taxonomic classification, and other information for a list
+of names.
 Case-insensitive but otherwise exact matches are used." />
 
 
@@ -121,7 +122,8 @@ Case-insensitive but otherwise exact matches are used." />
     </div>
 
     <div class="ref-description">
-    <p>Provides GUID, taxonomic classification, and other information for a list of names. 
+    <p>Provides GUID, taxonomic classification, and other information for a list
+of names.
 Case-insensitive but otherwise exact matches are used.</p>
     </div>
 
@@ -142,29 +144,44 @@ Case-insensitive but otherwise exact matches are used.</p>
     </tr>
     <tr>
       <th>vernacular</th>
-      <td><p>logical: if TRUE, match on common names as well as scientific names, otherwise match only on scientific names</p></td>
+      <td><p>logical: if TRUE, match on common names as well as
+scientific names, otherwise match only on scientific names</p></td>
     </tr>
     <tr>
       <th>guids_only</th>
-      <td><p>logical: if TRUE, a named list of GUIDs will be returned. Otherwise, a data frame with more comprehensive information for each name will be returned.</p></td>
+      <td><p>logical: if TRUE, a named list of GUIDs will be returned.
+Otherwise, a data frame with more comprehensive information for each name
+will be returned.</p></td>
     </tr>
     <tr>
       <th>occurrence_count</th>
-      <td><p>logical: if TRUE (and if <code>guids_only</code> is FALSE) then also return the number of occurrences of each matched name.
-Note that this requires one extra web call for each name, and so may be slow. Only applicable if <code>guids_only</code> is FALSE.</p></td>
+      <td><p>logical: if TRUE (and if <code>guids_only</code> is FALSE)
+then also return the number of occurrences of each matched name.
+Note that this requires one extra web call for each name, and so may be
+slow. Only applicable if <code>guids_only</code> is FALSE.</p></td>
     </tr>
     <tr>
       <th>output_format</th>
-      <td><p>string: controls the print method for the returned object (only has an effect when <code>guids_only</code> is FALSE). Either "complete" (the complete data structure is displayed), or "simple" (a simplified version is displayed). Note that the complete data structure exists in both cases: this option only controls what is displayed when the object is printed to the console. The default output format is "simple"</p></td>
+      <td><p>string: controls the print method for the returned
+object (only has an effect when <code>guids_only</code> is FALSE). Either
+"complete" (the complete data structure is displayed), or "simple" (a
+simplified version is displayed). Note that the complete data structure
+exists in both cases: this option only controls what is displayed when the
+object is printed to the console. The default output format is "simple"</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame of results, or named list of GUIDs if <code>guids_only</code> is TRUE. The results should include one entry (i.e. one data.frame row or one list element) per input name. The columns in the data.frame output may vary depending on the results returned by the ALA server, but should include searchTerm, name, rank, and guid.</p>
+    <p>A data frame of results, or named list of GUIDs if
+<code>guids_only</code> is TRUE. The results should include one entry (i.e. one
+data.frame row or one list element) per input name. The columns in the
+data.frame output may vary depending on the results returned by the ALA
+server, but should include searchTerm, name, rank, and guid.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>The associated ALA web service: <a href='https://api.ala.org.au/#ws87'>https://api.ala.org.au/#ws87</a></p>
+    <p>The associated ALA web service:
+<a href='https://api.ala.org.au/#ws87'>https://api.ala.org.au/#ws87</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
@@ -172,19 +189,20 @@ Note that this requires one extra web call for each name, and so may be slow. On
   <span class='st'>"Heleioporus"</span>, <span class='st'>"Thisisnot aname"</span>))
 
 <span class='fu'>search_names</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Grevillea humilis"</span>, <span class='st'>"Grevillea humilis subsp. maritima"</span>,
-  <span class='st'>"Heleioporus"</span>, <span class='st'>"Thisisnot aname"</span>), <span class='kw'>guids_only</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+  <span class='st'>"Heleioporus"</span>, <span class='st'>"Thisisnot aname"</span>), <span class='kw'>guids_only</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>search_names</span>(<span class='st'>"kookaburra"</span>, <span class='kw'>vernacular</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+<span class='fu'>search_names</span>(<span class='st'>"kookaburra"</span>, <span class='kw'>vernacular</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>search_names</span>(<span class='st'>"kookaburra"</span>, <span class='kw'>vernacular</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='fu'>search_names</span>(<span class='st'>"kookaburra"</span>, <span class='kw'>vernacular</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'>## occurrence counts for matched names</span>
 <span class='fu'>search_names</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Grevillea humilis"</span>, <span class='st'>"Grevillea humilis subsp. maritima"</span>,
-  <span class='st'>"Heleioporus"</span>, <span class='st'>"Thisisnot aname"</span>), <span class='kw'>occurrence_count</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+  <span class='st'>"Heleioporus"</span>, <span class='st'>"Thisisnot aname"</span>), <span class='kw'>occurrence_count</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'>## no occurrence counts because guids_only is TRUE</span>
 <span class='fu'>search_names</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Grevillea humilis"</span>, <span class='st'>"Grevillea humilis subsp. maritima"</span>,
-  <span class='st'>"Heleioporus"</span>, <span class='st'>"Thisisnot aname"</span>), <span class='kw'>occurrence_count</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>guids_only</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+  <span class='st'>"Heleioporus"</span>, <span class='st'>"Thisisnot aname"</span>), <span class='kw'>occurrence_count</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>guids_only</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

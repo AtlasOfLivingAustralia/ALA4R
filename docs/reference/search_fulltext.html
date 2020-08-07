@@ -40,7 +40,9 @@
 
 
 <meta property="og:title" content="Full text search — search_fulltext" />
-<meta property="og:description" content="Performs a search across all objects, and selects the closest matches. Generally, the user will provide the search term via the query parameter, with optional filtering via fq." />
+<meta property="og:description" content="Performs a search across all objects, and selects the closest matches.
+Generally, the user will provide the search term via the query
+parameter, with optional filtering via fq." />
 
 
 
@@ -120,7 +122,9 @@
     </div>
 
     <div class="ref-description">
-    <p>Performs a search across all objects, and selects the closest matches. Generally, the user will provide the search term via the <code>query</code> parameter, with optional filtering via <code>fq</code>.</p>
+    <p>Performs a search across all objects, and selects the closest matches.
+Generally, the user will provide the search term via the <code>query</code>
+parameter, with optional filtering via <code>fq</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>search_fulltext</span>(
@@ -142,29 +146,40 @@
     </tr>
     <tr>
       <th>fq</th>
-      <td><p>string: (optional) character string or vector of strings, specifying filters to be applied to the 
-original query. These are of the form "INDEXEDFIELD:VALUE" e.g. "rk_kingdom:Fungi". 
-See <code><a href='ala_fields.html'>ala_fields("general")</a></code> for all the fields that are queryable. 
-NOTE that fq matches are case-sensitive, but sometimes the entries in the fields are 
-not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae" but "ANIMALIA"). 
-fq matches are ANDed by default (e.g. c("field1:abc","field2:def") will match records that have 
-field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form c("field1:abc OR field2:def")</p></td>
+      <td><p>string: (optional) character string or vector of strings,
+specifying filters to be applied to the original query/
+These are of the form "INDEXEDFIELD:VALUE" e.g. "rk_kingdom:Fungi".
+See <code><a href='ala_fields.html'>ala_fields("general")</a></code> for all the fields that are queryable.
+NOTE that fq matches are case-sensitive, but sometimes the entries in the
+fields are not consistent in terms of case (e.g. kingdom names "Fungi" and
+"Plantae" but "ANIMALIA"). fq matches are ANDed by default
+(e.g. c("field1:abc","field2:def") will match records that have field1 value
+"abc" and field2 value "def"). To obtain OR behaviour, use the form
+c("field1:abc OR field2:def")</p></td>
     </tr>
     <tr>
       <th>output_format</th>
-      <td><p>string: controls the print method for the "data" component of the returned object. Either "complete" (the complete data structure is displayed), or "simple" (a simplified version is displayed). Note that the complete data structure exists in both cases: this option only controls what is displayed when the object is printed to the console. The default output format is "simple"</p></td>
+      <td><p>string: controls the print method for the "data"
+component of the returned object. Either "complete" (the complete data
+structure is displayed), or "simple" (a simplified version is displayed).
+Note that the complete data structure exists in both cases: this option
+only controls what is displayed when the object is printed to the console.
+The default output format is "simple"</p></td>
     </tr>
     <tr>
       <th>start</th>
-      <td><p>numeric: (optional) (positive integer) start offset for the results</p></td>
+      <td><p>numeric: (optional) (positive integer) start offset for the
+results</p></td>
     </tr>
     <tr>
       <th>page_size</th>
-      <td><p>numeric: (optional) (positive integer) maximum number of records to return. Defaults to the server-side value - currently 10</p></td>
+      <td><p>numeric: (optional) (positive integer) maximum number of
+records to return. Defaults to the server-side value - currently 10</p></td>
     </tr>
     <tr>
       <th>sort_by</th>
-      <td><p>string: (optional) field to sort on. See <code><a href='ala_fields.html'>ala_fields("general")</a></code> for valid field names</p></td>
+      <td><p>string: (optional) field to sort on. See
+<code><a href='ala_fields.html'>ala_fields("general")</a></code> for valid field names</p></td>
     </tr>
     <tr>
       <th>sort_dir</th>
@@ -174,7 +189,12 @@ field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a named list with the components "meta" (search metadata), "facets" (search facet results), and "data" (the search results, in the form of a data frame). The contents (column names) of the data frame will vary depending on the details of the search and the results, but should contain at least the columns <code>guid</code>, <code>name</code>, <code>commonName</code>, <code>rank</code>, <code>author</code>, and <code>occurrenceCount</code>.</p>
+    <p>a named list with the components "meta" (search metadata), "facets"
+(search facet results), and "data" (the search results, in the form of a
+data frame). The contents (column names) of the data frame will vary
+depending on the details of the search and the results, but should contain
+at least the columns <code>guid</code>, <code>name</code>, <code>commonName</code>,
+<code>rank</code>, <code>author</code>, and <code>occurrenceCount</code>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Associated ALA web service: <a href='https://api.ala.org.au/#ws1'>https://api.ala.org.au/#ws1</a></p>
@@ -187,10 +207,11 @@ field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the form
  <span class='co'># find information ALA holds on red kangaroo</span>
  <span class='fu'>search_fulltext</span>(<span class='st'>"red kangaroo"</span>)
  <span class='fu'>search_fulltext</span>(<span class='st'>"Heleioporus australiacus"</span>)
- <span class='fu'>search_fulltext</span>(<span class='st'>"urn:lsid:biodiversity.org.au:afd.taxon:31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae"</span>)
+ <span class='fu'>search_fulltext</span>(<span class='st'>"urn:lsid:biodiversity.org.au:afd.taxon:
+ 31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae"</span>)
 
  <span class='co'># find genus names like "Oenanthe"</span>
- <span class='fu'>search_fulltext</span>(<span class='st'>"oenanthe"</span>, <span class='kw'>sort_by</span><span class='kw'>=</span><span class='st'>"rk_kingdom"</span>, <span class='kw'>fq</span><span class='kw'>=</span><span class='st'>"rank:genus"</span>)
+ <span class='fu'>search_fulltext</span>(<span class='st'>"oenanthe"</span>, <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='st'>"rk_kingdom"</span>, <span class='kw'>fq</span> <span class='kw'>=</span> <span class='st'>"rank:genus"</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Retrieve the full details of occurrence records — occurrence_details" />
-<meta property="og:description" content="Note that this makes a separate web request for each occurrence uuid, and so may not be wise to use on a large number of uuids." />
+<meta property="og:description" content="Note that this makes a separate web request for each occurrence uuid, and
+so may not be wise to use on a large number of uuids." />
 
 
 
@@ -120,7 +121,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Note that this makes a separate web request for each occurrence uuid, and so may not be wise to use on a large number of uuids.</p>
+    <p>Note that this makes a separate web request for each occurrence uuid, and
+so may not be wise to use on a large number of uuids.</p>
     </div>
 
     <pre class="usage"><span class='fu'>occurrence_details</span>(<span class='no'>uuid</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span>()$<span class='no'>verbose</span>)</pre>
@@ -130,17 +132,21 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>uuid</th>
-      <td><p>string: one or more record ids, as returned by <code><a href='occurrences.html'>occurrences</a></code> (in the <code>data$id</code> column)</p></td>
+      <td><p>string: one or more record ids, as returned by
+<code><a href='occurrences.html'>occurrences</a></code> (in the <code>data$id</code> column)</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>logical: show additional progress information? [default is set by ala_config()]</p></td>
+      <td><p>logical: show additional progress information?
+[default is set by ala_config()]</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list (named by uuid), each element of which is a list containing the details for that uuid. This inner list will be empty if no match is found for the supplied uuid</p>
+    <p>A named list (named by uuid), each element of which is a list
+containing the details for that uuid. This inner list will be empty if no
+match is found for the supplied uuid</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Associated ALA web service: <a href='https://api.ala.org.au/#ws102'>https://api.ala.org.au/#ws102</a></p>
@@ -151,7 +157,7 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='no'>s1</span> <span class='kw'>&lt;-</span> <span class='fu'>occurrence_details</span>(<span class='st'>"f259c5ce-200c-41a2-b73a-e36a91f748f7"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>s1</span>, <span class='kw'>max.level</span><span class='kw'>=</span><span class='fl'>3</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>s1</span>, <span class='kw'>max.level</span> <span class='kw'>=</span> <span class='fl'>3</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

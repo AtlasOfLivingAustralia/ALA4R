@@ -40,8 +40,10 @@
 
 
 <meta property="og:title" content="Summarize, filter and subset occurrence data — occurrences_s3" />
-<meta property="og:description" content="Set of S3 methods to summarize, filter and get unique occurrence data retrieved using occurrences.
-This uses information based on selections of assertions (quality assurance issues ALA has identified), spatial and temporal data." />
+<meta property="og:description" content="Set of S3 methods to summarize, filter and get unique occurrence data
+retrieved using occurrences.
+This uses information based on selections of assertions (quality assurance
+issues ALA has identified), spatial and temporal data." />
 
 
 
@@ -121,8 +123,10 @@ This uses information based on selections of assertions (quality assurance issue
     </div>
 
     <div class="ref-description">
-    <p>Set of S3 methods to summarize, filter and get unique occurrence data retrieved using <code><a href='occurrences.html'>occurrences</a></code>.
-This uses information based on selections of assertions (quality assurance issues ALA has identified), spatial and temporal data.</p>
+    <p>Set of S3 methods to summarize, filter and get unique occurrence data
+retrieved using <code><a href='occurrences.html'>occurrences</a></code>.
+This uses information based on selections of assertions (quality assurance
+issues ALA has identified), spatial and temporal data.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for occurrences</span>
@@ -155,7 +159,8 @@ This uses information based on selections of assertions (quality assurance issue
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>list: an 'occurrence' object that has been downloaded using <code><a href='occurrences.html'>occurrences</a></code></p></td>
+      <td><p>list: an 'occurrence' object that has been downloaded using
+<code><a href='occurrences.html'>occurrences</a></code></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -163,53 +168,70 @@ This uses information based on selections of assertions (quality assurance issue
     </tr>
     <tr>
       <th>x</th>
-      <td><p>list: an 'occurrence' object that has been downloaded using <code><a href='occurrences.html'>occurrences</a></code></p></td>
+      <td><p>list: an 'occurrence' object that has been downloaded using
+<code><a href='occurrences.html'>occurrences</a></code></p></td>
     </tr>
     <tr>
       <th>incomparables</th>
-      <td><p>logical/numeric: currently ignored, but needed for S3 method consistency</p></td>
+      <td><p>logical/numeric: currently ignored, but needed for S3
+method consistency</p></td>
     </tr>
     <tr>
       <th>spatial</th>
-      <td><p>numeric: specifies a rounding value in decimal degrees used to to create a unique subset of the data. Value of 0 means no rounding and use values as is. Values &lt;0 mean ignore spatial unique parameter</p></td>
+      <td><p>numeric: specifies a rounding value in decimal degrees used
+to create a unique subset of the data. Value of 0 means no rounding and use
+values as is. Values &lt;0 mean ignore spatial unique parameter</p></td>
     </tr>
     <tr>
       <th>temporal</th>
-      <td><p>character: specifies the temporal unit for which to keep unique records; this can be by "year", "month", "yearmonth" or "full" date. NULL means ignore temporal unique parameter</p></td>
+      <td><p>character: specifies the temporal unit for which to keep
+unique records; this can be by "year", "month", "yearmonth" or "full" date.
+NULL means ignore temporal unique parameter</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
-      <td><p>logical: keep (FALSE) or remove (TRUE) missing spatial or temporal data</p></td>
+      <td><p>logical: keep (FALSE) or remove (TRUE) missing spatial or
+temporal data</p></td>
     </tr>
     <tr>
       <th>remove.fatal</th>
-      <td><p>logical: remove flagged assertion issues that are considered "fatal"; see <code><a href='check_assertions.html'>check_assertions</a></code></p></td>
+      <td><p>logical: remove flagged assertion issues that are
+considered "fatal"; see <code><a href='check_assertions.html'>check_assertions</a></code></p></td>
     </tr>
     <tr>
       <th>exclude.spatial</th>
-      <td><p>character vector: defining flagged spatial assertion issues to be removed. Values can include 'warnings','error','missing','none'; see <code><a href='check_assertions.html'>check_assertions</a></code></p></td>
+      <td><p>character vector: defining flagged spatial assertion
+issues to be removed. Values can include 'warnings','error','missing',
+'none'; see <code><a href='check_assertions.html'>check_assertions</a></code></p></td>
     </tr>
     <tr>
       <th>exclude.temporal</th>
-      <td><p>character vector: defining flagged temporal assertion issues to be removed. Values can include 'warnings','error','missing','none'; see <code><a href='check_assertions.html'>check_assertions</a></code></p></td>
+      <td><p>character vector: defining flagged temporal
+assertion issues to be removed. Values can include 'warnings','error',
+'missing','none'; see <code><a href='check_assertions.html'>check_assertions</a></code></p></td>
     </tr>
     <tr>
       <th>exclude.taxonomic</th>
-      <td><p>character vector: defining flagged taxonomic assertion issues to be removed. Values can include 'warnings','error','missing','none'; see <code><a href='check_assertions.html'>check_assertions</a></code></p></td>
+      <td><p>character vector: defining flagged taxonomic
+assertion issues to be removed. Values can include 'warnings','error',
+'missing','none'; see <code><a href='check_assertions.html'>check_assertions</a></code></p></td>
     </tr>
     <tr>
       <th>max.spatial.uncertainty</th>
-      <td><p>numeric: number defining the maximum spatial uncertainty (in meters) one is willing to accept.</p></td>
+      <td><p>numeric: number defining the maximum spatial
+uncertainty (in meters) one is willing to accept.</p></td>
     </tr>
     <tr>
       <th>keep.missing.spatial.uncertainty</th>
-      <td><p>logical: keep (FALSE) or remove (TRUE) information missing spatial uncertainty data.</p></td>
+      <td><p>logical: keep (FALSE) or remove
+(TRUE) information missing spatial uncertainty data.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>unique</code> will give the min value for all columns that are not used in the aggregation.</p>
+    <p><code>unique</code> will give the min value for all columns that are not used in
+the aggregation.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='https://api.ala.org.au/'>https://api.ala.org.au/</a></p>
@@ -218,17 +240,19 @@ This uses information based on selections of assertions (quality assurance issue
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'>#download some observations</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='occurrences.html'>occurrences</a></span>(<span class='kw'>taxon</span><span class='kw'>=</span><span class='st'>"Amblyornis newtonianus"</span>,<span class='kw'>download_reason_id</span><span class='kw'>=</span><span class='fl'>10</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='occurrences.html'>occurrences</a></span>(<span class='kw'>taxon</span> <span class='kw'>=</span> <span class='st'>"Amblyornis newtonianus"</span>,<span class='kw'>download_reason_id</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+<span class='kw'>email</span> <span class='kw'>=</span> <span class='st'>"test@test.org"</span>)
 
 <span class='co'>#summarize the occurrences</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>x</span>)
 
 <span class='co'>#keep spatially unique data at 0.01 degrees (latitude and longitude)</span>
-<span class='no'>tt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>x</span>,<span class='kw'>spatial</span><span class='kw'>=</span><span class='fl'>0.01</span>)
+<span class='no'>tt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>x</span>,<span class='kw'>spatial</span> <span class='kw'>=</span> <span class='fl'>0.01</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>tt</span>)
 
-<span class='co'>#keep spatially unique data that is also unique year/month for the collection date</span>
-<span class='no'>tt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>x</span>,<span class='kw'>spatial</span><span class='kw'>=</span><span class='fl'>0</span>,<span class='kw'>temporal</span><span class='kw'>=</span><span class='st'>'yearmonth'</span>)
+<span class='co'>#keep spatially unique data that is also unique year/month for the</span>
+<span class='co'>#collection date</span>
+<span class='no'>tt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>x</span>,<span class='kw'>spatial</span> <span class='kw'>=</span> <span class='fl'>0</span>,<span class='kw'>temporal</span> <span class='kw'>=</span> <span class='st'>'yearmonth'</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>tt</span>)
 
 <span class='co'>#keep only information for which fatal or "error" assertions do not exist</span>
