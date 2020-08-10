@@ -310,6 +310,7 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
     this_url <- build_url_from_parts(
         getOption("ALA4R_server_config")$base_url_biocache,
         c("occurrences", "offline", "download"), query = this_query)
+    print(this_url)
     ## the file that will ultimately hold the results (even if we are not
     ## caching, it still gets saved to file)
     thisfile <- ala_cache_filename(this_url)
@@ -450,10 +451,10 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
             xc <- "No citation information was returned, try again later"
             found_citation <- FALSE
             try({
-              suppressWarnings(xc <- read.table(unz(thisfile, "citation.csv"),
+              xc <- read.table(unz(thisfile, "citation.csv"),
                                                 header = TRUE,
                                                 comment.char = "",
-                                                as.is = TRUE))
+                                                as.is = TRUE)
               found_citation <- TRUE},
               silent = TRUE)
 
@@ -464,12 +465,12 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
             doi <- "DOI was not requested or could not be found"
             if (generate_doi) {
               tryCatch({
-                  doi <- as.character(read.table(
-                  unz(thisfile, "doi.txt"))$V1)
+                  doi_file <- read.table(unz(thisfile, "doi.txt"))
+                  doi <- as.character(doi_file$V1)
               },
               warning = function(e) {
-                warning("No DOI was generated for download. The DOI server may
-                        be down. Please try again later")
+                warning("No DOI was generated for download. Please double check you that you provided a
+                        valid email address.")
               },
               error = function(e) {
                 warning("No DOI was generated for download. The DOI server may

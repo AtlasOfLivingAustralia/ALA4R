@@ -503,7 +503,7 @@ magpie_occ_images <- ALA4R::occurrence_images(magpie_occs_top5 %>%
 tryCatch({
   magpie_occ_images <- ALA4R::occurrence_images(magpie_occs_top5 %>% dplyr::pull(id), download=FALSE)
   
-  if (!is.null(dim(magpie_occ_images)) ) {
+  if (!is.null(dim(magpie_occ_images))) {
     magpie_occ_images %>% dplyr::mutate(occurrenceID=paste0(substring(occurrenceID,0,10),"..."), imageID = paste0(substring(imageIdentifier,0,10),"...")) %>%
       dplyr::select(occurrenceID, imageID, format, fileSize, width, height)
   }
@@ -535,8 +535,8 @@ library(tidyr)
 # match cols against known assertions
 assertions <- ala_fields('assertions')
 assert_match <- names(dr)[names(dr) %in% assertions$name]
-dr_assert <- dr %>% select(name, all_of(assert_match)) %>%
-  pivot_longer(-name, names_to = "assertion", values_to = "count") %>%
+dr_assert <- dr %>% select(uid, all_of(assert_match)) %>%
+  pivot_longer(-uid, names_to = "assertion", values_to = "count") %>%
   mutate(count = as.integer(trimws(as.character(count)))) %>%
   # build axes labels with readable assertions
   mutate(assertion_label = tolower(gsub('([A-Z])','\n\\1',assertion)))
@@ -546,7 +546,7 @@ Plot the assertions
 ```{r warning=FALSE}
 library(ggplot2)
 ggplot(dr_assert) + geom_bar(aes(x = assertion_label, y = count,
-                                 fill = name),
+                                 fill = uid),
                              stat = "identity", position = "dodge",
                              width = 2/3) +
   theme(axis.text.x = element_text(size = 7)) + 
