@@ -92,7 +92,7 @@ Relevant ALA web services: \itemize{
 \item for fields_type "general": https://api.ala.org.au/#ws88
 \item for fields_type "layers": https://api.ala.org.au/#ws11
 (see also descriptions of the spatial layers:
- \url{https://spatial.ala.org.au/layers/})
+ \url{https://spatial.ala.org.au/ws/layers/index})
 \item for fields_type "assertions": https://api.ala.org.au/#ws81
 }
 }

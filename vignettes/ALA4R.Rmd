@@ -128,7 +128,7 @@ ala_config(warn_on_empty=TRUE)
 First, check that we have some additional packages that we'll use in the examples, and install them if necessary.
 ```{r message=FALSE}
 to_install <- c("ape", "dplyr", "ggplot2", "jpeg", "maps", "mapdata",
-                "maptools", "phytools", "tidyr", "vegan")
+                "sf", "phytools", "tidyr", "vegan")
 to_install <- to_install[!sapply(to_install, requireNamespace, quietly=TRUE)]
 if(length(to_install)>0)
     install.packages(to_install, repos="http://cran.us.r-project.org")
@@ -147,46 +147,22 @@ library(phytools)
 
 Let's say that we want to look at the taxonomic tree of penguins but we don't know what the correct scientific name is. Start by searching for it:
 
-```{r eval=FALSE}
+```{r}
 sx <- search_fulltext("penguins")
-sx$data %>% dplyr::select(name, rank, commonName)
+sx$data %>% dplyr::select(name, rank, commonName, family)
 ```
 
-```{r include=FALSE}
-tryCatch({
-  sx <- search_fulltext("penguins")
-  bieServerUp <- TRUE
-},warning = function(w) {print(w$message)}
- ,error = function(e) {
-   print(e$message)})
-
-if(bieServerUp) {
-  sx$data %>% dplyr::select(name, rank, commonName)
-}
-```
 We can see that penguins correspond to the family "SPHENISCIDAE". Now we can download the taxonomic data (note that the search is case-sensitive):
 
-```{r eval=FALSE}
+```{r}
 tx <- taxinfo_download("rk_family:SPHENISCIDAE", fields=c("guid", "rk_genus", "scientificName", "rank"))
   
 ## keep only species and subspecies records
 tx <- tx %>% dplyr::filter(rank %in% c("species","subspecies"))
 ```
 
-```{r message=FALSE, echo=FALSE}
-tx <- as.data.frame
-if (bieServerUp) {
-  tryCatch({
-    tx <- taxinfo_download("rk_family:SPHENISCIDAE", fields=c("guid", "rk_genus", "scientificName", "rank"))
-    tx <- tx %>% dplyr::filter(rank %in% c("species","subspecies"))
-  },warning = function(w) {print(w$message)}
-   ,error = function(e) {print(e$message)})
-}
-txExists <- !is.null(dim(tx))
-```
-
 We can make a taxonomic tree plot using the `phytools` package:
-```{r eval=FALSE}
+```{r}
 ## as.phylo requires the taxonomic columns to be factors
 tx <- tx %>% mutate_all(as.factor)
 
@@ -196,52 +172,24 @@ ax <- as.phylo(~genus/scientificName, data=tx)
 plotTree(ax, type="fan", fsize=0.7) ## plot it
 ```
 
-```{r eval=FALSE, results="hide", fig.width=9, fig.height=9, echo=FALSE}
-if(txExists)
-{
-  tx <- tx %>% mutate_all(as.factor)
-  ax <- as.phylo(~genus/scientificName, data=tx)
-  plotTree(ax, type="fan", fsize=0.7) ## plot it
-}
-```
 
 We can also plot the tree with images of the different penguin species. We can first extract a species profile for each species identifier (guid) in our results:
 
-```{r eval=FALSE}
+```{r}
   s <- search_guids(tx$guid)
-```
-
-```{r echo=FALSE}
-if(bieServerUp & txExists) {
-  tryCatch({
-    s <- search_guids(tx$guid)
-},warning = function(w) {print(w$message)}
- ,error = function(e) {print(e$message)})
-}
 ```
 
 For each of those species profiles, download the thumbnail image and store it in our data cache:
 
-```{r eval=FALSE}
+```{r}
 imfiles <- sapply(s$thumbnailUrl, function(z) {
   ifelse(!is.na(z), ALA4R:::cached_get(z, type="binary_filename"), "")
 })
 ```
 
-```{r echo=FALSE}
-if(txExists) {
-  tryCatch({
-  imfiles <- sapply(s$thumbnailUrl, function(z) {
-    ifelse(!is.na(z), ALA4R:::cached_get(z, type="binary_filename"), "")
-  })
-},warning = function(w) {print(w$message)}
- ,error = function(e) {print(e$message)})
-}
-```
-
 
 And finally, plot the tree:
-```{r eval = FALSE, results="hide", fig.width=7.5, fig.height=7.5, dev.args=if (.Platform$OS.type=="unix") list(png=list(colortype="pseudo.cube")) else list()}
+```{r results="hide", fig.width=7.5, fig.height=7.5, dev.args=if (.Platform$OS.type=="unix") list(png=list(colortype="pseudo.cube")) else list()}
 ## plot tree without labels
 plotTree(ax, type="fan", ftype="off")
 
@@ -254,24 +202,6 @@ for (k in which(nchar(imfiles)>0))
         rasterImage(readJPEG(imfiles[k]), tr$xx[k]-1/10, tr$yy[k]-1/10, tr$xx[k]+1/10, tr$yy[k]+1/10)
 ```
 
-```{r echo = FALSE, results="hide", fig.width=7.5, fig.height=7.5, dev.args=if (.Platform$OS.type=="unix") list(png=list(colortype="pseudo.cube")) else list()}
-
-if(txExists) {
-  tryCatch({
-    ## plot tree without labels
-    plotTree(ax, type="fan", ftype="off")
-    
-    ## get the tree plot object
-    tr <- get("last_plot.phylo", envir = .PlotPhyloEnv)
-    
-    ## add each image
-    library(jpeg)
-    for (k in which(nchar(imfiles)>0))
-            rasterImage(readJPEG(imfiles[k]), tr$xx[k]-1/10, tr$yy[k]-1/10, tr$xx[k]+1/10, tr$yy[k]+1/10)
-},warning = function(w) {print(w$message)}
- ,error = function(e) {print(e$message)})
-}
-```
 
 A number of species may have no image (mostly, these are extinct species) and others are images of eggs rather than animals, but you get the idea.
 
@@ -280,8 +210,8 @@ A number of species may have no image (mostly, these are extinct species) and ot
 
 First download an example shapefile of South Australian conservation reserve boundaries: see http://data.sa.gov.au/dataset/conservation-reserve-boundaries. We use the ALA4R's caching mechanism here, but you could equally download this file directly.
 
-```{r eval=FALSE}
-library(maptools)
+```{r}
+library(sf)
 shape_filename <- "https://data.environment.sa.gov.au/NatureMaps/Documents/CONSERVATION_Npwsa_Reserves_shp.zip"
 
 ## download to temporary file and unzip it to the ALA4R cache directory
@@ -289,24 +219,10 @@ tf <- tempfile()
 download.file(shape_filename, tf)
 unzip(tf, exdir=ala_config()$cache_directory)
 
-shape <- readShapePoly(file.path(ala_config()$cache_directory, "CONSERVATION_NpwsaReserves.shp"))
+shape <- read_sf(file.path(ala_config()$cache_directory, "CONSERVATION_NpwsaReserves.shp"))
 
 ## extract just the Morialta Conservation Park polygon
 shape <- shape[shape$RESNAME=="Morialta", ]
-```
-
-```{r include=FALSE}
-## use local file to speed up vignette and avoid download each build
-library(maptools)
-## this is the code to fetch that data and save it locally
-#shape_filename <- "https://data.environment.sa.gov.au/NatureMaps/Documents/CONSERVATION_Npwsa_Reserves_shp.zip"
-#tf <- tempfile()
-#download.file(shape_filename, tf)
-#unzip(tf, exdir=ala_config()$cache_directory)
-#shape <- maptools::readShapePoly(file.path(ala_config()$cache_directory, "CONSERVATION_NpwsaReserves.shp"))
-#shape <- shape[shape$RESNAME=="Morialta", ]
-#saveRDS(shape, file="vignette_morialta_shape.rds")
-shape <- readRDS("vignette_morialta_shape.rds")
 ```
 
 We could create the WKT string using the `rgeos` library:
@@ -317,7 +233,7 @@ wkt <- writeWKT(shape)
 
 Unfortunately, in this instance this gives a WKT string that is too long and won't be accepted by the ALA web service. Instead, let's construct the WKT string directly, which gives us a little more control over its format:
 ```{r}
-lonlat <- shape@polygons[[1]]@Polygons[[1]]@coords ## extract the polygon coordinates
+lonlat <- st_coordinates(shape) ## extract the polygon coordinates
 
 ## extract the convex hull of the polygon to reduce the length of the WKT string
 temp <- chull(lonlat)
@@ -557,7 +473,7 @@ magpie_occs_top5 <- magpie_occs$data %>%
 ```
 
 
-```{r echo=FALSE}
+```{r eval=FALSE, echo=FALSE}
 tryCatch({
   magpie_occs <- ALA4R::occurrences(taxon="taxon_name:\"Gymnorhina tibicen\"",
                             fq=c("multimedia:Image","license:\"CC0\""), 
@@ -600,5 +516,40 @@ Set the download flag in the occurrence_images() function and optionally specify
 ```{r eval=FALSE}
 magpie_occ_images <- ALA4R::occurrence_images(magpie_occs_top5 %>% 
     dplyr::pull(id), download=TRUE, download_path = "my/local/directory")
+```
+
+### Example 6: Retrieve data quality information for datasets
+Compare data quality metrics for data resources
+```{r}
+dr <- data_resources(druid = c('dr1411','dr90','dr361'), extra = 'assertions')
+```
+
+```{r eval = FALSE}
+# View names of all columns returned
+names(dr)
+```
+
+Extract the data quality metrics from the dataset
+```{r warning = FALSE}
+library(tidyr)
+# match cols against known assertions
+assertions <- ala_fields('assertions')
+assert_match <- names(dr)[names(dr) %in% assertions$name]
+dr_assert <- dr %>% select(name, all_of(assert_match)) %>%
+  pivot_longer(-name, names_to = "assertion", values_to = "count") %>%
+  mutate(count = as.integer(trimws(as.character(count)))) %>%
+  # build axes labels with readable assertions
+  mutate(assertion_label = tolower(gsub('([A-Z])','\n\\1',assertion)))
+```
+
+Plot the assertions
+```{r warning=FALSE}
+library(ggplot2)
+ggplot(dr_assert) + geom_bar(aes(x = assertion_label, y = count,
+                                 fill = name),
+                             stat = "identity", position = "dodge",
+                             width = 2/3) +
+  theme(axis.text.x = element_text(size = 7)) + 
+  labs(x = "Assertions")
 ```
 

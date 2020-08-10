@@ -40,5 +40,5 @@ Associated ALA web services:
 \url{https://api.ala.org.au/#ws13}
 
 Descriptions of the spatial layers:
-\url{https://spatial.ala.org.au/layers/})
+\url{https://spatial.ala.org.au/ws/layers/index/})
 }

@@ -71,7 +71,7 @@ The associated ALA web service:
 \url{https://api.ala.org.au/#ws84}
 
 Descriptions of the spatial layers:
-\url{https://spatial.ala.org.au/layers/}
+\url{https://spatial.ala.org.au/ws/layers/index/}
 }
 \seealso{
 \code{\link{ala_config}}
