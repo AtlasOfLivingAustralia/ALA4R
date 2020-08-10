@@ -111,6 +111,7 @@ search_fulltext <- function(query, fq = "idxtype:TAXON",
     this_url <- build_url_from_parts(
         getOption("ALA4R_server_config")$base_url_bie, "search.json",
         query = this_query)
+    print(this_url)
     x <- cached_get(url = this_url, type = "json")
     x <- as.list(x)
     ## server may return a message saying e.g. "400 error"

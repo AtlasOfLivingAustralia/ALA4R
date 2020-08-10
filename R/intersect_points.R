@@ -13,7 +13,7 @@
 #' @references The associated ALA web service:
 #' \url{https://api.ala.org.au/#ws84}
 #' @references Descriptions of the spatial layers:
-#' \url{https://spatial.ala.org.au/layers/}
+#' \url{https://spatial.ala.org.au/ws/layers/index/}
 #' @param pnts numeric: vector of latitude/longitude pairs, or a 2 column
 #' data.frame or matrix of lat, lons. NOTE: the number of locations must be
 #' less than 100000

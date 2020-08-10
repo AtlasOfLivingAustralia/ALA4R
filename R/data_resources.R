@@ -56,8 +56,6 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
   dr_data <- data.table::rbindlist(lapply(druid, function(z) {
     this_url <- paste0(getOption("ALA4R_server_config")$base_url_collectory,
                        "dataResource/", z)
-    #this_url <- paste0("https://collections.ala.org.au/ws/","dataResource/", z)
-    #print(this_url)
     data <- cached_get(URLencode(this_url), type = "json", verbose = verbose,
                        on_server_error = function(z) {
                          NULL })
@@ -115,7 +113,7 @@ data_resources <- function(druid, verbose=ala_config()$verbose, max=100,
   }), fill = TRUE)
   row.names(dr_data) <- NULL
   # Warn if any data resources were invalid
-  if (NA %in% unique(dr_data$name) | ncol(dr_data) < 3) {
+  if (NA %in% unique(dr_data$name) || ncol(dr_data) < 3) {
     warning("One or more of the data resources requested is invalid or
             has been deleted")
   }

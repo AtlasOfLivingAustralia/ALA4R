@@ -4,7 +4,7 @@
 #' \url{https://api.ala.org.au/#ws11} \url{https://api.ala.org.au/#ws12}
 #' \url{https://api.ala.org.au/#ws13}
 #' @references Descriptions of the spatial layers:
-#' \url{https://spatial.ala.org.au/layers/})
+#' \url{https://spatial.ala.org.au/ws/layers/index/})
 #'
 #' @param query text string: optional search term against layer metadata.
 #' Only layers that include this term in their metadata will be returned.
