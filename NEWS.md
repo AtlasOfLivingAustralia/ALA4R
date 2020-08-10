@@ -1,3 +1,8 @@
+# ALA4R 1.9.0
+* Add ability to generate a DOI for data downloads in `occurrences()` with `generate_doi` parameter to `occurrences()`
+* Add `occurrence_facets()` for occurrence facet searching
+* Add `data_resources()` for retrieving data resource information
+
 # ALA4R 1.8.0
 * remove `method` parameter for `occurrences()` and only use `offline` method to make download more stable
 * rename `image_info()` to `images()` and add option to download images

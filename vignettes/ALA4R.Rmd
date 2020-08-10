@@ -128,7 +128,7 @@ ala_config(warn_on_empty=TRUE)
 First, check that we have some additional packages that we'll use in the examples, and install them if necessary.
 ```{r message=FALSE}
 to_install <- c("ape", "dplyr", "ggplot2", "jpeg", "maps", "mapdata",
-                "sf", "phytools", "tidyr", "vegan")
+                "maptools", "phytools", "tidyr", "vegan")
 to_install <- to_install[!sapply(to_install, requireNamespace, quietly=TRUE)]
 if(length(to_install)>0)
     install.packages(to_install, repos="http://cran.us.r-project.org")
@@ -211,7 +211,7 @@ A number of species may have no image (mostly, these are extinct species) and ot
 First download an example shapefile of South Australian conservation reserve boundaries: see http://data.sa.gov.au/dataset/conservation-reserve-boundaries. We use the ALA4R's caching mechanism here, but you could equally download this file directly.
 
 ```{r}
-library(sf)
+library(maptools)
 shape_filename <- "https://data.environment.sa.gov.au/NatureMaps/Documents/CONSERVATION_Npwsa_Reserves_shp.zip"
 
 ## download to temporary file and unzip it to the ALA4R cache directory
@@ -219,7 +219,7 @@ tf <- tempfile()
 download.file(shape_filename, tf)
 unzip(tf, exdir=ala_config()$cache_directory)
 
-shape <- read_sf(file.path(ala_config()$cache_directory, "CONSERVATION_NpwsaReserves.shp"))
+shape <- readShapePoly(file.path(ala_config()$cache_directory, "CONSERVATION_NpwsaReserves.shp"))
 
 ## extract just the Morialta Conservation Park polygon
 shape <- shape[shape$RESNAME=="Morialta", ]
@@ -233,7 +233,7 @@ wkt <- writeWKT(shape)
 
 Unfortunately, in this instance this gives a WKT string that is too long and won't be accepted by the ALA web service. Instead, let's construct the WKT string directly, which gives us a little more control over its format:
 ```{r}
-lonlat <- st_coordinates(shape) ## extract the polygon coordinates
+lonlat <- shape@polygons[[1]]@Polygons[[1]]@coords ## extract the polygon coordinates
 
 ## extract the convex hull of the polygon to reduce the length of the WKT string
 temp <- chull(lonlat)

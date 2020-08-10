@@ -161,7 +161,7 @@
 <a href="#example-usage" class="anchor"></a>Example usage</h2>
 <p>First, check that we have some additional packages that we’ll use in the examples, and install them if necessary.</p>
 <div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">to_install</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ape"</span>, <span class="st">"dplyr"</span>, <span class="st">"ggplot2"</span>, <span class="st">"jpeg"</span>, <span class="st">"maps"</span>, <span class="st">"mapdata"</span>,
-                <span class="st">"sf"</span>, <span class="st">"phytools"</span>, <span class="st">"tidyr"</span>, <span class="st">"vegan"</span>)
+                <span class="st">"maptools"</span>, <span class="st">"phytools"</span>, <span class="st">"tidyr"</span>, <span class="st">"vegan"</span>)
 <span class="no">to_install</span> <span class="kw">&lt;-</span> <span class="no">to_install</span>[!<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="no">to_install</span>, <span class="no">requireNamespace</span>, <span class="kw">quietly</span><span class="kw">=</span><span class="fl">TRUE</span>)]
 <span class="kw">if</span>(<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">to_install</span>)<span class="kw">&gt;</span><span class="fl">0</span>)
     <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="no">to_install</span>, <span class="kw">repos</span><span class="kw">=</span><span class="st">"http://cran.us.r-project.org"</span>)
@@ -226,24 +226,25 @@
 <h3 class="hasAnchor">
 <a href="#example-2-area-report-what-listed-species-exist-in-a-given-area" class="anchor"></a>Example 2: Area report: what listed species exist in a given area?</h3>
 <p>First download an example shapefile of South Australian conservation reserve boundaries: see <a href="http://data.sa.gov.au/dataset/conservation-reserve-boundaries" class="uri">http://data.sa.gov.au/dataset/conservation-reserve-boundaries</a>. We use the ALA4R’s caching mechanism here, but you could equally download this file directly.</p>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)</pre></body></html></div>
-<pre><code>## Linking to GEOS 3.7.3, GDAL 2.4.2, PROJ 6.2.0</code></pre>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">shape_filename</span> <span class="kw">&lt;-</span> <span class="st">"https://data.environment.sa.gov.au/NatureMaps/Documents/CONSERVATION_Npwsa_Reserves_shp.zip"</span>
+<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">maptools</span>)</pre></body></html></div>
+<pre><code>## Loading required package: sp</code></pre>
+<pre><code>## Checking rgeos availability: TRUE</code></pre>
+<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="no">shape_filename</span> <span class="kw">&lt;-</span> <span class="st">"https://data.environment.sa.gov.au/NatureMaps/Documents/CONSERVATION_Npwsa_Reserves_shp.zip"</span>
 
 <span class="co">## download to temporary file and unzip it to the ALA4R cache directory</span>
 <span class="no">tf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span>()
 <span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="no">shape_filename</span>, <span class="no">tf</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/unzip.html">unzip</a></span>(<span class="no">tf</span>, <span class="kw">exdir</span><span class="kw">=</span><span class="fu"><a href="../reference/ala_config.html">ala_config</a></span>()$<span class="no">cache_directory</span>)
 
-<span class="no">shape</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_read.html">read_sf</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="fu"><a href="../reference/ala_config.html">ala_config</a></span>()$<span class="no">cache_directory</span>, <span class="st">"CONSERVATION_NpwsaReserves.shp"</span>))
-
-<span class="co">## extract just the Morialta Conservation Park polygon</span>
+<span class="no">shape</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/maptools/man/readShapePoly.html">readShapePoly</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="fu"><a href="../reference/ala_config.html">ala_config</a></span>()$<span class="no">cache_directory</span>, <span class="st">"CONSERVATION_NpwsaReserves.shp"</span>))</pre></body></html></div>
+<pre><code>## Warning: readShapePoly is deprecated; use rgdal::readOGR or sf::st_read</code></pre>
+<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="co">## extract just the Morialta Conservation Park polygon</span>
 <span class="no">shape</span> <span class="kw">&lt;-</span> <span class="no">shape</span>[<span class="no">shape</span>$<span class="no">RESNAME</span><span class="kw">==</span><span class="st">"Morialta"</span>, ]</pre></body></html></div>
 <p>We could create the WKT string using the <code>rgeos</code> library:</p>
-<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">rgeos</span>)
+<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">rgeos</span>)
 <span class="no">wkt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/wkt-functions.html">writeWKT</a></span>(<span class="no">shape</span>)</pre></body></html></div>
 <p>Unfortunately, in this instance this gives a WKT string that is too long and won’t be accepted by the ALA web service. Instead, let’s construct the WKT string directly, which gives us a little more control over its format:</p>
-<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">lonlat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_coordinates.html">st_coordinates</a></span>(<span class="no">shape</span>) <span class="co">## extract the polygon coordinates</span>
+<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="no">lonlat</span> <span class="kw">&lt;-</span> <span class="no">shape</span>@<span class="kw">polygons</span><span class="kw">[[</span><span class="fl">1</span>]]@<span class="kw">Polygons</span><span class="kw">[[</span><span class="fl">1</span>]]@<span class="kw">coords</span> <span class="co">## extract the polygon coordinates</span>
 
 <span class="co">## extract the convex hull of the polygon to reduce the length of the WKT string</span>
 <span class="no">temp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/chull.html">chull</a></span>(<span class="no">lonlat</span>)
@@ -256,7 +257,7 @@
 <span class="co">## now build the WKT string</span>
 <span class="no">wkt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"POLYGON(("</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="no">temp</span>, <span class="kw">collapse</span><span class="kw">=</span><span class="st">","</span>), <span class="st">"))"</span>, <span class="kw">sep</span><span class="kw">=</span><span class="st">""</span>)</pre></body></html></div>
 <p>Now extract the species list in this polygon, filtering to only include those with a conservation status:</p>
-<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="fu"><a href="../reference/specieslist.html">specieslist</a></span>(<span class="kw">wkt</span><span class="kw">=</span><span class="no">wkt</span>, <span class="kw">fq</span><span class="kw">=</span><span class="st">"state_conservation:*"</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb32"><html><body><pre class="r"><span class="fu"><a href="../reference/specieslist.html">specieslist</a></span>(<span class="kw">wkt</span><span class="kw">=</span><span class="no">wkt</span>, <span class="kw">fq</span><span class="kw">=</span><span class="st">"state_conservation:*"</span>) <span class="kw">%&gt;%</span>
     <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span>(<span class="no">occurrenceCount</span>)) <span class="kw">%&gt;%</span>
     <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">speciesName</span>, <span class="no">commonName</span>, <span class="no">occurrenceCount</span>) <span class="kw">%&gt;%</span>
     <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">10</span>)</pre></body></html></div>
@@ -276,7 +277,7 @@
 <h3 class="hasAnchor">
 <a href="#example-3-quality-assertions" class="anchor"></a>Example 3: Quality assertions</h3>
 <p>Data quality assertions are a suite of fields that are the result of a set of tests peformed on ALA data. Download occurrence data for the golden bowerbird (you should adjust the <code>download_reason_id</code> to match your purposes if using this function for your own analyses; see <code><a href="../reference/ala_config.html">ala_reasons()</a></code>):</p>
-<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/occurrences.html">occurrences</a></span>(<span class="kw">taxon</span><span class="kw">=</span><span class="st">"taxon_name:\"Amblyornis newtonianus\""</span>, <span class="kw">download_reason_id</span><span class="kw">=</span><span class="st">"testing"</span>, <span class="kw">email</span><span class="kw">=</span><span class="st">"test@test.org"</span>)
+<div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/occurrences.html">occurrences</a></span>(<span class="kw">taxon</span><span class="kw">=</span><span class="st">"taxon_name:\"Amblyornis newtonianus\""</span>, <span class="kw">download_reason_id</span><span class="kw">=</span><span class="st">"testing"</span>, <span class="kw">email</span><span class="kw">=</span><span class="st">"test@test.org"</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">x</span>)</pre></body></html></div>
 <pre><code>## number of original names: 6 
 ## number of taxonomically corrected names: 1 
@@ -301,9 +302,9 @@
 ##  stateCoordinateMismatch: 1 records 
 ##  firstOfMonth: 80 records</code></pre>
 <p>You can see that some of the points have assertions that are considered “fatal” (i.e. the occurrence record in question is unlikely to be suitable for subsequent analysis). We can use the <code>occurrences_plot</code> function to create a PDF file with a plot of this data, showing the points with fatal assertions (this will create an “Rplots.pdf” file in your working directory; not run here):</p>
-<div class="sourceCode" id="cb33"><html><body><pre class="r"><span class="fu"><a href="../reference/occurrences_plot.html">occurrences_plot</a></span>(<span class="no">x</span>, <span class="kw">qa</span><span class="kw">=</span><span class="st">"fatal"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="fu"><a href="../reference/occurrences_plot.html">occurrences_plot</a></span>(<span class="no">x</span>, <span class="kw">qa</span><span class="kw">=</span><span class="st">"fatal"</span>)</pre></body></html></div>
 <p>There are many other ways of producing spatial plots in R. The <code>leaflet</code> package provides a simple method of producing browser-based maps iwth panning, zooming, and background layers (again, not run here):</p>
-<div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">leaflet</span>)
+<div class="sourceCode" id="cb37"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">leaflet</span>)
 
 <span class="co">## drop any records with missing lat/lon values</span>
 <span class="no">x</span>$<span class="no">data</span> <span class="kw">&lt;-</span> <span class="no">x</span>$<span class="no">data</span>[!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">x</span>$<span class="no">data</span>$<span class="no">longitude</span>) <span class="kw">&amp;</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">x</span>$<span class="no">data</span>$<span class="no">latitude</span>), ]
@@ -341,9 +342,9 @@
 <div id="example-4-community-composition-and-turnover" class="section level3">
 <h3 class="hasAnchor">
 <a href="#example-4-community-composition-and-turnover" class="anchor"></a>Example 4: Community composition and turnover</h3>
-<div class="sourceCode" id="cb35"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">vegan</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb38"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">vegan</span>)</pre></body></html></div>
 <p>Define our area of interest as a transect running westwards from the Sydney region, and download the occurrences of legumes (Fabaceae; a large family of flowering plants) in this area:</p>
-<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="no">wkt</span> <span class="kw">&lt;-</span> <span class="st">"POLYGON((152.5 -35,152.5 -32,140 -32,140 -35,152.5 -35))"</span>
+<div class="sourceCode" id="cb39"><html><body><pre class="r"><span class="no">wkt</span> <span class="kw">&lt;-</span> <span class="st">"POLYGON((152.5 -35,152.5 -32,140 -32,140 -35,152.5 -35))"</span>
 
 <span class="co">## define some environmental layers of interest [see ala_fields()]</span>
 <span class="no">env_layers</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Precipitation - annual"</span>,<span class="st">"Temperature - annual max mean"</span>)
@@ -359,7 +360,7 @@
                  <span class="kw">download_reason_id</span><span class="kw">=</span><span class="st">"testing"</span>, <span class="kw">extra</span><span class="kw">=</span><span class="no">env_layers</span>,
                  <span class="kw">email</span><span class="kw">=</span><span class="st">"test@test.org"</span>)</pre></body></html></div>
 <p>Convert this to a sites-by-species data.frame:</p>
-<div class="sourceCode" id="cb37"><html><body><pre class="r"><span class="no">xgridded</span> <span class="kw">&lt;-</span> <span class="no">x</span>$<span class="no">data</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">xgridded</span> <span class="kw">&lt;-</span> <span class="no">x</span>$<span class="no">data</span> <span class="kw">%&gt;%</span>
     <span class="co">## discard genus- and higher-level records</span>
     <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">rank</span> <span class="kw">%in%</span>
                   <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"species"</span>, <span class="st">"subspecies"</span>, <span class="st">"variety"</span>, <span class="st">"form"</span>, <span class="st">"cultivar"</span>)) <span class="kw">%&gt;%</span>
@@ -393,7 +394,7 @@
                      <span class="st">"richness"</span>))
 <span class="no">xgridded</span> <span class="kw">&lt;-</span> <span class="no">xgridded</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_at</a></span>(<span class="no">sppcols</span>, <span class="kw">function</span>(<span class="no">z</span>) <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">z</span>), <span class="fl">0</span>, <span class="no">z</span>))</pre></body></html></div>
 <p>The end result:</p>
-<div class="sourceCode" id="cb38"><html><body><pre class="r"><span class="no">xgridded</span></pre></body></html></div>
+<div class="sourceCode" id="cb41"><html><body><pre class="r"><span class="no">xgridded</span></pre></body></html></div>
 <pre><code>## # A tibble: 175 x 847
 ##    longitude latitude precipitationAn… temperatureAnnu… richness `Acacia acinace… `Acacia brachyb… `Acacia calamif…
 ##        &lt;dbl&gt;    &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;    &lt;int&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
@@ -436,26 +437,26 @@
 ## #   littoralis` &lt;dbl&gt;, `Medicago sativa` &lt;dbl&gt;, `Melilotus albus` &lt;dbl&gt;, `Retama raetam` &lt;dbl&gt;, `Robinia
 ## #   pseudoacacia` &lt;dbl&gt;, `Senna artemisioides subsp. x petiolaris` &lt;dbl&gt;, …</code></pre>
 <p>Now we can start to examine the patterns in the data. Let’s plot richness as a function of longitude:</p>
-<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
+<div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">xgridded</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">longitude</span>, <span class="no">richness</span>)) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>() + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</pre></body></html></div>
 <p><img src="ALA4R_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
 <p>The number of species is highest at the eastern end of the transect (the Sydney/Blue Mountains area). This probably reflects both higher species richness as well as greater sampling effort in this area compared to the western end of the transect.</p>
 <p>Species richness as a function of environment:</p>
-<div class="sourceCode" id="cb41"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">xgridded</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">temperatureAnnualMaxMean</span>, <span class="no">precipitationAnnual</span>, <span class="kw">colour</span><span class="kw">=</span><span class="no">richness</span>)) +
+<div class="sourceCode" id="cb44"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">xgridded</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">temperatureAnnualMaxMean</span>, <span class="no">precipitationAnnual</span>, <span class="kw">colour</span><span class="kw">=</span><span class="no">richness</span>)) +
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_colour_distiller</a></span>(<span class="kw">palette</span><span class="kw">=</span><span class="st">"Spectral"</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw">size</span><span class="kw">=</span><span class="fl">8</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</pre></body></html></div>
 <p><img src="ALA4R_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
 <p>Higher species richness in cooler, wetter areas (i.e. the Blue Mountains).</p>
 <p>How does the community composition change along the transect? Use clustering:</p>
-<div class="sourceCode" id="cb42"><html><body><pre class="r"><span class="co">## Bray-Curtis dissimilarity</span>
+<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="co">## Bray-Curtis dissimilarity</span>
 <span class="no">D</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/vegan/man/vegdist.html">vegdist</a></span>(<span class="no">xgridded</span>[, <span class="no">sppcols</span>], <span class="st">"bray"</span>)
 
 <span class="co">## UPGMA clustering</span>
 <span class="no">cl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span>(<span class="no">D</span>, <span class="kw">method</span><span class="kw">=</span><span class="st">"ave"</span>)
 
 <span class="co">## plot the dendrogram</span>
-<span class="fu"><a href="https://rdrr.io/pkg/sf/man/plot.html">plot</a></span>(<span class="no">cl</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">cl</span>)</pre></body></html></div>
 <p><img src="ALA4R_files/figure-html/unnamed-chunk-37-1.png" width="576"></p>
-<div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="co">## extract group labels at the 20-group level</span>
+<div class="sourceCode" id="cb46"><html><body><pre class="r"><span class="co">## extract group labels at the 20-group level</span>
 <span class="no">grp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html">cutree</a></span>(<span class="no">cl</span>, <span class="fl">20</span>)
 
 <span class="co">## coalesce small (outlier) groups into a single catch-all group</span>
@@ -471,7 +472,7 @@
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">xgridded</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">longitude</span>, <span class="no">latitude</span>, <span class="kw">colour</span><span class="kw">=</span><span class="no">grp</span>)) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw">size</span><span class="kw">=</span><span class="fl">5</span>) +
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_colour_manual</a></span>(<span class="kw">values</span><span class="kw">=</span><span class="no">thiscol</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</pre></body></html></div>
 <p><img src="ALA4R_files/figure-html/unnamed-chunk-37-2.png" width="576"></p>
-<div class="sourceCode" id="cb44"><html><body><pre class="r"><span class="co">## or a slightly nicer map plot</span>
+<div class="sourceCode" id="cb47"><html><body><pre class="r"><span class="co">## or a slightly nicer map plot</span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">maps</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mapdata</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/maps/man/map.html">map</a></span>(<span class="st">"worldHires"</span>, <span class="st">"Australia"</span>, <span class="kw">xlim</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">105</span>, <span class="fl">155</span>), <span class="kw">ylim</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">45</span>, -<span class="fl">10</span>), <span class="kw">col</span><span class="kw">=</span><span class="st">"gray90"</span>, <span class="kw">fill</span><span class="kw">=</span><span class="fl">TRUE</span>)
@@ -482,29 +483,29 @@
 <h3 class="hasAnchor">
 <a href="#example-5-search-and-download-species-occurrence-records-with-images" class="anchor"></a>Example 5: Search and download species occurrence records with images</h3>
 <p>We can download images from the ALA’s image service using the id field, which is the ALA’s occurrence record identifier. We would first search occurrences() using facets to filter the records we want, in this case, magpie occurrences with an associated image and an open licence.</p>
-<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="no">magpie_occs</span> <span class="kw">&lt;-</span> <span class="kw pkg">ALA4R</span><span class="kw ns">::</span><span class="fu"><a href="../reference/occurrences.html">occurrences</a></span>(<span class="kw">taxon</span><span class="kw">=</span><span class="st">"taxon_name:\"Gymnorhina tibicen\""</span>,
+<div class="sourceCode" id="cb48"><html><body><pre class="r"><span class="no">magpie_occs</span> <span class="kw">&lt;-</span> <span class="kw pkg">ALA4R</span><span class="kw ns">::</span><span class="fu"><a href="../reference/occurrences.html">occurrences</a></span>(<span class="kw">taxon</span><span class="kw">=</span><span class="st">"taxon_name:\"Gymnorhina tibicen\""</span>,
                             <span class="kw">fq</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"multimedia:Image"</span>,<span class="st">"license:\"CC0\""</span>))</pre></body></html></div>
 <p>The top 5 records:</p>
-<div class="sourceCode" id="cb46"><html><body><pre class="r"><span class="no">magpie_occs_top5</span> <span class="kw">&lt;-</span> <span class="no">magpie_occs</span>$<span class="no">data</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb49"><html><body><pre class="r"><span class="no">magpie_occs_top5</span> <span class="kw">&lt;-</span> <span class="no">magpie_occs</span>$<span class="no">data</span> <span class="kw">%&gt;%</span>
     <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">id</span>,<span class="no">basisOfRecord</span>,<span class="no">dataResourceName</span>,<span class="no">state</span>,<span class="no">licence</span>,<span class="no">eventDate</span>) <span class="kw">%&gt;%</span>
     <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">5</span>)</pre></body></html></div>
 <p>We then call the occurrence_images() function to query the image service using the occurrence ids.</p>
-<div class="sourceCode" id="cb47"><html><body><pre class="r"><span class="no">magpie_occ_images</span> <span class="kw">&lt;-</span> <span class="kw pkg">ALA4R</span><span class="kw ns">::</span><span class="fu"><a href="../reference/occurrence_images.html">occurrence_images</a></span>(<span class="no">magpie_occs_top5</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb50"><html><body><pre class="r"><span class="no">magpie_occ_images</span> <span class="kw">&lt;-</span> <span class="kw pkg">ALA4R</span><span class="kw ns">::</span><span class="fu"><a href="../reference/occurrence_images.html">occurrence_images</a></span>(<span class="no">magpie_occs_top5</span> <span class="kw">%&gt;%</span>
     <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span>(<span class="no">id</span>), <span class="kw">download</span><span class="kw">=</span><span class="fl">FALSE</span>)</pre></body></html></div>
 <pre><code>## [1] "object 'magpie_occs_top5' not found"</code></pre>
 <p>Set the download flag in the occurrence_images() function and optionally specify a file path to download the images to local disk. The image download is rate limited to 1 image/second to minimise server load.</p>
-<div class="sourceCode" id="cb49"><html><body><pre class="r"><span class="no">magpie_occ_images</span> <span class="kw">&lt;-</span> <span class="kw pkg">ALA4R</span><span class="kw ns">::</span><span class="fu"><a href="../reference/occurrence_images.html">occurrence_images</a></span>(<span class="no">magpie_occs_top5</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb52"><html><body><pre class="r"><span class="no">magpie_occ_images</span> <span class="kw">&lt;-</span> <span class="kw pkg">ALA4R</span><span class="kw ns">::</span><span class="fu"><a href="../reference/occurrence_images.html">occurrence_images</a></span>(<span class="no">magpie_occs_top5</span> <span class="kw">%&gt;%</span>
     <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span>(<span class="no">id</span>), <span class="kw">download</span><span class="kw">=</span><span class="fl">TRUE</span>, <span class="kw">download_path</span> <span class="kw">=</span> <span class="st">"my/local/directory"</span>)</pre></body></html></div>
 </div>
 <div id="example-6-retrieve-data-quality-information-for-datasets" class="section level3">
 <h3 class="hasAnchor">
 <a href="#example-6-retrieve-data-quality-information-for-datasets" class="anchor"></a>Example 6: Retrieve data quality information for datasets</h3>
 <p>Compare data quality metrics for data resources</p>
-<div class="sourceCode" id="cb50"><html><body><pre class="r"><span class="no">dr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/data_resources.html">data_resources</a></span>(<span class="kw">druid</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'dr1411'</span>,<span class="st">'dr90'</span>,<span class="st">'dr361'</span>), <span class="kw">extra</span> <span class="kw">=</span> <span class="st">'assertions'</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb51"><html><body><pre class="r"><span class="co"># View names of all columns returned</span>
+<div class="sourceCode" id="cb53"><html><body><pre class="r"><span class="no">dr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/data_resources.html">data_resources</a></span>(<span class="kw">druid</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'dr1411'</span>,<span class="st">'dr90'</span>,<span class="st">'dr361'</span>), <span class="kw">extra</span> <span class="kw">=</span> <span class="st">'assertions'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb54"><html><body><pre class="r"><span class="co"># View names of all columns returned</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">dr</span>)</pre></body></html></div>
 <p>Extract the data quality metrics from the dataset</p>
-<div class="sourceCode" id="cb52"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyr</span>)
+<div class="sourceCode" id="cb55"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyr</span>)
 <span class="co"># match cols against known assertions</span>
 <span class="no">assertions</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/ala_fields.html">ala_fields</a></span>(<span class="st">'assertions'</span>)
 <span class="no">assert_match</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">dr</span>)[<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">dr</span>) <span class="kw">%in%</span> <span class="no">assertions</span>$<span class="no">name</span>]
@@ -514,7 +515,7 @@
   <span class="co"># build axes labels with readable assertions</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">assertion_label</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html">tolower</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">'([A-Z])'</span>,<span class="st">'\n\\1'</span>,<span class="no">assertion</span>)))</pre></body></html></div>
 <p>Plot the assertions</p>
-<div class="sourceCode" id="cb53"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
+<div class="sourceCode" id="cb56"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">dr_assert</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">assertion_label</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">count</span>,
                                  <span class="kw">fill</span> <span class="kw">=</span> <span class="no">name</span>),
                              <span class="kw">stat</span> <span class="kw">=</span> <span class="st">"identity"</span>, <span class="kw">position</span> <span class="kw">=</span> <span class="st">"dodge"</span>,
