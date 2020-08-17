@@ -75,7 +75,6 @@ download_images <- function(data, media_dir, verbose = verbose,
                             sounds = FALSE) {
 
   assert_that(!missing(media_dir))
-
   if (!file.exists(media_dir)) {
     message(sprintf("Media directory does not exist, creating directory %s",
                     media_dir))
@@ -87,14 +86,15 @@ download_images <- function(data, media_dir, verbose = verbose,
       id <- data[r, "imageIdentifier"]
       base_url <- getOption("ALA4R_server_config")$base_url_images
       url <- build_url_from_parts(base_url, c("image", id, "original"))
+      # use mimetype to find correct file extension
       if (!("mimeType" %in% names(data))) {
         ext <- data[r, "extension"]
       }
       else {
-        ext <- strsplit(data[r, "mimeType"], "/")[[1]][1]
+        ext <- strsplit(data[r, "mimeType"], "/")[[1]][2]
       }
 
-      out_path <- file.path(media_dir, paste0(id, ext))
+      out_path <- file.path(media_dir, paste0(id, ".", ext))
       download_to_file(url, out_path, verbose = verbose)
 
       # throttle download requests
