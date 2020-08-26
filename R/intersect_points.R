@@ -131,9 +131,7 @@ intersect_points <- function(pnts, layers, SPdata.frame = FALSE,
       ## fetch the data from the server
       status_url <- jsonlite::fromJSON(cached_post(url, body = body,
                                                    type = "text"))$statusUrl
-      print(body)
       # get the data url
-      print(status_url)
       data_url <- cached_get(status_url, type = "json", caching = "off")
       while (data_url$status != "finished") {
         #keep checking the status until finished
