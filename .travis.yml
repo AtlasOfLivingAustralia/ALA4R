@@ -17,10 +17,9 @@ matrix:
   include:
   - os: linux
     r: release
-    dist: trusty
     env:
-    - BUILD_NAME=trusty_release
-    - DETAILS="trusty release build"
+    - BUILD_NAME=release
+    - DETAILS="release build"
     - R_CODECOV=true
 env:
   global:
