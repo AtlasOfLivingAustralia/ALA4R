@@ -9,11 +9,7 @@ addons:
     - sourceline: 'ppa:ubuntugis/ppa'
     - 'ubuntu-toolchain-r-test'
     packages:
-    - libv8-3.14-dev
     - libmagick++-dev
-    - gcc-8
-    - g++-8
-    - gfortran-8
     - librsvg2-dev
     - libwebp-dev
     - libpoppler-cpp-dev
@@ -23,6 +19,10 @@ addons:
     - r-cran-rgdal
     - libfftw3-dev
     - cargo
+    - gcc-8
+    - g++-8
+    - gfortran-8
+    
 matrix:
   include:
   - os: linux
