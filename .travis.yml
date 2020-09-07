@@ -4,9 +4,6 @@ cache: packages
 addons:
   apt:
     update: true
-    sources:
-    - sourceline: 'ppa:opencpu/imagemagick'
-    - 'ubuntu-toolchain-r-test'
     packages:
     - libv8-3.14-dev
     - libmagick++-dev
