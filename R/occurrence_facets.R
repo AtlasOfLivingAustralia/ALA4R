@@ -70,6 +70,5 @@ occurrence_facets <- function(facet, query, start, page_size,
 
  out$data <- data.frame(data[names(data) %in% c("label", "count")],
                         stringsAsFactors = FALSE)
- out$data$label <- rename_variables(out$data$label, type = "general")
  return(out)
 }

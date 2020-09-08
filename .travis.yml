@@ -1,26 +1,24 @@
-language: R
+language: r
 sudo: false
 cache: packages
 addons:
   apt:
     update: true
-    sources:
-    - sourceline: 'ppa:opencpu/imagemagick'
-    - 'ubuntu-toolchain-r-test'
     packages:
     - libv8-3.14-dev
     - libmagick++-dev
     - gcc-8
     - g++-8
     - gfortran-8
+    
 matrix:
   include:
   - os: linux
     r: release
-    dist: trusty
+    dist: bionic
     env:
-    - BUILD_NAME=trusty_release
-    - DETAILS="trusty release build"
+    - BUILD_NAME=release
+    - DETAILS="release build"
     - R_CODECOV=true
 env:
   global:
