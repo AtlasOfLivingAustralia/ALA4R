@@ -47,7 +47,7 @@
 #' \dontrun{
 #' #download some observations
 #' x <- occurrences(taxon = "Amblyornis newtonianus",download_reason_id = 10,
-#' email = "test@test.org")
+#' email = "ala4r@ala.org.au")
 #'
 #' #summarize the occurrences
 #' summary(x)

@@ -21,7 +21,7 @@ thischeck <- function() {
     test_that("occurrences summary works when no qa are present", {
         skip_on_cran()
         expect_output(summary(occurrences(taxon = "Amblyornis newtonianus",
-                                          email = "testing@test.org",
+                                          email = "ala4r@ala.org.au",
                                           download_reason_id = 10,
                                           qa = "none")), "no assertion issues")
     })
@@ -31,7 +31,7 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences summary gives something sensible", {
         occ <- occurrences(taxon = "Amblyornis newtonianus",
-                           email = "testing@test.org",
+                           email = "ala4r@ala.org.au",
                            download_reason_id = 10)
         expect_output(summary(occ), "^number of original names")
         ## check that names required for summary.occurrences method are present
@@ -50,13 +50,13 @@ thischeck <- function() {
     test_that("occurrences retrieves the fields specified", {
         skip_on_cran()
         expect_equal(sort(names(
-            occurrences(taxon = "Eucalyptus gunnii", email = "testing@test.org",
+            occurrences(taxon = "Eucalyptus gunnii", email = "ala4r@ala.org.au",
                         fields = c("latitude", "longitude"), qa = "none",
                         fq = "basis_of_record:LivingSpecimen",
                         download_reason_id = 10)$data)),
             c("latitude", "longitude"))
         expect_error(occurrences(taxon = "Eucalyptus gunnii",
-                                 email = "testing@test.org",
+                                 email = "ala4r@ala.org.au",
                                  fields = c("blahblahblah"),
                                  download_reason_id = 10))
     })
@@ -68,7 +68,7 @@ thischeck <- function() {
     test_that("occurrences unique does something sensible", {
         skip_on_cran()
         x <- occurrences(taxon = "Amblyornis newtonianus",
-                         email = "testing@test.org", download_reason_id = 10)
+                         email = "ala4r@ala.org.au", download_reason_id = 10)
         Sys.sleep(20)
         xu <- unique(x, spatial = 0.1)
         expect_is(xu, "list")
@@ -91,7 +91,7 @@ thischeck <- function() {
     test_that("occurrences subset does something sensible", {
         skip_on_cran()
         x <- occurrences(taxon = "Amblyornis newtonianus",
-                         email = "testing@test.org", download_reason_id = 10)
+                         email = "ala4r@ala.org.au", download_reason_id = 10)
         Sys.sleep(20)
         xs <- subset(x)
         expect_is(xs, "list")
@@ -113,7 +113,7 @@ thischeck <- function() {
         skip_on_cran()
         expect_error(occurrences())
         expect_error(occurrences(taxon = "data_resource_uid:dr356",
-                                 reason = 10, email = "testing@test.org"))
+                                 reason = 10, email = "ala4r@ala.org.au"))
         expect_error(occurrences(taxon = "data_resource_uid:dr356",
                                  download_reason_id = "testing", email = ""))
         expect_error(occurrences(taxon = "data_resource_uid:dr356",
@@ -123,15 +123,15 @@ thischeck <- function() {
         ## missing download_reason_id
         expect_error(occurrences(taxon = "Amblyornis newtonianus"))
         expect_warning(occurrences(taxon = "Amblyornis newtonianus",
-                                   email = "testing@test.org",
+                                   email = "ala4r@ala.org.au",
                                    download_reason_id = 10, method = "indexed"))
         # bad download reason
         expect_error(occurrences(taxon = "Amblyornis newtonianus",
-                     email = "testing@test.org", download_reason_id = 20))
+                     email = "ala4r@ala.org.au", download_reason_id = 20))
 
         # bad qa fields
         expect_error(occurrences(taxon = "Amblyornis newtonianus",
-                                 email = "testing@test.org",
+                                 email = "ala4r@ala.org.au",
                                  download_reason_id = 10,
                                  qa = "bad_assertion"))
     })
@@ -143,13 +143,13 @@ thischeck <- function() {
     skip_on_cran()
     expect_is(
       occurrences(taxon = as.factor("Amblyornis newtonianus"),
-                  email = "testing@test.org",
+                  email = "ala4r@ala.org.au",
                   download_reason_id = 10,
                   wkt = "POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")$
         data, "data.frame")
     expect_true("acceptedNameUsage" %in%
                   names(occurrences(taxon = "Amblyornis newtonianus",
-                                    email = "testing@test.org",
+                                    email = "ala4r@ala.org.au",
                                     download_reason_id = 10,
                                     extra = "accepted_name_usage")$data))
   })
@@ -163,7 +163,7 @@ thischeck <- function() {
         expect_error(expect_warning(
             occurrences(taxon = "data_resource_uid:dr356",
                         download_reason_id = "testing",
-                        email = "testing@test.org", fields = "all")))
+                        email = "ala4r@ala.org.au", fields = "all")))
     })
 }
 check_caching(thischeck)
@@ -184,7 +184,7 @@ thischeck <- function() {
     skip("Skip except for manual testing to avoid clogging up doi system with
          unnecessary dois.")
     expect_true("doi" %in% occurrences(taxon = "Acacia podalyriifolia",
-                                       email = "test@test.org",
+                                       email = "ala4r@ala.org.au",
                                        download_reason_id = "testing",
                                        generateDoi = TRUE)$meta$doi)
     })
