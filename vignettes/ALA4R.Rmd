@@ -210,7 +210,7 @@ A number of species may have no image (mostly, these are extinct species) and ot
 
 First download an example shapefile of South Australian conservation reserve boundaries: see http://data.sa.gov.au/dataset/conservation-reserve-boundaries. We use the ALA4R's caching mechanism here, but you could equally download this file directly.
 
-```{r}
+```{r eval=FALSE}
 library(maptools)
 shape_filename <- "https://data.environment.sa.gov.au/NatureMaps/Documents/CONSERVATION_Npwsa_Reserves_shp.zip"
 
@@ -223,6 +223,20 @@ shape <- readShapePoly(file.path(ala_config()$cache_directory, "CONSERVATION_Npw
 
 ## extract just the Morialta Conservation Park polygon
 shape <- shape[shape$RESNAME=="Morialta", ]
+```
+
+```{r include=FALSE}
+## use local file to speed up vignette and avoid download each build
+library(maptools)
+## this is the code to fetch that data and save it locally
+#shape_filename <- "https://data.environment.sa.gov.au/NatureMaps/Documents/CONSERVATION_Npwsa_Reserves_shp.zip"
+#tf <- tempfile()
+#download.file(shape_filename, tf)
+#unzip(tf, exdir=ala_config()$cache_directory)
+#shape <- maptools::readShapePoly(file.path(ala_config()$cache_directory, "CONSERVATION_NpwsaReserves.shp"))
+#shape <- shape[shape$RESNAME=="Morialta", ]
+#saveRDS(shape, file="vignette_morialta_shape.rds")
+shape <- readRDS("vignette_morialta_shape.rds")
 ```
 
 We could create the WKT string using the `rgeos` library:
@@ -516,41 +530,6 @@ Set the download flag in the occurrence_images() function and optionally specify
 ```{r eval=FALSE}
 magpie_occ_images <- ALA4R::occurrence_images(magpie_occs_top5 %>% 
     dplyr::pull(id), download=TRUE, download_path = "my/local/directory")
-```
-
-### Example 6: Retrieve assertion information for datasets
-Compare data quality metrics for data resources
-```{r}
-dr <- data_resources(druid = c('dr1411','dr90','dr361'), extra = 'assertions')
-```
-
-```{r eval = FALSE}
-# View names of all columns returned
-names(dr)
-```
-
-Extract the assertion metrics from the dataset
-```{r warning = FALSE}
-library(tidyr)
-# match cols against known assertions
-assertions <- ala_fields('assertions')
-assert_match <- names(dr)[names(dr) %in% assertions$name]
-dr_assert <- dr %>% select(uid, all_of(assert_match)) %>%
-  pivot_longer(-uid, names_to = "assertion", values_to = "count") %>%
-  mutate(count = as.integer(trimws(as.character(count)))) %>%
-  # build axes labels with readable assertions
-  mutate(assertion_label = tolower(gsub('([A-Z])','\n\\1',assertion)))
-```
-
-Plot the assertions
-```{r warning=FALSE}
-library(ggplot2)
-ggplot(dr_assert) + geom_bar(aes(x = assertion_label, y = count,
-                                 fill = uid),
-                             stat = "identity", position = "dodge",
-                             width = 2/3) +
-  theme(axis.text.x = element_text(size = 7)) + 
-  labs(x = "Assertions")
 ```
 
 ### Example 6: Retrieve assertion information for datasets
