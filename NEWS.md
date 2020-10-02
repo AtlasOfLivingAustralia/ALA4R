@@ -1,5 +1,7 @@
 # ALA4R 1.9.0
-* Add ability to generate a DOI for data downloads in `occurrences()` with `generate_doi` parameter to `occurrences()`
+* Add ability to generate a DOI for data downloads in `occurrences()` with `generate_doi` parameter
+* Add `email_notify` parameter to `occurrences()`, set to `FALSE` by default
+* Set default download reason as "scientific research"
 
 # ALA4R 1.8.0
 * remove `method` parameter for `occurrences()` and only use `offline` method to make download more stable
