@@ -74,7 +74,7 @@ ala_config <- function(...) {
         caching = "on",
         cache_directory = tempdir(),
         user_agent = user_agent_string,
-        download_reason_id = NA,
+        download_reason_id = 4,
         verbose = FALSE,
         warn_on_empty = FALSE,
         text_encoding = "UTF-8"
