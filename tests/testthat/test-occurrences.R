@@ -147,11 +147,11 @@ thischeck <- function() {
                   download_reason_id = 10,
                   wkt = "POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")$
         data, "data.frame")
-    expect_true("acceptedNameUsage" %in%
+    expect_true("associatedMedia" %in%
                   names(occurrences(taxon = "Amblyornis newtonianus",
                                     email = "ala4r@ala.org.au",
                                     download_reason_id = 10,
-                                    extra = "accepted_name_usage")$data))
+                                    extra = "associated_media")$data))
   })
 }
 check_caching(thischeck)
