@@ -24,8 +24,6 @@
             base_url_spatial = "https://spatial.ala.org.au/ws/",
             base_url_bie = "https://bie.ala.org.au/ws/",
             base_url_biocache = "https://biocache-ws.ala.org.au/ws/",
-            base_url_biocache_download =
-                "https://biocache.ala.org.au/biocache-download/",
             biocache_version = "2.1.16",
             base_url_alaspatial = "https://spatial.ala.org.au/alaspatial/ws/",
             base_url_images = "https://images.ala.org.au/",
