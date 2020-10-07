@@ -22,19 +22,25 @@ directly used within R.
 ALA4R enables the R community to directly access data and resources
 hosted by the ALA.
 
-**NOTE** The next release of ALA4R will be version 2.0.0. This will be a
-major update to simplify the process of downloading data, make behaviour
-across functions consistent, and remove redundant functionality.  
+**NOTE:** The next release of ALA4R will be version 2.0.0. This will be
+a major update to simplify the process of downloading data, make
+behaviour across functions consistent, and remove redundant
+functionality.  
 In the coming weeks, you will be able to test out the new functionality
-in the `upgrade` branch. If you have any questions or suggestions,
-please contact us at <support@ala.org.au>
+in the [dev
+branch](https://github.com/AtlasOfLivingAustralia/ALA4R/tree/dev). If
+you have any questions or suggestions, please [contact
+us](mailto:support@ala.org.au).
 
 The use-examples presented at the [2014 ALA Science
 Symposium](http://www.ala.org.au/blogs-news/2014-atlas-of-living-australia-science-symposium/)
 are available in the package vignette, via (in R): `vignette("ALA4R")`,
 or [browse it
 online](https://atlasoflivingaustralia.github.io/ALA4R/articles/ALA4R.html).
-\#\# Citing ALA4R To generate a citation for ALA4R run:
+
+## Citing ALA4R
+
+To generate a citation for ALA4R run:
 
 ``` r
 citation(package = "ALA4R")
