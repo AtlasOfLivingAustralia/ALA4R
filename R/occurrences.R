@@ -310,7 +310,7 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
     this_url <- build_url_from_parts(
         getOption("ALA4R_server_config")$base_url_biocache,
         c("occurrences", "offline", "download"), query = this_query)
-
+    
     ## the file that will ultimately hold the results (even if we are not
     ## caching, it still gets saved to file)
     thisfile <- ala_cache_filename(this_url)
@@ -462,20 +462,18 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
                 warning("citation file not found within downloaded zip file")
             }
             # look for doi if one was requested
-            doi <- "DOI was not requested or could not be found"
+            doi <- NA
             if (generate_doi) {
-              tryCatch({
-                  doi_file <- read.table(unz(thisfile, "doi.txt"))
-                  doi <- as.character(doi_file$V1)
-              },
-              warning = function(e) {
-                warning("No DOI was generated for download. Please double check you that you provided a
-                        valid email address.")
-              },
-              error = function(e) {
-                warning("No DOI was generated for download. The DOI server may
+              try({
+                doi_file <- read.table(unz(thisfile, "doi.txt"))
+                doi <- as.character(doi_file$V1)
+                found_doi <- TRUE},
+                silent = TRUE)
+            }
+            
+            if (generate_doi & is.na(doi)) {
+              warning("No DOI was generated for download. The DOI server may
                         be down. Please try again later")
-              })
             }
         } else {
             if (ala_config()$warn_on_empty) {
