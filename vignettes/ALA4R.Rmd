@@ -283,13 +283,13 @@ specieslist(wkt=wkt, fq="state_conservation:*") %>%
 Data quality assertions are a suite of fields that are the result of a set of tests peformed on ALA data. Download occurrence data for the golden bowerbird (you should adjust the `download_reason_id` to match your purposes if using this function for your own analyses; see `ala_reasons()`):
 
 ```{r eval=FALSE}
-x <- occurrences(taxon="taxon_name:\"Amblyornis newtonianus\"", download_reason_id="testing", email="test@test.org")
+x <- occurrences(taxon="taxon_name:\"Amblyornis newtonianus\"", download_reason_id="testing", email="ala4r@ala.org.au")
 summary(x)
 ```
 
 ```{r echo=FALSE}
 tryCatch({
-  x <- occurrences(taxon="taxon_name:\"Amblyornis newtonianus\"", download_reason_id="testing", email="test@test.org")
+  x <- occurrences(taxon="taxon_name:\"Amblyornis newtonianus\"", download_reason_id="testing", email="ala4r@ala.org.au")
   summary(x)
 },warning = function(w) {print(w$message)}
  ,error = function(e) { print(e$message)})
@@ -363,7 +363,7 @@ env_layers <- c("Precipitation - annual","Temperature - annual max mean")
 
 x <- occurrences(taxon="family:Fabaceae", wkt=wkt, qa="none",
                  download_reason_id="testing", extra=env_layers,
-                 email="test@test.org")
+                 email="ala4r@ala.org.au")
 ```
 
 Convert this to a sites-by-species data.frame:
@@ -491,7 +491,7 @@ magpie_occs_top5 <- magpie_occs$data %>%
 tryCatch({
   magpie_occs <- ALA4R::occurrences(taxon="taxon_name:\"Gymnorhina tibicen\"",
                             fq=c("multimedia:Image","license:\"CC0\""), 
-                            email = "test@ala-test.org", download_reason_id = "testing")
+                            email = "ala4r@ala.org.au", download_reason_id = "testing")
   # retain 5
   magpie_occs_top5 <- magpie_occs$data %>% dplyr::arrange(desc(eventDate)) %>% 
     dplyr::mutate(occId=paste0(substring(id,0,10),"...")) %>%
