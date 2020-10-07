@@ -11,6 +11,11 @@ to enable basic species and related information to be queried and output in
 standard formats for R. ALA4R is based around the extensive web services
 provided by the Atlas; see the API link below.
 }
+\details{
+Note: The next release of ALA4R will be version 2.0.0. This will be a major update to simplify the process of downloading data, make behaviour across functions consistent, and remove redundant functionality.  
+In the coming weeks, you will be able to test out the new functionality in the upgrade branch.
+If you have any questions or suggestions, please email support@ala.org.au.
+}
 \references{
 \url{https://api.ala.org.au/}
 }

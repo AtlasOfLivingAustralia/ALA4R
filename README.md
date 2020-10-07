@@ -11,7 +11,7 @@ status](https://ci.appveyor.com/api/projects/status/g9pudc4l7053w4vn/branch/mast
 [![CRAN
 Status](http://www.r-pkg.org/badges/version/ALA4R)](http://www.r-pkg.org/pkg/ALA4R)
 [![CRAN
-Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ALA4R)](https://cran.r-project.org/package=ALA4R)
+Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ALA4R)](https://cran.rstudio.com/web/packages/ALA4R/index.html)
 
 The Atlas of Living Australia (ALA) provides tools to enable users of
 biodiversity information to find, access, combine and visualise data on
@@ -21,6 +21,13 @@ directly used within R.
 
 ALA4R enables the R community to directly access data and resources
 hosted by the ALA.
+
+**NOTE** The next release of ALA4R will be version 2.0.0. This will be a
+major update to simplify the process of downloading data, make behaviour
+across functions consistent, and remove redundant functionality.  
+In the coming weeks, you will be able to test out the new functionality
+in the `upgrade` branch. If you have any questions or suggestions,
+please contact us at <support@ala.org.au>
 
 The use-examples presented at the [2014 ALA Science
 Symposium](http://www.ala.org.au/blogs-news/2014-atlas-of-living-australia-science-symposium/)
