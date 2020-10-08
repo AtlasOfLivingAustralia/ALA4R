@@ -46,3 +46,9 @@ test_that("ala_taxa handles name searches", {
   expect_message(ala_taxa(term = "Microseris lanceolata",
                           term_type = "identifier"))
 })
+
+test_that("ala taxa returns counts for species", {
+  skip_on_cran()
+  expect_true("count" %in% colnames(ala_taxa(term = "Thylacinus cynocephalus",
+                                        include_counts = TRUE)))
+})

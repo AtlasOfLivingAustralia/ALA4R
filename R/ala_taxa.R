@@ -9,6 +9,7 @@ bie_url <- 'https://bie-ws.ala.org.au/'
 #' conduct a free text search
 #' @param term_type string: specifies which type of terms are provided in
 #' `term`. One of name `c('name', 'identifier')`
+#' @param include_count logical: return occurrence counts for all species returned?
 #' @export ala_taxa
 #' 
 
@@ -18,7 +19,7 @@ bie_url <- 'https://bie-ws.ala.org.au/'
 # should vernacular name searching be supported?
 
 ala_taxa <- function(term, term_type = "name", rank = NULL,
-                     return_children = FALSE) {
+                     return_children = FALSE, include_counts = FALSE) {
   
   assert_that(is.flag(return_children))
   assert_that(term_type %in% c("name", "identifier"),
@@ -52,6 +53,11 @@ ala_taxa <- function(term, term_type = "name", rank = NULL,
     cbind(search_term = t, out_data)
   }), fill = TRUE)
 
+  if (include_counts) {
+    matches$count <- lapply(matches$taxonConceptID, function(id) {
+      record_count(list(fq = paste0("lsid:",id)))
+    }) 
+  }
   matches
   
 }
