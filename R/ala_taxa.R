@@ -1,13 +1,5 @@
-library(httr)
-library(jsonlite)
-library(stringr)
-
 taxa_url <- 'https://namematching-ws-test.ala.org.au/'
 bie_url <- 'https://bie-ws.ala.org.au/'
-
-
-# if no match is found, should a row for the name still be included in the output?
-# should a message and/or warning be displayed?
 
 
 # Function to lookup species information from ALA, given names or unique
@@ -18,6 +10,12 @@ bie_url <- 'https://bie-ws.ala.org.au/'
 #' @param term_type string: specifies which type of terms are provided in
 #' `term`. One of name `c('name', 'identifier')`
 #' @export ala_taxa
+#' 
+
+
+# if no match is found, should a row for the name still be included in the output?
+# should a message and/or warning be displayed?
+# should vernacular name searching be supported?
 
 ala_taxa <- function(term, term_type = "name", rank = NULL,
                      return_children = FALSE) {
@@ -42,9 +40,9 @@ ala_taxa <- function(term, term_type = "name", rank = NULL,
     }
     if (isFALSE(result$success)) {
       message("No taxon matches were found for \"", t, "\"")
-      return(as.data.frame(list(search_term = t)))
+      return(as.data.frame(list(search_term = t), stringsAsFactors = FALSE))
     }
-    out_data <- adjust_col_names(as.data.frame(result))
+    out_data <- adjust_col_names(as.data.frame(result, stringsAsFactors = FALSE))
     if (return_children) {
       # look up the child concepts for the identifier
       children <- child_concepts(result$taxonConceptID)

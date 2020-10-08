@@ -1,0 +1,48 @@
+context('Taxa search')
+
+
+test_that("ala_taxa checks inputs", {
+  skip_on_cran()
+  expect_error(ala_taxa(term_type = 'bad_term'))
+  expect_error(ala_taxa("Varanus varius", return_children = 'false'))
+  expect_error(ala_taxa("Varanus varius", rank = 'sp'))
+})
+
+test_that("child_concepts behaves correctly", {
+  # species with no children should return a message and no output
+  skip_on_cran()
+  expect_message(expect_null(
+    child_concepts("urn:lsid:biodiversity.org.au:afd.taxon:ac61fd14-4950-4566-b384-304bd99ca75f")))
+  
+  expect_is(child_concepts("urn:lsid:biodiversity.org.au:afd.taxon:f05d7036-e74b-4468-858d-1f7d78470298"), "data.frame")
+  # correct number of children are returned
+  expect_equal(nrow(child_concepts("urn:lsid:biodiversity.org.au:afd.taxon:f05d7036-e74b-4468-858d-1f7d78470298")), 1)
+  
+  expect_equal(nrow(ala_taxa("Hydromys", return_children = TRUE)), 2)
+})
+
+
+test_that("ala_taxa searches at provided rank", {
+  skip_on_cran()
+  expect_equal(ala_taxa(term = "Acacia", rank = "genus")$rank, "genus")
+  
+  # converts from 'species' to 'scientificName'
+  expect_equal(ala_taxa(term = "Wurmbea dioica", rank = "species")$rank,
+               "species")
+  expect_equal(ala_taxa(term = "Wurmbea dioica", rank = "scientificName")$rank,
+               "species")
+})
+
+test_that("ala_taxa handles identifier searches", {
+  skip_on_cran()
+  expect_equal(nrow(ala_taxa(term = "https://id.biodiversity.org.au/node/apni/2902929", term_type = "identifier")), 1)
+  expect_message(ala_taxa(term = "https://id.biodiversity.org.au/node/apni/2902929", term_type = "name"))
+})
+
+test_that("ala_taxa handles name searches", {
+  skip_on_cran()
+  expect_equal(nrow(ala_taxa(term = "Microseris lanceolata",
+                             term_type = "name")), 1)
+  expect_message(ala_taxa(term = "Microseris lanceolata",
+                          term_type = "identifier"))
+})
