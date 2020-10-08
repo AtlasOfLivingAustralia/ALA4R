@@ -152,7 +152,7 @@
 ## TODO LATER: add params: lat, lon, radius (for specifying a search circle)
 
 occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
-                        generate_doi = FALSE, email, email_notify=TRUE,
+                        generate_doi = FALSE, email, email_notify=FALSE,
                         download_reason_id = ala_config()$download_reason_id,
                         reason, verbose = ala_config()$verbose,
                         record_count_only = FALSE, use_layer_names = TRUE,
