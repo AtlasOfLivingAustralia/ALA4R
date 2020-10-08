@@ -8,6 +8,8 @@ addons:
     - libv8-3.14-dev
     - libmagick++-dev
     - libudunits2-dev
+    - libgdal-dev
+    - libnetcdf-dev
     - gcc-8
     - g++-8
     - gfortran-8
