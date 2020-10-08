@@ -14,7 +14,7 @@ occurrences(
   method,
   generate_doi = FALSE,
   email,
-  email_notify = TRUE,
+  email_notify = FALSE,
   download_reason_id = ala_config()$download_reason_id,
   reason,
   verbose = ala_config()$verbose,
