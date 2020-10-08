@@ -22,8 +22,10 @@ Imports:
     digest,
     httr,
     jsonlite (>= 0.9.8),
+    sf,
     sp,
     stringr (>= 1.0.0),
+    utils,
     wellknown
 Suggests:
     ape,
