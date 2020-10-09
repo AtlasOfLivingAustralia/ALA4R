@@ -1,17 +1,26 @@
-library(jsonlite)
-
+#' Download occurrence data from the ALA
+#' 
+#' @param taxon_id string: single species ID or vector of species ids. Use 
+#' `ala_taxa()` to get lookup species id. 
 #' @param area string or sf object: restrict the search to an area. Can provide
 #' sf object, or a wkt string. If the wkt string is too long, it may be simplified.
-#' 
+#' @param columns string: vector of columns to return in download. 
+#' @param filters string: a list to narrow down the search, in the form `c(field = value)`
+#' @param generate_doi logical: by default no DOI will be generated. Set to
+#' true if you intend to use the data in a publication or similar
+#' @param email string: the email address of the user performing the download
+#' (required unless \code{record_count_only = TRUE}
+#' @param email_notify logical: set to `FALSE` by default, set to true if you
+#' would like an email notification for the download
+#' @export ala_occurrences
 
-biocache_url <- "https://biocache-ws.ala.org.au"
 
-ala_occurrences <- function(taxon_id, filters, area, columns = "default", use_cache = FALSE,
+ala_occurrences <- function(taxon_id, filters, area, columns = "default",
                             email = "ala4r@ala.org.au", generate_doi = FALSE, 
                             email_notify = FALSE) {
   
+  biocache_url <- "https://biocache-ws.ala.org.au"
   assert_that(is.flag(generate_doi))
-  assert_that(is.flag(use_cache))
   assert_that(is.flag(email_notify))
   
   query <- list()
@@ -23,6 +32,7 @@ ala_occurrences <- function(taxon_id, filters, area, columns = "default", use_ca
   
   taxa_query <- NULL
   if(!missing(taxon_id)) {
+    # should species id be validated?
     query$fq <- build_taxa_query(taxon_id)
   }
 
@@ -44,7 +54,7 @@ ala_occurrences <- function(taxon_id, filters, area, columns = "default", use_ca
     if (is.character(area)) {
       # maybe give a more helpful error message here?
       stopifnot(wellknown::lint(area))
-    } else if (is(area, "sf")) {
+    } else if (identical(class(area), c("sf", "data.frame"))) {
       area <- build_wkt(area)
     } else {
       stop("Area must be either a wkt string or an sf spatial object.")
@@ -149,7 +159,6 @@ record_count <- function(query) {
 
 # build a valid wkt string from a spatial polygon
 build_wkt <- function(polygon) {
-  assert_that(is(polygon, c("sf","data.frame")))
   wkt <- st_as_text(st_geometry(polygon)[[1]])
   return(wkt)
 }

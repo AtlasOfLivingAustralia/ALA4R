@@ -1,17 +1,18 @@
-taxa_url <- 'https://namematching-ws-test.ala.org.au/'
-bie_url <- 'https://bie-ws.ala.org.au/'
-
-
-# Function to lookup species information from ALA, given names or unique
-# identifiers. 
+#' Function to lookup species information from ALA, given names or unique
+#' identifiers. 
+#' 
+#' Uses ALA name matching service. Species ids from this function can be
+#' used to search `ala_occurrences`
+#' 
 #' @param term string: search term
-#' @param rank string: taxonomic rank to search at. If not provided, will
-#' conduct a free text search
 #' @param term_type string: specifies which type of terms are provided in
 #' `term`. One of name `c('name', 'identifier')`
-#' @param include_count logical: return occurrence counts for all species returned?
-#' @export ala_taxa
+#' @param rank string: (optional) taxonomic rank to search at. If not provided, will
+#' conduct a free text search
+#' @param return_children logical: return child concepts for the provided term(s)?
+#' @param include_counts logical: return occurrence counts for all species returned?
 #' 
+#' @export ala_taxa
 
 
 # if no match is found, should a row for the name still be included in the output?
@@ -20,6 +21,9 @@ bie_url <- 'https://bie-ws.ala.org.au/'
 
 ala_taxa <- function(term, term_type = "name", rank = NULL,
                      return_children = FALSE, include_counts = FALSE) {
+  
+  taxa_url <- 'https://namematching-ws-test.ala.org.au/'
+  bie_url <- 'https://bie-ws.ala.org.au/'
   
   assert_that(is.flag(return_children))
   assert_that(term_type %in% c("name", "identifier"),
@@ -33,7 +37,7 @@ ala_taxa <- function(term, term_type = "name", rank = NULL,
     rank <- validate_rank(rank)
   }
   
-  matches <- rbindlist(lapply(term, function(t) {
+  matches <- data.table::rbindlist(lapply(term, function(t) {
     if (term_type == "identifier") {
       result <- identifier_lookup(t)
     } else {
@@ -63,6 +67,7 @@ ala_taxa <- function(term, term_type = "name", rank = NULL,
 }
 
 name_lookup <- function(name, rank = NULL) {
+  taxa_url <- 'https://namematching-ws-test.ala.org.au/'
   url <- parse_url(taxa_url)
   if (is.null(rank)) {
     # search by scientific name
@@ -77,6 +82,7 @@ name_lookup <- function(name, rank = NULL) {
 }
 
 identifier_lookup <- function(identifier) {
+  taxa_url <- 'https://namematching-ws-test.ala.org.au/'
   url <- parse_url(taxa_url)
   url$path <- "/api/getByTaxonID"
   url$query <- list(taxonID = identifier)
@@ -99,6 +105,7 @@ validate_rank <- function(rank) {
 }
 
 child_concepts <- function(identifier) {
+  bie_url <- 'https://bie-ws.ala.org.au/'
   url <- parse_url(bie_url)
   url$path <- c("ws/childConcepts", URLencode(identifier, reserved = TRUE))
   children <- fromJSON(build_url(url))
@@ -108,7 +115,7 @@ child_concepts <- function(identifier) {
   }
   
   # lookup details for each child concept
-  child_info <- suppressWarnings(rbindlist(lapply(children$guid, function(id) {
+  child_info <- suppressWarnings(data.table::rbindlist(lapply(children$guid, function(id) {
     result <- identifier_lookup(id)
     # keep child even if it can't be found?
     adjust_col_names(as.data.frame(result))
