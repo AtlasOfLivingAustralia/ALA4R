@@ -20,7 +20,7 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences summary works when no qa are present", {
         skip_on_cran()
-        expect_output(summary(occurrences(taxon = "Amblyornis newtonianus",
+        expect_output(summary(occurrences(taxon = "Acacia abbatiana",
                                           email = "ala4r@ala.org.au",
                                           download_reason_id = 10,
                                           qa = "none")), "no assertion issues")
@@ -30,7 +30,7 @@ check_caching(thischeck)
 
 thischeck <- function() {
     test_that("occurrences summary gives something sensible", {
-        occ <- occurrences(taxon = "Amblyornis newtonianus",
+        occ <- occurrences(taxon = "Ailuroedus crassirostris maculosus",
                            email = "ala4r@ala.org.au",
                            download_reason_id = 10)
         expect_output(summary(occ), "^number of original names")
@@ -50,12 +50,12 @@ thischeck <- function() {
     test_that("occurrences retrieves the fields specified", {
         skip_on_cran()
         expect_equal(sort(names(
-            occurrences(taxon = "Eucalyptus gunnii", email = "ala4r@ala.org.au",
+            occurrences(taxon = "Eucalyptus alligatrix", email = "ala4r@ala.org.au",
                         fields = c("latitude", "longitude"), qa = "none",
                         fq = "basis_of_record:LivingSpecimen",
                         download_reason_id = 10)$data)),
             c("latitude", "longitude"))
-        expect_error(occurrences(taxon = "Eucalyptus gunnii",
+        expect_error(occurrences(taxon = "Eucalyptus alligatrix",
                                  email = "ala4r@ala.org.au",
                                  fields = c("blahblahblah"),
                                  download_reason_id = 10))
@@ -67,7 +67,7 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences unique does something sensible", {
         skip_on_cran()
-        x <- occurrences(taxon = "Amblyornis newtonianus",
+        x <- occurrences(taxon = "Acanthorhynchus tenuirostris dubius",
                          email = "ala4r@ala.org.au", download_reason_id = 10)
         Sys.sleep(20)
         xu <- unique(x, spatial = 0.1)
@@ -90,7 +90,7 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences subset does something sensible", {
         skip_on_cran()
-        x <- occurrences(taxon = "Amblyornis newtonianus",
+        x <- occurrences(taxon = "Ailuroedus crassirostris maculosus",
                          email = "ala4r@ala.org.au", download_reason_id = 10)
         Sys.sleep(20)
         xs <- subset(x)
@@ -142,7 +142,7 @@ thischeck <- function() {
   test_that("occurrences handles fields correctly", {
     skip_on_cran()
     expect_is(
-      occurrences(taxon = as.factor("Amblyornis newtonianus"),
+      occurrences(taxon = as.factor("Ailuroedus crassirostris maculosus"),
                   email = "ala4r@ala.org.au",
                   download_reason_id = 10,
                   wkt = "POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")$
