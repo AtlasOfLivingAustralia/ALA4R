@@ -90,7 +90,7 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("occurrences subset does something sensible", {
         skip_on_cran()
-        x <- occurrences(taxon = "Ailuroedus crassirostris maculosus",
+        x <- occurrences(taxon = "Amblyornis newtonianus",
                          email = "ala4r@ala.org.au", download_reason_id = 10)
         Sys.sleep(20)
         xs <- subset(x)
