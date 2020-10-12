@@ -23,6 +23,9 @@ ala_occurrences <- function(taxon_id, filters, area, columns = "default",
   assert_that(is.flag(generate_doi))
   assert_that(is.flag(email_notify))
   
+  # is it worth validating the email with a regex? this won't 
+  # be able to tell if the email is registered or not
+  
   query <- list()
   
   if (missing(taxon_id) & missing(filters) & missing(area)) {
@@ -73,7 +76,7 @@ ala_occurrences <- function(taxon_id, filters, area, columns = "default",
   }
 
   message('This query will return ', record_count(query), " records")
-  
+
   # Add columns after getting record count
   if (missing(columns)) {
     message("No columns specified, default columns will be returned.")
@@ -92,7 +95,8 @@ ala_occurrences <- function(taxon_id, filters, area, columns = "default",
   # Get data
   url <- parse_url(biocache_url)
   url$path <- c("ws", "occurrences", "offline", "download")
-  url$query <- c(query, email = email, reasonTypeId = 10, dwcHeaders = 'true')
+  url$query <- c(query, email = email, reasonTypeId = 10, dwcHeaders = 'true',
+                 qa = "none")
   status <- fromJSON(build_url(url))
   
   this_status_url <- status$statusUrl
@@ -104,7 +108,7 @@ ala_occurrences <- function(taxon_id, filters, area, columns = "default",
   
   temp <- tempfile(fileext = '.zip')
   download.file(status$downloadUrl,temp)
-  data <- read.csv(unz(temp, "data.csv"))
+  data <- read.csv(unz(temp, "data.csv"), stringsAsFactors = FALSE)
   unlink(temp)
   
   return(data)
@@ -197,5 +201,9 @@ validate_filters <- function(filters) {
   # should we do this? or let users find out for themselves?
   # we can't do it for fields where there are > 1000 options 
   # I think let them check if they get bad results
-} 
+}
+
+# what to do about returned columns? it doesn't make sense that the 
+# names of the columns you request are not necessarily the same as
+# the ones asked for
 
