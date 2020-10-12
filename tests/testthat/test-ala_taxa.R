@@ -9,16 +9,20 @@ test_that("ala_taxa checks inputs", {
 })
 
 test_that("child_concepts behaves correctly", {
-  # species with no children should return a message and no output
+  # species with no children should return a messag
   skip_on_cran()
-  expect_message(expect_null(
-    child_concepts("urn:lsid:biodiversity.org.au:afd.taxon:ac61fd14-4950-4566-b384-304bd99ca75f")))
+  expect_message(
+    child_concepts("urn:lsid:biodiversity.org.au:afd.taxon:ac61fd14-4950-4566-b384-304bd99ca75f"))
   
   expect_is(child_concepts("urn:lsid:biodiversity.org.au:afd.taxon:f05d7036-e74b-4468-858d-1f7d78470298"), "data.frame")
   # correct number of children are returned
-  expect_equal(nrow(child_concepts("urn:lsid:biodiversity.org.au:afd.taxon:f05d7036-e74b-4468-858d-1f7d78470298")), 1)
-  
+})
+
+test_that("child concepts returns expected number of children", {
+  skip_on_cran()
   expect_equal(nrow(ala_taxa("Hydromys", return_children = TRUE)), 2)
+  expect_equal(nrow(
+    child_concepts("urn:lsid:biodiversity.org.au:afd.taxon:f05d7036-e74b-4468-858d-1f7d78470298")), 1)
 })
 
 
