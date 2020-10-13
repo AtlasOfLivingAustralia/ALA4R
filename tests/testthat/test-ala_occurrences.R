@@ -13,6 +13,7 @@ test_that("ala_occurrences handles filters correctly", {
                                                   basis_of_record = 'FossilSpecimen'),
                                       columns = c("default", "state"))$stateProvince),
                "Australian Capital Territory")
+  expect_error(ala_occurrences(filters = c("FossilSpecimen")))
   
 })
 
@@ -31,27 +32,27 @@ test_that("ala occurrences returns requested columns",{
                c("occurrenceStatus","decimalLatitude","decimalLongitude"))
 })
 
-test_that("ala_occurrences handles area inputs", {
+test_that("ala_occurrences handles wkt area inputs", {
   # invalid wkt
+  skip_on_cran()
   invalid_wkt <- "POLYGON((145.71622941565508 -32.17848852726597,))"
   expect_error(ala_occurrences(area = invalid_wkt))
   
-  
-  # shapefile
-  # Download ACT shapefile from ALA, should store in data/ instead?
-  # tests searchability in multipolygon
-  # also tests very long wkt
-  #dir.create('test_data')
-  #download.file(url = "https://spatial.ala.org.au/ws/shape/shp/3742602",
-  #                          destfile = 'test_data/act_shp.zip')
-  #unzip('test_data/act_shp.zip', exdir = 'test_data')
-  #shp_file <- st_read('test_data/3742602.shp')
-  # all banksia records in the ACT for this decade
-  #occ <- ala_occurrences(
-  #  taxon_id = "https://id.biodiversity.org.au/taxon/apni/51299884",
-  #  filters = c(occurrence_decade_i = 2000), area = shp_file,
-  #  columns = c("default", "state"))
-  # all records are in the state
-  #expect_equal(unique(occ$stateProvince), "Australian Capital Territory")
+  wkt <- readLines('../testdata/act_wkt.txt')
+  expect_equal(unique(ala_occurrences(area = wkt,
+                                      filters = c(basis_of_record = "FossilSpecimen"),
+                                      columns = c("default",
+                                                  "state"))$stateProvince),
+               "Australian Capital Territory")
 
+})
+
+test_that("ala_occurrences handles sf polygon inputs", {
+  skip_on_cran()
+  act_shp <- st_read('../testdata/act_state_polygon_shp/ACT_STATE_POLYGON_shp.shp')
+  expect_equal(unique(ala_occurrences(area = act_shp,
+                                      filters = c(basis_of_record = "FossilSpecimen"),
+                                      columns = c("default",
+                                                  "state"))$stateProvince),
+               "Australian Capital Territory")
 })
