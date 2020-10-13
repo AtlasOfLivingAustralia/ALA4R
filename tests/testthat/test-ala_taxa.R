@@ -3,6 +3,7 @@ context('Taxa search')
 
 test_that("ala_taxa checks inputs", {
   skip_on_cran()
+  expect_error(ala_taxa())
   expect_error(ala_taxa(term_type = 'bad_term'))
   expect_error(ala_taxa("Varanus varius", return_children = 'false'))
   expect_error(ala_taxa("Varanus varius", rank = 'sp'))
