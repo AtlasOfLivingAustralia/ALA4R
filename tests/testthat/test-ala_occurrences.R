@@ -4,6 +4,7 @@ test_that("ala_occurrences check inputs", {
   skip_on_cran()
   # bad field
   expect_error(ala_occurrences(filters = c(invalid_field = 'value')))
+  expect_error(ala_occurrences())
 })
 
 test_that("ala_occurrences handles filters correctly", {
@@ -36,11 +37,14 @@ test_that("ala_occurrences handles wkt area inputs", {
   # invalid wkt
   skip_on_cran()
   invalid_wkt <- "POLYGON((145.71622941565508 -32.17848852726597,))"
+  valid_wkt <- "POINT(147.08005201710293 -34.48290525355578)"
+  expect_error(ala_occurrences(area = as.factor(valid_wkt)))
   expect_error(ala_occurrences(area = invalid_wkt))
   
   wkt <- readLines('../testdata/act_wkt.txt')
   expect_equal(unique(ala_occurrences(area = wkt,
-                                      filters = c(basis_of_record = "FossilSpecimen"),
+                                      filters = c(basis_of_record =
+                                                    "FossilSpecimen"),
                                       columns = c("default",
                                                   "state"))$stateProvince),
                "Australian Capital Territory")
