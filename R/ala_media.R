@@ -88,7 +88,7 @@ download_media <- function(id, type, download_dir) {
     'image/jpeg' = '.jpg'
   )
   out_path <- file.path(download_dir, paste0(id, ext))
-  download.file(build_url(url), destfile = out_path)
+  download.file(build_url(url), destfile = out_path, quiet = TRUE)
   # throttle download requests
   Sys.sleep(1)
 }

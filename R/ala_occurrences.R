@@ -107,7 +107,7 @@ ala_occurrences <- function(taxon_id, filters, area, columns = "default",
   }
   
   temp <- tempfile(fileext = '.zip')
-  download.file(status$downloadUrl,temp)
+  download.file(status$downloadUrl,temp, quiet = TRUE)
   data <- read.csv(unz(temp, "data.csv"), stringsAsFactors = FALSE)
   unlink(temp)
   
