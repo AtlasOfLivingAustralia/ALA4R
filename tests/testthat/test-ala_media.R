@@ -24,7 +24,7 @@ test_that("ala media handles a single image id", {
   file_count <- length(list.files(media_dir))
   expect_equal(file_count, nrow(media_data))
   
-  unlink(media_dir)
+  unlink(media_dir, recursive = TRUE)
 })
 
 test_that("ala media handles multiple image ids", {
@@ -36,7 +36,7 @@ test_that("ala media handles multiple image ids", {
                           identifier_type = "media", download_dir = media_dir)
   file_count <- length(list.files(media_dir))
   expect_equal(file_count, nrow(media_data))
-  unlink(media_dir)
+  unlink(media_dir, recursive = TRUE)
 })
 
 test_that("ala media handles a single occurrence id", {
@@ -48,7 +48,7 @@ test_that("ala media handles a single occurrence id", {
                           download_dir = media_dir)
   file_count <- length(list.files(media_dir))
   expect_equal(file_count, nrow(media_data))
-  unlink(media_dir)
+  unlink(media_dir, recursive = TRUE)
   
 })
 
@@ -61,6 +61,6 @@ test_that("ala media handles a multiple occurrence ids", {
                           identifier_type = "occurrence", download_dir = media_dir)
   file_count <- length(list.files(media_dir))
   expect_equal(file_count, nrow(media_data))
-  unlink(media_dir)
+  unlink(media_dir, recursive = TRUE)
   
 })
