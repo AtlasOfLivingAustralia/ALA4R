@@ -125,17 +125,22 @@ child_concepts <- function(identifier) {
 
 # fix up species info columns 
 # can take any output and make the col names as expected
-adjust_col_names <- function(data, type = 'species_info') {
+adjust_col_names <- function(data, type = 'taxa') {
   # this is dodgy but will do for now
   if (nrow(data) > 1) {
     data <- data[1,]
   }
-  if (type == 'species_info') {
+  if (type == 'taxa') {
     cols_to_keep <- c('scientificName', 'scientificNameAuthorship',
                       'taxonConceptID', 'rank','rankID','matchType',
                       'kingdom','kingdomID','phylum','phylumID',
                       'classs','classID','order','orderID','family','familyID',
                       'genus','genusID','species','speciesID','issues')
+  } else if (type == "media") {
+    cols_to_keep <- c("rightsHolder", "imageIdentifier", "format",
+                      "occurrenceID", "recognisedLicence", "license",
+                      "creator", "title", "rights", "mimeType",
+                      "mediaId")
   }
   
   # keep only required columns
@@ -143,6 +148,8 @@ adjust_col_names <- function(data, type = 'species_info') {
   
   # replace 'classs' with 'class' 
   names(data)[names(data) == "classs"] <- "class"
+  names(data)[names(data) == "mimeType"] <- "format"
+  names(data)[names(data) == "imageIdentifier"] <- "mediaId"
   
   return(data)
 }
