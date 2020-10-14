@@ -4,13 +4,23 @@
 \alias{ala_media}
 \title{Download images and sounds from the ALA.}
 \usage{
-ala_media(identifier, identifier_type)
+ala_media(
+  identifier,
+  download_dir,
+  identifier_type = "media",
+  media_type = c("image", "sound")
+)
 }
 \arguments{
 \item{identifier}{string: a single or vector of identifiers, of type
 specified by `identifier_type`}
 
-\item{identifier_type}{string: one of `c("occurrence", "image")`}
+\item{download_dir}{string: path to directory for downloading media}
+
+\item{identifier_type}{string: one of `c("occurrence", "media")`}
+
+\item{media_type}{string: type of media to download, one or both of 
+`c("image", "sound")`}
 }
 \description{
 Download images and sounds from the ALA.
