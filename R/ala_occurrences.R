@@ -5,7 +5,10 @@
 #' @param area string or sf object: restrict the search to an area. Can provide
 #' sf object, or a wkt string. If the wkt string is too long, it may be simplified.
 #' @param columns string: vector of columns to return in download. 
-#' @param filters string: a list to narrow down the search, in the form `c(field = value)`
+#' @param filters string: a list to narrow down the search, in the form
+#' `list(field = value)`. To limit the query to a year range, use
+#' `list(year = c(1990, 2000))`. This will return records between and including
+#' the years provided.
 #' @param generate_doi logical: by default no DOI will be generated. Set to
 #' true if you intend to use the data in a publication or similar
 #' @param email string: the email address of the user performing the download
@@ -33,7 +36,6 @@ ala_occurrences <- function(taxon_id, filters, area, columns = "default",
     stop("Need to provide one of `taxon id`, `filters` or `area`")
   }
   
-  taxa_query <- NULL
   if(!missing(taxon_id)) {
     # should species id be validated?
     query$fq <- build_taxa_query(taxon_id)
@@ -41,17 +43,21 @@ ala_occurrences <- function(taxon_id, filters, area, columns = "default",
 
   # validate filters
   if (!missing(filters)) {
+    filters <- as.list(filters)
     validate_filters(filters)
     # there must be a better way to do this
     if (!is.null(query$fq)) {
-      query$fq <- paste0("(",query$fq, ' AND ', fq = build_filter_query(filters), ")")
+      query$fq <- paste0("(",query$fq, ' AND ',
+                         fq = build_filter_query(filters), ")")
     }
     else {
       query$fq <- build_filter_query(filters)
     }
   }
   
-
+  # Two issues with area validation: 
+  # wellknown validates wkt correctly?? 
+  # 504 error is returned from the server if a polygon is too complicated
   if (!missing(area)) {
     # convert area to wkt if not already
     if (is.character(area)) {
@@ -75,7 +81,12 @@ ala_occurrences <- function(taxon_id, filters, area, columns = "default",
     query <- list(q = paste0("qid:",qid))
   }
 
-  message('This query will return ', record_count(query), " records")
+  count <- record_count(query),
+  message('This query will return ', count, " records")
+  if (count == 0) {
+    # should this return something?
+    return()
+  }
 
   # Add columns after getting record count
   if (missing(columns)) {
@@ -139,12 +150,31 @@ build_fields <- function(cols) {
 }
 
 # this is ugly but does work...
+# should there be a special case if a date field is provided?
+# for now we will only support year queries
 build_filter_query <- function(filters) {
   # add quotes so query behaves as expected
+  date_fields <- c("year")
+  
+  matched_date_field <- which(names(filters) %in% date_fields)
+  if (length(matched_date_field) != 0) {
+    # extract date fields from filter
+    date_filters <- filters[matched_date_field]
+    filters <- filters[-matched_date_field]
+    
+    date_query <- paste0(names(date_filters), ":[", date_filters[[1]][1],
+                         " TO ", date_filters[[1]][2], "]")
+  }
+  
+  
   quoted_filters <- lapply(filters, function(x) {
     paste0("\"", x, "\"")
     })
-  paste0("(",paste(names(filters), quoted_filters, sep = ":", collapse = " AND "),")")
+  
+  filter_query <- paste0("(",date_query, " AND ",
+                         paste(names(filters), quoted_filters, sep = ":",
+                               collapse = " AND "),")")
+  filter_query
 }
 
 build_taxa_query <- function(ids) {

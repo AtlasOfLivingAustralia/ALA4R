@@ -10,11 +10,18 @@ test_that("ala_occurrences check inputs", {
 test_that("ala_occurrences handles filters correctly", {
   # can handle multiword filters
   skip_on_cran()
-  expect_equal(unique(ala_occurrences(filters = c(state = 'Australian Capital Territory',
-                                                  basis_of_record = 'FossilSpecimen'),
-                                      columns = c("default", "state"))$stateProvince),
-               "Australian Capital Territory")
+  expect_equal(
+    unique(ala_occurrences(filters = c(state = 'Australian Capital Territory',
+                                       basis_of_record = 'FossilSpecimen'),
+                           columns = c("default", "state"))$stateProvince),
+    "Australian Capital Territory")
   expect_error(ala_occurrences(filters = c("FossilSpecimen")))
+  
+  # handles year filters
+  expect_equal(range(ala_occurrences(filters = list(year = c(1971, 1981),
+                                           basis_of_record = 'FossilSpecimen'),
+                                      columns = c("default", "year"))$year),
+               c(1971, 1981))
   
 })
 
