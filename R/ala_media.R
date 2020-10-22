@@ -30,19 +30,18 @@ ala_media <- function(identifier, download_dir, identifier_type = "media",
   media_data <- data.table::rbindlist(lapply(identifier, function(id) {
     if (identifier_type == 'media') {
       # get the media specified
-      data <- cbind(mediaId = id, media(id))
+      data <- cbind(media_id = id, as.data.frame(media(id),
+                                                 stringsAsFactors = FALSE))
     } else {
       # get media for an occurrence id
       data <- occurrence_media(id)
     }
-    if (!is.null(data)) {
-      adjust_col_names(data, type = "media")
-    }
+    data
   }), fill = TRUE)
   
   # download media
   # should add output path to out data?
-  d <- mapply(download_media, media_data$mediaId, media_data$format,
+  d <- mapply(download_media, media_data$media_id, media_data$format,
               download_dir)
   media_data
 }
@@ -51,23 +50,24 @@ ala_media <- function(identifier, download_dir, identifier_type = "media",
 # handle the case when an occurrence record has more images than the limit?
 # is there a limit?
 occurrence_media <- function(occurrence_id) {
-  url <- parse_url(getOption("ALA4R_server_config")$base_url_images)
-  url$path <- c("ws", "search")
-  url$query <- list(q = paste0("occurrenceID:", "\"", occurrence_id, "\""))
-  resp <- fromJSON(build_url(url))
+  url <- getOption("ALA4R_server_config")$base_url_images
+  resp <- ala_GET(url, "ws/search",
+                  list(q = paste0("occurrenceID:", "\"", occurrence_id, "\"")))
+
   if(resp$totalImageCount == 0) {
     warning("No media was found for id ", "\"", occurrence_id, "\"")
     return(NULL)
   }
-  adjust_col_names(resp$images, type = "media")
+  resp <- resp$images
+  names(resp) <- rename_columns(names(resp), type = "media")
+  resp[names(resp) %in% wanted_columns("media")]
 }
 
 # what to do if no media found? create error for now
 media <- function(media_id) {
-  url <- parse_url(getOption("ALA4R_server_config")$base_url_images)
-  url$path <- c("ws", "image", media_id)
+  url <- getOption("ALA4R_server_config")$base_url_images
   tryCatch(
-    resp <- fromJSON(build_url(url), flatten = TRUE),
+    resp <- ala_GET(url, paste0("ws/image/", media_id)),
     error = function(e) {
       e$message <- paste0("No media found for id ", "\"", media_id, "\"")
       stop(e)
@@ -77,8 +77,8 @@ media <- function(media_id) {
   if (is.null(resp$recognisedLicence)) {
     resp$recognisedLicence <- NA
   }
-  adjust_col_names(as.data.frame(resp, stringsAsFactors = FALSE),
-                   type = "media")
+  names(resp) <- rename_columns(names(resp), type = "media")
+  resp[names(resp) %in% wanted_columns("media")]
 }
 
 download_media <- function(id, type, download_dir) {
