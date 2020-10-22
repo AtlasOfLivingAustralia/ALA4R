@@ -4,7 +4,7 @@
 #' additional break down by `breakdown`
 #'
 #' @param taxon_id string: single species ID or vector of species ids. Use 
-#' `ala_taxa()` to get lookup species id. 
+#' `ala_taxa()` to lookup species id. 
 #' @param filters string: a list to narrow down the search, in the form `list(field = value)`.
 #'
 #' @param area string or sf object: restrict the search to an area. Can provide
@@ -48,6 +48,14 @@ ala_counts <- function(taxon_id, filters, area, breakdown) {
   }
   
   if(missing(breakdown)) {
+    count_url <- parse_url(getOption("ALA4R_server_config")$base_url_biocache)
+    count_url$path <- c("ws","occurrences","search")
+    count_url$query <- c(query, pageSize = 0)
+    
+    if (nchar(build_url(count_url)) > 2000) {
+      qid <- cache_params(query)
+      query <- list(q = paste0("qid:",qid))
+    }
     return(record_count(query))
   }
   

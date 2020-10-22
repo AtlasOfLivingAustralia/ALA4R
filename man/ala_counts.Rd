@@ -4,10 +4,13 @@
 \alias{ala_counts}
 \title{Counts for ALA records}
 \usage{
-ala_counts(filters, area, breakdown)
+ala_counts(taxon_id, filters, area, breakdown)
 }
 \arguments{
-\item{filters}{string: a list to narrow down the search, in the form `c(field = value)`}
+\item{taxon_id}{string: single species ID or vector of species ids. Use 
+`ala_taxa()` to lookup species id.}
+
+\item{filters}{string: a list to narrow down the search, in the form `list(field = value)`.}
 
 \item{area}{string or sf object: restrict the search to an area. Can provide
 sf object, or a wkt string. If the wkt string is too long, it may be simplified.}
