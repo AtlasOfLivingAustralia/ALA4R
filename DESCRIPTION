@@ -18,6 +18,7 @@ Description: The Atlas of Living Australia (ALA) provides tools to enable users
     and resources hosted by the ALA.
 Imports:
     assertthat,
+    crul,
     data.table,
     digest,
     httr,
