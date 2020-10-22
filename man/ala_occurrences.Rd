@@ -18,10 +18,14 @@ ala_occurrences(
 \item{taxon_id}{string: single species ID or vector of species ids. Use 
 `ala_taxa()` to get lookup species id.}
 
-\item{filters}{string: a list to narrow down the search, in the form `c(field = value)`}
+\item{filters}{string: a list to narrow down the search, in the form
+`list(field = value)`. To limit the query to a year range, use
+`list(year = c(1990, 2000))`. This will return records between and including
+the years provided.}
 
 \item{area}{string or sf object: restrict the search to an area. Can provide
-sf object, or a wkt string. If the wkt string is too long, it may be simplified.}
+sf object, or a wkt string. WKT strings longer than 10000 characters will
+not be accepted by the ALA- see the vignette for how to work around this.}
 
 \item{columns}{string: vector of columns to return in download.}
 
