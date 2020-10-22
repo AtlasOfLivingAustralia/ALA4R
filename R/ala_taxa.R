@@ -88,7 +88,8 @@ name_lookup <- function(name) {
     return(as.data.frame(list(search_term = name), stringsAsFactors = FALSE))
   }
   names(result) <- rename_columns(names(result), type = "taxa")
-  result[names(result) %in% wanted_columns("taxa")]
+  cbind(search_term = name,
+        as.data.frame(result[names(result) %in% wanted_columns("taxa")]))
 }
 
 identifier_lookup <- function(identifier) {
