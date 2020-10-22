@@ -36,7 +36,9 @@ ala_taxa <- function(term, term_type = "name", return_children = FALSE,
     validate_rank(ranks)
     if (is.list(term)) {
       # convert to dataframe for simplicity
-      term <- as.data.frame(term)
+      if (length(names(term)) > 0) {
+        term <- as.data.frame(term)
+      }
     }
     if (is.data.frame(term)) {
       matches <- data.table::rbindlist(apply(term, 1, name_lookup),

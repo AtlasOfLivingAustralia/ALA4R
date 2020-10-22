@@ -49,6 +49,9 @@ test_that("ala_taxa handles name searches", {
   # Handle multiple names
   expect_equal(nrow(ala_taxa(term = c("Eucalyptus", "Banksia", "Acacia"))), 3)
   
+  # Handle list of multiple names
+  expect_equal(nrow(ala_taxa(term = list("Eucalyptus", "Banksia", "Acacia"))), 3)
+  
   # Handle mix of valid and invalid names
   expect_message(expect_equal(nrow(ala_taxa(term = c("Eucalyptus", "Banksia", "Wattle"))), 3))
   
