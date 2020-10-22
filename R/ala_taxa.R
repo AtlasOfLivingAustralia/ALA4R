@@ -44,14 +44,14 @@ ala_taxa <- function(term, term_type = "name", return_children = FALSE,
     } else {
       matches <- data.table::rbindlist(lapply(term, function(t) {
         name_lookup(t)
-      }))
+      }), fill = TRUE)
     }
   } else {
     matches <- data.table::rbindlist(lapply(term, function(t) {
       identifier_lookup(t)
-    }))
+    }), fill = TRUE)
   }
-  out_data <- adjust_col_names(as.data.frame(matches, stringsAsFactors = FALSE))
+  out_data <- as.data.frame(matches, stringsAsFactors = FALSE)
   if (ncol(out_data) > 1 && return_children) {
     # look up the child concepts for the identifier
     children <- child_concepts(out_data$taxonConceptID)
@@ -125,7 +125,9 @@ child_concepts <- function(identifier) {
   child_info <- suppressWarnings(data.table::rbindlist(lapply(children$guid, function(id) {
     result <- identifier_lookup(id)
     # keep child even if it can't be found?
-    adjust_col_names(as.data.frame(result, stringsAsFactors = FALSE))
+    names(result) <- rename_columns(names(result), type = "taxa")
+    result <- result[names(result) %in% wanted_columns("taxa")]
+    as.data.frame(result, stringsAsFactors = FALSE)
   }), fill = TRUE))
   child_info
 }

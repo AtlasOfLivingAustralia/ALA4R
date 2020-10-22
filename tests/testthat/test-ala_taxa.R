@@ -46,6 +46,12 @@ test_that("ala_taxa handles name searches", {
                              term_type = "name")), 1)
   expect_message(ala_taxa(term = "Microseris lanceolata",
                           term_type = "identifier"))
+  # Handle multiple names
+  expect_equal(nrow(ala_taxa(term = c("Eucalyptus", "Banksia", "Acacia"))), 3)
+  
+  # Handle mix of valid and invalid names
+  expect_message(expect_equal(nrow(ala_taxa(term = c("Eucalyptus", "Banksia", "Wattle"))), 3))
+  
 })
 
 test_that("ala taxa returns counts for species", {
