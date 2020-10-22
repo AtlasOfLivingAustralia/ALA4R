@@ -8,23 +8,19 @@ identifiers.}
 ala_taxa(
   term,
   term_type = "name",
-  rank = NULL,
   return_children = FALSE,
   include_counts = FALSE
 )
 }
 \arguments{
-\item{term}{string: search term}
+\item{term}{string, named list or dataframe: search term(s)}
 
 \item{term_type}{string: specifies which type of terms are provided in
 `term`. One of name `c('name', 'identifier')`}
 
-\item{rank}{string: (optional) taxonomic rank to search at. If not provided, will
-conduct a free text search}
+\item{return_children}{logical: return child concepts for the provided term(s)}
 
-\item{return_children}{logical: return child concepts for the provided term(s)?}
-
-\item{include_counts}{logical: return occurrence counts for all species returned?}
+\item{include_counts}{logical: return occurrence counts for all species returned}
 }
 \description{
 Uses ALA name matching service. Species ids from this function can be

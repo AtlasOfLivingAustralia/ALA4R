@@ -79,42 +79,62 @@ tocamel <- function(x, delim = "[^[:alnum:]]", upper = FALSE, sep = "") {
 
 ##-----------------------------------------------------------------------------
 
+wanted_columns <- function(type) {
+    switch(type,
+           "taxa" = c("scientificName", "scientificNameAuthorship",
+                      "taxonConceptID", "rank","rankID","matchType",
+                      "kingdom","kingdomID","phylum","phylumID",
+                      "classs","classID","order","orderID","family","familyID",
+                      "genus","genusID","species","speciesID","issues",
+                      "search_term"),
+           "profile"= c("id", "name", "shortName", "description"))
+}
+
 ## define column names that we will remove from the results because we don't
 ## think they will be useful in the ALA4R context
+# TODO: update with new functions
 unwanted_columns <- function(type) {
     type <- match.arg(tolower(type), c("general", "layers", "occurrence",
-                                       "occurrence_stored",
-                                       "occurrence_indexed", "assertions"))
+                                       "assertions", "taxa", "media"))
     switch(type,
+           "taxa"  = c("scientificName", "scientificNameAuthorship",
+                       "taxonConceptID", "rank","rankID","matchType",
+                       "kingdom","kingdomID","phylum","phylumID",
+                       "classs","classID","order","orderID","family","familyID",
+                       "genus","genusID","species","speciesID","issues",
+                       "search_term"),
+           "media" = c("rightsHolder", "imageIdentifier", "format",
+                       "occurrenceID", "recognisedLicence", "license",
+                       "creator", "title", "rights", "mimeType",
+                       "mediaId"),
            "general" = c("rawRank", "rawRankString", "rankId", "rankID",
                          "left", "right", "idxType", "highlight",
                          "linkIdentifier", "isExcluded"),
-             ## rawRank appears to be a duplicate of rank or rankString
            "layers" = c("pid", "path", "path_orig", "path_1km", "enabled",
                         "uid", "licence_level", "lookuptablepath", "mdhrlv",
                         "mddatest", "datalang", "grid", "shape", "enabled",
                         "indb", "spid", "sid", "sdesc", "sname",
                         "defaultlayer", "namesearch", "intersect",
                         "layerbranch", "analysis", "addtomap"),
-             ## datalang appears to be all "eng" "Eng" "enu" "" or NA
-             ## (2x"enu" records appear to be in English and from DEH/DEWHA)
-             ## grid is redundant: all env layers are grid==TRUE, all
-             ## contextual layers are grid==NA
-             ## ditto for shape: all contextual are TRUE, all grid are NA
-             ## mddatest is an internal metadata testing date of some sort?
-             ## enabled appears to be all TRUE
-             ## spid is redundant with id
-             ## no idea what sid,sname, or sdesc are, but don't look
-             ## particularly useful in our context
-           "occurrence_stored"=,
-           "occurrence_indexed"=,
            "occurrence" = c("lft", "rgt", "rankId"),
-             ## lft and rgt look the same as left and right in general fields
            c("")
            )
 }
 
 ##-----------------------------------------------------------------------------
+# Function to replace rename variables eventually
+rename_columns <- function(varnames, type) {
+    if (type == "media") {
+        varnames[varnames == "mimeType"] <- "format"
+        varnames[varnames == "imageIdentifier"] <- "media_id"
+    }
+    else if (type == "taxa") {
+        varnames[varnames == "classs"] <- "class"
+    }
+    # change all to snake case?
+    varnames
+}
+
 
 rename_variables <- function(varnames, type, verbose = ala_config()$verbose) {
     if (length(varnames) < 1) {

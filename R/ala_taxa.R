@@ -4,13 +4,11 @@
 #' Uses ALA name matching service. Species ids from this function can be
 #' used to search `ala_occurrences`
 #' 
-#' @param term string: search term
+#' @param term string, named list or dataframe: search term(s)
 #' @param term_type string: specifies which type of terms are provided in
 #' `term`. One of name `c('name', 'identifier')`
-#' @param rank string: (optional) taxonomic rank to search at. If not provided, will
-#' conduct a free text search
-#' @param return_children logical: return child concepts for the provided term(s)?
-#' @param include_counts logical: return occurrence counts for all species returned?
+#' @param return_children logical: return child concepts for the provided term(s)
+#' @param include_counts logical: return occurrence counts for all species returned
 #' 
 #' @export ala_taxa
 
@@ -19,11 +17,10 @@
 # should a message and/or warning be displayed?
 # should vernacular name searching be supported?
 
-ala_taxa <- function(term, term_type = "name", rank = NULL,
-                     return_children = FALSE, include_counts = FALSE) {
-  
-  taxa_url <- 'https://namematching-ws-test.ala.org.au/'
-  bie_url <- 'https://bie-ws.ala.org.au/'
+## TODO: Fix the adjust colnames function
+
+ala_taxa <- function(term, term_type = "name", return_children = FALSE,
+                         include_counts = FALSE) {
   
   assert_that(is.flag(return_children))
   assert_that(term_type %in% c("name", "identifier"),
@@ -33,82 +30,92 @@ ala_taxa <- function(term, term_type = "name", rank = NULL,
     stop("`ala_taxa` requires a term to search for")
   }
   
-  if (!missing(rank)) {
-    rank <- validate_rank(rank)
-  }
-  
-  matches <- data.table::rbindlist(lapply(term, function(t) {
-    if (term_type == "identifier") {
-      result <- identifier_lookup(t)
+  if (term_type == "name") {
+    ranks <- names(term)
+    # check ranks are valid if term type is name
+    validate_rank(ranks)
+    if (is.list(term)) {
+      # convert to dataframe for simplicity
+      term <- as.data.frame(term)
+    }
+    if (is.data.frame(term)) {
+      matches <- data.table::rbindlist(apply(term, 1, name_lookup),
+                                       fill = TRUE)
     } else {
-      result <- name_lookup(t, rank)
+      matches <- data.table::rbindlist(lapply(term, function(t) {
+        name_lookup(t)
+      }))
     }
-    if (isFALSE(result$success)) {
-      message("No taxon matches were found for \"", t, "\"")
-      return(as.data.frame(list(search_term = t), stringsAsFactors = FALSE))
-    }
-    out_data <- adjust_col_names(as.data.frame(result, stringsAsFactors = FALSE))
-    if (return_children) {
-      # look up the child concepts for the identifier
-      children <- child_concepts(result$taxonConceptID)
-      # add children to df
-      out_data <- rbind(out_data, children, fill = TRUE)
-    }
-    cbind(search_term = t, out_data)
-  }), fill = TRUE)
-
-  if (include_counts) {
-    matches$count <- lapply(matches$taxonConceptID, function(id) {
+  } else {
+    matches <- data.table::rbindlist(lapply(term, function(t) {
+      identifier_lookup(t)
+    }))
+  }
+  out_data <- adjust_col_names(as.data.frame(matches, stringsAsFactors = FALSE))
+  if (ncol(out_data) > 1 && return_children) {
+    # look up the child concepts for the identifier
+    children <- child_concepts(out_data$taxonConceptID)
+    # add children to df
+    out_data <- rbind(out_data, children, fill = TRUE)
+  }
+  if (ncol(out_data) > 1 && include_counts) {
+    out_data$count <- lapply(out_data$taxonConceptID, function(id) {
       record_count(list(fq = paste0("lsid:",id)))
     }) 
   }
-  matches
-  
+  out_data
 }
 
-name_lookup <- function(name, rank = NULL) {
-  taxa_url <- 'https://namematching-ws-test.ala.org.au/'
-  url <- parse_url(taxa_url)
-  if (is.null(rank)) {
+
+name_lookup <- function(name) {
+  url <- 'https://namematching-ws-test.ala.org.au/'
+  if (is.null(names(name)) || names(name) == "") {
     # search by scientific name
-    url$path <- "api/search"
-    url$query <- list(q = name)
+    path <- "api/search"
+    query <- list(q = name[[1]])
   } else {
     # search by classification
-    url$path <- "api/searchByClassification"
-    url$query <- paste0(rank, "=" , URLencode(name))
+    path <- "api/searchByClassification"
+    query <- name
   }
-  fromJSON(build_url(url))
+  result <- ala_GET(url, path, query)
+  if (result$issues == "homonym") {
+    stop("Homonym issue with ", name, ". Please also provide another rank to clarify.")
+  }  else if (isFALSE(result$success)) {
+    message("No taxon matches were found for \"", name, "\"")
+    return(as.data.frame(list(search_term = name), stringsAsFactors = FALSE))
+  }
+  names(result) <- rename_columns(names(result), type = "taxa")
+  result[names(result) %in% wanted_columns("taxa")]
 }
 
 identifier_lookup <- function(identifier) {
   taxa_url <- 'https://namematching-ws-test.ala.org.au/'
-  url <- parse_url(taxa_url)
-  url$path <- "/api/getByTaxonID"
-  url$query <- list(taxonID = identifier)
-  fromJSON(build_url(url))
+  res <- ala_GET(taxa_url, "/api/getByTaxonID", list(taxonID = identifier))
+  if (isFALSE(res$success) && res$issues == 'noMatch') {
+    message("No match found for identifier ", identifier)
+  }
+  names(result) <- rename_columns(names(result), type = "taxa")
+  result[names(result) %in% wanted_columns("taxa")]
 }
 
 # make sure rank provided is in accepted list
-validate_rank <- function(rank) {
+validate_rank <- function(ranks) {
   valid_ranks <- c('kingdom', 'phylum', 'class', 'order',
-                   'family', 'genus', 'species', 'scientificName')
-  # allow user to provide species in place of scientific name
-  if (rank == 'species') {
-    rank <- 'scientificName'
+                   'family', 'genus', 'scientificName', 'specificEpithet')
+  
+  invalid_ranks <- ranks[which(!(ranks %in% valid_ranks))]
+  
+  if (length(invalid_ranks) != 0) {
+    stop("Invalid rank(s): ", paste(invalid_ranks, collapse = ', '),
+         ". Valid ranks are: ", paste0(valid_ranks, collapse = ', '))
   }
-  if (!(rank %in% valid_ranks)) {
-    stop('The provided rank must be one of: ', paste0(valid_ranks,
-                                                     collapse = ', '))
-  }
-  rank
 }
 
 child_concepts <- function(identifier) {
-  bie_url <- 'https://bie-ws.ala.org.au/'
-  url <- parse_url(bie_url)
-  url$path <- c("ws/childConcepts", URLencode(identifier, reserved = TRUE))
-  children <- fromJSON(build_url(url))
+  url <- 'https://bie-ws.ala.org.au/'
+  path <- paste0("ws/childConcepts/", URLencode(identifier, reserved = TRUE))
+  children <- ala_GET(url, path)
   if (length(children) == 0) {
     message("No child concepts found for taxon id \"", identifier, "\"")
     return()
@@ -118,38 +125,8 @@ child_concepts <- function(identifier) {
   child_info <- suppressWarnings(data.table::rbindlist(lapply(children$guid, function(id) {
     result <- identifier_lookup(id)
     # keep child even if it can't be found?
-    adjust_col_names(as.data.frame(result))
+    adjust_col_names(as.data.frame(result, stringsAsFactors = FALSE))
   }), fill = TRUE))
   child_info
 }
 
-# fix up species info columns 
-# can take any output and make the col names as expected
-adjust_col_names <- function(data, type = 'taxa') {
-  # this is dodgy but will do for now
-  if (nrow(data) > 1) {
-    data <- data[1,]
-  }
-  if (type == 'taxa') {
-    cols_to_keep <- c('scientificName', 'scientificNameAuthorship',
-                      'taxonConceptID', 'rank','rankID','matchType',
-                      'kingdom','kingdomID','phylum','phylumID',
-                      'classs','classID','order','orderID','family','familyID',
-                      'genus','genusID','species','speciesID','issues')
-  } else if (type == "media") {
-    cols_to_keep <- c("rightsHolder", "imageIdentifier", "format",
-                      "occurrenceID", "recognisedLicence", "license",
-                      "creator", "title", "rights", "mimeType",
-                      "mediaId")
-  }
-  
-  # keep only required columns
-  data <- data[, names(data) %in% cols_to_keep]
-  
-  # replace 'classs' with 'class' 
-  names(data)[names(data) == "classs"] <- "class"
-  names(data)[names(data) == "mimeType"] <- "format"
-  names(data)[names(data) == "imageIdentifier"] <- "mediaId"
-  
-  return(data)
-}

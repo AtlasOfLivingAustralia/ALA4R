@@ -6,7 +6,6 @@ test_that("ala_taxa checks inputs", {
   expect_error(ala_taxa())
   expect_error(ala_taxa(term_type = 'bad_term'))
   expect_error(ala_taxa("Varanus varius", return_children = 'false'))
-  expect_error(ala_taxa("Varanus varius", rank = 'sp'))
 })
 
 test_that("child_concepts behaves correctly", {
@@ -28,12 +27,10 @@ test_that("child concepts returns expected number of children", {
 
 test_that("ala_taxa searches at provided rank", {
   skip_on_cran()
-  expect_equal(ala_taxa(term = "Acacia", rank = "genus")$rank, "genus")
+  expect_equal(ala_taxa(list(genus = "Acacia"))$rank, "genus")
   
   # converts from 'species' to 'scientificName'
-  expect_equal(ala_taxa(term = "Wurmbea dioica", rank = "species")$rank,
-               "species")
-  expect_equal(ala_taxa(term = "Wurmbea dioica", rank = "scientificName")$rank,
+  expect_equal(ala_taxa(list(scientificName = "Wurmbea dioica"))$rank,
                "species")
 })
 
