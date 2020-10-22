@@ -81,13 +81,18 @@ tocamel <- function(x, delim = "[^[:alnum:]]", upper = FALSE, sep = "") {
 
 wanted_columns <- function(type) {
     switch(type,
-           "taxa" = c("scientificName", "scientificNameAuthorship",
-                      "taxonConceptID", "rank","rankID","matchType",
-                      "kingdom","kingdomID","phylum","phylumID",
-                      "classs","classID","order","orderID","family","familyID",
-                      "genus","genusID","species","speciesID","issues",
-                      "search_term"),
-           "profile"= c("id", "name", "shortName", "description"))
+           "taxa" = c("search_term", "scientificName",
+                      "scientificNameAuthorship", "taxonConceptID", "rank",
+                      "matchType", "kingdom", "phylum", "class", "order",
+                      "family", "genus", "species", "issues"),
+           "profile"= c("id", "name", "shortName", "description"),
+           "media" = c("rightsHolder", "imageIdentifier", "format",
+                       "occurrenceID", "recognisedLicence", "license",
+                       "creator", "title", "rights", "mimeType",
+                       "media_id"),
+           "layer" = c("source_link", "display_name", "id", "type",
+                       "description"),
+           "quality_filter" = c("description", "filter"))
 }
 
 ## define column names that we will remove from the results because we don't
@@ -97,16 +102,6 @@ unwanted_columns <- function(type) {
     type <- match.arg(tolower(type), c("general", "layers", "occurrence",
                                        "assertions", "taxa", "media"))
     switch(type,
-           "taxa"  = c("scientificName", "scientificNameAuthorship",
-                       "taxonConceptID", "rank","rankID","matchType",
-                       "kingdom","kingdomID","phylum","phylumID",
-                       "classs","classID","order","orderID","family","familyID",
-                       "genus","genusID","species","speciesID","issues",
-                       "search_term"),
-           "media" = c("rightsHolder", "imageIdentifier", "format",
-                       "occurrenceID", "recognisedLicence", "license",
-                       "creator", "title", "rights", "mimeType",
-                       "mediaId"),
            "general" = c("rawRank", "rawRankString", "rankId", "rankID",
                          "left", "right", "idxType", "highlight",
                          "linkIdentifier", "isExcluded"),
@@ -130,6 +125,8 @@ rename_columns <- function(varnames, type) {
     }
     else if (type == "taxa") {
         varnames[varnames == "classs"] <- "class"
+    } else if (type == "layer") {
+        varnames[varnames == "displayname"] <- "display_name"
     }
     # change all to snake case?
     varnames
