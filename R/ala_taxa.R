@@ -94,7 +94,7 @@ name_lookup <- function(name) {
 
 identifier_lookup <- function(identifier) {
   taxa_url <- 'https://namematching-ws-test.ala.org.au/'
-  res <- ala_GET(taxa_url, "/api/getByTaxonID", list(taxonID = identifier))
+  result <- ala_GET(taxa_url, "/api/getByTaxonID", list(taxonID = identifier))
   if (isFALSE(res$success) && res$issues == 'noMatch') {
     message("No match found for identifier ", identifier)
   }
@@ -117,7 +117,8 @@ validate_rank <- function(ranks) {
 
 child_concepts <- function(identifier) {
   url <- 'https://bie-ws.ala.org.au/'
-  path <- paste0("ws/childConcepts/", URLencode(identifier, reserved = TRUE))
+  path <- paste0("ws/childConcepts/",
+                 URLencode(as.character(identifier), reserved = TRUE))
   children <- ala_GET(url, path)
   if (length(children) == 0) {
     message("No child concepts found for taxon id \"", identifier, "\"")
