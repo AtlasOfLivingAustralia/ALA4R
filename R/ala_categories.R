@@ -12,14 +12,13 @@ biocache_url <- "https://biocache-ws.ala.org.au/"
 # can we modify /occurrences/search/ to return the number of facet values? It seems quicker
 # or use /ws/occurrences/facets/download?
 # should this allow 
-ala_categories <- function(field) {
-  max_categories <- 20
+ala_categories <- function(field, limit = 20) {
   if (missing(field)) {
     stop("`ala_categories` requires a field to search for")
   }
   url <- parse_url(biocache_url)
   url$path <- c("ws", "occurrence", "facets")
-  url$query <- list(facets = field, flimit = max_categories)
+  url$query <- list(facets = field, flimit = limit)
   
   tryCatch(
     resp <- fromJSON(build_url(url)),
@@ -29,9 +28,9 @@ ala_categories <- function(field) {
     }
   )
 
-  if (resp$count > max_categories) {
+  if (resp$count > limit) {
     warning("This field has ", resp$count, " possible values. Only the first ",
-    max_categories, " will be returned.")
+    limit, " will be returned. Change `limit` to return more values.")
   }
   categories <- sapply(resp$fieldResult[[1]]$fq, function(n) {
     extract_category_value(n)
