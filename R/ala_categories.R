@@ -1,6 +1,12 @@
+#' List valid options for a categorical field
+#' 
+#' Use for checking filters for `ala_occurrences` and `ala_counts` are valid
+#' @param field string: field to return the categories for. Use `ala_fields`
+#' to view valid fields.
+#' @param limit numeric: maximum number of categories to return. 20 by default.
+#' @return a dataframe of field name and category name (for now)
+#' @export ala_categories
 
-
-biocache_url <- "https://biocache-ws.ala.org.au/"
 
 # this should return the term you need to search with?
 # which is not included in the facet results- perhaps something to ask about?
@@ -16,26 +22,23 @@ ala_categories <- function(field, limit = 20) {
   if (missing(field)) {
     stop("`ala_categories` requires a field to search for")
   }
-  url <- parse_url(biocache_url)
-  url$path <- c("ws", "occurrence", "facets")
-  url$query <- list(facets = field, flimit = limit)
+  if (!(field %in% ala_fields()$name)) {
+    stop("\"", field,
+         "\" is not a valid field. See valid fields with `ala_fields()`.")
+  }
+  assert_that(is.numeric(limit))
+  url <- getOption("ALA4R_server_config")$base_url_biocache
+  resp <- ala_GET(url, "ws/occurrence/facets",
+                    params = list(facets = field, flimit = limit))
   
-  tryCatch(
-    resp <- fromJSON(build_url(url)),
-    error = function(e) {
-      e$message <- paste0("\"", field, "\" is not a valid field. Use `ala_fields` for a list of valid fields.")
-      stop(e)
-    }
-  )
-
   if (resp$count > limit) {
     warning("This field has ", resp$count, " possible values. Only the first ",
     limit, " will be returned. Change `limit` to return more values.")
   }
-  categories <- sapply(resp$fieldResult[[1]]$fq, function(n) {
+  category <- sapply(resp$fieldResult[[1]]$fq, function(n) {
     extract_category_value(n)
   }, USE.NAMES = FALSE)
-  categories
+  cbind(field = field, as.data.frame(category))
 }
 
 # function to extract value which for some reason isn't returned
