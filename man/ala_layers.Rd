@@ -6,6 +6,9 @@
 \usage{
 ala_layers()
 }
+\value{
+dataframe of all spatial layers held by the ALA
+}
 \description{
 Search ALA spatial layers
 }
