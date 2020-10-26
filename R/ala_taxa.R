@@ -61,9 +61,10 @@ ala_taxa <- function(term, term_type = "name", return_children = FALSE,
     out_data <- rbind(out_data, children, fill = TRUE)
   }
   if (ncol(out_data) > 1 && include_counts) {
-    out_data$count <- unlist(lapply(out_data$taxon_concept_id, function(id) {
+    counts <- unlist(lapply(out_data$taxon_concept_id, function(id) {
       record_count(list(fq = paste0("lsid:",id)))
     }))
+    out_data <- cbind(out_data, count = counts)
   }
   out_data
 }
