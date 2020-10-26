@@ -79,21 +79,6 @@ tocamel <- function(x, delim = "[^[:alnum:]]", upper = FALSE, sep = "") {
 
 ##-----------------------------------------------------------------------------
 
-wanted_columns <- function(type) {
-    switch(type,
-           "taxa" = c("search_term", "scientificName",
-                      "scientificNameAuthorship", "taxonConceptID", "rank",
-                      "matchType", "kingdom", "phylum", "class", "order",
-                      "family", "genus", "species", "issues"),
-           "profile"= c("id", "name", "shortName", "description"),
-           "media" = c("rightsHolder", "imageIdentifier", "format",
-                       "occurrenceID", "recognisedLicence", "license",
-                       "creator", "title", "rights", "mimeType",
-                       "media_id"),
-           "layer" = c("source_link", "display_name", "id", "type",
-                       "description"),
-           "quality_filter" = c("description", "filter"))
-}
 
 ## define column names that we will remove from the results because we don't
 ## think they will be useful in the ALA4R context
@@ -117,20 +102,7 @@ unwanted_columns <- function(type) {
 }
 
 ##-----------------------------------------------------------------------------
-# Function to replace rename variables eventually
-rename_columns <- function(varnames, type) {
-    if (type == "media") {
-        varnames[varnames == "mimeType"] <- "format"
-        varnames[varnames == "imageIdentifier"] <- "media_id"
-    }
-    else if (type == "taxa") {
-        varnames[varnames == "classs"] <- "class"
-    } else if (type == "layer") {
-        varnames[varnames == "displayname"] <- "display_name"
-    }
-    # change all to snake case?
-    varnames
-}
+
 
 
 rename_variables <- function(varnames, type, verbose = ala_config()$verbose) {
@@ -330,3 +302,150 @@ read_csv_quietly <- function(...) {
 
 replace_nonbreaking_spaces <- function(s)
     gsub("\ua0", " ", s)
+
+
+##----------------------Helper functions for v2--------------------------------
+
+wanted_columns <- function(type) {
+    switch(type,
+           "taxa" = c("search_term", "scientific_name",
+                      "scientific_name_authorship", "taxon_concept_id", "rank",
+                      "match_type", "kingdom", "phylum", "class", "order",
+                      "family", "genus", "species", "issues"),
+           "profile"= c("id", "name", "shortName", "description"),
+           "media" = c("rightsHolder", "imageIdentifier", "format",
+                       "occurrenceID", "recognisedLicence", "license",
+                       "creator", "title", "rights", "mimeType",
+                       "media_id"),
+           "layer" = c("source_link", "display_name", "id", "type",
+                       "description"),
+           "quality_filter" = c("description", "filter"))
+}
+
+# rename specific columns, and convert camelCase to snake_case
+rename_columns <- function(varnames, type) {
+    if (type == "media") {
+        varnames[varnames == "mimeType"] <- "format"
+        varnames[varnames == "imageIdentifier"] <- "media_id"
+    }
+    else if (type == "taxa") {
+        varnames[varnames == "classs"] <- "class"
+    } else if (type == "layer") {
+        varnames[varnames == "displayname"] <- "display_name"
+    }
+    # change all to snake case?
+    if (type == "taxa") {
+        varnames <- tolower(gsub("([a-z])([A-Z])", "\\1_\\L\\2", varnames,
+                         perl = TRUE))
+    }
+    varnames
+}
+
+# this is ugly but does work...
+build_filter_query <- function(filters, dq_profile) {
+    # add quotes so query behaves as expected
+    date_fields <- c("year")
+    
+    matched_date_field <- which(names(filters) %in% date_fields)
+    if (length(matched_date_field) != 0) {
+        # extract date fields from filter
+        date_filters <- filters[matched_date_field]
+        date_query <- build_date_query(date_filters)
+        filters <- filters[-matched_date_field]
+    } else {
+        date_query <- NULL
+    }
+    general_query <- build_general_query(filters)
+    quality_query <- build_quality_query(dq_profile)
+    queries <- c(date_query, general_query, quality_query)
+    valid_queries <- queries[!sapply(queries,is.null)]
+    paste(valid_queries, collapse =  ' AND ')
+}
+
+build_quality_query <- function(dq_profile) {
+    if (is.null(dq_profile)) {
+        return(NULL)
+    }
+    paste(ala_quality_filters(dq_profile)$filter, collapse = ' AND ')
+}
+
+build_date_query <- function(filters) {
+    paste0(names(filters), ":[", filters[[1]][1],
+           " TO ", filters[[1]][2], "]")
+}
+
+# rename?
+build_general_query <- function(filters) {
+    if (length(filters) == 0) {
+        return(NULL)
+    }
+    quoted_filters <- lapply(filters, function(x) {
+        paste0("\"", x, "\"")
+    })
+    paste(names(filters), quoted_filters, sep = ":", collapse = " AND ")
+}
+
+build_taxa_query <- function(ids) {
+    paste0("(lsid:",paste(ids, collapse = " OR lsid:"),")")
+}
+
+build_area_query <- function(area) {
+    # check wkt
+    if (is.character(area)) {
+        # maybe give a more helpful error message here?
+        validate_wkt(area)
+        # should this also take other area types?
+    } else if (identical(class(area), c("sf", "data.frame"))) {
+        area <- build_wkt(area)
+    } else {
+        stop("Area must be either a wkt string or an sf spatial object.")
+    }
+    area
+}
+
+
+validate_wkt <- function(wkt) {
+    max_char <- 10000
+    if (nchar(wkt) > max_char) {
+        stop("The WKT string provided is greater than ", max_char,
+             " , please simplify the WKT and try again.")
+    }
+}
+
+# build a valid wkt string from a spatial polygon
+build_wkt <- function(polygon) {
+    wkt <- st_as_text(st_geometry(polygon))
+    if (nchar(wkt) > 10000) {
+        stop("The area provided is too complex. Please simplify it and try again.")
+    }
+}
+
+# filters vs. fields terminology
+# should handle miscased things?
+# should try to fuzzy match?
+# should also validate facets?
+validate_filters <- function(filters) {
+    # filters are provided in a list
+    # key should be a valid field name and value should be a valid category for that field
+    # valid options is a combination of ala_layers and ala_fields?
+    
+    invalid_filters <- names(filters)[which(!names(filters) %in%
+                                                ala_fields()$name)]
+    if (length(invalid_filters) > 0) {
+        stop("The following filters are invalid: ",
+             paste(invalid_filters, collapse = ", "),
+             ". Use `ala_fields()` to get a list of valid options")
+    }
+}
+
+# POST params to server to get around url length constraint
+# POST all the filters here, or just ones that are likely to cause the maximum
+# length to be exceeded? POST only if the url is too long, or by default?
+# what is the maximum length? around 2000 chars?
+cache_params <- function(query) {
+    #url <- parse_url(getOption("ALA4R_server_config")$base_url_biocache)
+    url <- "https://biocache-ws.ala.org.au"
+    resp <- ala_POST(url, path = "ws/webportal/params", body = query)
+    return(resp)
+}
+

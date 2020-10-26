@@ -15,7 +15,8 @@ ala_data_profiles <- function() {
 
 #' Get data filters for a  data quality profile
 #' 
-#' @param profile string: can be a provide a profile name, short name or id
+#' @param profile string: a data quality profile name, short name or id.
+#' See `ala_data_profiles` for valid filters
 #' @export ala_quality_filters
 
 ala_quality_filters <- function(profile) {

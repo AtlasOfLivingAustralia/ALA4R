@@ -5,14 +5,18 @@
 #'
 #' @param taxon_id string: single species ID or vector of species ids. Use 
 #' `ala_taxa()` to lookup species id. 
-#' @param filters string: a list to narrow down the search, in the form `list(field = value)`.
-#'
+#' @param filters string: a list to narrow down the search, in the form
+#' `list(field = value)`.
 #' @param area string or sf object: restrict the search to an area. Can provide
-#' sf object, or a wkt string. If the wkt string is too long, it may be simplified.
+#' sf object, or a wkt string. If the wkt string is too long, it may be
+#' simplified.
+#' @param data_quality_profile string: a data quality profile to apply to the
+#' records. See `ala_data_profiles()` for valid profiles. Defaults to "general"
 #' @param breakdown field to breakdown the counts by
 #' @export ala_counts
 
-ala_counts <- function(taxon_id, filters, area, breakdown) {
+ala_counts <- function(taxon_id, filters, area,
+                       data_quality_profile = "ALA", breakdown) {
   
   query <- list()
   
@@ -23,15 +27,7 @@ ala_counts <- function(taxon_id, filters, area, breakdown) {
   
   if (!missing(area)) {
     # convert area to wkt if not already
-    if (is.character(area)) {
-      # maybe give a more helpful error message here?
-      stopifnot(wellknown::lint(area))
-    } else if (identical(class(area), c("sf", "data.frame"))) {
-      area <- build_wkt(area)
-    } else {
-      stop("Area must be either a wkt string or an sf spatial object.")
-    }
-    query$wkt <- area
+    query$wkt <- build_area_query(area)
   }
   
   if (!missing(filters)) {
@@ -40,19 +36,17 @@ ala_counts <- function(taxon_id, filters, area, breakdown) {
     # there must be a better way to do this
     if (!is.null(query$fq)) {
       query$fq <- paste0("(",query$fq, ' AND ',
-                         fq = build_filter_query(filters), ")")
+                         fq = build_filter_query(
+                           filters, dq_profile = data_quality_profile), ")"
+                         )
     }
     else {
-      query$q <- build_filter_query(filters)
+      query$fq <- build_filter_query(filters, dq_profile = data_quality_profile)
     }
   }
   
   if(missing(breakdown)) {
-    count_url <- parse_url(getOption("ALA4R_server_config")$base_url_biocache)
-    count_url$path <- c("ws","occurrences","search")
-    count_url$query <- c(query, pageSize = 0)
-    
-    if (nchar(build_url(count_url)) > 2000) {
+    if (sum(nchar(query$fq), nchar(query$wkt), na.rm = TRUE) > 1948) {
       qid <- cache_params(query)
       query <- list(q = paste0("qid:",qid))
     }
@@ -63,12 +57,19 @@ ala_counts <- function(taxon_id, filters, area, breakdown) {
   validate_facet(breakdown)
   query$facets <- breakdown
   
-  url <- parse_url(getOption("ALA4R_server_config")$base_url_biocache)
-  url$path <- c("ws", "occurrence", "facets")
-  url$query <- query
+  url <- getOption("ALA4R_server_config")$base_url_biocache
+  resp <- ala_GET(url, "ws/occurrence/facets", params = query)
   
-  resp <- fromJSON(build_url(url))
   resp$fieldResult[[1]][c("label", "count", "fq")]
+}
+
+# get just the record count for a query
+# handle too long queries in here?
+record_count <- function(query) {
+  query$pageSize <- 0
+  url <- getOption("ALA4R_server_config")$base_url_biocache
+  resp <- ala_GET(url, "ws/occurrences/search", query)
+  resp$totalRecords
 }
 
 validate_facet <- function(facet) {
