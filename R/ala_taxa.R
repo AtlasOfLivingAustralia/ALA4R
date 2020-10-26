@@ -56,12 +56,12 @@ ala_taxa <- function(term, term_type = "name", return_children = FALSE,
   out_data <- as.data.frame(matches, stringsAsFactors = FALSE)
   if (ncol(out_data) > 1 && return_children) {
     # look up the child concepts for the identifier
-    children <- child_concepts(out_data$taxonConceptID)
+    children <- child_concepts(out_data$taxon_concept_id)
     # add children to df
     out_data <- rbind(out_data, children, fill = TRUE)
   }
   if (ncol(out_data) > 1 && include_counts) {
-    out_data$count <- lapply(out_data$taxonConceptID, function(id) {
+    out_data$count <- lapply(out_data$taxon_concept_id, function(id) {
       record_count(list(fq = paste0("lsid:",id)))
     }) 
   }
@@ -88,14 +88,20 @@ name_lookup <- function(name) {
     return(as.data.frame(list(search_term = name), stringsAsFactors = FALSE))
   }
   names(result) <- rename_columns(names(result), type = "taxa")
+  
+  # if search term includes more than one rank, how to include in output?
+  if (length(name) > 1) {
+    name <- paste(unname(unlist(name)), collapse  = '_')
+  }
   cbind(search_term = name,
-        as.data.frame(result[names(result) %in% wanted_columns("taxa")]))
+        as.data.frame(result[names(result) %in% wanted_columns("taxa")],
+                      stringsAsFactors = FALSE))
 }
 
 identifier_lookup <- function(identifier) {
   taxa_url <- 'https://namematching-ws-test.ala.org.au/'
   result <- ala_GET(taxa_url, "/api/getByTaxonID", list(taxonID = identifier))
-  if (isFALSE(res$success) && res$issues == 'noMatch') {
+  if (isFALSE(result$success) && result$issues == 'noMatch') {
     message("No match found for identifier ", identifier)
   }
   names(result) <- rename_columns(names(result), type = "taxa")
