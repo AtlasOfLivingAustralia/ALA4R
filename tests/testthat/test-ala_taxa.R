@@ -57,7 +57,7 @@ test_that("ala_taxa handles name searches", {
   
   # Handle a dataframe input
   taxa_df <- data.frame(genus = c("Banksia", "Microseris"), kingdom = "Plantae")
-  expect_equal(nrow(ala_taxa(term = taxa_df), 2))
+  expect_equal(nrow(ala_taxa(term = taxa_df)), 2)
   
   taxa_df <- data.frame(genus = c("Banksia", "Microseris"))
   expect_message(expect_equal(nrow(ala_taxa(term = taxa_df)), 2))
