@@ -8,6 +8,7 @@ ala_occurrences(
   taxon_id,
   filters,
   area,
+  data_quality_profile = "ALA",
   columns = "default",
   email = "ala4r@ala.org.au",
   generate_doi = FALSE,
@@ -26,6 +27,9 @@ the years provided.}
 \item{area}{string or sf object: restrict the search to an area. Can provide
 sf object, or a wkt string. WKT strings longer than 10000 characters will
 not be accepted by the ALA- see the vignette for how to work around this.}
+
+\item{data_quality_profile}{string: a data quality profile to apply to the
+records. See `ala_data_profiles()` for valid profiles. Defaults to "general"}
 
 \item{columns}{string: vector of columns to return in download.}
 

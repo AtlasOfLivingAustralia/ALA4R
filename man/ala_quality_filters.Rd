@@ -7,7 +7,8 @@
 ala_quality_filters(profile)
 }
 \arguments{
-\item{profile}{string: can be a provide a profile name, short name or id}
+\item{profile}{string: a data quality profile name, short name or id.
+See `ala_data_profiles` for valid filters}
 }
 \description{
 Get data filters for a  data quality profile

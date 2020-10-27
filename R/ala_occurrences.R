@@ -2,14 +2,16 @@
 #' 
 #' @param taxon_id string: single species ID or vector of species ids. Use 
 #' `ala_taxa()` to get lookup species id. 
-#' @param area string or sf object: restrict the search to an area. Can provide
-#' sf object, or a wkt string. WKT strings longer than 10000 characters will
-#' not be accepted by the ALA- see the vignette for how to work around this.
-#' @param columns string: vector of columns to return in download. 
 #' @param filters string: a list to narrow down the search, in the form
 #' `list(field = value)`. To limit the query to a year range, use
 #' `list(year = c(1990, 2000))`. This will return records between and including
 #' the years provided.
+#' @param area string or sf object: restrict the search to an area. Can provide
+#' sf object, or a wkt string. WKT strings longer than 10000 characters will
+#' not be accepted by the ALA- see the vignette for how to work around this.
+#' @param data_quality_profile string: a data quality profile to apply to the
+#' records. See `ala_data_profiles()` for valid profiles. Defaults to "general"
+#' @param columns string: vector of columns to return in download. 
 #' @param generate_doi logical: by default no DOI will be generated. Set to
 #' true if you intend to use the data in a publication or similar
 #' @param email string: the email address of the user performing the download
@@ -19,11 +21,12 @@
 #' @export ala_occurrences
 
 
-ala_occurrences <- function(taxon_id, filters, area, columns = "default",
+ala_occurrences <- function(taxon_id, filters, area,
+                            data_quality_profile = "ALA",
+                            columns = "default",
                             email = "ala4r@ala.org.au", generate_doi = FALSE, 
                             email_notify = FALSE) {
   
-  biocache_url <- "https://biocache-ws.ala.org.au"
   assert_that(is.flag(generate_doi))
   assert_that(is.flag(email_notify))
   assert_that(is.character(email))
@@ -41,37 +44,31 @@ ala_occurrences <- function(taxon_id, filters, area, columns = "default",
   if(!missing(taxon_id)) {
     # should species id be validated?
     assert_that(is.character(taxon_id))
-    query$fq <- build_taxa_query(taxon_id)
+    taxa_query <- build_taxa_query(taxon_id)
+  } else {
+    taxa_query <- NULL
   }
 
   # validate filters
   if (!missing(filters)) {
     assert_that(is.list(filters))
     validate_filters(filters)
-    # there must be a better way to do this
-    if (!is.null(query$fq)) {
-      query$fq <- paste0("(",query$fq, " AND ",
-                         fq = build_filter_query(filters), ")")
-    }
-    else {
-      query$fq <- build_filter_query(filters)
-    }
+  } else {
+    filters <- NULL
   }
+  # there must be a better way to do this
+  query$fq <- build_filter_query(filters, data_quality_profile,
+                                      taxa_query)
+  
+  # not yet released
+  #query$qualityProfile <- 'ALA'
   
   # Two issues with area validation: 
   # wellknown validates wkt correctly?? 
   # 504 error is returned from the server if a polygon is too complicated
   if (!missing(area)) {
     # convert area to wkt if not already
-    if (is.character(area)) {
-      # maybe give a more helpful error message here?
-      stopifnot(wellknown::lint(area))
-    } else if (identical(class(area), c("sf", "data.frame"))) {
-      area <- build_wkt(area)
-    } else {
-      stop("Area must be either a wkt string or an sf spatial object.")
-    }
-    query$wkt <- area
+    query$wkt <- build_area_query(area)
   }
 
   # do a occurrence count query first? to warn the user
@@ -84,12 +81,7 @@ ala_occurrences <- function(taxon_id, filters, area, columns = "default",
     
   }
   
-  # maybe move this bit into another function (also used by ala_counts)?
-  count_url <- parse_url(getOption("ALA4R_server_config")$base_url_biocache)
-  count_url$path <- c("ws","occurrences","search")
-  count_url$query <- c(query, pageSize = 0)
-
-  if (nchar(build_url(count_url)) > 2000) {
+  if (sum(nchar(query$fq), nchar(query$wkt), na.rm = TRUE) > 1948) {
     qid <- cache_params(query)
     query <- list(q = paste0("qid:",qid))
   }
@@ -146,12 +138,13 @@ ala_occurrences <- function(taxon_id, filters, area, columns = "default",
 }
 
 # check validity of fields?
+# maybe only warn because it is possible to get results for fields not in ala_fields
 # should the fields you have in the filters also be included?
 
 build_fields <- function(cols) {
   presets <- c("default")
   default_columns <- c("latitude", "longitude","occurrence_date","taxon_name",
-                       "species_guid","id", "data_resource")
+                       "taxon_concept_lsid", "id", "data_resource")
   additional_cols <- cols[!cols %in% presets]
   preset_selected <- cols[cols %in% presets]
     
@@ -169,110 +162,9 @@ build_fields <- function(cols) {
   paste0(fields, collapse = ",")
 }
 
-# this is ugly but does work...
-# should there be a special case if a date field is provided?
-# for now we will only support year queries
-build_filter_query <- function(filters) {
-  # add quotes so query behaves as expected
-  date_fields <- c("year")
-  
-  matched_date_field <- which(names(filters) %in% date_fields)
-  if (length(matched_date_field) != 0) {
-    # extract date fields from filter
-    date_filters <- filters[matched_date_field]
-    date_query <- build_date_query(date_filters)
-    if (length(filters[-matched_date_field]) == 0) {
-      return(build_date_query(date_filters))
-    } else {
-      return(paste(build_non_date_query(filters[-matched_date_field]),
-                   date_query, sep = " AND "))
-    }
-  } else {
-    return(build_non_date_query(filters))
-  }
-}
-
-build_date_query <- function(filters) {
-  paste0(names(filters), ":[", filters[[1]][1],
-         " TO ", filters[[1]][2], "]")
-}
-# to be renamed
-build_non_date_query <- function(filters) {
-  if (length(filters) == 0) {
-    return(NULL)
-  }
-  quoted_filters <- lapply(filters, function(x) {
-    paste0("\"", x, "\"")
-  })
-  paste(names(filters), quoted_filters, sep = ":", collapse = " AND ")
-}
-
-build_taxa_query <- function(ids) {
-  paste0("(lsid:",paste(ids, collapse = " OR lsid:"),")")
-}
 
 
-# get just the record count for a query
-# handle too long queries in here?
-record_count <- function(query) {
-  url <- parse_url(getOption("ALA4R_server_config")$base_url_biocache)
-  url$path <- c("ws","occurrences","search")
-  url$query <- c(query, pageSize = 0)
-  resp <- fromJSON(build_url(url))
-  resp$totalRecords
-}
 
-# build a valid wkt string from a spatial polygon
-build_wkt <- function(polygon) {
-  wkt <- st_as_text(st_geometry(polygon)[[1]])
-  return(wkt)
-}
-
-
-# POST params to server to get around url length constraint
-# POST all the filters here, or just ones that are likely to cause the maximum
-# length to be exceeded? POST only if the url is too long, or by default?
-# what is the maximum length? around 2000 chars?
-cache_params <- function(query) {
-  url <- parse_url(getOption("ALA4R_server_config")$base_url_biocache)
-  url$path <- c("ws", "webportal", "params")
-  resp <- POST(build_url(url), body = query, encode = "form")
-  print(content(resp))
-  if (resp$status_code == 504) {
-    stop("The area provided is too complex. Please simplify and try again.")
-  }
- else if (resp$status_code != 200) {
-    stop("Status code ", resp$status_code,
-         " returned when trying to cache the query.",
-          "biocache may be down temporarily. Please send an email to `support@ala.org.au`
-         if the issue persists.")
-  }
-  qid <- content(resp)
-  return(qid)
-}
-
-# filters vs. fields terminology
-# should handle miscased things?
-# should try to fuzzy match?
-# should also validate facets?
-validate_filters <- function(filters) {
-  # filters are provided in a list
-  # key should be a valid field name and value should be a valid category for that field
-  # valid options is a combination of ala_layers and ala_fields?
-  
-  invalid_filters <- names(filters)[which(!names(filters) %in%
-                                            ala_fields()$name)]
-  if (length(invalid_filters) > 0) {
-    stop("The following filters are invalid: ",
-         paste(invalid_filters, collapse = ", "),
-         ". Use `ala_fields()` to get a list of valid options")
-  }
-  
-  # validate categories
-  # should we do this? or let users find out for themselves?
-  # we can't do it for fields where there are > 1000 options 
-  # I think let them check if they get bad results
-}
 
 
 # what to do about returned columns? it doesn't make sense that the 

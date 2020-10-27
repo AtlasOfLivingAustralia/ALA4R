@@ -19,31 +19,31 @@ ala_counts <- function(taxon_id, filters, area,
                        data_quality_profile = "ALA", breakdown) {
   
   query <- list()
-  
+
   if(!missing(taxon_id)) {
     # should species id be validated?
-    query$fq <- build_taxa_query(taxon_id)
+    assert_that(is.character(taxon_id))
+    taxa_query <- build_taxa_query(taxon_id)
+  } else {
+    taxa_query <- NULL
   }
+  
+  # validate filters
+  if (!missing(filters)) {
+    assert_that(is.list(filters))
+    validate_filters(filters)
+  } else {
+    filters <- NULL
+  }
+  # there must be a better way to do this
+  query$fq <- build_filter_query(filters, data_quality_profile,
+                                 taxa_query)
   
   if (!missing(area)) {
     # convert area to wkt if not already
     query$wkt <- build_area_query(area)
   }
   
-  if (!missing(filters)) {
-    filters <- as.list(filters)
-    validate_filters(filters)
-    # there must be a better way to do this
-    if (!is.null(query$fq)) {
-      query$fq <- paste0("(",query$fq, ' AND ',
-                         fq = build_filter_query(
-                           filters, dq_profile = data_quality_profile), ")"
-                         )
-    }
-    else {
-      query$fq <- build_filter_query(filters, dq_profile = data_quality_profile)
-    }
-  }
   
   if(missing(breakdown)) {
     if (sum(nchar(query$fq), nchar(query$wkt), na.rm = TRUE) > 1948) {

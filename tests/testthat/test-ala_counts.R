@@ -2,7 +2,8 @@ context("Test ala counts")
 
 test_that("ala counts checks inputs", {
   # ALA counts with no arguments gives the total number of records in the ALA
-  expect_gt(ala_counts(), 90000000)
+  expect_gt(ala_counts(data_quality_profile = NULL), 90000000)
+  expect_gt(ala_counts(), 80000000)
   
   # invalid facet
   expect_error(ala_counts(breakdown = "bad_facet"))

@@ -4,16 +4,21 @@
 \alias{ala_counts}
 \title{Counts for ALA records}
 \usage{
-ala_counts(taxon_id, filters, area, breakdown)
+ala_counts(taxon_id, filters, area, data_quality_profile = "ALA", breakdown)
 }
 \arguments{
 \item{taxon_id}{string: single species ID or vector of species ids. Use 
 `ala_taxa()` to lookup species id.}
 
-\item{filters}{string: a list to narrow down the search, in the form `list(field = value)`.}
+\item{filters}{string: a list to narrow down the search, in the form
+`list(field = value)`.}
 
 \item{area}{string or sf object: restrict the search to an area. Can provide
-sf object, or a wkt string. If the wkt string is too long, it may be simplified.}
+sf object, or a wkt string. If the wkt string is too long, it may be
+simplified.}
+
+\item{data_quality_profile}{string: a data quality profile to apply to the
+records. See `ala_data_profiles()` for valid profiles. Defaults to "general"}
 
 \item{breakdown}{field to breakdown the counts by}
 }

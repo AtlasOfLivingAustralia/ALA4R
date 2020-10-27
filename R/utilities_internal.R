@@ -342,7 +342,12 @@ rename_columns <- function(varnames, type) {
 }
 
 # this is ugly but does work...
-build_filter_query <- function(filters, dq_profile) {
+build_filter_query <- function(filters, dq_profile, taxa_query) {
+    if (is.null(c(filters, dq_profile, taxa_query))) {
+        return(NULL)
+    } else if (is.null(filters) && is.null(dq_profile)) {
+        return(taxa_query)
+    }
     # add quotes so query behaves as expected
     date_fields <- c("year")
     
@@ -359,7 +364,15 @@ build_filter_query <- function(filters, dq_profile) {
     quality_query <- build_quality_query(dq_profile)
     queries <- c(date_query, general_query, quality_query)
     valid_queries <- queries[!sapply(queries,is.null)]
-    paste(valid_queries, collapse =  ' AND ')
+    query_string <- paste(valid_queries, collapse =  ' AND ')
+    if (is.null(taxa_query)) {
+        # only have query string
+        return(query_string)
+    } else {
+        return(paste0("(", taxa_query, " AND ",
+                      fq = query_string, ")"))
+    }
+    
 }
 
 build_quality_query <- function(dq_profile) {
@@ -395,12 +408,15 @@ build_area_query <- function(area) {
         # maybe give a more helpful error message here?
         validate_wkt(area)
         # should this also take other area types?
-    } else if (identical(class(area), c("sf", "data.frame"))) {
-        area <- build_wkt(area)
     } else {
-        stop("Area must be either a wkt string or an sf spatial object.")
-    }
-    area
+      tryCatch(area <- build_wkt(area),
+               error = function(e) {
+                 e$message <- "Area must be either a wkt string or an sf spatial object."
+                 stop(e)
+               })
+  }
+
+  area
 }
 
 
@@ -408,7 +424,10 @@ validate_wkt <- function(wkt) {
     max_char <- 10000
     if (nchar(wkt) > max_char) {
         stop("The WKT string provided is greater than ", max_char,
-             " , please simplify the WKT and try again.")
+             " characters , please simplify and try again.")
+    }
+    if (!wellknown::lint(wkt)) {
+      stop("The WKT provided is invalid.")
     }
 }
 
@@ -418,6 +437,7 @@ build_wkt <- function(polygon) {
     if (nchar(wkt) > 10000) {
         stop("The area provided is too complex. Please simplify it and try again.")
     }
+    wkt
 }
 
 # filters vs. fields terminology
