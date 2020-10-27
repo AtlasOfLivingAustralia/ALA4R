@@ -4,7 +4,14 @@
 \alias{ala_counts}
 \title{Counts for ALA records}
 \usage{
-ala_counts(taxon_id, filters, area, data_quality_profile = "ALA", breakdown)
+ala_counts(
+  taxon_id,
+  filters,
+  area,
+  data_quality_profile = "ALA",
+  breakdown,
+  limit = 20
+)
 }
 \arguments{
 \item{taxon_id}{string: single species ID or vector of species ids. Use 
@@ -21,6 +28,8 @@ simplified.}
 records. See `ala_data_profiles()` for valid profiles. Defaults to "general"}
 
 \item{breakdown}{field to breakdown the counts by}
+
+\item{limit}{numeric: maximum number of categories to return. 20 by default.}
 }
 \description{
 Takes filters in the same format as `ala_occurrences`, with an 

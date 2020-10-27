@@ -13,10 +13,12 @@
 #' @param data_quality_profile string: a data quality profile to apply to the
 #' records. See `ala_data_profiles()` for valid profiles. Defaults to "general"
 #' @param breakdown field to breakdown the counts by
+#' @param limit numeric: maximum number of categories to return. 20 by default.
 #' @export ala_counts
 
 ala_counts <- function(taxon_id, filters, area,
-                       data_quality_profile = "ALA", breakdown) {
+                       data_quality_profile = "ALA", breakdown,
+                       limit = 20) {
   
   query <- list()
 
@@ -56,10 +58,13 @@ ala_counts <- function(taxon_id, filters, area,
   # check facet is valid
   validate_facet(breakdown)
   query$facets <- breakdown
-  
+  query$flimit <- limit
   url <- getOption("ALA4R_server_config")$base_url_biocache
   resp <- ala_GET(url, "ws/occurrence/facets", params = query)
-  
+  if (resp$count > limit) {
+    warning("This field has ", resp$count, " possible values. Only the first ",
+            limit, " will be returned. Change `limit` to return more values.")
+  }
   resp$fieldResult[[1]][c("label", "count", "fq")]
 }
 
