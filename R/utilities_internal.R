@@ -85,7 +85,9 @@ tocamel <- function(x, delim = "[^[:alnum:]]", upper = FALSE, sep = "") {
 # TODO: update with new functions
 unwanted_columns <- function(type) {
     type <- match.arg(tolower(type), c("general", "layers", "occurrence",
-                                       "assertions", "taxa", "media"))
+                                       "assertions", "taxa", "media",
+                                       "occurrence_stored",
+                                       "occurrence_indexed"))
     switch(type,
            "general" = c("rawRank", "rawRankString", "rankId", "rankID",
                          "left", "right", "idxType", "highlight",
@@ -97,6 +99,8 @@ unwanted_columns <- function(type) {
                         "defaultlayer", "namesearch", "intersect",
                         "layerbranch", "analysis", "addtomap"),
            "occurrence" = c("lft", "rgt", "rankId"),
+           "occurrence_stored"=,
+           "occurrence_indexed"=,
            c("")
            )
 }
