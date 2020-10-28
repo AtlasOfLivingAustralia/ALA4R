@@ -18,6 +18,7 @@
 #' (required unless \code{record_count_only = TRUE}
 #' @param email_notify logical: set to `FALSE` by default, set to true if you
 #' would like an email notification for the download
+#' @param caching string: should the results be cached? Either "on" or "off"
 #' @examples
 #' \dontrun{
 #' ## Retrieve all machine-observed reptile records in Victoria in the past 

@@ -42,6 +42,8 @@ true if you intend to use the data in a publication or similar}
 
 \item{email_notify}{logical: set to `FALSE` by default, set to true if you
 would like an email notification for the download}
+
+\item{caching}{string: should the results be cached? Either "on" or "off"}
 }
 \description{
 Download occurrence data from the ALA

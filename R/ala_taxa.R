@@ -9,6 +9,7 @@
 #' `term`. One of name `c('name', 'identifier')`
 #' @param return_children logical: return child concepts for the provided term(s)
 #' @param include_counts logical: return occurrence counts for all species returned
+#' @param caching string: should the results be cached? Either "on" or "off"
 #' @return dataframe of taxon information
 #' @examples
 #' ala_taxa(term = "Reptilia")
@@ -24,7 +25,7 @@
 ## TODO: Fix the adjust colnames function
 
 ala_taxa <- function(term, term_type = "name", return_children = FALSE,
-                         include_counts = FALSE) {
+                         include_counts = FALSE, caching = "off") {
   
   assert_that(is.flag(return_children))
   assert_that(term_type %in% c("name", "identifier"),

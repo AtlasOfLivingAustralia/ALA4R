@@ -14,11 +14,19 @@
 #' records. See `ala_data_profiles()` for valid profiles. Defaults to "general"
 #' @param breakdown field to breakdown the counts by
 #' @param limit numeric: maximum number of categories to return. 20 by default.
+#' @param caching string: should the results be cached? Either "on" or "off"
+#' @return either single integer of total counts, or a dataframe of counts by
+#' `breakdown` field, if specified.
+#' @examples
+#' # Count of records in the ALA
+#' ala_counts()
+#' # Counts by state and territory
+#' ala_counts(breakdown = "state")
 #' @export ala_counts
 
 ala_counts <- function(taxon_id, filters, area,
                        data_quality_profile = "ALA", breakdown,
-                       limit = 20) {
+                       limit = 20, caching = "off") {
   
   query <- list()
 

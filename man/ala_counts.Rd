@@ -10,7 +10,8 @@ ala_counts(
   area,
   data_quality_profile = "ALA",
   breakdown,
-  limit = 20
+  limit = 20,
+  caching = "off"
 )
 }
 \arguments{
@@ -30,8 +31,20 @@ records. See `ala_data_profiles()` for valid profiles. Defaults to "general"}
 \item{breakdown}{field to breakdown the counts by}
 
 \item{limit}{numeric: maximum number of categories to return. 20 by default.}
+
+\item{caching}{string: should the results be cached? Either "on" or "off"}
+}
+\value{
+either single integer of total counts, or a dataframe of counts by
+`breakdown` field, if specified.
 }
 \description{
 Takes filters in the same format as `ala_occurrences`, with an 
 additional break down by `breakdown`
+}
+\examples{
+# Count of records in the ALA
+ala_counts()
+# Counts by state and territory
+ala_counts(breakdown = "state")
 }

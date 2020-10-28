@@ -5,6 +5,9 @@
 #' to view valid fields.
 #' @param limit numeric: maximum number of categories to return. 20 by default.
 #' @return a dataframe of field name and category name (for now)
+#' @examples 
+#' ala_categories("basis_of_record")
+#' ala_categories("state")
 #' @export ala_categories
 
 

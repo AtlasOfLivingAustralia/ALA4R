@@ -9,7 +9,8 @@ ala_taxa(
   term,
   term_type = "name",
   return_children = FALSE,
-  include_counts = FALSE
+  include_counts = FALSE,
+  caching = "off"
 )
 }
 \arguments{
@@ -21,6 +22,8 @@ ala_taxa(
 \item{return_children}{logical: return child concepts for the provided term(s)}
 
 \item{include_counts}{logical: return occurrence counts for all species returned}
+
+\item{caching}{string: should the results be cached? Either "on" or "off"}
 }
 \value{
 dataframe of taxon information

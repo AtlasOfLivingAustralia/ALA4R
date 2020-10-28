@@ -18,3 +18,7 @@ a dataframe of field name and category name (for now)
 \description{
 Use for checking filters for `ala_occurrences` and `ala_counts` are valid
 }
+\examples{
+ala_categories("basis_of_record")
+ala_categories("state")
+}
