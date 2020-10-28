@@ -39,8 +39,7 @@ ala_checklist <- function(taxon_id, filters, area) {
     filters <- NULL
   }
   # there must be a better way to do this
-  query$fq <- build_filter_query(filters, data_quality_profile,
-                                 taxa_query)
+  query$fq <- build_filter_query(filters, dq_profile = NULL, taxa_query)
   
   if (!missing(area)) {
     # convert area to wkt if not already
@@ -52,6 +51,7 @@ ala_checklist <- function(taxon_id, filters, area) {
   query$counts <- "true"
   query$lists <- "true"
   
-  data <- ala_download(url, path = "ws/occurrences/facets/download", params = query)
+  data <- ala_download(url, path = "ws/occurrences/facets/download",
+                       params = query)
   return(data)
 }

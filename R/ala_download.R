@@ -9,7 +9,7 @@ ala_download <- function(url, path, params = list(), ext = ".csv",
     )
   )
   if (is.null(cache_file)) {
-    cache_file <- cache_filename(url, path, param, ext)
+    cache_file <- cache_filename(url, path, params, ext)
   }
   
   res <- cli$get(path = path, query = params, disk = cache_file)
