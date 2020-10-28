@@ -109,30 +109,24 @@ ala_occurrences <- function(taxon_id, filters, area,
   }
   
   # Get data
-  url <- parse_url(getOption("ALA4R_server_config")$base_url_biocache)
-  url$path <- c("ws", "occurrences", "offline", "download")
-  url$query <- c(query, email = email, reasonTypeId = 10, dwcHeaders = "true",
+  url <- getOption("ALA4R_server_config")$base_url_biocache
+  query <- c(query, email = email, reasonTypeId = 10, dwcHeaders = "true",
                  qa = "none")
   
-  tryCatch(status <- fromJSON(build_url(url)),
-           error = function(e) {
-             e$message <- paste0("Error in getting occurrences for url",
-                                 build_url(url))
-             message(e)
-             return()
-           }
-  )
-  this_status_url <- status$statusUrl
-  status <- fromJSON(this_status_url)
+  status <- ala_GET(url, "ws/occurrences/offline/download",
+                             params = query)
+
+  status_url <- parse_url(status$statusUrl)
+  status <- ala_GET(url, path = status_url$path)
   while (tolower(status$status) %in% c("inqueue", "running")) {
-    status <- fromJSON(this_status_url)
+    status <- ala_GET(url, path = status_url$path)
     Sys.sleep(2)
   }
   
-  temp <- tempfile(fileext = ".zip")
-  download.file(status$downloadUrl,temp, quiet = TRUE)
-  data <- read.csv(unz(temp, "data.csv"), stringsAsFactors = FALSE)
-  unlink(temp)
+  download_url <- getOption("ALA4R_server_config")$base_url_biocache_download
+  data <- ala_download(url = download_url,
+                       path = parse_url(status$downloadUrl)$path,
+                       file_type = "zip")
   
   return(data)
 }
