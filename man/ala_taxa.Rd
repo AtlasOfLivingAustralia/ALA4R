@@ -22,7 +22,15 @@ ala_taxa(
 
 \item{include_counts}{logical: return occurrence counts for all species returned}
 }
+\value{
+dataframe of taxon information
+}
 \description{
 Uses ALA name matching service. Species ids from this function can be
 used to search `ala_occurrences`
+}
+\examples{
+ala_taxa(term = "Reptilia")
+ala_taxa(list(kingdom = "Plantae", genus = "Microseris"), return_children = TRUE,
+include_counts = TRUE)
 }

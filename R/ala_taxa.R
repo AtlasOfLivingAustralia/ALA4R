@@ -9,7 +9,11 @@
 #' `term`. One of name `c('name', 'identifier')`
 #' @param return_children logical: return child concepts for the provided term(s)
 #' @param include_counts logical: return occurrence counts for all species returned
-#' 
+#' @return dataframe of taxon information
+#' @examples
+#' ala_taxa(term = "Reptilia")
+#' ala_taxa(list(kingdom = "Plantae", genus = "Microseris"), return_children = TRUE,
+#' include_counts = TRUE)
 #' @export ala_taxa
 
 

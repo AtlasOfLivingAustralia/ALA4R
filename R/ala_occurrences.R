@@ -18,6 +18,14 @@
 #' (required unless \code{record_count_only = TRUE}
 #' @param email_notify logical: set to `FALSE` by default, set to true if you
 #' would like an email notification for the download
+#' @examples
+#' \dontrun{
+#' ## Retrieve all machine-observed reptile records in Victoria in the past 
+#' ## five years, with the default ALA data quality profile
+#' id <- ala_taxa("Reptilia")$taxon_concept_id
+#' occ <- ala_occurrences(taxon_id = id, filters = list(year = c(2015, 2020),
+#' state = "Victoria"), data_quality_profile = "ALA")
+#' }
 #' @export ala_occurrences
 
 

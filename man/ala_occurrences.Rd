@@ -12,7 +12,8 @@ ala_occurrences(
   columns = "default",
   email = "ala4r@ala.org.au",
   generate_doi = FALSE,
-  email_notify = FALSE
+  email_notify = FALSE,
+  caching = "off"
 )
 }
 \arguments{
@@ -44,4 +45,13 @@ would like an email notification for the download}
 }
 \description{
 Download occurrence data from the ALA
+}
+\examples{
+\dontrun{
+## Retrieve all machine-observed reptile records in Victoria in the past 
+## five years, with the default ALA data quality profile
+id <- ala_taxa("Reptilia")$taxon_concept_id
+occ <- ala_occurrences(taxon_id = id, filters = list(year = c(2015, 2020),
+state = "Victoria"), data_quality_profile = "ALA")
+}
 }
