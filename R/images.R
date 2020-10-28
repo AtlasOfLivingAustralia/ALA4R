@@ -44,6 +44,9 @@ images <- function(image_id, download=FALSE, download_path,
       data$imageIdentifier <- z
       if (is.null(data$recognisedLicence)) {
         data$recognisedLicence <- NA
+      } else {
+        data$recognisedLicence <-
+          data$recognisedLicence[!duplicated(data$recognisedLicence)]
       }
     }
     # add basic info if request fails
