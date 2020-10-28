@@ -25,7 +25,8 @@ ala_occurrences <- function(taxon_id, filters, area,
                             data_quality_profile = "ALA",
                             columns = "default",
                             email = "ala4r@ala.org.au", generate_doi = FALSE, 
-                            email_notify = FALSE) {
+                            email_notify = FALSE,
+                            caching = "off") {
   
   assert_that(is.flag(generate_doi))
   assert_that(is.flag(email_notify))
@@ -73,18 +74,29 @@ ala_occurrences <- function(taxon_id, filters, area,
 
   # do a occurrence count query first? to warn the user
   
-  # handle caching
-  if (ala_config()$caching == "on") {
-    # look for file
-    
-    # if file doesn't exist, continue as before
-    
-  }
-  
   if (sum(nchar(query$fq), nchar(query$wkt), na.rm = TRUE) > 1948) {
     qid <- cache_params(query)
     query <- list(q = paste0("qid:",qid))
   }
+  
+  # handle caching
+  # look for file to download- if it doesn't exist, continue on
+  # use base_url_biocache as the filename? otherwise won't be found
+  cache_file <- cache_filename(url = getOption("ALA4R_server_config")$
+                                   base_url_biocache,
+                               path = "ws/occurrences/offline/download",
+                               params = query, ext = ".zip")
+  
+  if (caching == "on" & file.exists(cache_file)) {
+    message("Using existing file")
+    # look for file using query parameters
+    data <- read.csv(unz(cache_file, "data.csv"), stringsAsFactors = FALSE)
+    # if file doesn't exist, continue as before
+    return(data)
+  }
+  message("Caching is ", caching)
+  message("Download path is ", cache_file)
+  
 
   count <- record_count(query)
   message("This query will return ", count, " records")
@@ -124,11 +136,17 @@ ala_occurrences <- function(taxon_id, filters, area,
   }
   
   download_url <- getOption("ALA4R_server_config")$base_url_biocache_download
-  data <- ala_download(url = download_url,
+  data_path <- ala_download(url = download_url,
                        path = parse_url(status$downloadUrl)$path,
-                       file_type = "zip")
-  
-  return(data)
+                       cache_file = cache_file, ext = ".zip",
+                       caching = caching)
+  df <- read.csv(unz(data_path, "data.csv"), stringsAsFactors = FALSE)
+  # delete the file
+  if (caching == "off") {
+    message("Deleting file")
+    unlink(data_path)
+  }
+  return(df)
 }
 
 # check validity of fields?

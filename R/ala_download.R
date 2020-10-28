@@ -1,21 +1,26 @@
 # Download a file
 # so far needs to handle zip files and csv
-ala_download <- function(url, path, params = list(), file_type = "csv") {
+ala_download <- function(url, path, params = list(), ext = ".csv",
+                         cache_file = NULL, caching = "off") {
   cli <- HttpClient$new(
     url = url,
     headers = list(
       useragent = ala_config()$user_agent
     )
   )
-  f <- tempfile()
-  res <- cli$get(path = path, query = params, disk = f)
-  if (file_type == "csv") {
-    df <- read.csv(res$content, stringsAsFactors = FALSE)
-    close(file(f))
-  } else {
-    df <- read.csv(unz(f, "data.csv"), stringsAsFactors = FALSE)
-    close(file(f))
+  if (is.null(cache_file)) {
+    cache_file <- cache_filename(url, path, param, ext)
   }
+  
+  res <- cli$get(path = path, query = params, disk = cache_file)
+  if (ext == ".csv") {
+    df <- read.csv(res$content, stringsAsFactors = FALSE)
+    close(file(cache_file))
+  } else {
+    # for zipped files just return the path
+    return(cache_file)
+  }
+ 
   return(df)
   
 }

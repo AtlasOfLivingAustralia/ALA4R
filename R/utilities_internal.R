@@ -396,6 +396,8 @@ build_general_query <- function(filters) {
     if (length(filters) == 0) {
         return(NULL)
     }
+    # order filters so cached file can be found
+    filters <- filters[order(names(filters))]
     quoted_filters <- lapply(filters, function(x) {
         paste0("\"", x, "\"")
     })
@@ -403,6 +405,8 @@ build_general_query <- function(filters) {
 }
 
 build_taxa_query <- function(ids) {
+    # order filters so cached file can be found
+    ids <- ids[order(ids)]
     paste0("(lsid:",paste(ids, collapse = " OR lsid:"),")")
 }
 
