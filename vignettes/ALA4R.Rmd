@@ -513,7 +513,7 @@ magpie_occ_images <- ALA4R::occurrence_images(magpie_occs_top5 %>%
     dplyr::pull(id), download=FALSE)
 ```
 
-```{r echo=FALSE,warning=FALSE}
+```{r echo=FALSE,warning=FALSE, eval=FALSE}
 tryCatch({
   magpie_occ_images <- ALA4R::occurrence_images(magpie_occs_top5 %>% dplyr::pull(id), download=FALSE)
   
