@@ -2,6 +2,7 @@
 # so far needs to handle zip files and csv
 ala_download <- function(url, path, params = list(), ext = ".csv",
                          cache_file = NULL, caching = "off") {
+  assert_that(is.character(url))
   message("Downloading from url ", url)
   cli <- HttpClient$new(
     url = url,
