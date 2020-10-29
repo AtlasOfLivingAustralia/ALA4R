@@ -145,6 +145,7 @@ ala_occurrences <- function(taxon_id, filters, area,
   }
   
   download_url <- getOption("ALA4R_server_config")$base_url_biocache_download
+  message(download_url)
   data_path <- ala_download(url = download_url,
                        path = parse_url(status$downloadUrl)$path,
                        cache_file = cache_file, ext = ".zip",
