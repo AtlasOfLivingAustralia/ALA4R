@@ -4,7 +4,7 @@
 \alias{ala_checklist}
 \title{List species matching criteria}
 \usage{
-ala_checklist(taxon_id, filters, area)
+ala_checklist(taxon_id, filters, area, caching = "off")
 }
 \arguments{
 \item{taxon_id}{string: single species ID or vector of species ids. Use 
@@ -20,7 +20,7 @@ sf object, or a wkt string. WKT strings longer than 10000 characters will
 not be accepted by the ALA- see the vignette for how to work around this.}
 }
 \value{
-dataframe of matching species, with optional additional defails.
+dataframe of matching species, with optional additional details.
 }
 \description{
 List species matching criteria
