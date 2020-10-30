@@ -208,7 +208,7 @@ A number of species may have no image (mostly, these are extinct species) and ot
 
 ### Example 2: Area report: what listed species exist in a given area?
 
-First download an example shapefile of South Australian conservation reserve boundaries: see http://data.sa.gov.au/dataset/conservation-reserve-boundaries. We use the ALA4R's caching mechanism here, but you could equally download this file directly.
+First download an example shapefile of South Australian conservation reserve boundaries: see https://data.sa.gov.au/dataset/conservation-reserve-boundaries. We use the ALA4R's caching mechanism here, but you could equally download this file directly.
 
 ```{r eval=FALSE}
 library(maptools)
