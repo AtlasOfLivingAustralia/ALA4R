@@ -9,6 +9,7 @@
 #' @param area string or sf object: restrict the search to an area. Can provide
 #' sf object, or a wkt string. WKT strings longer than 10000 characters will
 #' not be accepted by the ALA- see the vignette for how to work around this.
+#' @param caching string: should the results be cached? Either "on" or "off"
 #' @return dataframe of matching species, with optional additional details.
 #' @export ala_checklist
 
