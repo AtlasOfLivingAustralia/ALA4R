@@ -28,7 +28,7 @@ ala_media <- function(identifier, download_dir, identifier_type = "media",
   assert_that(file.exists(download_dir))
   
   media_data <- data.table::rbindlist(lapply(identifier, function(id) {
-    if (identifier_type == 'media') {
+    if (identifier_type == "media") {
       # get the media specified
       data <- cbind(media_id = id, as.data.frame(media(id),
                                                  stringsAsFactors = FALSE))
@@ -85,7 +85,8 @@ download_media <- function(id, type, download_dir) {
   url <- parse_url(getOption("ALA4R_server_config")$base_url_images)
   url$path <- c("image", as.character(id), "original")
   ext <- switch (type,
-    'image/jpeg' = '.jpg'
+    "image/jpeg" = ".jpg",
+    "image/png" = ".png"
   )
   out_path <- file.path(download_dir, paste0(id, ext))
   download.file(build_url(url), destfile = out_path, quiet = TRUE)

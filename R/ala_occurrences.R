@@ -147,8 +147,7 @@ ala_occurrences <- function(taxon_id, filters, area,
   
   data_path <- ala_download(url = "https://biocache.ala.org.au",
                        path = parse_url(status$downloadUrl)$path,
-                       cache_file = cache_file, ext = ".zip",
-                       caching = caching)
+                       cache_file = cache_file, ext = ".zip")
   df <- read.csv(unz(data_path, "data.csv"), stringsAsFactors = FALSE)
   # delete the file
   if (caching == "off") {
