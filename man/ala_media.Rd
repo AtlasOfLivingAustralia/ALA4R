@@ -22,6 +22,9 @@ specified by `identifier_type`}
 \item{media_type}{string: type of media to download, one or both of 
 `c("image", "sound")`}
 }
+\value{
+dataframe of media information
+}
 \description{
 Download images and sounds from the ALA.
 }

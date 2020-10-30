@@ -6,6 +6,8 @@
 #' @param identifier_type string: one of `c("occurrence", "media")`
 #' @param media_type string: type of media to download, one or both of 
 #' `c("image", "sound")`
+#' @return dataframe of media information
+#' @export ala_media
 
 # should sounds be downloaded by default?
 # which fields should be kept?
