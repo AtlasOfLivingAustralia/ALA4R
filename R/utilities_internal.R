@@ -341,6 +341,8 @@ rename_columns <- function(varnames, type) {
     if (type == "taxa") {
         varnames <- tolower(gsub("([a-z])([A-Z])", "\\1_\\L\\2", varnames,
                          perl = TRUE))
+    } else if (type == "checklist") {
+      varnames <- tolower(gsub('\\.', '_', varnames))
     }
     varnames
 }

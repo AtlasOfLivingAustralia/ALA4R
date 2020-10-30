@@ -65,7 +65,7 @@ ala_checklist <- function(taxon_id, filters, area, caching = "off") {
   
   data <- ala_download(url, path = path, params = query,
                        cache_file = cache_file)
-  
+  names(data) <- rename_columns(names(data), type = "checklist")
   
   return(data)
 }
