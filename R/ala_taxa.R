@@ -12,9 +12,11 @@
 #' @param caching string: should the results be cached? Either "on" or "off"
 #' @return dataframe of taxon information
 #' @examples
+#' \dontrun{
 #' ala_taxa(term = "Reptilia")
 #' ala_taxa(list(kingdom = "Plantae", genus = "Microseris"), return_children = TRUE,
 #' include_counts = TRUE)
+#' }
 #' @export ala_taxa
 
 
