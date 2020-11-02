@@ -1,9 +1,9 @@
 #' Function to lookup species information from ALA, given names or unique
-#' identifiers. 
-#' 
+#' identifiers.
+#'
 #' Uses ALA name matching service. Species ids from this function can be
 #' used to search `ala_occurrences`
-#' 
+#'
 #' @param term string, named list or dataframe: search term(s)
 #' @param term_type string: specifies which type of terms are provided in
 #' `term`. One of name `c('name', 'identifier')`
@@ -28,15 +28,15 @@
 
 ala_taxa <- function(term, term_type = "name", return_children = FALSE,
                          include_counts = FALSE, caching = "off") {
-  
+
   assert_that(is.flag(return_children))
   assert_that(term_type %in% c("name", "identifier"),
               msg = "`term_type` must be one of `c('name', 'identifier')`")
-  
+
   if (missing(term)) {
     stop("`ala_taxa` requires a term to search for")
   }
-  
+
   if (term_type == "name") {
     ranks <- names(term)
     # check ranks are valid if term type is name
@@ -65,7 +65,7 @@ ala_taxa <- function(term, term_type = "name", return_children = FALSE,
     # look up the child concepts for the identifier
     children <- child_concepts(out_data$taxon_concept_id)
     # add children to df
-    out_data <- rbind(out_data, children, fill = TRUE)
+    out_data <- data.table::rbindlist(list(out_data, children), fill = TRUE)
   }
   if (ncol(out_data) > 1 && include_counts) {
     counts <- unlist(lapply(out_data$taxon_concept_id, function(id) {
@@ -96,7 +96,7 @@ name_lookup <- function(name) {
     return(as.data.frame(list(search_term = name), stringsAsFactors = FALSE))
   }
   names(result) <- rename_columns(names(result), type = "taxa")
-  
+
   # if search term includes more than one rank, how to include in output?
   if (length(name) > 1) {
     name <- paste(unname(unlist(name)), collapse  = '_')
@@ -120,9 +120,9 @@ identifier_lookup <- function(identifier) {
 validate_rank <- function(ranks) {
   valid_ranks <- c('kingdom', 'phylum', 'class', 'order',
                    'family', 'genus', 'scientificName', 'specificEpithet')
-  
+
   invalid_ranks <- ranks[which(!(ranks %in% valid_ranks))]
-  
+
   if (length(invalid_ranks) != 0) {
     stop("Invalid rank(s): ", paste(invalid_ranks, collapse = ', '),
          ". Valid ranks are: ", paste0(valid_ranks, collapse = ', '))
@@ -138,7 +138,7 @@ child_concepts <- function(identifier) {
     message("No child concepts found for taxon id \"", identifier, "\"")
     return()
   }
-  
+
   # lookup details for each child concept
   child_info <- suppressWarnings(data.table::rbindlist(lapply(children$guid, function(id) {
     result <- identifier_lookup(id)
