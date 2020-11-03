@@ -7,7 +7,7 @@
 ala_checklist(taxon_id, filters, area, caching = "off")
 }
 \arguments{
-\item{taxon_id}{string: single species ID or vector of species ids. Use 
+\item{taxon_id}{string: single species ID or vector of species ids. Use
 `ala_taxa()` to get lookup species id.}
 
 \item{filters}{string: a list to narrow down the search, in the form
