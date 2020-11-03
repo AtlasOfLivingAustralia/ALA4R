@@ -347,39 +347,6 @@ rename_columns <- function(varnames, type) {
     varnames
 }
 
-# this is ugly but does work...
-build_filter_query <- function(filters, dq_profile, taxa_query) {
-    if (is.null(c(filters, dq_profile, taxa_query))) {
-        return(NULL)
-    } else if (is.null(filters) && is.null(dq_profile)) {
-        return(taxa_query)
-    }
-    # add quotes so query behaves as expected
-    date_fields <- c("year")
-    
-    matched_date_field <- which(names(filters) %in% date_fields)
-    if (length(matched_date_field) != 0) {
-        # extract date fields from filter
-        date_filters <- filters[matched_date_field]
-        date_query <- build_date_query(date_filters)
-        filters <- filters[-matched_date_field]
-    } else {
-        date_query <- NULL
-    }
-    general_query <- build_general_query(filters)
-    quality_query <- build_quality_query(dq_profile)
-    queries <- c(date_query, general_query, quality_query)
-    valid_queries <- queries[!sapply(queries,is.null)]
-    query_string <- paste(valid_queries, collapse =  ' AND ')
-    if (is.null(taxa_query)) {
-        # only have query string
-        return(query_string)
-    } else {
-        return(paste0("(", taxa_query, " AND ",
-                      fq = query_string, ")"))
-    }
-    
-}
 
 build_quality_query <- function(dq_profile) {
     if (is.null(dq_profile)) {
@@ -425,7 +392,7 @@ build_area_query <- function(area) {
                  stop(e)
                })
   }
-
+  message("returning, ", area)
   area
 }
 
@@ -455,12 +422,12 @@ build_wkt <- function(polygon) {
 # should try to fuzzy match?
 # should also validate facets?
 validate_filters <- function(filters) {
-    # filters are provided in a list
+    # filters are provided in a dataframe
     # key should be a valid field name and value should be a valid category for that field
     # valid options is a combination of ala_layers and ala_fields?
     
-    invalid_filters <- names(filters)[which(!names(filters) %in%
-                                                ala_fields()$name)]
+    invalid_filters <- filters$name[!filters$name %in% ala_fields()$name]
+    
     if (length(invalid_filters) > 0) {
         stop("The following filters are invalid: ",
              paste(invalid_filters, collapse = ", "),
