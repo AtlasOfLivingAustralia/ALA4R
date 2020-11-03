@@ -13,7 +13,7 @@ ala_filters <- function(filters, data_quality_profile = NULL) {
     dq_filters <- ala_quality_filters(data_quality_profile)
   }
   filter_rows <- data.table::rbindlist(lapply(names(filters), function(x) {
-    row <- data.frame(name = x, include = !is(filters[[x]], "exclude"))
+    row <- data.frame(name = x, include = !inherits(filters[[x]], "exclude"))
     row$value <- list(filter_value(filters[[x]]))
     row
   }))
