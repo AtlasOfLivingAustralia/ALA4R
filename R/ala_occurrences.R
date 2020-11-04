@@ -103,21 +103,15 @@ ala_occurrences <- function(taxon_id, filters, area,
   message("Download path is ", cache_file)
 
   count <- record_count(query)
-  message("This query will return ", count, " records")
-  if (count == 0) {
-    # should this return something?
-    return()
-  } else if (count > 50000000) {
-    stop("A maximum of 50 million records can be retrieved at once.",
-         " Please narrow the query and try again.")
-  }
+  check_count(count)
+  
 
   # Add columns after getting record count
   if (missing(columns)) {
     message("No columns specified, default columns will be returned.")
     columns <- "default"
   }
-  query$fields <- build_fields(columns)
+  query$fields <- build_columns(columns)
 
   if (generate_doi) {
     query$mintDoi <- "true"
@@ -131,19 +125,10 @@ ala_occurrences <- function(taxon_id, filters, area,
   url <- getOption("ALA4R_server_config")$base_url_biocache
   query <- c(query, email = email, reasonTypeId = 10, dwcHeaders = "true",
                  qa = "none")
-
-  status <- ala_GET(url, "ws/occurrences/offline/download",
-                             params = query)
-
-  status_url <- parse_url(status$statusUrl)
-  status <- ala_GET(url, path = status_url$path)
-  while (tolower(status$status) %in% c("inqueue", "running")) {
-    status <- ala_GET(url, path = status_url$path)
-    Sys.sleep(2)
-  }
-
+  
+  download_path <- wait_for_download(url, query)
   data_path <- ala_download(url = "https://biocache.ala.org.au",
-                       path = parse_url(status$downloadUrl)$path,
+                       path = download_path,
                        cache_file = cache_file, ext = ".zip")
   df <- read.csv(unz(data_path, "data.csv"), stringsAsFactors = FALSE)
   # add DOI as attribute
@@ -161,11 +146,6 @@ ala_occurrences <- function(taxon_id, filters, area,
                         be down. Please try again later")
   }
   
-  # delete the file
-  if (caching == "off") {
-    message("Deleting file")
-    unlink(data_path)
-  }
   return(df)
 }
 
@@ -173,7 +153,7 @@ ala_occurrences <- function(taxon_id, filters, area,
 # maybe only warn because it is possible to get results for fields not in ala_fields
 # should the fields you have in the filters also be included?
 
-build_fields <- function(cols) {
+build_columns <- function(cols) {
   presets <- c("default")
   default_columns <- c("latitude", "longitude","occurrence_date","taxon_name",
                        "taxon_concept_lsid", "id", "data_resource")
@@ -194,6 +174,9 @@ build_fields <- function(cols) {
   paste0(fields, collapse = ",")
 }
 
+#' Build dataframe of columns to keep
+#' @param cols string: vector of column names to include. If a col matches a
+#' group name, columns in that group will be added to the list
 #' @export ala_columns
 ala_columns <- function(cols) {
   presets <- c("basic", "event")
@@ -215,4 +198,29 @@ preset_cols <- function(type) {
   )
   cols
   
+}
+
+wait_for_download <- function(url, query) {
+  status <- ala_GET(url, "ws/occurrences/offline/download",
+                    params = query)
+  
+  status_url <- parse_url(status$statusUrl)
+  status <- ala_GET(url, path = status_url$path)
+  while (tolower(status$status) %in% c("inqueue", "running")) {
+    status <- ala_GET(url, path = status_url$path)
+    Sys.sleep(2)
+  }
+  parse_url(status$downloadUrl)$path
+}
+
+check_count <- function(count) {
+  message("This query will return ", count, " records")
+  
+  if (count == 0) {
+    # should this return something?
+    stop()
+  } else if (count > 50000000) {
+    stop("A maximum of 50 million records can be retrieved at once.",
+         " Please narrow the query and try again.")
+  }
 }
