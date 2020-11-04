@@ -42,7 +42,7 @@ ala_counts <- function(taxon_id, filters, area, breakdown,
   } else {
     filter_query <- NULL
   }
-  
+
   if (!is.null(filter_query) || !is.null(taxa_query)) {
     query$fq <- paste0("(", paste(c(taxa_query, filter_query), collapse = ' AND '), ")")
   }
@@ -66,17 +66,27 @@ ala_counts <- function(taxon_id, filters, area, breakdown,
   query$flimit <- limit
   url <- getOption("ALA4R_server_config")$base_url_biocache
   resp <- ala_GET(url, "ws/occurrence/facets", params = query)
-  if (resp$count > limit) {
-    warning("This field has ", resp$count, " possible values. Only the first ",
-            limit, " will be returned. Change `limit` to return more values.")
+  if(length(resp) < 1){
+    return(data.frame(
+      name = as.character(),
+      count = as.numeric()
+    ))
+  }else{
+    if (resp$count > limit) {
+      warning("This field has ", resp$count, " possible values. Only the first ",
+              limit, " will be returned. Change `limit` to return more values.")
+    }
+    # parse out field value
+    counts <- resp$fieldResult[[1]]
+    value <- sapply(counts$fq, function(z) {
+      sub('.*?"([^"]+)"', "\\1", z)
+    }, USE.NAMES = FALSE)
+
+    return(data.frame(
+      name = value,
+      count = counts$count
+    ))
   }
-  # parse out field value
-  counts <- resp$fieldResult[[1]]
-  value <- sapply(counts$fq, function(z) {
-    sub('.*?"([^"]+)"', "\\1", z)
-  }, USE.NAMES = FALSE)
-  
-  cbind(value, counts[c("label", "count")])
 }
 
 # get just the record count for a query
