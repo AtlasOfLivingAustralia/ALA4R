@@ -13,7 +13,8 @@
 #' @name ALA4R
 #' @docType package
 #' @references \url{https://api.ala.org.au/}
-#' @import assertthat httr sp sf crul
+#' @import assertthat sp sf httr
+#' @importFrom crul HttpClient
 #' @importFrom digest digest
 #' @importFrom grDevices dev.off pdf rainbow
 #' @importFrom graphics image legend points title
