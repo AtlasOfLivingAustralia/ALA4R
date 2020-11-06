@@ -29,6 +29,10 @@ ala_checklist <- function(taxon_id, filters, area, caching = "off") {
 
   if(!missing(taxon_id)) {
     # should species id be validated?
+    if (inherits(taxon_id, "data.frame") &&
+        "taxon_concept_id" %in% colnames(taxon_id)) {
+      taxon_id <- taxon_id$taxon_concept_id
+    }
     assert_that(is.character(taxon_id))
     taxa_query <- build_taxa_query(taxon_id)
   } else {
@@ -39,11 +43,11 @@ ala_checklist <- function(taxon_id, filters, area, caching = "off") {
   if (!missing(filters)) {
     assert_that(is.data.frame(filters))
     validate_filters(filters)
+    filters$name <- dwc_to_ala(filters$name)
     filter_query <- build_filter_query(filters)
   } else {
     filter_query <- NULL
   }
-  
   if (!is.null(filter_query) || !is.null(taxa_query)) {
     query$fq <- paste0("(", paste(c(taxa_query, filter_query), collapse = ' AND '), ")")
   }

@@ -12,13 +12,41 @@ ala_filters <- function(filters, data_quality_profile = NULL) {
   if (!is.null(data_quality_profile)) {
     dq_filters <- ala_quality_filters(data_quality_profile)
   }
+  assertions <- ala_fields("assertion")$name
   filter_rows <- data.table::rbindlist(lapply(names(filters), function(x) {
-    row <- data.frame(name = x, include = !inherits(filters[[x]], "exclude"))
-    row$value <- list(filter_value(filters[[x]]))
+    if (x %in% assertions) {
+      row <- data.frame(name = "assertion", include = TRUE, value = x,
+                        stringsAsFactors = FALSE)
+    } else {
+      row <- data.frame(name = x, include = !inherits(filters[[x]], "exclude"),
+                        value = I(list(filter_value(filters[[x]]))),
+                        stringsAsFactors = FALSE)
+    }
     row
   }))
   filter_rows
 }
+
+
+# filters vs. fields terminology
+# should handle miscased things?
+# should try to fuzzy match?
+# should also validate facets?
+validate_filters <- function(filters) {
+  # filters are provided in a dataframe
+  # key should be a valid field name and value should be a valid category for that field
+  # valid options is a combination of ala_layers and ala_fields?
+  
+  invalid_filters <- filters$name[!filters$name %in% c(ala_fields()$name,
+                                                       "assertion", all_fields()$name)]
+  
+  if (length(invalid_filters) > 0) {
+    stop("The following filters are invalid: ",
+         paste(invalid_filters, collapse = ", "),
+         ". Use `ala_fields()` to get a list of valid options")
+  }
+}
+
 
 # takes a dataframe and returns a built filter query
 build_filter_query <- function(filters) {
@@ -48,8 +76,7 @@ filter_value <- function(val) {
   if (is.logical(val)) {
     ifelse(val, "true", "false")
   }
-  
-  as.vector(val)
+  val
 }
 
 # negate a filter 

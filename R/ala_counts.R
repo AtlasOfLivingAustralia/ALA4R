@@ -26,23 +26,27 @@ ala_counts <- function(taxon_id, filters, area, breakdown,
 
   query <- list()
 
-  if (!missing(taxon_id)) {
+  if(!missing(taxon_id)) {
     # should species id be validated?
+    if (inherits(taxon_id, "data.frame") &&
+        "taxon_concept_id" %in% colnames(taxon_id)) {
+      taxon_id <- taxon_id$taxon_concept_id
+    }
     assert_that(is.character(taxon_id))
     taxa_query <- build_taxa_query(taxon_id)
   } else {
     taxa_query <- NULL
   }
-
+  
   # validate filters
   if (!missing(filters)) {
     assert_that(is.data.frame(filters))
     validate_filters(filters)
+    filters$name <- dwc_to_ala(filters$name)
     filter_query <- build_filter_query(filters)
   } else {
     filter_query <- NULL
   }
-
   if (!is.null(filter_query) || !is.null(taxa_query)) {
     query$fq <- paste0("(", paste(c(taxa_query, filter_query), collapse = ' AND '), ")")
   }
@@ -51,7 +55,6 @@ ala_counts <- function(taxon_id, filters, area, breakdown,
     # convert area to wkt if not already
     query$wkt <- build_area_query(area)
   }
-
   if (missing(breakdown)) {
     if (sum(nchar(query$fq), nchar(query$wkt), na.rm = TRUE) > 1948) {
       qid <- cache_params(query)
@@ -62,6 +65,7 @@ ala_counts <- function(taxon_id, filters, area, breakdown,
 
   # check facet is valid
   validate_facet(breakdown)
+  breakdown <- dwc_to_ala(breakdown)
   query$facets <- breakdown
   query$flimit <- limit
   url <- getOption("ALA4R_server_config")$base_url_biocache
@@ -99,7 +103,7 @@ record_count <- function(query) {
 }
 
 validate_facet <- function(facet) {
-  if (!facet %in% ala_fields()$name) {
+  if (!facet %in% c(ala_fields()$name, all_fields()$name)) {
     stop("\"", facet, "\" is not a valid breakdown field. ",
          "Use `ala_fields()` to get a list of valid options")
   }

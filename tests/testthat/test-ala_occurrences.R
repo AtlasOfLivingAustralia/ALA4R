@@ -15,7 +15,7 @@ test_that("ala_occurrences handles filters correctly", {
     unique(ala_occurrences(filters = ala_filters(
       list(state = 'Australian Capital Territory',
            basis_of_record = 'FossilSpecimen')),
-      columns = c("default", "state"))$stateProvince),
+      columns = ala_columns("basic", "state"))$state),
     "Australian Capital Territory")
   expect_error(ala_occurrences(filters = c("FossilSpecimen")))
   
@@ -23,7 +23,7 @@ test_that("ala_occurrences handles filters correctly", {
   expect_equal(range(ala_occurrences(filters = ala_filters(
     list(year = seq(1971, 1981),
     basis_of_record = 'FossilSpecimen')),
-    columns = c("default", "year"))$year),
+    columns = ala_columns("basic", "year"))$year),
     c(1971, 1981))
   
 })
@@ -43,13 +43,16 @@ test_that("ala occurrences returns requested columns",{
   expect_equal(names(ala_occurrences(taxon_id = id,
                                      filters = ala_filters(
                                        list(occurrence_decade_i = 1930)),
-                                     columns = "default")), expected_cols)
+                                     columns = ala_columns("basic"))),
+               expected_cols)
+  
+  cols <- ala_columns(extra = c("occurrence_status", "latitude", "longitude"))
   expect_equal(names(ala_occurrences(taxon_id = id,
                                      filters = ala_filters(
                                        list(occurrence_decade_i = 1930)),
-                                     columns = c("occurrence_status",
-                                                 "latitude", "longitude"))),
-               c("occurrenceStatus","decimalLatitude","decimalLongitude"))
+                                     columns = cols)), c("occurrenceStatus",
+                                                         "decimalLatitude",
+                                                         "decimalLongitude"))
 })
 
 test_that("ala_occurrences handles wkt area inputs", {
@@ -64,13 +67,12 @@ test_that("ala_occurrences handles wkt area inputs", {
   expect_error(ala_occurrences(area = wkt))
   
   wkt <- readLines('../testdata/short_act_wkt.txt')
+  cols <- ala_columns("basic", extra = "state")
+  filters <- ala_filters(list(basis_of_record = 'MachineObservation'))
   expect_equal(unique(ala_occurrences(area = wkt,
-                                      filters = ala_filters(
-                                        list(basis_of_record = 'MachineObservation')),
-                                      columns = c("default",
-                                                  "state"))$stateProvince),
+                                      filters = filters,
+                                      columns = cols)$stateProvince),
                "Australian Capital Territory")
-
 })
 
 test_that("ala_occurrences handles sf polygon inputs", {
@@ -80,7 +82,7 @@ test_that("ala_occurrences handles sf polygon inputs", {
   expect_equal(unique(ala_occurrences(area = act_shp,
                                       filters = ala_filters(
                                         list(basis_of_record = "MachineObservation")),
-                                      columns = c("default",
+                                      columns = ala_columns("basic",
                                                   "state"))$stateProvince),
                "Australian Capital Territory")
 })

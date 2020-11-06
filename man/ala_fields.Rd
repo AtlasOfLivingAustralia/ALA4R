@@ -5,7 +5,10 @@
 \title{Retrieves a list of all field names that can be used with data
 retrieval functions}
 \usage{
-ala_fields()
+ala_fields(class = "all")
+}
+\arguments{
+\item{class}{string: class of fields to return e.g. "Assertion"}
 }
 \value{
 data.frame of all fields.

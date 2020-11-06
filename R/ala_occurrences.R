@@ -26,7 +26,7 @@
 #' @export ala_occurrences
 
 ala_occurrences <- function(taxon_id, filters, area,
-                            columns = "default",
+                            columns = ala_columns("basic"),
                             email = "ala4r@ala.org.au", generate_doi = FALSE,
                             email_notify = FALSE,
                             caching = "off") {
@@ -47,6 +47,10 @@ ala_occurrences <- function(taxon_id, filters, area,
 
   if(!missing(taxon_id)) {
     # should species id be validated?
+    if (inherits(taxon_id, "data.frame") &&
+        "taxon_concept_id" %in% colnames(taxon_id)) {
+      taxon_id <- taxon_id$taxon_concept_id
+    }
     assert_that(is.character(taxon_id))
     taxa_query <- build_taxa_query(taxon_id)
   } else {
@@ -57,6 +61,7 @@ ala_occurrences <- function(taxon_id, filters, area,
   if (!missing(filters)) {
     assert_that(is.data.frame(filters))
     validate_filters(filters)
+    filters$name <- dwc_to_ala(filters$name)
     filter_query <- build_filter_query(filters)
   } else {
     filter_query <- NULL
@@ -99,8 +104,8 @@ ala_occurrences <- function(taxon_id, filters, area,
     # if file doesn't exist, continue as before
     return(data)
   }
-  message("Caching is ", caching)
-  message("Download path is ", cache_file)
+  #message("Caching is ", caching)
+  #message("Download path is ", cache_file)
 
   count <- record_count(query)
   check_count(count)
@@ -109,9 +114,11 @@ ala_occurrences <- function(taxon_id, filters, area,
   # Add columns after getting record count
   if (missing(columns)) {
     message("No columns specified, default columns will be returned.")
-    columns <- "default"
+    columns <- ala_columns("basic")
+  } else {
+    query$fields <- build_columns(columns[columns$type != "assertion",])
+    query$qa <- build_columns(columns[columns$type == "assertion",])
   }
-  query$fields <- build_columns(columns)
 
   if (generate_doi) {
     query$mintDoi <- "true"
@@ -123,14 +130,16 @@ ala_occurrences <- function(taxon_id, filters, area,
 
   # Get data
   url <- getOption("ALA4R_server_config")$base_url_biocache
-  query <- c(query, email = email, reasonTypeId = 10, dwcHeaders = "true",
-                 qa = "none")
+  query <- c(query, email = email, reasonTypeId = 10, dwcHeaders = "true")
   
   download_path <- wait_for_download(url, query)
   data_path <- ala_download(url = "https://biocache.ala.org.au",
                        path = download_path,
                        cache_file = cache_file, ext = ".zip")
   df <- read.csv(unz(data_path, "data.csv"), stringsAsFactors = FALSE)
+  
+  # rename cols so they match requested cols
+  names(df) <- rename_columns(names(df), type = "occurrence")
   # add DOI as attribute
   doi <- NA
   if (generate_doi) {
@@ -153,52 +162,57 @@ ala_occurrences <- function(taxon_id, filters, area,
 # maybe only warn because it is possible to get results for fields not in ala_fields
 # should the fields you have in the filters also be included?
 
-build_columns <- function(cols) {
-  presets <- c("default")
-  default_columns <- c("latitude", "longitude","occurrence_date","taxon_name",
-                       "taxon_concept_lsid", "id", "data_resource")
-  additional_cols <- cols[!cols %in% presets]
-  preset_selected <- cols[cols %in% presets]
-    
-  if (length(preset_selected) > 1) {
-    stop("Only one preset option can be specified in `columns`")
+build_columns <- function(col_df) {
+  if (nrow(col_df) == 0) {
+    return("")
   }
-  else if (length(preset_selected) == 1) {
-    preset_cols <- switch(preset_selected,
-           "default" = default_columns)
-    fields <- c(preset_cols, additional_cols)
-  }
-  else {
-    fields <- cols
-  }
-  paste0(fields, collapse = ",")
+  ala_cols <- dwc_to_ala(col_df$name)
+  paste0(ala_cols, collapse = ",")
 }
 
+
 #' Build dataframe of columns to keep
-#' @param cols string: vector of column names to include. If a col matches a
-#' group name, columns in that group will be added to the list
+#' @param group string: name of column group to include
+#' @param extra string: additional column names to return
 #' @export ala_columns
-ala_columns <- function(cols) {
-  presets <- c("basic", "event")
-  additional_cols <- cols[!cols %in% presets]
-  preset <- sapply(cols[cols %in% presets], function(x) {
-    preset_cols(x)
-  }, USE.NAMES = FALSE)
-  c(unlist(preset), additional_cols)
+ala_columns <- function(group, extra) {
+  
+  if (!missing(group)) {
+    group_cols <- data.table::rbindlist(lapply(group, function(x) {
+      data.frame(name = preset_cols(x), type = "field",
+                 stringsAsFactors = FALSE)
+    }))}
+  
+  
+  assertions <- ala_fields("assertion")$name
+  if (!missing(extra)) {
+   extra_cols <- data.table::rbindlist(lapply(extra, function(x) {
+     type <- ifelse(x %in% assertions, "assertion", "field")
+    data.frame(name = x, type = type, stringsAsFactors = FALSE)
+   }))}
+  
+  all_cols <- rbind(group_cols, extra_cols)
+  # remove duplicates
+  all_cols[!duplicated(all_cols$name),]
 }
 
 
 
 preset_cols <- function(type) {
+  valid_groups <- c("basic", "event")
+  # use ALA version of taxon name to avoid ambiguity (2 fields map to dwc name)
   cols <- switch (type,
-    "basic" = c("latitude", "longitude","occurrence_date","taxon_name",
-                "taxon_concept_lsid", "id", "data_resource"),
-    "event" = c("event_remarks", "event_time", "event_id", "occurrence_date",
-                "sampling_effort", "sampling_protocol") 
+    "basic" = c("decimalLatitude", "decimalLongitude","eventDate","taxon_name",
+                "taxonConceptID", "recordID", "data_resource"),
+    "event" = c("eventRemarks", "eventTime", "eventID", "eventDate",
+                "samplingEffort", "samplingProtocol") ,
+    stop("\"", type, "\" is not a valid column group. Valid groups are: ",
+         paste(valid_groups, collapse = ", "))
   )
   cols
   
 }
+
 
 wait_for_download <- function(url, query) {
   status <- ala_GET(url, "ws/occurrences/offline/download",
@@ -214,13 +228,12 @@ wait_for_download <- function(url, query) {
 }
 
 check_count <- function(count) {
-  message("This query will return ", count, " records")
-  
   if (count == 0) {
-    # should this return something?
-    stop()
+    stop("This query does not match any records.")
   } else if (count > 50000000) {
     stop("A maximum of 50 million records can be retrieved at once.",
          " Please narrow the query and try again.")
+  } else {
+    message("This query will return ", count, " records")
   }
 }

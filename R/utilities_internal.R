@@ -204,7 +204,7 @@ rename_variables <- function(varnames, type, verbose = ala_config()$verbose) {
                                     regex("(matched|processed|parsed)",
                                           ignore_case = TRUE), "")
     } else if (type == "assertions") {
-        a <- ala_fields("assertions", as_is = TRUE)
+        a <- ala_fields("assertion")
         ## want all assertion field names to match those in a$name
         ## but some may be camelCased versions of the description
         ## use "other" here to avoid this renaming code block, just apply
@@ -321,8 +321,7 @@ wanted_columns <- function(type) {
                        "occurrenceID", "recognisedLicence", "license",
                        "creator", "title", "rights", "mimeType",
                        "media_id"),
-           "layer" = c("source_link", "display_name", "id", "type",
-                       "description"),
+           "layer" = c("layer_id", "name", "source_link", "description"),
            "fields" = c("name", "data_type", "info", "class"),
            "assertions" = c("name", "data_type", "info", "class"),
            "quality_filter" = c("description", "filter"))
@@ -337,7 +336,7 @@ rename_columns <- function(varnames, type) {
     else if (type == "taxa") {
         varnames[varnames == "classs"] <- "class"
     } else if (type == "layer") {
-        varnames[varnames == "displayname"] <- "display_name"
+        varnames[varnames == "displayname"] <- "name"
     } else if (type == "fields") {
       varnames[varnames == "classs"] <- "class"
       varnames[varnames == "dataType"] <- "data_type"
@@ -350,6 +349,11 @@ rename_columns <- function(varnames, type) {
                          perl = TRUE))
     } else if (type == "checklist") {
       varnames <- tolower(gsub('\\.', '_', varnames))
+    } else if (type == "occurrence") {
+      # change dots to camel case
+      varnames <- gsub('\\.(\\w?)', '\\U\\1', varnames, perl=T)
+      # replace first letters with lowercase
+      substr(varnames, 1, 1) <- tolower(substr(varnames, 1, 1))
     }
     varnames
 }
@@ -422,24 +426,6 @@ build_wkt <- function(polygon) {
         stop("The area provided is too complex. Please simplify it and try again.")
     }
     wkt
-}
-
-# filters vs. fields terminology
-# should handle miscased things?
-# should try to fuzzy match?
-# should also validate facets?
-validate_filters <- function(filters) {
-    # filters are provided in a dataframe
-    # key should be a valid field name and value should be a valid category for that field
-    # valid options is a combination of ala_layers and ala_fields?
-    
-    invalid_filters <- filters$name[!filters$name %in% ala_fields()$name]
-    
-    if (length(invalid_filters) > 0) {
-        stop("The following filters are invalid: ",
-             paste(invalid_filters, collapse = ", "),
-             ". Use `ala_fields()` to get a list of valid options")
-    }
 }
 
 # POST params to server to get around url length constraint

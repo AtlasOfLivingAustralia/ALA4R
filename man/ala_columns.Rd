@@ -4,11 +4,12 @@
 \alias{ala_columns}
 \title{Build dataframe of columns to keep}
 \usage{
-ala_columns(cols)
+ala_columns(group, extra)
 }
 \arguments{
-\item{cols}{string: vector of column names to include. If a col matches a
-group name, columns in that group will be added to the list}
+\item{group}{string: name of column group to include}
+
+\item{extra}{string: additional column names to return}
 }
 \description{
 Build dataframe of columns to keep

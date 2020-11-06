@@ -8,7 +8,7 @@ ala_occurrences(
   taxon_id,
   filters,
   area,
-  columns = "default",
+  columns = ala_columns("basic"),
   email = "ala4r@ala.org.au",
   generate_doi = FALSE,
   email_notify = FALSE,
