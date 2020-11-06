@@ -7,7 +7,7 @@
 #' @param fq string: character string or vector of strings, specifying filters
 #' to be applied to the original query.
 #' These are of the form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See
-#' \code{ala_fields("general", as_is=TRUE)} for all the
+#' \code{ala_fields("general")} for all the
 #' fields that are queryable. NOTE that fq matches are case-sensitive, but
 #' sometimes the entries in the fields are
 #' not consistent in terms of case (e.g. kingdom names "Fungi" and "Plantae"
@@ -19,7 +19,7 @@
 #' Note that the columns of the returned data
 #' frame are not guaranteed to retain the ordering of the field names given
 #' here. If not specified, a default list of
-#' fields will be returned. See \code{ala_fields("general", as_is=TRUE)} for
+#' fields will be returned. See \code{ala_fields()} for
 #' valid field names. Use \code{fields="all"} to include all available fields
 #' @param verbose logical: show additional progress information?
 #' [default is set by ala_config()]
@@ -70,17 +70,17 @@ taxinfo_download <- function(query, fq, fields, verbose = ala_config()$verbose,
         this_query <- c(this_query, fq)
     }
     if (!missing(fields)) {
-        assert_that(is.character(fields))
-        ## user has specified some fields
-        valid_fields <- ala_fields(fields_type = "general", as_is = TRUE)
-        if (identical(tolower(fields), "all")) fields <- valid_fields$name
-        unknown <- setdiff(fields, valid_fields$name)
-        if (length(unknown) > 0) {
-            stop("invalid fields requested: ", str_c(unknown, collapse = ", "),
-                 ". See ", getOption("ALA4R_server_config")$fields_function,
-                 "(\"general\", as_is=TRUE)")
-        }
-        this_query$fields <- str_c(fields, collapse = ",")
+      assert_that(is.character(fields))
+      ## user has specified some fields
+      valid_fields <- ala_fields("general")
+      if (identical(tolower(fields), "all")) fields <- valid_fields$name
+      unknown <- setdiff(fields, valid_fields$name)
+      if (length(unknown) > 0) {
+        stop("invalid fields requested: ", str_c(unknown, collapse = ", "),
+             ". See ", getOption("ALA4R_server_config")$fields_function,
+             "(\"general\", as_is=TRUE)")
+      }
+      this_query$fields <- str_c(fields, collapse = ",")
     }
 
     this_url <- build_url_from_parts(

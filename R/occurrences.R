@@ -22,7 +22,7 @@
 #' other commonly-used fields, and so just specifying your target
 #' taxon (e.g. taxon = "Alaba vibex") will probably work.
 #' However, for reliable results it is recommended to use a specific field
-#' where possible (see \code{ala_fields("occurrence")}
+#' where possible (see \code{ala_fields()}
 #' for valid fields). It is also good practice to quote the taxon name if it
 #' contains multiple words, for example
 #' \code{taxon = "taxon_name:\"Alaba vibex\""}
@@ -32,7 +32,7 @@
 #' @param fq string: (optional) character string or vector of strings,
 #' specifying filters to be applied to the original query. These are of the
 #' form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi".
-#' See \code{ala_fields("occurrence",as_is = TRUE)} for all the fields
+#' See \code{ala_fields()} for all the fields
 #' that are queryable.
 #' NOTE that fq matches are case-sensitive, but sometimes the entries in the
 #' fields are not consistent in terms of case (e.g. kingdom names "Fungi" and
@@ -47,7 +47,7 @@
 #' Note that the columns of the returned data frame are not guaranteed to
 #' retain the ordering of the field names given here. If not specified, a
 #' default list of fields will be returned. See
-#' \code{ala_fields("occurrence")} for valid field names. Field names can be
+#' \code{ala_fields()} for valid field names. Field names can be
 #' passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than
 #' id ("el871").
 #' Use \code{fields = "all"} to include all available fields, but note that
@@ -57,7 +57,7 @@
 #' in addition to those specified in \code{fields}. This is useful if you would
 #'  like the default list of fields (i.e. when \code{fields} parameter is not
 #'  specified) plus some additional extras. See
-#'  \code{ala_fields("occurrence_stored",as_is = TRUE)} for valid field names.
+#'  \code{ala_fields()} for valid field names.
 #'  Field names can be passed as full names
 #'  (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871").
 #'  Use \code{extra = "all"} to include all available fields, but note that
@@ -66,7 +66,7 @@
 #' @param qa string vector: (optional) list of record issues to include in
 #' the download. Use \code{qa = "all"} to include all available issues, or
 #' \code{qa = "none"} to include none. Otherwise see
-#' \code{ala_fields("assertions",as_is = TRUE)} for valid values
+#' \code{ala_fields(class = "assertion")} for valid values
 #' @param method string: This parameter is deprecated. Now all queries use
 #' offline method unless \code{record_count_only = TRUE}
 #'  more fields are available and larger datasets can be returned
@@ -116,9 +116,6 @@
 #' ## download records, with standard fields
 #' x <- occurrences(taxon = "data_resource_uid:dr356", download_reason_id = 10,
 #' email = 'your_email_here')
-#' ## download records, with all fields
-#' x <- occurrences(taxon = "data_resource_uid:dr356",download_reason_id = 10,
-#'   fields = ala_fields("occurrence_stored",as_is = TRUE)$name)
 #' ## download records, with specified fields
 #' x <- occurrences(taxon = "genus:Heleioporus",
 #' fields = c("longitude","latitude",
@@ -164,12 +161,7 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
         warning("Method is a deprecated field. All queries use offline method,
                 unless record_count_only == TRUE, when indexed method is used")
     }
-    if (record_count_only) {
-        valid_fields_type <- "occurrence_stored"
-        }
-    else {
-        valid_fields_type <- "occurrence"
-    }
+
     this_query <- list()
     ## have we specified a taxon?
     if (!missing(taxon)) {
@@ -236,16 +228,15 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
     if (!missing(fields)) {
         assert_that(is.character(fields))
         ## user has specified some fields
-        valid_fields <- ala_fields(fields_type = valid_fields_type,
-                                   as_is = TRUE)
+        valid_fields <- all_fields()$name
+        
         if (identical(tolower(fields), "all")) fields <- valid_fields$name
         # # replace long names with ids
-        fields <- fields_name_to_id(fields = fields, fields_type = "occurrence")
-        unknown <- setdiff(fields, valid_fields$name)
+        #fields <- fields_name_to_id(fields = fields, fields_type = "occurrence")
+        unknown <- setdiff(dwc_to_ala(fields), valid_fields)
         if (length(unknown) > 0) {
             stop("invalid fields requested: ", str_c(unknown, collapse = ", "),
-                 ". See ", getOption("ALA4R_server_config")$fields_function,
-                 "(\"", valid_fields_type, "\",as_is=TRUE)")
+                 ". See ", getOption("ALA4R_server_config")$fields_function)
         }
         this_query$fields <- str_c(fields, collapse = ",")
     }
@@ -256,34 +247,30 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
 
     if (!missing(extra)) {
         assert_that(is.character(extra))
-        valid_fields <- ala_fields(fields_type = valid_fields_type,
-                                   as_is = TRUE)
-        if (identical(tolower(extra), "all")) extra <- valid_fields$name
+        valid_fields <- all_fields()$name
+        if (identical(tolower(extra), "all")) extra <- valid_fields
         ## replace long names with ids
-        extra <- fields_name_to_id(fields = extra, fields_type = "occurrence")
-        unknown <- setdiff(extra, valid_fields$name)
+        #extra <- fields_name_to_id(fields = extra, fields_type = "occurrence")
+        unknown <- setdiff(dwc_to_ala(extra), valid_fields)
         if (length(unknown) > 0) {
             stop("invalid extra fields requested: ",
                  str_c(unknown, collapse = ", "),
-                 ". See ", getOption("ALA4R_server_config")$fields_function,
-                 "(\"", valid_fields_type, "\",as_is=TRUE)")
+                 ". See ", getOption("ALA4R_server_config")$fields_function)
         }
         this_query$extra <- str_c(extra, collapse = ",")
     }
     if (!missing(qa)) {
         assert_that(is.character(qa))
         if (identical(tolower(qa), "all")) {
-            qa <- ala_fields("assertions", as_is = TRUE)$name
+            qa <- ala_fields("assertion")$name
         }
         ## valid entries for qa
-        valid_fields <- c("none", ala_fields(fields_type = "assertions",
-                                            as_is = TRUE)$name)
+        valid_fields <- c("none", ala_fields("assertion")$name)
         unknown <- setdiff(qa, valid_fields)
         if (length(unknown) > 0) {
             stop("invalid qa fields requested: ",
                  str_c(unknown, collapse = ", "),
-                 ". See ", getOption("ALA4R_server_config")$fields_function,
-                 "(\"assertions\",as_is=TRUE)")
+                 ". See ", getOption("ALA4R_server_config")$fields_function)
         }
         this_query$qa <- str_c(qa, collapse = ",")
     }
@@ -426,18 +413,7 @@ occurrences <- function(taxon, wkt, fq, fields, extra, qa, method,
             ## change e.g. el.xxx to elxxx
             names(x) <- str_replace_all(names(x),
                                         "^(el|cl)\\.([0-9]+)", "\\1\\2")
-            ## TODO what is "cl.1050.b" etc?
-            if (use_layer_names) {
-                names(x) <- make.names(fields_id_to_name(names(x),
-                                                         fields_type =
-                                                             "layers"))
-            } else {
-                ## use make_names because names here have dots instead of
-                ## spaces (not tested)
-                names(x) <- make.names(fields_name_to_id(names(x),
-                                                         fields_type = "layers",
-                                                         make_names = TRUE))
-            }
+
             names(x) <- rename_variables(names(x), type = "assertions")
             names(x) <- rename_variables(names(x), type = "occurrence")
             ## remove unwanted columns

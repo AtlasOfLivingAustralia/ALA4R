@@ -28,7 +28,7 @@
 #' @param page_size numeric: (optional) (positive integer) maximum number of
 #' records to return. Defaults to the server-side value - currently 10
 #' @param sort_by string: (optional) field to sort on. See
-#' \code{ala_fields("general")} for valid field names
+#' \code{ala_fields()} for valid field names
 #' @param sort_dir string: (optional) sort direction, either "asc" or "desc"
 #' @seealso \code{\link{ala_fields}}
 #' @return a named list with the components "meta" (search metadata), "facets"
@@ -94,11 +94,10 @@ search_fulltext <- function(query, fq = "idxtype:TAXON",
     if (!missing(sort_by)) {
         assert_that(is.string(sort_by))
         ## check that this is a valid field
-        valid_fields <- ala_fields("general", as_is = TRUE)$name
+        valid_fields <- ala_fields("general")$name
         if (! sort_by %in% valid_fields) {
             stop(sort_by, " is not a valid field for sort_by. See ",
-                 getOption("ALA4R_server_config")$fields_function,
-                 "(\"general\", as_is=TRUE)")
+                 getOption("ALA4R_server_config")$fields_function)
         }
         this_query$sort <- sort_by
     }

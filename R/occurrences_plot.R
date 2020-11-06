@@ -87,7 +87,7 @@ occurrences_plot <- function(x, filename = "Rplots.pdf",
                 warning("invalid qa fields requested: ",
                         str_c(unknown, collapse = ", "), ". See ",
                         getOption("ALA4R_server_config")$fields_function,
-                        "(\"assertions\", as_is=TRUE)")
+                        "(\"assertion\")")
             }
             tt <- intersect(qa, valid_fields)
         }

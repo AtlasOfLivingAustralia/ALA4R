@@ -17,7 +17,7 @@
 #'  ##download species data with all possible assertions
 #'
 #'  x <- occurrences(taxon="golden bowerbird", download_reason_id=10,
-#'  qa=ala_fields("assertions")$name)
+#'  qa=ala_fields("assertion")$name)
 #'
 #'  asserts <- check_assertions(x)
 #'  ## this is a data.frame of assertions, their description and column names
@@ -38,9 +38,9 @@ check_assertions <- function(x) {
              getOption("ALA4R_server_config")$occurrences_function,
              "() in the ", getOption("ALA4R_server_config")$brand, " package")
     }
-    ass <- ala_fields("assertions", as_is = TRUE) ## get all assertion fields
+    ass <- ala_fields("assertion") ## get all assertion fields
     ass$occurColnames <- NA
-    temp_description <- rename_variables(ass$description, type = "assertions")
+    temp_description <- rename_variables(ass$info, type = "assertions")
     for (coi in colnames(x$data)) {
         ## match on either name or description
         tt <- which(coi == ass$name | coi == temp_description)

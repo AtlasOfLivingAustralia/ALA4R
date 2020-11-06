@@ -19,7 +19,7 @@ data.frame or matrix of lat, lons. NOTE: the number of locations must be
 less than 100000}
 
 \item{layers}{string vector: ids of layers to be intersected. The list of
-possible layers is available from \code{ala_fields("layers")}. Names can be
+possible layers is available from \code{ala_layers()}. Names can be
 passed as full layer names (e.g. "Radiation - lowest period (Bio22)") rather
 than id ("el871"). Note: if more than one location has been provided in
 \code{pnts}, the number of layers must be less than 700}

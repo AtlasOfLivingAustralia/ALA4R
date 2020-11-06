@@ -193,42 +193,7 @@ NULL
     ass <- check_assertions(x) #need to get existing assertions in occur dataset
     roi <- NULL #define an object outlining rows to remove
 
-    if (is.null(ass)) {
-        warning("no assertions in occurrence data")
-    } else {
-        for (ii in seq_len(nrow(ass))) {
-            if (ass$fatal[ii] == TRUE) {
-                if (remove.fatal) { #remove the fatal data
-                    roi <- c(roi, which(x$data[, ass$occurColnames[ii]] ==
-                                            TRUE)); next
-                }
-            }
-            if (ass$code[ii] < 10000) { #remove data with spatial issues
-                if (length(exclude.spatial) > 0) {
-                    if (ass$category[ii] %in% exclude.spatial) {
-                        roi <- c(roi, which(x$data[, ass$occurColnames[ii]] ==
-                                           TRUE)); next
-                    }
-                }
-            } else if (ass$code[ii] >= 10000 & ass$code[ii] < 20000) {
-                # remove data with taxonomic issues
-                if (length(exclude.taxonomic) > 0) {
-                    if (ass$category[ii] %in% exclude.taxonomic) {
-                        roi <- c(roi, which(x$data[, ass$occurColnames[ii]] ==
-                                                TRUE)); next
-                    }
-                }
-            } else if (ass$code[ii] >= 30000) {
-                #remove data with temporal issues
-                if (length(exclude.temporal) > 0) {
-                    if (ass$category[ii] %in% exclude.temporal) {
-                        roi <- c(roi, which(x$data[, ass$occurColnames[ii]] ==
-                                                TRUE)); next
-                    }
-                }
-            }
-        }
-    }
+    
     if (!missing(max.spatial.uncertainty)) {
         assert_that(is.numeric(max.spatial.uncertainty))
         if (! "coordinateUncertaintyInMetres" %in% names(x$data)) {

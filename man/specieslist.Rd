@@ -10,7 +10,7 @@ specieslist(taxon, wkt, fq)
 \item{taxon}{string: (optional) query of the form field:value (e.g.
 "genus:Heleioporus") or a free text search (e.g. "macropodidae").
 For reliable results it is recommended to use a specific field where
-possible (see \code{ala_fields("occurrence_indexed")}
+possible (see \code{ala_fields()}
 for valid fields). It is also good practice to quote the taxon name if it
 contains multiple words, for example
 \code{taxon = "taxon_name:\"Alaba vibex\""} (noting, however, that multi-word
@@ -25,7 +25,7 @@ limit taxon search, e.g.
 \item{fq}{string: character string or vector of strings, specifying filters
 to be applied to the original query. These are of the form
 "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi". See
-\code{ala_fields("occurrence_indexed", as_is = TRUE)} for all the fields
+\code{ala_fields()} for all the fields
 that are queryable. NOTE that fq matches are case-sensitive, but sometimes
 the entries in the fields are not consistent in terms of case (e.g. kingdom
 names "Fungi" and "Plantae" but "ANIMALIA"). fq matches are ANDed by

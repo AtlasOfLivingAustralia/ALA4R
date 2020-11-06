@@ -32,7 +32,7 @@ The text field is populated with the taxon name along with a handful of
 other commonly-used fields, and so just specifying your target
 taxon (e.g. taxon = "Alaba vibex") will probably work.
 However, for reliable results it is recommended to use a specific field
-where possible (see \code{ala_fields("occurrence")}
+where possible (see \code{ala_fields()}
 for valid fields). It is also good practice to quote the taxon name if it
 contains multiple words, for example
 \code{taxon = "taxon_name:\"Alaba vibex\""}}
@@ -44,7 +44,7 @@ spatial polygon within which to search, e.g. "POLYGON((140 -37,151 -37,151 ]
 \item{fq}{string: (optional) character string or vector of strings,
 specifying filters to be applied to the original query. These are of the
 form "INDEXEDFIELD:VALUE" e.g. "kingdom:Fungi".
-See \code{ala_fields("occurrence",as_is = TRUE)} for all the fields
+See \code{ala_fields()} for all the fields
 that are queryable.
 NOTE that fq matches are case-sensitive, but sometimes the entries in the
 fields are not consistent in terms of case (e.g. kingdom names "Fungi" and
@@ -60,7 +60,7 @@ for more information about filter queries}
 Note that the columns of the returned data frame are not guaranteed to
 retain the ordering of the field names given here. If not specified, a
 default list of fields will be returned. See
-\code{ala_fields("occurrence")} for valid field names. Field names can be
+\code{ala_fields()} for valid field names. Field names can be
 passed as full names (e.g. "Radiation - lowest period (Bio22)") rather than
 id ("el871").
 Use \code{fields = "all"} to include all available fields, but note that
@@ -71,7 +71,7 @@ exceed the maximum allowable length}
 in addition to those specified in \code{fields}. This is useful if you would
  like the default list of fields (i.e. when \code{fields} parameter is not
  specified) plus some additional extras. See
- \code{ala_fields("occurrence_stored",as_is = TRUE)} for valid field names.
+ \code{ala_fields()} for valid field names.
  Field names can be passed as full names
  (e.g. "Radiation - lowest period (Bio22)") rather than id ("el871").
  Use \code{extra = "all"} to include all available fields, but note that
@@ -81,7 +81,7 @@ in addition to those specified in \code{fields}. This is useful if you would
 \item{qa}{string vector: (optional) list of record issues to include in
 the download. Use \code{qa = "all"} to include all available issues, or
 \code{qa = "none"} to include none. Otherwise see
-\code{ala_fields("assertions",as_is = TRUE)} for valid values}
+\code{ala_fields(class = "assertion")} for valid values}
 
 \item{method}{string: This parameter is deprecated. Now all queries use
 offline method unless \code{record_count_only = TRUE}
@@ -146,9 +146,6 @@ x <- occurrences(taxon = "data_resource_uid:dr356",record_count_only = TRUE)
 ## download records, with standard fields
 x <- occurrences(taxon = "data_resource_uid:dr356", download_reason_id = 10,
 email = 'your_email_here')
-## download records, with all fields
-x <- occurrences(taxon = "data_resource_uid:dr356",download_reason_id = 10,
-  fields = ala_fields("occurrence_stored",as_is = TRUE)$name)
 ## download records, with specified fields
 x <- occurrences(taxon = "genus:Heleioporus",
 fields = c("longitude","latitude",

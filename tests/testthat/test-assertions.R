@@ -2,6 +2,7 @@ context("Check assertion-related functions")
 
 thischeck <- function() {
     test_that("NULL returned when no assertions present in input", {
+        ala_config(warn_on_empty = FALSE)
         temp <- data.frame()
         class(temp) <- c("occurrences", class(temp))
         expect_null(check_assertions(temp))
@@ -23,15 +24,15 @@ check_caching(thischeck)
 thischeck <- function() {
     test_that("check_assertions gets all assertions in occurrences object", {
         skip_on_cran()
+        assertions <- ala_fields("assertion")$name
         x <- occurrences(taxon = "Amblyornis newtonianus",
                          email = "ala4r@ala.org.au",
                          download_reason_id = 10,
-                         qa = ala_fields("assertions", as_is = TRUE)$name)
+                         qa = assertions)
         ## expect all assertion fields in object to be in the list of master
         ## assertion fields
         expect_equal(length(setdiff(check_assertions(x)$name,
-                                    ala_fields("assertions",
-                                               as_is = TRUE)$name)), 0)
+                                    assertions)), 0)
         x <- occurrences(taxon = "Amblyornis newtonianus",
                          email = "ala4r@ala.org.au",
                          download_reason_id = 10, qa = "none")

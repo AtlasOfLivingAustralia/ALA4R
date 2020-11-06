@@ -23,7 +23,7 @@ in a dataset returned from \code{\link{occurrences}}.
  ##download species data with all possible assertions
 
  x <- occurrences(taxon="golden bowerbird", download_reason_id=10,
- qa=ala_fields("assertions")$name)
+ qa=ala_fields("assertion")$name)
 
  asserts <- check_assertions(x)
  ## this is a data.frame of assertions, their description and column names

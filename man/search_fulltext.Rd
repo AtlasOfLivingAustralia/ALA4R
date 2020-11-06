@@ -42,7 +42,7 @@ results}
 records to return. Defaults to the server-side value - currently 10}
 
 \item{sort_by}{string: (optional) field to sort on. See
-\code{ala_fields("general")} for valid field names}
+\code{ala_fields()} for valid field names}
 
 \item{sort_dir}{string: (optional) sort direction, either "asc" or "desc"}
 }

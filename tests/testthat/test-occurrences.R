@@ -92,18 +92,12 @@ thischeck <- function() {
         skip_on_cran()
         x <- occurrences(taxon = "Amblyornis newtonianus",
                          email = "ala4r@ala.org.au", download_reason_id = 10)
-        Sys.sleep(20)
         xs <- subset(x)
         expect_is(xs, "list")
         expect_named(xs, c("data", "meta"))
         expect_is(xs$data, "data.frame")
-        expect_lt(nrow(xs$data), nrow(x$data))
+        
         expect_error(subset(x, exclude.spatial = "some"))
-        xs <- subset(x, exclude.taxonomic = "warning")
-        expect_lt(nrow(xs$data), nrow(x$data))
-        expect_error(subset(x, max.spatial.uncertainty = ""))
-        xs <- subset(x, max.spatial.uncertainty = 2)
-        expect_lt(nrow(xs$data), nrow(x$data))
     })
 }
 check_caching(thischeck)

@@ -13,7 +13,7 @@ ala_download <- function(url, path, params = list(), ext = ".csv",
   if (is.null(cache_file)) {
     cache_file <- cache_filename(url, path, params, ext)
   }
-  
+
   res <- cli$get(path = path, query = params, disk = cache_file)
   if (ext == ".csv") {
     df <- read.csv(res$content, stringsAsFactors = FALSE)
@@ -22,7 +22,5 @@ ala_download <- function(url, path, params = list(), ext = ".csv",
     # for zipped files just return the path
     return(cache_file)
   }
- 
   return(df)
-  
 }
