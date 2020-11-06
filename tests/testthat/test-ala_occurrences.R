@@ -40,11 +40,11 @@ test_that("ala occurrences returns requested columns",{
                      "scientificName", "taxonConceptID", "recordID",
                      "data_resource")
   id <- ala_taxa("Polytelis swainsonii")$taxon_concept_id
-  expect_equal(names(ala_occurrences(taxon_id = id,
+  expect_equal(sort(names(ala_occurrences(taxon_id = id,
                                      filters = ala_filters(
                                        list(occurrence_decade_i = 1930)),
-                                     columns = ala_columns("basic"))),
-               expected_cols)
+                                     columns = ala_columns("basic")))),
+               sort(expected_cols))
   
   cols <- ala_columns(extra = c("occurrence_status", "latitude", "longitude"))
   expect_equal(names(ala_occurrences(taxon_id = id,

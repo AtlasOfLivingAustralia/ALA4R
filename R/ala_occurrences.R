@@ -181,7 +181,9 @@ ala_columns <- function(group, extra) {
     group_cols <- data.table::rbindlist(lapply(group, function(x) {
       data.frame(name = preset_cols(x), type = "field",
                  stringsAsFactors = FALSE)
-    }))}
+    }))} else {
+      group_cols <- NULL
+    }
   
   
   assertions <- ala_fields("assertion")$name
@@ -189,7 +191,9 @@ ala_columns <- function(group, extra) {
    extra_cols <- data.table::rbindlist(lapply(extra, function(x) {
      type <- ifelse(x %in% assertions, "assertion", "field")
     data.frame(name = x, type = type, stringsAsFactors = FALSE)
-   }))}
+   }))} else {
+     extra_cols <- NULL
+   }
   
   all_cols <- rbind(group_cols, extra_cols)
   # remove duplicates
