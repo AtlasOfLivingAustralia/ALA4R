@@ -6,6 +6,17 @@ check_fq <- function(fq, type) {
     type <- match.arg(tolower(type),
                       c("general", "occurrence", "layers", "images"))
     if (identical(type, "occurrence")) type <- "occurrence_indexed"
+    
+    if (identical(type, "images")) {
+      fields <- c("dateUploaded", "dataResourceUid", "license",
+                  "recognisedLicence", "imageSize", "dateUploadedYearMonth",
+                  "format", "fileType", "createdYear", "creator", "title",
+                  "description", "width", "height", "thumbHeight", "thumbWidth")
+      df <- data.frame(fields)
+      names(df) <- "name"
+      return(df)
+    }
+    
     field_names <- extract_fq_fieldnames(fq)
     if (is.null(field_names)) {
         ## no matches, so somehow fq doesn't match our expected syntax
