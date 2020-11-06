@@ -8,7 +8,7 @@ ala_POST <- function(url, path, body = list()) {
       useragent = ala_config()$user_agent
     )
   )
-  res <- cli$post(path = path, body = body, encode = "json")
+  res <- cli$post(path = path, body = body, encode = "form")
   if (res$status_code != 200) {
     stop("Status code ", res$status_code, "returned for url ", res$request$url)
   }
