@@ -89,7 +89,7 @@ name_lookup <- function(name) {
     query <- name
   }
   result <- ala_GET(url, path, query)
-  if (result$issues == "homonym") {
+  if ("homonym" %in% result$issues) {
     stop("Homonym issue with ", name, ". Please also provide another rank to clarify.")
   }  else if (isFALSE(result$success)) {
     message("No taxon matches were found for \"", name, "\"")
