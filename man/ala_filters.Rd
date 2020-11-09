@@ -4,7 +4,7 @@
 \alias{ala_filters}
 \title{Build a dataframe from a filter list}
 \usage{
-ala_filters(filters, data_quality_profile = NULL)
+ala_filters(filters = NULL, data_quality_profile = NULL)
 }
 \arguments{
 \item{filters}{string: a list to narrow down the search, in the form

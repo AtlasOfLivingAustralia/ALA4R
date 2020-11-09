@@ -8,11 +8,29 @@
 #' @return dataframe of filter values
 #' @export ala_filters
 
-ala_filters <- function(filters, data_quality_profile = NULL) {
+ala_filters <- function(filters = NULL, data_quality_profile = NULL) {
   if (!is.null(data_quality_profile)) {
     dq_filters <- ala_quality_filters(data_quality_profile)
+    dq_filter_rows <- data.table::rbindlist(lapply(dq_filters$filter,
+                                                   function(filter) {
+      split <- strsplit(filter, ":")[[1]]
+      value <- str_replace_all(split[2], "\"", "")
+      if (substr(split[1], 1, 1) == "-") {
+        name <- substr(split[1], 2, nchar(split[1]))
+        include <- FALSE
+      } else {
+        name <- split[1]
+        include <- TRUE
+      }
+      row <- data.frame(name, include, value, stringsAsFactors = FALSE)
+    }))
+  } else {
+    dq_filter_rows <- NULL
   }
+  
+  
   assertions <- ala_fields("assertion")$name
+
   filter_rows <- data.table::rbindlist(lapply(names(filters), function(x) {
     if (x %in% assertions) {
       row <- data.frame(name = "assertions", include = TRUE, value = x,
@@ -24,7 +42,8 @@ ala_filters <- function(filters, data_quality_profile = NULL) {
     }
     row
   }))
-  filter_rows
+  
+  rbind(filter_rows, dq_filter_rows)
 }
 
 
@@ -79,7 +98,10 @@ filter_value <- function(val) {
   val
 }
 
-# negate a filter 
+#' Negate a filter value
+#' @param value string: filter value(s) to be excluded
+#' @return value with class "exclude"
+#' @export exclude
 exclude <- function(value) {
   class(value) <- "exclude"
   value
