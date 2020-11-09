@@ -20,17 +20,17 @@ test_that("ala_occurrences handles filters correctly", {
   expect_error(ala_occurrences(filters = c("FossilSpecimen")))
   
   # handles year filters
-  expect_equal(range(ala_occurrences(filters = ala_filters(
+  expect_true(unique(ala_occurrences(filters = ala_filters(
     list(year = seq(1971, 1981),
     basis_of_record = 'FossilSpecimen')),
-    columns = ala_columns("basic", "year"))$year),
-    c(1971, 1981))
-  
+    columns = ala_columns("basic", "year"))$year %in% seq(1971,1981)))
 })
 
-test_that("ala occurrences uses data quality filters", {
+test_that("ala occurrences handles a long query", {
   skip_on_cran()
-  # check there are no records before 1700
+  # generate a query longer than 2000 characters
+  taxa <- ala_taxa("Hymenoptera", return_children = TRUE)
+  filters <- ala_filters(filters = list(year = 1990), data_quality_profile = "ALA")
   
   
 })
@@ -55,9 +55,10 @@ test_that("ala occurrences returns requested columns",{
                                                          "decimalLongitude"))
 })
 
-test_that("ala occurrences handles assertion columns", {
+test_that("ala occurrences handles assertion columns and works with data.frame
+          input", {
   skip_on_cran()
-  id <- ala_taxa("Paraparatrechina minutula")$taxon_concept_id
+  id <- ala_taxa("Paraparatrechina minutula")
   cols <- ala_columns(extra = c("zeroLatitude", "zeroLongitude", "eventDate"))
   expect_equal(names(ala_occurrences(taxon_id = id, columns = cols)),
                c("eventDate", "zeroLatitude", "zeroLongitude"))

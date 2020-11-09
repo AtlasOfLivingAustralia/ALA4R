@@ -13,6 +13,7 @@ test_that("ala counts checks inputs", {
 })
 
 test_that("ala counts returns expected outputs", {
+  skip_on_cran()
   expect_type(ala_counts(taxon_id = "https://id.biodiversity.org.au/taxon/apni/51302291"), "integer")
   expect_equal(class(ala_counts(taxon_id = "https://id.biodiversity.org.au/taxon/apni/51302291",
                                 breakdown = "basis_of_record")), "data.frame")
@@ -38,4 +39,11 @@ test_that("ala counts handles queries with no records", {
   filters <- ala_filters(list(kingdom = 'non-existent'))
   expect_s3_class(ala_counts(filters = filters,
                              breakdown = 'basis_of_record'), "data.frame")
+})
+
+test_that("ala_counts works with long queries", {
+  skip_on_cran()
+  taxa <- ala_taxa("Hymenoptera", return_children = TRUE)
+  filters <- ala_filters(data_quality_profile = "ALA")
+  expect_gt(ala_counts(taxa, filters), 0)
 })

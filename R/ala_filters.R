@@ -22,7 +22,7 @@ ala_filters <- function(filters = NULL, data_quality_profile = NULL) {
         name <- split[1]
         include <- TRUE
       }
-      row <- data.frame(name, include, value, stringsAsFactors = FALSE)
+      data.frame(name = name, include, value = I(list(value)), stringsAsFactors = FALSE)
     }))
   } else {
     dq_filter_rows <- NULL
@@ -79,15 +79,21 @@ build_filter_query <- function(filters) {
 query_term <- function(name, value, include) {
   # add quotes around value
   value <- lapply(value, function(x) {
-    paste0("\"", x, "\"")
+    # don't add quotes if there are square brackets in the term
+    if (grepl("\\[", x)) {
+      x
+    } else {
+      paste0("\"", x, "\"")
+    }
   })
   if (include) {
     value_str <- paste(name, value, collapse = " OR ", sep = ":")
   } else {
     value_str <- paste(paste0("-", name), value, collapse = ' AND ', sep = ':')
   }
-  paste0("(", value_str, ")")
+  #paste0("(", value_str, ")")
 }
+
 
 
 filter_value <- function(val) {
