@@ -143,7 +143,7 @@ ala_occurrences <- function(taxon_id, filters, area,
   names(df) <- rename_columns(names(df), type = "occurrence")
   
   # replace 'true' and 'false' with boolean
-  if (length(assertion_cols > 0)) {
+  if (nrow(assertion_cols) > 0) {
     df <- fix_assertion_cols(df, assertion_cols$name)
   }
   
