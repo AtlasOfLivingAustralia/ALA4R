@@ -55,6 +55,14 @@ test_that("ala occurrences returns requested columns",{
                                                          "decimalLongitude"))
 })
 
+test_that("ala occurrences handles assertion columns", {
+  skip_on_cran()
+  id <- ala_taxa("Paraparatrechina minutula")$taxon_concept_id
+  cols <- ala_columns(extra = c("zeroLatitude", "zeroLongitude", "eventDate"))
+  expect_equal(names(ala_occurrences(taxon_id = id, columns = cols)),
+               c("eventDate", "zeroLatitude", "zeroLongitude"))
+})
+
 test_that("ala_occurrences handles wkt area inputs", {
   # invalid wkt
   skip_on_cran()

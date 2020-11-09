@@ -15,7 +15,7 @@ ala_filters <- function(filters, data_quality_profile = NULL) {
   assertions <- ala_fields("assertion")$name
   filter_rows <- data.table::rbindlist(lapply(names(filters), function(x) {
     if (x %in% assertions) {
-      row <- data.frame(name = "assertion", include = TRUE, value = x,
+      row <- data.frame(name = "assertions", include = TRUE, value = x,
                         stringsAsFactors = FALSE)
     } else {
       row <- data.frame(name = x, include = !inherits(filters[[x]], "exclude"),

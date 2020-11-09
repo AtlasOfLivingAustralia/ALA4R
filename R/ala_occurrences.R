@@ -115,10 +115,11 @@ ala_occurrences <- function(taxon_id, filters, area,
   if (missing(columns)) {
     message("No columns specified, default columns will be returned.")
     columns <- ala_columns("basic")
-  } else {
-    query$fields <- build_columns(columns[columns$type != "assertion",])
-    query$qa <- build_columns(columns[columns$type == "assertion",])
   }
+  
+  assertion_cols <- columns[columns$type == "assertions",]
+  query$fields <- build_columns(columns[columns$type != "assertions",])
+  query$qa <- build_columns(assertion_cols)
 
   if (generate_doi) {
     query$mintDoi <- "true"
@@ -140,6 +141,12 @@ ala_occurrences <- function(taxon_id, filters, area,
   
   # rename cols so they match requested cols
   names(df) <- rename_columns(names(df), type = "occurrence")
+  
+  # replace 'true' and 'false' with boolean
+  if (length(assertion_cols > 0)) {
+    df <- fix_assertion_cols(df, assertion_cols$name)
+  }
+  
   # add DOI as attribute
   doi <- NA
   if (generate_doi) {
@@ -156,6 +163,13 @@ ala_occurrences <- function(taxon_id, filters, area,
   }
   
   return(df)
+}
+
+fix_assertion_cols <- function(df, assertion_cols) {
+  for (col in assertion_cols) {
+    df[,col] <- as.logical(df[,col])
+  }
+  df
 }
 
 # check validity of fields?
@@ -189,7 +203,7 @@ ala_columns <- function(group, extra) {
   assertions <- ala_fields("assertion")$name
   if (!missing(extra)) {
    extra_cols <- data.table::rbindlist(lapply(extra, function(x) {
-     type <- ifelse(x %in% assertions, "assertion", "field")
+     type <- ifelse(x %in% assertions, "assertions", "field")
     data.frame(name = x, type = type, stringsAsFactors = FALSE)
    }))} else {
      extra_cols <- NULL
