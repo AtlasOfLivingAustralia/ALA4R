@@ -20,7 +20,8 @@ simplified.}
 
 \item{limit}{numeric: maximum number of categories to return. 20 by default.}
 
-\item{caching}{string: should the results be cached? Either "on" or "off"}
+\item{caching}{logical: should the results be cached/use cache? Only used if
+`breakdown` is supplied.}
 }
 \value{
 either single integer of total counts, or a dataframe of counts by

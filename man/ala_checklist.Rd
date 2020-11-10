@@ -4,7 +4,7 @@
 \alias{ala_checklist}
 \title{List species matching criteria}
 \usage{
-ala_checklist(taxon_id, filters, area, caching = "off")
+ala_checklist(taxon_id, filters, area, caching = FALSE)
 }
 \arguments{
 \item{taxon_id}{string: single species ID or vector of species ids. Use
