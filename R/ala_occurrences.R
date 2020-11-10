@@ -60,7 +60,6 @@ ala_occurrences <- function(taxon_id, filters, area,
   # validate filters
   if (!missing(filters)) {
     assert_that(is.data.frame(filters))
-    validate_filters(filters)
     filters$name <- dwc_to_ala(filters$name)
     filter_query <- build_filter_query(filters)
   } else {

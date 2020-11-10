@@ -2,8 +2,6 @@ context("Get occurrence data")
 
 test_that("ala_occurrences check inputs", {
   skip_on_cran()
-  # bad field
-  expect_error(ala_occurrences(filters = c(invalid_field = "value")))
   expect_error(ala_occurrences(filters =
                                  c(state = "Australian Capital Territory")))
   expect_error(ala_occurrences())
