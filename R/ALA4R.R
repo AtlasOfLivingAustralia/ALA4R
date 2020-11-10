@@ -23,6 +23,7 @@
 #' @importFrom stringr regex str_c str_detect str_extract str_locate 
 #' str_match str_match_all
 #' @importFrom stringr str_replace str_replace_all str_split str_trim
-#' @importFrom utils data packageVersion read.csv read.table str unzip URLencode download.file
+#' @importFrom utils data packageVersion read.csv write.csv read.table str
+#' unzip URLencode download.file
 #' @importFrom wellknown lint
 NULL
