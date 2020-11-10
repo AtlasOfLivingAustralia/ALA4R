@@ -35,7 +35,7 @@ ala_occurrences <- function(taxon_id, filters, area,
   assert_that(is.flag(email_notify))
   assert_that(is.character(email))
 
-  # is it worth validating the email with a regex? this won't 
+  # is it worth validating the email with a regex? this won't
   # be able to tell if the email is registered or not
 
   query <- list()
@@ -45,7 +45,7 @@ ala_occurrences <- function(taxon_id, filters, area,
     stop("Need to provide one of `taxon id`, `filters` or `area`")
   }
 
-  if(!missing(taxon_id)) {
+  if (!missing(taxon_id)) {
     # should species id be validated?
     if (inherits(taxon_id, "data.frame") &&
         "taxon_concept_id" %in% colnames(taxon_id)) {
@@ -67,15 +67,15 @@ ala_occurrences <- function(taxon_id, filters, area,
     filter_query <- NULL
   }
   if (!is.null(filter_query) || !is.null(taxa_query)) {
-    query$fq <- paste0("(", paste(c(taxa_query, filter_query), collapse = ' AND '), ")")
+    query$fq <- paste0("(", paste(c(taxa_query, filter_query),
+                                  collapse = " AND "), ")")
   }
-  
 
   # not yet released
   #query$qualityProfile <- 'ALA'
 
-  # Two issues with area validation: 
-  # wellknown validates wkt correctly?? 
+  # Two issues with area validation:
+  # wellknown validates wkt correctly??
   # 504 error is returned from the server if a polygon is too complicated
   if (!missing(area)) {
     # convert area to wkt if not already
@@ -86,16 +86,16 @@ ala_occurrences <- function(taxon_id, filters, area,
 
   if (sum(nchar(query$fq), nchar(query$wkt), na.rm = TRUE) > 1948) {
     qid <- cache_params(query)
-    query <- list(q = paste0("qid:",qid))
+    query <- list(q = paste0("qid:", qid))
   }
 
   # handle caching
   # look for file to download- if it doesn't exist, continue on
   # use base_url_biocache as the filename? otherwise won't be found
-  cache_file <- cache_filename(url = getOption("ALA4R_server_config")$
+  cache_file <- cache_filename(c(getOption("ALA4R_server_config")$
                                    base_url_biocache,
                                path = "ws/occurrences/offline/download",
-                               params = query, ext = ".zip")
+                               params = unlist(query)), ext = ".zip")
 
   if (caching == "on" & file.exists(cache_file)) {
     message("Using existing file")
@@ -104,21 +104,18 @@ ala_occurrences <- function(taxon_id, filters, area,
     # if file doesn't exist, continue as before
     return(data)
   }
-  #message("Caching is ", caching)
-  #message("Download path is ", cache_file)
 
   count <- record_count(query)
   check_count(count)
-  
 
   # Add columns after getting record count
   if (missing(columns)) {
     message("No columns specified, default columns will be returned.")
     columns <- ala_columns("basic")
   }
-  
-  assertion_cols <- columns[columns$type == "assertions",]
-  query$fields <- build_columns(columns[columns$type != "assertions",])
+
+  assertion_cols <- columns[columns$type == "assertions", ]
+  query$fields <- build_columns(columns[columns$type != "assertions", ])
   query$qa <- build_columns(assertion_cols)
 
   if (generate_doi) {
@@ -132,21 +129,21 @@ ala_occurrences <- function(taxon_id, filters, area,
   # Get data
   url <- getOption("ALA4R_server_config")$base_url_biocache
   query <- c(query, email = email, reasonTypeId = 10, dwcHeaders = "true")
-  
+
   download_path <- wait_for_download(url, query)
   data_path <- ala_download(url = "https://biocache.ala.org.au",
                        path = download_path,
                        cache_file = cache_file, ext = ".zip")
   df <- read.csv(unz(data_path, "data.csv"), stringsAsFactors = FALSE)
-  
+
   # rename cols so they match requested cols
   names(df) <- rename_columns(names(df), type = "occurrence")
-  
+
   # replace 'true' and 'false' with boolean
   if (nrow(assertion_cols) > 0) {
     df <- fix_assertion_cols(df, assertion_cols$name)
   }
-  
+
   # add DOI as attribute
   doi <- NA
   if (generate_doi) {
@@ -156,25 +153,20 @@ ala_occurrences <- function(taxon_id, filters, area,
       attr(df, "doi") <- doi},
       silent = TRUE)
   }
-  
+
   if (generate_doi && is.na(doi)) {
     warning("No DOI was generated for download. The DOI server may
                         be down. Please try again later")
   }
-  
   return(df)
 }
 
 fix_assertion_cols <- function(df, assertion_cols) {
   for (col in assertion_cols) {
-    df[,col] <- as.logical(df[,col])
+    df[, col] <- as.logical(df[, col])
   }
   df
 }
-
-# check validity of fields?
-# maybe only warn because it is possible to get results for fields not in ala_fields
-# should the fields you have in the filters also be included?
 
 build_columns <- function(col_df) {
   if (nrow(col_df) == 0) {
@@ -184,13 +176,11 @@ build_columns <- function(col_df) {
   paste0(ala_cols, collapse = ",")
 }
 
-
 #' Build dataframe of columns to keep
 #' @param group string: name of column group to include
 #' @param extra string: additional column names to return
 #' @export ala_columns
 ala_columns <- function(group, extra) {
-  
   if (!missing(group)) {
     group_cols <- data.table::rbindlist(lapply(group, function(x) {
       data.frame(name = preset_cols(x), type = "field",
@@ -198,8 +188,7 @@ ala_columns <- function(group, extra) {
     }))} else {
       group_cols <- NULL
     }
-  
-  
+
   assertions <- ala_fields("assertion")$name
   if (!missing(extra)) {
    extra_cols <- data.table::rbindlist(lapply(extra, function(x) {
@@ -208,34 +197,31 @@ ala_columns <- function(group, extra) {
    }))} else {
      extra_cols <- NULL
    }
-  
   all_cols <- rbind(group_cols, extra_cols)
   # remove duplicates
-  all_cols[!duplicated(all_cols$name),]
+  all_cols[!duplicated(all_cols$name), ]
 }
-
 
 
 preset_cols <- function(type) {
   valid_groups <- c("basic", "event")
   # use ALA version of taxon name to avoid ambiguity (2 fields map to dwc name)
-  cols <- switch (type,
-    "basic" = c("decimalLatitude", "decimalLongitude","eventDate","taxon_name",
-                "taxonConceptID", "recordID", "data_resource"),
+  cols <- switch(type,
+    "basic" = c("decimalLatitude", "decimalLongitude", "eventDate",
+                "taxon_name", "taxonConceptID", "recordID", "data_resource"),
     "event" = c("eventRemarks", "eventTime", "eventID", "eventDate",
-                "samplingEffort", "samplingProtocol") ,
+                "samplingEffort", "samplingProtocol"),
     stop("\"", type, "\" is not a valid column group. Valid groups are: ",
          paste(valid_groups, collapse = ", "))
   )
   cols
-  
 }
 
 
 wait_for_download <- function(url, query) {
   status <- ala_GET(url, "ws/occurrences/offline/download",
                     params = query)
-  
+
   status_url <- parse_url(status$statusUrl)
   status <- ala_GET(url, path = status_url$path)
   while (tolower(status$status) %in% c("inqueue", "running")) {
