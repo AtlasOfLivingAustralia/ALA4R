@@ -16,7 +16,7 @@
 # If the facet search download worked properly, this should also return counts. But, as this
 # function is likely to be used to download long species lists, for now we will make do
 # without the counts- otherwise will require lots of pagination.
-ala_checklist <- function(taxon_id, filters, area, caching = "off") {
+ala_checklist <- function(taxon_id, filters, area, caching = FALSE) {
   # Use facet search with additional options
 
   url <- getOption("ALA4R_server_config")$base_url_biocache
@@ -51,6 +51,8 @@ ala_checklist <- function(taxon_id, filters, area, caching = "off") {
   if (!is.null(filter_query) || !is.null(taxa_query)) {
     query$fq <- paste0("(", paste(c(taxa_query, filter_query), collapse = ' AND '), ")")
   }
+  
+  
 
   if (!missing(area)) {
     # convert area to wkt if not already
@@ -60,19 +62,20 @@ ala_checklist <- function(taxon_id, filters, area, caching = "off") {
   query$facets <- "species_guid"
   query$lookup  <- "true"
   query$counts <- "true"
-
+  
   path <- "ws/occurrences/facets/download"
-
-  cache_file <- cache_filename(url, path, params = query, ".csv")
-
-  if (caching == "on" && file.exists(cache_file)) {
+  
+  cache_file <- cache_filename(c(url, path, unlist(query)), ext = ".csv")
+  
+  if (caching && file.exists(cache_file)) {
     message("Using cached file")
     return(read.csv(cache_file))
   }
 
   data <- ala_download(url, path = path, params = query,
                        cache_file = cache_file)
+  # overwrite file with fixed names
   names(data) <- rename_columns(names(data), type = "checklist")
-
+  write.csv(data, cache_file)
   return(data)
 }
