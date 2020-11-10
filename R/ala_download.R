@@ -10,9 +10,6 @@ ala_download <- function(url, path, params = list(), ext = ".csv",
       useragent = ala_config()$user_agent
     )
   )
-  if (is.null(cache_file)) {
-    cache_file <- cache_filename(url, path, params, ext)
-  }
 
   res <- cli$get(path = path, query = params, disk = cache_file)
   if (ext == ".csv") {
