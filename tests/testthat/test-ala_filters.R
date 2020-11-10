@@ -20,5 +20,5 @@ test_that("ala_filters handles exclusion filters", {
 })
 
 test_that("ala filters converts logical to string", {
-  expect_equal(ala_filters(list(geospatial_kosher = TRUE))$value, "true")
+  expect_equal(unlist(ala_filters(list(geospatial_kosher = TRUE))$value), "true")
 })
