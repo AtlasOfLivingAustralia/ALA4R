@@ -50,5 +50,5 @@ Maintainer: Matilda Stevenson <matilda.stevenson@csiro.au>
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Encoding: UTF-8

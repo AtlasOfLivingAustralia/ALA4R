@@ -4,7 +4,7 @@
 \alias{ala_counts}
 \title{Counts for ALA records}
 \usage{
-ala_counts(taxon_id, filters, area, breakdown, limit = 20, caching = "off")
+ala_counts(taxon_id, filters, area, breakdown, limit = 20, caching = FALSE)
 }
 \arguments{
 \item{taxon_id}{string: single species ID or vector of species ids. Use

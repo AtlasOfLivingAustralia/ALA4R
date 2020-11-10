@@ -10,7 +10,7 @@ ala_taxa(
   term_type = "name",
   return_children = FALSE,
   include_counts = FALSE,
-  caching = "off"
+  caching = FALSE
 )
 }
 \arguments{
@@ -19,11 +19,13 @@ ala_taxa(
 \item{term_type}{string: specifies which type of terms are provided in
 `term`. One of name `c('name', 'identifier')`}
 
-\item{return_children}{logical: return child concepts for the provided term(s)}
+\item{return_children}{logical: return child concepts for the provided
+term(s)}
 
-\item{include_counts}{logical: return occurrence counts for all species returned}
+\item{include_counts}{logical: return occurrence counts for all species
+returned}
 
-\item{caching}{string: should the results be cached? Either "on" or "off"}
+\item{caching}{logical: should the results be cached?}
 }
 \value{
 dataframe of taxon information
@@ -35,7 +37,7 @@ used to search `ala_occurrences`
 \examples{
 \dontrun{
 ala_taxa(term = "Reptilia")
-ala_taxa(list(kingdom = "Plantae", genus = "Microseris"), return_children = TRUE,
-include_counts = TRUE)
+ala_taxa(list(kingdom = "Plantae", genus = "Microseris"),
+return_children = TRUE, include_counts = TRUE)
 }
 }
