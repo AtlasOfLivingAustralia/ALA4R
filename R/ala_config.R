@@ -81,7 +81,8 @@ ala_config <- function(...) {
     )
 
     ## define allowed options, for those that have restricted values
-    allowed_options <- list(caching = c("on", "off", "refresh"),
+    # for now leave on/off/refresh as they are used by old functions
+    allowed_options <- list(caching = c("on", "off", "refresh", TRUE, FALSE),
                             download_reason_id = c(0:8, 10:12))
     ## ideally, the valid download_reason_id values should be populated
     ## dynamically from the ala_reasons() function. However if that is
