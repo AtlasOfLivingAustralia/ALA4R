@@ -32,6 +32,9 @@ test_that("ala_taxa searches at provided rank", {
   # converts from 'species' to 'scientificName'
   expect_equal(ala_taxa(list(scientificName = "Wurmbea dioica"))$rank,
                "species")
+  
+  # expect validation error for bad rank
+  expect_error(ala_taxa(list(kingdom = "Animalia", bad_rank = "species")))
 })
 
 test_that("ala_taxa handles identifier searches", {
@@ -68,3 +71,9 @@ test_that("ala taxa returns counts for species", {
   expect_true("count" %in% colnames(ala_taxa(term = "Thylacinus cynocephalus",
                                         include_counts = TRUE)))
 })
+
+test_that("ala_taxa handles name issues", {
+  expect_error(ala_taxa("Microseris"))
+})
+
+
