@@ -11,7 +11,8 @@
 #' simplified.
 #' @param breakdown field to breakdown the counts by
 #' @param limit numeric: maximum number of categories to return. 20 by default.
-#' @param caching string: should the results be cached? Either "on" or "off"
+#' @param caching logical: should the results be cached/use cache? Only used if
+#' `breakdown` is supplied.
 #' @return either single integer of total counts, or a dataframe of counts by
 #' `breakdown` field, if specified.
 #' @examples
@@ -22,11 +23,11 @@
 #' @export ala_counts
 
 ala_counts <- function(taxon_id, filters, area, breakdown,
-                       limit = 20, caching = "off") {
+                       limit = 20, caching = FALSE) {
 
   query <- list()
 
-  if(!missing(taxon_id)) {
+  if (!missing(taxon_id)) {
     # should species id be validated?
     if (inherits(taxon_id, "data.frame") &&
         "taxon_concept_id" %in% colnames(taxon_id)) {
@@ -37,7 +38,7 @@ ala_counts <- function(taxon_id, filters, area, breakdown,
   } else {
     taxa_query <- NULL
   }
-  
+
   # validate filters
   if (!missing(filters)) {
     assert_that(is.data.frame(filters))
@@ -48,13 +49,15 @@ ala_counts <- function(taxon_id, filters, area, breakdown,
     filter_query <- NULL
   }
   if (!is.null(filter_query) || !is.null(taxa_query)) {
-    query$fq <- paste0("(", paste(c(taxa_query, filter_query), collapse = ' AND '), ")")
+    query$fq <- paste0("(", paste(c(taxa_query, filter_query),
+                                  collapse = " AND "), ")")
   }
 
   if (!missing(area)) {
     # convert area to wkt if not already
     query$wkt <- build_area_query(area)
   }
+
   if (missing(breakdown)) {
     if (sum(nchar(query$fq), nchar(query$wkt), na.rm = TRUE) > 1948) {
       qid <- cache_params(query)
@@ -69,16 +72,23 @@ ala_counts <- function(taxon_id, filters, area, breakdown,
   query$facets <- breakdown
   query$flimit <- limit
   url <- getOption("ALA4R_server_config")$base_url_biocache
-  resp <- ala_GET(url, "ws/occurrence/facets", params = query)
-  if(length(resp) < 1){
-    return(data.frame(
+  path <- "ws/occurrence/facets"
+  cache_file <- cache_filename(args = c(url, path, unlist(query), breakdown),
+                               ext = ".csv")
+  if (caching && file.exists(cache_file)) {
+    return(read.csv(cache_file))
+  }
+
+  resp <- ala_GET(url, path, params = query)
+  if (length(resp) < 1) {
+    counts <- data.frame(
       name = as.character(),
       count = as.numeric()
-    ))
-  }else{
+    )
+  } else {
     if (resp$count > limit) {
-      warning("This field has ", resp$count, " possible values. Only the first ",
-              limit, " will be returned. Change `limit` to return more values.")
+      warning("This field has ", resp$count, limit,
+              " will be returned. Change `limit` to return more values.")
     }
     # parse out field value
     counts <- resp$fieldResult[[1]]
@@ -86,11 +96,15 @@ ala_counts <- function(taxon_id, filters, area, breakdown,
       sub('.*?"([^"]+)"', "\\1", z)
     }, USE.NAMES = FALSE)
 
-    return(data.frame(
+    counts <- data.frame(
       name = value,
       count = counts$count
-    ))
+    )
   }
+  if (caching) {
+    write.csv(counts)
+  }
+  return(counts)
 }
 
 # get just the record count for a query
