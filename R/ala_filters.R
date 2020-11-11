@@ -99,7 +99,7 @@ query_term <- function(name, value, include) {
 filter_value <- function(val) {
   # replace loigcal values with strings
   if (is.logical(val)) {
-    ifelse(val, "true", "false")
+    return(ifelse(val, "true", "false"))
   }
   val
 }
