@@ -316,7 +316,7 @@ wanted_columns <- function(type) {
                       "scientific_name_authorship", "taxon_concept_id", "rank",
                       "match_type", "kingdom", "phylum", "class", "order",
                       "family", "genus", "species", "issues"),
-           "profile"= c("id", "name", "shortName", "description"),
+           "profile" = c("id", "name", "shortName", "description"),
            "media" = c("rightsHolder", "imageIdentifier", "format",
                        "occurrenceID", "recognisedLicence", "license",
                        "creator", "title", "rights", "mimeType",
@@ -348,46 +348,20 @@ rename_columns <- function(varnames, type) {
         varnames <- tolower(gsub("([a-z])([A-Z])", "\\1_\\L\\2", varnames,
                          perl = TRUE))
     } else if (type == "checklist") {
-      varnames <- tolower(gsub('\\.', '_', varnames))
+      varnames <- tolower(gsub("\\.", "_", varnames))
     } else if (type == "occurrence") {
       # change dots to camel case
-      varnames <- gsub('\\.(\\w?)', '\\U\\1', varnames, perl=T)
+      varnames <- gsub("\\.(\\w?)", "\\U\\1", varnames, perl = T)
       # replace first letters with lowercase
       substr(varnames, 1, 1) <- tolower(substr(varnames, 1, 1))
     }
     varnames
 }
 
-
-build_quality_query <- function(dq_profile) {
-    if (is.null(dq_profile)) {
-        return(NULL)
-    }
-    paste(ala_quality_filters(dq_profile)$filter, collapse = ' AND ')
-}
-
-build_date_query <- function(filters) {
-    paste0(names(filters), ":[", filters[[1]][1],
-           " TO ", filters[[1]][2], "]")
-}
-
-# rename?
-build_general_query <- function(filters) {
-    if (length(filters) == 0) {
-        return(NULL)
-    }
-    # order filters so cached file can be found
-    filters <- filters[order(names(filters))]
-    quoted_filters <- lapply(filters, function(x) {
-        paste0("\"", x, "\"")
-    })
-    paste(names(filters), quoted_filters, sep = ":", collapse = " AND ")
-}
-
 build_taxa_query <- function(ids) {
     # order filters so cached file can be found
     ids <- ids[order(ids)]
-    paste0("(lsid:",paste(ids, collapse = " OR lsid:"),")")
+    paste0("(lsid:", paste(ids, collapse = " OR lsid:"), ")")
 }
 
 build_area_query <- function(area) {
@@ -397,16 +371,14 @@ build_area_query <- function(area) {
         validate_wkt(area)
         # should this also take other area types?
     } else {
-      tryCatch(area <- build_wkt(area),
-               error = function(e) {
-                 e$message <- "Area must be either a wkt string or an sf spatial object."
-                 stop(e)
-               })
+      tryCatch(area <- build_wkt(area), error = function(e) {
+        e$message <-
+          "Area must be either a wkt string or an sf spatial object."
+        stop(e)
+        })
   }
-  message("returning, ", area)
   area
 }
-
 
 validate_wkt <- function(wkt) {
     max_char <- 10000
@@ -449,12 +421,11 @@ cached_query <- function(taxa_query, filter_query, area_query,
   list(fq = filter_query, q = paste0("qid:", resp))
 }
 
-
-# Check whether caching of some url parameters is required. 
-# Note: it is only possible to cache one fq so filters can't be cached 
+# Check whether caching of some url parameters is required.
+# Note: it is only possible to cache one fq so filters can't be cached
 check_for_caching <- function(taxa_query, filter_query, area_query,
                               columns = NULL) {
-  if (nchar(paste(filter_query, collapse = '&fq=')) > 1948) {
+  if (nchar(paste(filter_query, collapse = "&fq=")) > 1948) {
     stop("Too many filters provided.")
   }
   if (sum(nchar(taxa_query), nchar(filter_query), nchar(area_query),
@@ -464,4 +435,3 @@ check_for_caching <- function(taxa_query, filter_query, area_query,
   }
   return(FALSE)
 }
-
