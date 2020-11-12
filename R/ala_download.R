@@ -3,7 +3,6 @@
 ala_download <- function(url, path, params = list(), ext = ".csv",
                          cache_file = NULL) {
   assert_that(is.character(url))
-  message("Downloading from url ", url)
   cli <- HttpClient$new(
     url = url,
     headers = list(

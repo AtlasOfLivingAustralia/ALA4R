@@ -439,3 +439,29 @@ cache_params <- function(query) {
     return(resp)
 }
 
+# this is only relevant for ala_counts and ala_occurrences
+cached_query <- function(taxa_query, filter_query, area_query,
+                         columns = NULL) {
+  url <- "https://biocache-ws.ala.org.au"
+  resp <- ala_POST(url, path = "ws/webportal/params",
+                   body = list(wkt = area_query, fq = taxa_query,
+                               fields = columns))
+  list(fq = filter_query, q = paste0("qid:", resp))
+}
+
+
+# Check whether caching of some url parameters is required. 
+# Note: it is only possible to cache one fq so filters can't be cached 
+check_for_caching <- function(taxa_query, filter_query, area_query,
+                              columns = NULL) {
+  if (nchar(paste(filter_query, collapse = '&fq=')) > 1948) {
+    stop("Too many filters provided.")
+  }
+  if (sum(nchar(taxa_query), nchar(filter_query), nchar(area_query),
+          nchar(paste(columns$name, collapse = ",")), na.rm = TRUE) > 1948) {
+    # caching of taxa query and area query required
+    return(TRUE)
+  }
+  return(FALSE)
+}
+

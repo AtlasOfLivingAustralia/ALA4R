@@ -27,7 +27,7 @@ ala_checklist <- function(taxon_id, filters, area, caching = FALSE) {
     warning("This query will return a list of all species in the ALA")
   }
 
-  if(!missing(taxon_id)) {
+  if (!missing(taxon_id)) {
     # should species id be validated?
     if (inherits(taxon_id, "data.frame") &&
         "taxon_concept_id" %in% colnames(taxon_id)) {
@@ -42,20 +42,23 @@ ala_checklist <- function(taxon_id, filters, area, caching = FALSE) {
   # validate filters
   if (!missing(filters)) {
     assert_that(is.data.frame(filters))
-    filters$name <- dwc_to_ala(filters$name)
     filter_query <- build_filter_query(filters)
   } else {
     filter_query <- NULL
   }
-  if (!is.null(filter_query) || !is.null(taxa_query)) {
-    query$fq <- paste0("(", paste(c(taxa_query, filter_query), collapse = ' AND '), ")")
-  }
   
+  query$fq <- c(taxa_query, filter_query)
   
-
   if (!missing(area)) {
     # convert area to wkt if not already
-    query$wkt <- build_area_query(area)
+    area_query <- build_area_query(area)
+    query$wkt <- area_query
+  } else {
+    area_query <- NULL
+  }
+  
+  if (check_for_caching(taxa_query, filter_query, area_query)) {
+    query <- cached_query(taxa_query, filter_query, area_query)
   }
 
   query$facets <- "species_guid"

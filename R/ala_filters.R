@@ -72,8 +72,9 @@ build_filter_query <- function(filters) {
   if (is.null(filters)) {
     return(NULL)
   }
-  paste(mapply(query_term, filters$name, filters$value, filters$include,
-               USE.NAMES = FALSE), collapse = " AND ")
+  filters$name <- dwc_to_ala(filters$name)
+  mapply(query_term, filters$name, filters$value, filters$include,
+         USE.NAMES = FALSE)
 }
 
 query_term <- function(name, value, include) {
@@ -86,14 +87,15 @@ query_term <- function(name, value, include) {
       paste0("\"", x, "\"")
     }
   })
+  # add quotes around value
   if (include) {
-    value_str <- paste(name, value, collapse = " OR ", sep = ":")
+    value_str <- paste0("(", paste(name, value, collapse = " OR ", sep = ":"), ")")
   } else {
-    value_str <- paste(paste0("-", name), value, collapse = ' AND ', sep = ':')
+    value_str <- paste0("(", paste(paste0("-", name), value, collapse = ' AND ', sep = ":"), ")")
   }
   #paste0("(", value_str, ")")
+  value_str
 }
-
 
 
 filter_value <- function(val) {

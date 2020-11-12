@@ -42,26 +42,26 @@ ala_counts <- function(taxon_id, filters, area, breakdown,
   # validate filters
   if (!missing(filters)) {
     assert_that(is.data.frame(filters))
-    filters$name <- dwc_to_ala(filters$name)
     filter_query <- build_filter_query(filters)
   } else {
     filter_query <- NULL
   }
-  if (!is.null(filter_query) || !is.null(taxa_query)) {
-    query$fq <- paste0("(", paste(c(taxa_query, filter_query),
-                                  collapse = " AND "), ")")
-  }
+
+  query$fq <- c(taxa_query, filter_query)
 
   if (!missing(area)) {
     # convert area to wkt if not already
-    query$wkt <- build_area_query(area)
+    area_query <- build_area_query(area)
+    query$wkt <- area_query
+  } else {
+    area_query <- NULL
+  }
+  
+  if (check_for_caching(taxa_query, filter_query, area_query)) {
+    query <- cached_query(taxa_query, filter_query, area_query)
   }
 
   if (missing(breakdown)) {
-    if (sum(nchar(query$fq), nchar(query$wkt), na.rm = TRUE) > 1948) {
-      qid <- cache_params(query)
-      query <- list(q = paste0("qid:", qid))
-    }
     return(record_count(query))
   }
 

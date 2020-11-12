@@ -56,45 +56,43 @@ ala_occurrences <- function(taxon_id, filters, area,
   } else {
     taxa_query <- NULL
   }
-
+  
   # validate filters
   if (!missing(filters)) {
     assert_that(is.data.frame(filters))
-    filters$name <- dwc_to_ala(filters$name)
     filter_query <- build_filter_query(filters)
   } else {
     filter_query <- NULL
   }
-  if (!is.null(filter_query) || !is.null(taxa_query)) {
-    query$fq <- paste0("(", paste(c(taxa_query, filter_query),
-                                  collapse = " AND "), ")")
-  }
 
-  # not yet released
-  #query$qualityProfile <- 'ALA'
-
-  # Two issues with area validation:
-  # wellknown validates wkt correctly??
-  # 504 error is returned from the server if a polygon is too complicated
+  query$fq <- c(taxa_query, filter_query)
+  
   if (!missing(area)) {
     # convert area to wkt if not already
-    query$wkt <- build_area_query(area)
+    area_query <- build_area_query(area)
+    query$wkt <- area_query
+  } else {
+    area_query <- NULL
   }
-
-  # do a occurrence count query first? to warn the user
-
-  if (sum(nchar(query$fq), nchar(query$wkt), na.rm = TRUE) > 1948) {
-    qid <- cache_params(query)
-    query <- list(q = paste0("qid:", qid))
+  
+  # Add columns after getting record count
+  if (missing(columns)) {
+    message("No columns specified, default columns will be returned.")
+    columns <- ala_columns("basic")
   }
 
   # handle caching
   # look for file to download- if it doesn't exist, continue on
   # use base_url_biocache as the filename? otherwise won't be found
+  # create cache file with the original query
   cache_file <- cache_filename(c(getOption("ALA4R_server_config")$
                                    base_url_biocache,
                                path = "ws/occurrences/offline/download",
                                params = unlist(query)), ext = ".zip")
+  
+  if (check_for_caching(taxa_query, filter_query, area_query, columns)) {
+    query <- cached_query(taxa_query, filter_query, area_query)
+  }
 
   if (caching == "on" & file.exists(cache_file)) {
     message("Using existing file")
@@ -106,12 +104,6 @@ ala_occurrences <- function(taxon_id, filters, area,
 
   count <- record_count(query)
   check_count(count)
-
-  # Add columns after getting record count
-  if (missing(columns)) {
-    message("No columns specified, default columns will be returned.")
-    columns <- ala_columns("basic")
-  }
 
   assertion_cols <- columns[columns$type == "assertions", ]
   query$fields <- build_columns(columns[columns$type != "assertions", ])
