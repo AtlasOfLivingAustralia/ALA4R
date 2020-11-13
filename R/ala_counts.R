@@ -24,7 +24,6 @@
 
 ala_counts <- function(taxon_id, filters, area, breakdown,
                        limit = 20, caching = FALSE) {
-
   query <- list()
 
   if (!missing(taxon_id)) {
@@ -56,7 +55,7 @@ ala_counts <- function(taxon_id, filters, area, breakdown,
   } else {
     area_query <- NULL
   }
-  
+
   if (check_for_caching(taxa_query, filter_query, area_query)) {
     query <- cached_query(taxa_query, filter_query, area_query)
   }
