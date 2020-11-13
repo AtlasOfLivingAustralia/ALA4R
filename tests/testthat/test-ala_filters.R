@@ -19,6 +19,10 @@ test_that("ala_filters handles exclusion filters", {
                                   exclude("HumanObservation")))$include)
 })
 
+test_that("ala filters validates filters", {
+  expect_error(ala_filters(invalid_filter = 'value'))
+})
+
 test_that("ala filters converts logical to string", {
   expect_equal(unlist(ala_filters(list(geospatial_kosher = TRUE))$value), "true")
 })

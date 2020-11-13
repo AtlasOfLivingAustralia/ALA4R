@@ -30,7 +30,7 @@ ala_filters <- function(filters = NULL, data_quality_profile = NULL) {
   
   
   assertions <- ala_fields("assertion")$name
-
+  validate_filters(filters)
   filter_rows <- data.table::rbindlist(lapply(names(filters), function(x) {
     if (x %in% assertions) {
       row <- data.frame(name = "assertions", include = TRUE, value = x,
@@ -43,7 +43,7 @@ ala_filters <- function(filters = NULL, data_quality_profile = NULL) {
     row
   }))
   
-  rbind(filter_rows, dq_filter_rows)
+  filter_df <- rbind(filter_rows, dq_filter_rows)
 }
 
 
@@ -56,9 +56,9 @@ validate_filters <- function(filters) {
   # key should be a valid field name and value should be a valid category for that field
   # valid options is a combination of ala_layers and ala_fields?
   
-  invalid_filters <- filters$name[!filters$name %in% c(ala_fields()$name,
-                                                       "assertion", all_fields()$name)]
-  
+  invalid_filters <- names(filters)[!names(filters) %in%
+                                      c(ala_fields()$name,
+                                        "assertion", all_fields()$name)]
   if (length(invalid_filters) > 0) {
     stop("The following filters are invalid: ",
          paste(invalid_filters, collapse = ", "),
