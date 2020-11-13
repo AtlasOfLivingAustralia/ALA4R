@@ -46,18 +46,6 @@ thischeck <- function() {
 check_caching(thischeck)
 
 thischeck <- function() {
-    test_that("intersect_points works for largeish number of points", {
-        skip_on_cran()
-        layers <- c("el767", "cl10925")
-        pnts <- cbind(lat = runif(1000, -40, -12),
-                      long = runif(1000, 115, 148))
-        out1 <- intersect_points(pnts, layers)
-        expect_that(out1$maximumMonthEvaporationMm, is_a("numeric"))
-    })
-}
-check_caching(thischeck)
-
-thischeck <- function() {
   test_that("intersect_points gives errors for bad inputs", {
     skip_on_cran()
     layers <- c("cl22", "cl23", "el767")

@@ -117,21 +117,6 @@ thischeck <- function() {
 }
 check_caching(thischeck)
 
-thischeck <- function() {
-    test_that("unexpected case-related behaviour in search_names has not
-              changed", {
-        skip_on_cran()
-        expect_equal(search_names("Gallirallus australis")$name,
-                     "Gallirallus australis")
-        expect_equal(search_names("Gallirallus Australis")$name,
-                     "Gallirallus australis")
-        expect_equal(search_names("Gallirallus australi")$name,
-                     as.character(NA))
-        expect_equal(search_names("Gallirallus Australi")$name,
-                     as.character(NA))
-    })
-}
-check_caching(thischeck)
     
 thischeck <- function() {
     test_that("nonbreaking spaces not present in names", {
