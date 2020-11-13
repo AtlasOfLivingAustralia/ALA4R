@@ -69,9 +69,6 @@ validate_filters <- function(filters) {
 
 # takes a dataframe and returns a built filter query
 build_filter_query <- function(filters) {
-  if (is.null(filters)) {
-    return(NULL)
-  }
   filters$name <- dwc_to_ala(filters$name)
   mapply(query_term, filters$name, filters$value, filters$include,
          USE.NAMES = FALSE)

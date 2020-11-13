@@ -3,7 +3,6 @@ context("Test ala counts")
 test_that("ala counts checks inputs", {
   # ALA counts with no arguments gives the total number of records in the ALA
   expect_gt(ala_counts(), 90000000)
-  expect_gt(ala_counts(filters = NULL), 90000000)
   # invalid facet
   expect_error(ala_counts(breakdown = "bad_facet"))
   
@@ -13,7 +12,7 @@ test_that("ala counts checks inputs", {
   # too many filters
   filters <- ala_filters(sapply(ala_fields("assertion")$name,
                                 function(x){ return(TRUE) }))
-  #expect_error(ala_counts(filters))
+  expect_error(ala_counts(filters))
 })
 
 test_that("ala counts returns expected outputs", {
