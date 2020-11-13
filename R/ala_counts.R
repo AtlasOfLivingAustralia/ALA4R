@@ -100,7 +100,7 @@ ala_counts <- function(taxon_id, filters, area, breakdown,
     )
   }
   if (caching) {
-    write.csv(counts)
+    write.csv(counts, cache_file)
   }
   return(counts)
 }
