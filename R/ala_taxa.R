@@ -94,7 +94,7 @@ name_lookup <- function(name) {
   } else {
     # search by classification
     path <- "api/searchByClassification"
-    query <- name
+    query <- as.list(name)
   }
   result <- ala_GET(url, path, query)
   if ("homonym" %in% result$issues) {
