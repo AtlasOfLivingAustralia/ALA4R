@@ -400,17 +400,6 @@ build_wkt <- function(polygon) {
     wkt
 }
 
-# POST params to server to get around url length constraint
-# POST all the filters here, or just ones that are likely to cause the maximum
-# length to be exceeded? POST only if the url is too long, or by default?
-# what is the maximum length? around 2000 chars?
-cache_params <- function(query) {
-    #url <- parse_url(getOption("ALA4R_server_config")$base_url_biocache)
-    url <- "https://biocache-ws.ala.org.au"
-    resp <- ala_POST(url, path = "ws/webportal/params", body = query)
-    return(resp)
-}
-
 # this is only relevant for ala_counts and ala_occurrences
 cached_query <- function(taxa_query, filter_query, area_query,
                          columns = NULL) {
