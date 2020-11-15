@@ -190,7 +190,10 @@ ala_reasons <- function() {
       build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,
                            path = "reasons"), type = "json")
     if (any(names(out) == "deprecated")) out <- out[!out$deprecated, ]
-    out[, !names(out) == "deprecated"]
+    out <- out[wanted_columns("reasons")]
+    # sort by id to make it less confusing
+    row.names(out) <- out$id
+    out[order(out$id),]
 }
 
 ## internal function, used to define the ALA4R sourceTypeId parameter value,

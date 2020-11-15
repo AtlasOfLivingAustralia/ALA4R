@@ -324,7 +324,8 @@ wanted_columns <- function(type) {
            "layer" = c("layer_id", "name", "source_link", "description"),
            "fields" = c("name", "data_type", "info", "class"),
            "assertions" = c("name", "data_type", "info", "class"),
-           "quality_filter" = c("description", "filter"))
+           "quality_filter" = c("description", "filter"),
+           "reasons" = c("id", "name"))
 }
 
 # rename specific columns, and convert camelCase to snake_case
