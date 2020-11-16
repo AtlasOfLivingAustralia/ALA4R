@@ -7,9 +7,6 @@
 #' sf object, or a wkt string. WKT strings longer than 10000 characters will
 #' not be accepted by the ALA- see the vignette for how to work around this.
 #' @param columns string: vector of columns to return in download.
-#' @param generate_doi logical: by default no DOI will be generated. Set to
-#' true if you intend to use the data in a publication or similar. If
-#' generated, DOI is stored in attributes.
 #' @param caching string: should the results be cached? Either "on" or "off"
 #' @examples
 #' \dontrun{
@@ -23,10 +20,7 @@
 
 ala_occurrences <- function(taxon_id, filters, area,
                             columns = ala_columns("basic"),
-                            generate_doi = FALSE,
                             caching = "off") {
-
-  assert_that(is.flag(generate_doi))
 
   query <- list()
 
@@ -46,7 +40,7 @@ ala_occurrences <- function(taxon_id, filters, area,
   } else {
     taxa_query <- NULL
   }
-  
+
   # validate filters
   if (!missing(filters)) {
     assert_that(is.data.frame(filters))
@@ -56,7 +50,7 @@ ala_occurrences <- function(taxon_id, filters, area,
   }
 
   query$fq <- c(taxa_query, filter_query)
-  
+
   if (!missing(area)) {
     # convert area to wkt if not already
     area_query <- build_area_query(area)
@@ -64,7 +58,7 @@ ala_occurrences <- function(taxon_id, filters, area,
   } else {
     area_query <- NULL
   }
-  
+
   # Add columns after getting record count
   if (missing(columns)) {
     message("No columns specified, default columns will be returned.")
@@ -79,7 +73,7 @@ ala_occurrences <- function(taxon_id, filters, area,
                                    base_url_biocache,
                                path = "ws/occurrences/offline/download",
                                params = unlist(query)), ext = ".zip")
-  
+
   if (check_for_caching(taxa_query, filter_query, area_query, columns)) {
     query <- cached_query(taxa_query, filter_query, area_query)
   }
@@ -99,13 +93,8 @@ ala_occurrences <- function(taxon_id, filters, area,
   query$fields <- build_columns(columns[columns$type != "assertions", ])
   query$qa <- build_columns(assertion_cols)
 
-  if (generate_doi) {
-    query$mintDoi <- "true"
-  }
-
-  if (isFALSE(email_notify)) {
-    query$emailNotify <- "false"
-  }
+  query$mintDoi <- mint_doi()
+  query$emailNotify <- email_notify()
 
   # Get data
   url <- getOption("ALA4R_server_config")$base_url_biocache
@@ -128,18 +117,17 @@ ala_occurrences <- function(taxon_id, filters, area,
 
   # add DOI as attribute
   doi <- NA
-  if (generate_doi) {
-    try({
-      doi_file <- read.table(unz(data_path, "doi.txt"))
-      doi <- as.character(doi_file$V1)
-      attr(df, "doi") <- doi},
-      silent = TRUE)
+  if (as.logical(mint_doi())) {
+    tryCatch(
+      doi <- as.character(
+        read.table(unz(data_path, "doi.txt"))$V1),
+      warning = function(e) {
+        e$message <- "No DOI was generated for download. The DOI server may
+                        be down. Please try again later"
+      })
   }
+  attr(df, "doi") <- doi
 
-  if (generate_doi && is.na(doi)) {
-    warning("No DOI was generated for download. The DOI server may
-                        be down. Please try again later")
-  }
   return(df)
 }
 
@@ -185,11 +173,11 @@ default_download_reason <- function() {
 
 validate_download_reason <- function(reason) {
   if (is.character(reason)) {
-    reason <- ala_reasons()[ala_reasons()$name == reason,]$id
+    reason <- ala_reasons()[ala_reasons()$name == reason, ]$id
   }
   if (!(reason %in% ala_reasons()$id)) {
    stop("Download reason must be a valid reason id or name ",
-        "See `ala_reasons()` for valid reasons.") 
+        "See `ala_reasons()` for valid reasons.")
   }
   reason
 }
@@ -198,11 +186,12 @@ email_notify <- function() {
   notify <- as.logical(Sys.getenv("ala_notify"))
   if (notify == "") {
     notify <- FALSE
-  } else if (!is.na(notify)) {
+  } else if (is.na(notify)) {
     stop("Email notify must be a logical value.",
          "Set email notify using `Sys.setenv(ala_notify = )`")
   }
-  notify
+  # ala api requires lowercase
+  ifelse(notify, "true", "false")
 }
 
 user_email <- function() {
@@ -214,3 +203,14 @@ user_email <- function() {
   email
 }
 
+mint_doi <- function() {
+  mint <- Sys.getenv("ala_doi")
+  if (mint == "") {
+    mint <- FALSE
+  } else if (is.na(mint)) {
+    stop("Mint doi must be a logical value.",
+         "Configure doi minting using `Sys.setenv(ala_doi = )`")
+  }
+  # ala api requires lowercase
+  ifelse(mint, "true", "false")
+}
