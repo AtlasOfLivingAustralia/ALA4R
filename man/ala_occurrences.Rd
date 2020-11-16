@@ -9,9 +9,7 @@ ala_occurrences(
   filters,
   area,
   columns = ala_columns("basic"),
-  email = "ala4r@ala.org.au",
   generate_doi = FALSE,
-  email_notify = FALSE,
   caching = "off"
 )
 }
@@ -27,15 +25,9 @@ not be accepted by the ALA- see the vignette for how to work around this.}
 
 \item{columns}{string: vector of columns to return in download.}
 
-\item{email}{string: the email address of the user performing the download
-(required unless \code{record_count_only = TRUE}}
-
 \item{generate_doi}{logical: by default no DOI will be generated. Set to
 true if you intend to use the data in a publication or similar. If
 generated, DOI is stored in attributes.}
-
-\item{email_notify}{logical: set to `FALSE` by default, set to true if you
-would like an email notification for the download}
 
 \item{caching}{string: should the results be cached? Either "on" or "off"}
 }
