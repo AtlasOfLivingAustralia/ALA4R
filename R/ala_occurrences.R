@@ -184,7 +184,7 @@ validate_download_reason <- function(reason) {
 
 email_notify <- function() {
   notify <- as.logical(Sys.getenv("ala_notify"))
-  if (notify == "") {
+  if (is.na(notify)) {
     notify <- FALSE
   } else if (is.na(notify)) {
     stop("Email notify must be a logical value.",
