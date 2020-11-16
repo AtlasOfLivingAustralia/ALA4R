@@ -10,10 +10,6 @@
 #' @param generate_doi logical: by default no DOI will be generated. Set to
 #' true if you intend to use the data in a publication or similar. If
 #' generated, DOI is stored in attributes.
-#' @param email string: the email address of the user performing the download
-#' (required unless \code{record_count_only = TRUE}
-#' @param email_notify logical: set to `FALSE` by default, set to true if you
-#' would like an email notification for the download
 #' @param caching string: should the results be cached? Either "on" or "off"
 #' @examples
 #' \dontrun{
@@ -27,13 +23,10 @@
 
 ala_occurrences <- function(taxon_id, filters, area,
                             columns = ala_columns("basic"),
-                            email = "ala4r@ala.org.au", generate_doi = FALSE,
-                            email_notify = FALSE,
+                            generate_doi = FALSE,
                             caching = "off") {
 
   assert_that(is.flag(generate_doi))
-  assert_that(is.flag(email_notify))
-  assert_that(is.character(email))
 
   query <- list()
 
@@ -116,7 +109,7 @@ ala_occurrences <- function(taxon_id, filters, area,
 
   # Get data
   url <- getOption("ALA4R_server_config")$base_url_biocache
-  query <- c(query, email = email, reasonTypeId = download_reason(),
+  query <- c(query, email = user_email(), reasonTypeId = download_reason(),
              dwcHeaders = "true")
 
   download_path <- wait_for_download(url, query)
@@ -199,5 +192,25 @@ validate_download_reason <- function(reason) {
         "See `ala_reasons()` for valid reasons.") 
   }
   reason
+}
+
+email_notify <- function() {
+  notify <- Sys.getenv("ala_email_notify")
+  if (notify == "") {
+    notify <- FALSE
+  } else if (!is.logical(notify)) {
+    stop("Email notify must be a logical value.",
+         "Set email notify using `Sys.setenv(ala_user_email = )`")
+  }
+  notify
+}
+
+user_email <- function() {
+  email <- Sys.getenv("ala_user_email")
+  if (email == "") {
+    stop("To download occurrence records you must provide a valid email ",
+         "address registered with the ALA using `Sys.setenv(ala_email = )`")
+  }
+  email
 }
 
