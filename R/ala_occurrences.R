@@ -195,18 +195,18 @@ validate_download_reason <- function(reason) {
 }
 
 email_notify <- function() {
-  notify <- Sys.getenv("ala_email_notify")
+  notify <- as.logical(Sys.getenv("ala_notify"))
   if (notify == "") {
     notify <- FALSE
-  } else if (!is.logical(notify)) {
+  } else if (!is.na(notify)) {
     stop("Email notify must be a logical value.",
-         "Set email notify using `Sys.setenv(ala_user_email = )`")
+         "Set email notify using `Sys.setenv(ala_notify = )`")
   }
   notify
 }
 
 user_email <- function() {
-  email <- Sys.getenv("ala_user_email")
+  email <- Sys.getenv("ala_email")
   if (email == "") {
     stop("To download occurrence records you must provide a valid email ",
          "address registered with the ALA using `Sys.setenv(ala_email = )`")
