@@ -4,7 +4,7 @@
 # ALA4R
 
 [![Travis-CI Build
-Status](https://travis-ci.org/AtlasOfLivingAustralia/ALA4R.svg?branch=master)](https://travis-ci.org/AtlasOfLivingAustralia/ALA4R)
+Status](https://travis-ci.com/AtlasOfLivingAustralia/ALA4R.svg?branch=master)](https://travis-ci.com/AtlasOfLivingAustralia/ALA4R)
 [![AppVeyor Build
 status](https://ci.appveyor.com/api/projects/status/g9pudc4l7053w4vn/branch/master?svg=true)](https://ci.appveyor.com/project/PeggyNewman/ala4r/branch/master)
 [![codecov](https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R/branch/master/graph/badge.svg)](https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R)
