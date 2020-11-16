@@ -425,3 +425,20 @@ check_for_caching <- function(taxa_query, filter_query, area_query,
   }
   return(FALSE)
 }
+
+# convert true/false to logical values
+fix_assertion_cols <- function(df, assertion_cols) {
+  for (col in assertion_cols) {
+    df[, col] <- as.logical(df[, col])
+  }
+  df
+}
+
+build_columns <- function(col_df) {
+  if (nrow(col_df) == 0) {
+    return("")
+  }
+  ala_cols <- dwc_to_ala(col_df$name)
+  paste0(ala_cols, collapse = ",")
+}
+

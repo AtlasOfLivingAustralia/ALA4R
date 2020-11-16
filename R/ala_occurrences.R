@@ -35,9 +35,6 @@ ala_occurrences <- function(taxon_id, filters, area,
   assert_that(is.flag(email_notify))
   assert_that(is.character(email))
 
-  # is it worth validating the email with a regex? this won't
-  # be able to tell if the email is registered or not
-
   query <- list()
 
   if (missing(taxon_id) & missing(filters) & missing(area)) {
@@ -119,7 +116,8 @@ ala_occurrences <- function(taxon_id, filters, area,
 
   # Get data
   url <- getOption("ALA4R_server_config")$base_url_biocache
-  query <- c(query, email = email, reasonTypeId = 10, dwcHeaders = "true")
+  query <- c(query, email = email, reasonTypeId = download_reason(),
+             dwcHeaders = "true")
 
   download_path <- wait_for_download(url, query)
   data_path <- ala_download(url = "https://biocache.ala.org.au",
@@ -152,61 +150,6 @@ ala_occurrences <- function(taxon_id, filters, area,
   return(df)
 }
 
-fix_assertion_cols <- function(df, assertion_cols) {
-  for (col in assertion_cols) {
-    df[, col] <- as.logical(df[, col])
-  }
-  df
-}
-
-build_columns <- function(col_df) {
-  if (nrow(col_df) == 0) {
-    return("")
-  }
-  ala_cols <- dwc_to_ala(col_df$name)
-  paste0(ala_cols, collapse = ",")
-}
-
-#' Build dataframe of columns to keep
-#' @param group string: name of column group to include
-#' @param extra string: additional column names to return
-#' @export ala_columns
-ala_columns <- function(group, extra) {
-  if (!missing(group)) {
-    group_cols <- data.table::rbindlist(lapply(group, function(x) {
-      data.frame(name = preset_cols(x), type = "field",
-                 stringsAsFactors = FALSE)
-    }))} else {
-      group_cols <- NULL
-    }
-
-  assertions <- ala_fields("assertion")$name
-  if (!missing(extra)) {
-   extra_cols <- data.table::rbindlist(lapply(extra, function(x) {
-     type <- ifelse(x %in% assertions, "assertions", "field")
-    data.frame(name = x, type = type, stringsAsFactors = FALSE)
-   }))} else {
-     extra_cols <- NULL
-   }
-  all_cols <- rbind(group_cols, extra_cols)
-  # remove duplicates
-  all_cols[!duplicated(all_cols$name), ]
-}
-
-
-preset_cols <- function(type) {
-  valid_groups <- c("basic", "event")
-  # use ALA version of taxon name to avoid ambiguity (2 fields map to dwc name)
-  cols <- switch(type,
-    "basic" = c("decimalLatitude", "decimalLongitude", "eventDate",
-                "taxon_name", "taxonConceptID", "recordID", "data_resource"),
-    "event" = c("eventRemarks", "eventTime", "eventID", "eventDate",
-                "samplingEffort", "samplingProtocol"),
-    stop("\"", type, "\" is not a valid column group. Valid groups are: ",
-         paste(valid_groups, collapse = ", "))
-  )
-  cols
-}
 
 
 wait_for_download <- function(url, query) {
@@ -232,3 +175,29 @@ check_count <- function(count) {
     message("This query will return ", count, " records")
   }
 }
+
+download_reason <- function() {
+  reason <- Sys.getenv("ala_download_reason")
+  if (reason == "") {
+    reason <- default_download_reason()
+  } else {
+   reason <- validate_download_reason(reason)
+  }
+  reason
+}
+
+default_download_reason <- function() {
+  4
+}
+
+validate_download_reason <- function(reason) {
+  if (is.character(reason)) {
+    reason <- ala_reasons()[ala_reasons()$name == reason,]$id
+  }
+  if (!(reason %in% ala_reasons()$id)) {
+   stop("Download reason must be a valid reason id or name ",
+        "See `ala_reasons()` for valid reasons.") 
+  }
+  reason
+}
+
