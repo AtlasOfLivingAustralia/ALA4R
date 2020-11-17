@@ -19,7 +19,8 @@
 #' }
 #' @export ala_occurrences
 
-ala_occurrences <- function(taxon_id, filters, area, mint_doi = FALSE) {
+ala_occurrences <- function(taxon_id, filters, area, columns,
+                            mint_doi = FALSE) {
 
   assert_that(is.logical(mint_doi))
   query <- list()
@@ -183,6 +184,9 @@ email_notify <- function() {
 
 user_email <- function() {
   email <- getOption("ALA4R_config")$email
+  if (email == "") {
+    email <- Sys.getenv("ALA_EMAIL")
+  }
   if (email == "") {
     stop("To download occurrence records you must provide a valid email ",
          "address registered with the ALA using `Sys.setenv(ala_email = )`")
