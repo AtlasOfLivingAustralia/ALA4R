@@ -9,5 +9,5 @@ check_caching <- function(f) {
     f()
     f()
 }
-Sys.setenv(ala_email = "ala4r@ala.org.au")
+ala_config(email = "ala4r@ala.org.au")
 test_check("ALA4R")
