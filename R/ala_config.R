@@ -9,6 +9,8 @@
 #'
 #' \code{ala_reasons()} returns a data frame with information describing the
 #' valid options for \code{download_reason_id}
+#' 
+#' @param preserve logical: store config for future sessions?
 #'
 #' @param \dots Options can be defined using name = value. Valid options are:
 #' \itemize{
@@ -55,13 +57,12 @@
 #' }
 #' @export ala_config
 
-ala_config <- function(...) {
+ala_config <- function(..., preserve = FALSE) {
     ## get or set options that control ALA4R behaviour
     ## options are stored as a global option with the name defined
     ## in ala_option_name
     ala_option_name <- "ALA4R_config"
     user_options <- list(...) ## the options passed by the user
-
     ## default user-agent string
     version_string <- "version unknown"
     suppressWarnings(
@@ -77,6 +78,8 @@ ala_config <- function(...) {
         download_reason_id = 4,
         verbose = FALSE,
         warn_on_empty = FALSE,
+        email = "",
+        send_email = FALSE,
         text_encoding = "UTF-8"
     )
 
@@ -160,10 +163,20 @@ ala_config <- function(...) {
                       stop("user_agent should be a string")
                   }
               }
+              if (identical(this_option_name, "email")) {
+                if (!see_if(is.string(user_options[[i]]))) {
+                  stop("user_agent should be a string")
+                }
+              }
               if (identical(this_option_name, "verbose")) {
                   if (!see_if(is.flag(user_options[[i]]))) {
                       stop("verbose should be TRUE or FALSE")
                   }
+              }
+              if (identical(this_option_name, "send_email")) {
+                if (!see_if(is.flag(user_options[[i]]))) {
+                  stop("send_email should be TRUE or FALSE")
+                }
               }
               if (identical(this_option_name, "warn_on_empty")) {
                   if (!see_if(is.flag(user_options[[i]]))) {
@@ -179,6 +192,17 @@ ala_config <- function(...) {
           options(temp)
 
     }
+    if (preserve) {
+      profile_path <- file.path(Sys.getenv("HOME"), ".Rprofile")
+      message("The variables set will be stored in ", profile_path)
+      #write_options 
+    } else {
+      msg <- "These configuration options will only be saved for this session. 
+    Set `preserve = TRUE` to preserve them for future sessions."
+      # message("These configuration options will only be saved for this session.",
+      #        " Set `preserve = TRUE` to preserve them for future sessions.")
+    }
+    options(temp)
 }
 
 
@@ -231,4 +255,85 @@ convert_reason <- function(reason) {
                  )
     }
     reason
+}
+
+new_ala_config <- function(preserve = FALSE, ...) {
+  ala_option_name <- "ALA4R_config"
+  current_options <- getOption(ala_option_name)
+  
+  assert_that(is.logical(preserve))
+  user_options <- list(...)
+  
+  default_options <- list(caching = FALSE,
+                          download_reason = 4,
+                          send_email = FALSE)
+  
+  current_options <- getOption(ala_option_name)
+  if (length(user_options) == 0) {
+    return(current_options)
+  }
+  if (is.null(current_options)) {
+    ## ALA4R options have not been set yet, so set them to the defaults
+    current_options <- default_options
+    ## set the global option
+    temp <- list(current_options)
+    names(temp) <- ala_option_name
+    options(temp)
+  }
+  
+  # check all the options are valid, if so, set as options
+  for (x in names(user_options)) {
+    validate_option(x, user_options[[x]])
+    current_options[[x]] <- user_options[[x]]
+  }
+  
+  # for backwards compatibility
+  if (!is.null(user_options$download_reason_id)) {
+    user_options$download_reason_id <-
+      convert_reason(user_options$download_reason_id)
+  }
+  
+  ## set the global option
+  temp <- list(current_options)
+  names(temp) <- ala_option_name
+  options(temp)
+  
+  if (preserve) {
+    profile_path <- file.path(Sys.getenv("HOME"), ".Rprofile")
+    message("The variables set will be stored in ", profile_path)
+    #write_options 
+  } else {
+    msg <- "These configuration options will only be saved for this session. 
+    Set `preserve = TRUE` to preserve them for future sessions."
+   # message("These configuration options will only be saved for this session.",
+    #        " Set `preserve = TRUE` to preserve them for future sessions.")
+  }
+  options(temp)
+}
+
+validate_option <- function(name, value) {
+  if (name == "caching") {
+    if (!is.logical(value) && !(value %in% c("on", "off", "reset"))) {
+      stop("\"", name, "\"", " must be TRUE or FALSE")
+    }
+  } else if (name == "send_email" || name == "warn_on_empty") {
+    if (!is.logical(value)) {
+      stop("\"", name, "\"", " must be TRUE or FALSE")
+    }
+  } else if (name == "cache_directory") {
+    if (!dir.exists("cache_directory")) {
+      stop("Cache directory does not exist, please create it and try again.")
+    }
+  } else if (name == "email") {
+    if (!is.character(email)) {
+      stop("Email must be a string")
+    }
+  } else if (name == "download_reason_id") {
+    if (!(name %in% c(ala_reasons()$name, ala_reasons()$id))) {
+      stop("Download reason must be a valid reason id or name ",
+           "See `ala_reasons()` for valid reasons.")
+    }
+  } else {
+    stop("\"", name, "\"", "is not a valid option name.")
+  }
 }
