@@ -22,7 +22,11 @@ ala_GET <- function(url, path, params = list()) {
   if (res$status_code == "504") {
     stop("Status code 504 returned for url",
          res$request$url)
-  } else if (res$status_code != 200) {
+  } else if (res$status_code == "403") {
+    stop("Status code 403 was returned. This may be because the email you",
+         " provided is not registered with the ALA. 
+         Please check and try again. ")
+  }  else if (res$status_code != 200) {
     stop("Status code ", res$status_code, "returned for url ",
          res$request$url)
   }
