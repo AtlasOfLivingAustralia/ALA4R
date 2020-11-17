@@ -1,6 +1,26 @@
 #' Build dataframe of columns to keep
-#' @param group string: name of column group to include
+#' @param group string: name of column group to include (either \code{'basic'} or \code{'event'})
 #' @param extra string: additional column names to return
+#' @details
+#' Calling the argument \code{group = 'basic'} returns the following columns:
+#' \itemize{
+#'   \item\code{decimalLatitude}
+#'   \item\code{decimalLongitude}
+#'   \item\code{eventDate}
+#'   \item\code{taxon_name}
+#'   \item\code{taxonConceptID}
+#'   \item\code{recordID}
+#'   \item\code{data_resource}
+#' }
+#' Conversely, using \code{group = 'event'} returns the following columns:
+#' \itemize{
+#'   \item\code{eventRemarks}
+#'   \item\code{eventTime}
+#'   \item\code{eventID}
+#'   \item\code{eventDate}
+#'   \item\code{samplingEffort}
+#'   \item\code{samplingProtocol}
+#' }
 #' @export ala_columns
 ala_columns <- function(group, extra) {
   if (!missing(group)) {
@@ -10,7 +30,7 @@ ala_columns <- function(group, extra) {
     }))} else {
       group_cols <- NULL
     }
-  
+
   assertions <- ala_fields("assertion")$name
   if (!missing(extra)) {
     extra_cols <- data.table::rbindlist(lapply(extra, function(x) {

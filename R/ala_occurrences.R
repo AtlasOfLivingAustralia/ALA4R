@@ -19,7 +19,7 @@
 #' @export ala_occurrences
 
 ala_occurrences <- function(taxon_id, filters, area,
-                            columns = ala_columns("basic"),
+                            columns,
                             caching = "off") {
 
   query <- list()
@@ -60,7 +60,7 @@ ala_occurrences <- function(taxon_id, filters, area,
   }
 
   # Add columns after getting record count
-  if (missing(columns)) {
+  if(missing(columns)) {
     message("No columns specified, default columns will be returned.")
     columns <- ala_columns("basic")
   }

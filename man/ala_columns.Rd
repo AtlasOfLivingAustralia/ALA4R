@@ -7,10 +7,31 @@
 ala_columns(group, extra)
 }
 \arguments{
-\item{group}{string: name of column group to include}
+\item{group}{string: name of column group to include (either \code{'basic'} or \code{'event'})}
 
 \item{extra}{string: additional column names to return}
 }
 \description{
 Build dataframe of columns to keep
+}
+\details{
+Calling the argument \code{group = 'basic'} returns the following columns:
+\itemize{
+  \item\code{decimalLatitude}
+  \item\code{decimalLongitude}
+  \item\code{eventDate}
+  \item\code{taxon_name}
+  \item\code{taxonConceptID}
+  \item\code{recordID}
+  \item\code{data_resource}
+}
+Conversely, using \code{group = 'event'} returns the following columns:
+\itemize{
+  \item\code{eventRemarks}
+  \item\code{eventTime}
+  \item\code{eventID}
+  \item\code{eventDate}
+  \item\code{samplingEffort}
+  \item\code{samplingProtocol}
+}
 }
