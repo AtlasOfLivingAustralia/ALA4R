@@ -9,7 +9,7 @@ ala_occurrences(
   filters,
   area,
   columns = ala_columns("basic"),
-  caching = "off"
+  mint_doi = FALSE
 )
 }
 \arguments{
@@ -24,7 +24,8 @@ not be accepted by the ALA- see the vignette for how to work around this.}
 
 \item{columns}{string: vector of columns to return in download.}
 
-\item{caching}{string: should the results be cached? Either "on" or "off"}
+\item{mint_doi}{logical: by default no DOI will be generated. Set to
+true if you intend to use the data in a publication or similar}
 }
 \description{
 Download occurrence data from the ALA

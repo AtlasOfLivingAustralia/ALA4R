@@ -7,7 +7,8 @@
 #' sf object, or a wkt string. WKT strings longer than 10000 characters will
 #' not be accepted by the ALA- see the vignette for how to work around this.
 #' @param columns string: vector of columns to return in download.
-#' @param caching string: should the results be cached? Either "on" or "off"
+#' @param mint_doi logical: by default no DOI will be generated. Set to
+#' true if you intend to use the data in a publication or similar
 #' @examples
 #' \dontrun{
 #' ## Retrieve all machine-observed reptile records in Victoria in the past
@@ -20,8 +21,9 @@
 
 ala_occurrences <- function(taxon_id, filters, area,
                             columns = ala_columns("basic"),
-                            caching = "off") {
+                            mint_doi = FALSE) {
 
+  assert_that(is.logical(mint_doi))
   query <- list()
 
   if (missing(taxon_id) & missing(filters) & missing(area)) {
@@ -78,7 +80,8 @@ ala_occurrences <- function(taxon_id, filters, area,
     query <- cached_query(taxa_query, filter_query, area_query)
   }
 
-  if (caching == "on" & file.exists(cache_file)) {
+  caching <- getOption("ALA4R_config")$caching
+  if ((caching %in% c("on", TRUE)) & file.exists(cache_file)) {
     message("Using existing file")
     # look for file using query parameters
     data <- read.csv(unz(cache_file, "data.csv"), stringsAsFactors = FALSE)
@@ -93,7 +96,7 @@ ala_occurrences <- function(taxon_id, filters, area,
   query$fields <- build_columns(columns[columns$type != "assertions", ])
   query$qa <- build_columns(assertion_cols)
 
-  query$mintDoi <- mint_doi()
+  query$mintDoi <- mint_doi
   query$emailNotify <- email_notify()
 
   # Get data
@@ -171,46 +174,20 @@ default_download_reason <- function() {
   4
 }
 
-validate_download_reason <- function(reason) {
-  if (is.character(reason)) {
-    reason <- ala_reasons()[ala_reasons()$name == reason, ]$id
-  }
-  if (!(reason %in% ala_reasons()$id)) {
-   stop("Download reason must be a valid reason id or name ",
-        "See `ala_reasons()` for valid reasons.")
-  }
-  reason
-}
-
 email_notify <- function() {
-  notify <- as.logical(Sys.getenv("ala_notify"))
+  notify <- as.logical(getOption("ALA4R_config")$send_email)
   if (is.na(notify)) {
     notify <- FALSE
-  } else if (is.na(notify)) {
-    stop("Email notify must be a logical value.",
-         "Set email notify using `Sys.setenv(ala_notify = )`")
   }
   # ala api requires lowercase
   ifelse(notify, "true", "false")
 }
 
 user_email <- function() {
-  email <- Sys.getenv("ala_email")
+  email <- getOption("ALA4R_config")$email
   if (email == "") {
     stop("To download occurrence records you must provide a valid email ",
          "address registered with the ALA using `Sys.setenv(ala_email = )`")
   }
   email
-}
-
-mint_doi <- function() {
-  mint <- Sys.getenv("ala_doi")
-  if (mint == "") {
-    mint <- FALSE
-  } else if (is.na(mint)) {
-    stop("Mint doi must be a logical value.",
-         "Configure doi minting using `Sys.setenv(ala_doi = )`")
-  }
-  # ala api requires lowercase
-  ifelse(mint, "true", "false")
 }
