@@ -73,7 +73,7 @@ test_that("ala taxa returns counts for species", {
 })
 
 test_that("ala_taxa handles name issues", {
-  expect_error(ala_taxa("Microseris"))
+  expect_warning(ala_taxa("Microseris"))
 })
 
 
