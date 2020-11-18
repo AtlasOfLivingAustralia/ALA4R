@@ -90,6 +90,10 @@ ala_config(caching="off")
 
 or set to "refresh", meaning that the cached results will re-downloaded from the ALA servers and the cache updated. (This will happen for as long as caching is set to "refresh" --- so you may wish to switch back to normal "on" caching behaviour once you have updated your cache with the data you are working on).
 
+```{r}
+Sys.setenv(ala_email = "ala4r@ala.org.au")
+```
+
 ### User-agent string
 Each request to the ALA servers is accompanied by a "user-agent" string that identifies the software making the request. This is a standard behaviour used by web browsers as well. The user-agent identifies the user requests to the ALA, helping the ALA to adapt and enhance the services that it provides. By default, the ALA4R user-agent string is set to "ALA4R" plus the ALA4R version number (e.g. "ALA4R 1.5.2").
 
@@ -175,7 +179,6 @@ ala_taxa(term = id, term_type = "identifier")
 ## Occurrence data
 Download occurrence data for a taxon
 ```{r, message=FALSE}
-ala_config(ala_email = "ala4r@ala.org.au")
 occ <- ala_occurrences(taxon_id = quoll$taxon_concept_id)
 
 head(occ)
