@@ -69,7 +69,8 @@ ala_config <- function(..., preserve = FALSE) {
     cache_directory = tempdir(),
     download_reason_id = 4,
     email = "",
-    send_email = FALSE
+    send_email = FALSE,
+    verbose = FALSE
   )
   
   current_options <- getOption(ala_option_name)
@@ -120,7 +121,7 @@ validate_option <- function(name, value) {
     if (!is.logical(value) && !(value %in% c("on", "off", "reset"))) {
       stop("\"", name, "\"", " must be TRUE or FALSE")
     }
-  } else if (name == "send_email" || name == "warn_on_empty") {
+  } else if (name == "send_email" || name == "verbose") {
     if (!is.logical(value)) {
       stop("\"", name, "\"", " must be TRUE or FALSE")
     }
