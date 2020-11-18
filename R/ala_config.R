@@ -74,7 +74,7 @@ ala_config <- function(..., preserve = FALSE) {
   )
   
   current_options <- getOption(ala_option_name)
-  if (length(user_options) == 0) {
+  if (length(user_options) == 0 && !is.null(current_options)) {
     return(current_options)
   }
   if (is.null(current_options)) {
@@ -83,25 +83,25 @@ ala_config <- function(..., preserve = FALSE) {
     ## set the global option
     temp <- list(current_options)
     names(temp) <- ala_option_name
-    options(temp)
+  } else {
+    # check all the options are valid, if so, set as options
+    for (x in names(user_options)) {
+      validate_option(x, user_options[[x]])
+      current_options[[x]] <- user_options[[x]]
+    }
+    
+    # for backwards compatibility
+    if (!is.null(user_options$download_reason_id)) {
+      user_options$download_reason_id <-
+        convert_reason(user_options$download_reason_id)
+    }
+    
+    ## set the global option
+    temp <- list(current_options)
+    names(temp) <- ala_option_name
   }
-  
-  # check all the options are valid, if so, set as options
-  for (x in names(user_options)) {
-    validate_option(x, user_options[[x]])
-    current_options[[x]] <- user_options[[x]]
-  }
-  
-  # for backwards compatibility
-  if (!is.null(user_options$download_reason_id)) {
-    user_options$download_reason_id <-
-      convert_reason(user_options$download_reason_id)
-  }
-  
-  ## set the global option
-  temp <- list(current_options)
-  names(temp) <- ala_option_name
   options(temp)
+  
   
   if (preserve) {
     profile_path <- file.path(Sys.getenv("HOME"), ".Rprofile")
