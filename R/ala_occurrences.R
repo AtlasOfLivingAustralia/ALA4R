@@ -118,7 +118,7 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
 
   # add DOI as attribute
   doi <- NA
-  if (as.logical(mint_doi())) {
+  if (as.logical(mint_doi)) {
     tryCatch(
       doi <- as.character(
         read.table(unz(data_path, "doi.txt"))$V1),
