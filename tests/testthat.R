@@ -1,5 +1,5 @@
 library(testthat)
 library(ALA4R)
 
-Sys.setenv(ala_email = "ala4r@ala.org.au")
+ala_config(cache_directory = tempdir(), ala_email = "ala4r@ala.org.au", caching = FALSE)
 test_check("ALA4R")
