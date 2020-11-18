@@ -325,7 +325,7 @@ validate_option <- function(name, value) {
       stop("Cache directory does not exist, please create it and try again.")
     }
   } else if (name == "email") {
-    if (!is.character(email)) {
+    if (!is.character(value)) {
       stop("Email must be a string")
     }
   } else if (name == "download_reason_id") {

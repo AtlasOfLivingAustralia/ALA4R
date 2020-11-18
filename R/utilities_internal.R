@@ -381,25 +381,9 @@ build_area_query <- function(area) {
   area
 }
 
-validate_wkt <- function(wkt) {
-    max_char <- 10000
-    if (nchar(wkt) > max_char) {
-        stop("The WKT string provided is greater than ", max_char,
-             " characters , please simplify and try again.")
-    }
-    if (!wellknown::lint(wkt)) {
-      stop("The WKT provided is invalid.")
-    }
-}
 
-# build a valid wkt string from a spatial polygon
-build_wkt <- function(polygon) {
-    wkt <- st_as_text(st_geometry(polygon))
-    if (nchar(wkt) > 10000) {
-        stop("The area provided is too complex. Please simplify it and try again.")
-    }
-    wkt
-}
+
+
 
 # this is only relevant for ala_counts and ala_occurrences
 cached_query <- function(taxa_query, filter_query, area_query,
@@ -440,5 +424,11 @@ build_columns <- function(col_df) {
   }
   ala_cols <- dwc_to_ala(col_df$name)
   paste0(ala_cols, collapse = ",")
+}
+
+# ask user if they want to preserve an environment var 
+preserve_var <- function() {
+  set <- readline(prompt = "Do you want to store this email in your .Rprofile file for future use? ")
+  print(set)
 }
 
