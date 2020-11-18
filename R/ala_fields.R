@@ -26,14 +26,6 @@ ala_fields <- function(class = "all") {
   # To do: check if a user has provided params/ used `field_info` and warn if so
   
   # for backwards compatibility, should allow a user to get the ALA names for a field?
-  
-  
-  # keep for backwards compatibility
-  if (class == "general") {
-    fields <- ala_GET(getOption("ALA4R_server_config")$base_url_bie,
-                      path = "ws/admin/indexFields")
-    return(fields[!fields$name %in% unwanted_columns("general"), ])
-  }
 
   url <- getOption("ALA4R_server_config")$base_url_biocache
   
