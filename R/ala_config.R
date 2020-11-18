@@ -125,7 +125,7 @@ validate_option <- function(name, value) {
       stop("\"", name, "\"", " must be TRUE or FALSE")
     }
   } else if (name == "cache_directory") {
-    if (!dir.exists("cache_directory")) {
+    if (!dir.exists(value)) {
       stop("Cache directory does not exist, please create it and try again.")
     }
   } else if (name == "ala_email") {
@@ -133,7 +133,7 @@ validate_option <- function(name, value) {
       stop("Email must be a string")
     }
   } else if (name == "download_reason_id") {
-    if (!(name %in% c(ala_reasons()$name, ala_reasons()$id))) {
+    if (!(value %in% c(ala_reasons()$name, ala_reasons()$id))) {
       stop("Download reason must be a valid reason id or name ",
            "See `ala_reasons()` for valid reasons.")
     }
