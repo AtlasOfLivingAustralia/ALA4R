@@ -68,7 +68,7 @@ ala_config <- function(..., preserve = FALSE) {
     caching = FALSE,
     cache_directory = tempdir(),
     download_reason_id = 4,
-    email = "",
+    ala_email = "",
     send_email = FALSE,
     verbose = FALSE
   )
