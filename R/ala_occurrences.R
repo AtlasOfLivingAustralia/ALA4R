@@ -181,9 +181,9 @@ email_notify <- function() {
 }
 
 user_email <- function() {
-  email <- getOption("ALA4R_config")$ala_email
+  email <- getOption("ALA4R_config")$email
   if (email == "") {
-    email <- Sys.getenv("ala_email")
+    email <- Sys.getenv("email")
   }
   if (email == "") {
     stop("To download occurrence records you must provide a valid email ",
