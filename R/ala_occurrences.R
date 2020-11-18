@@ -21,7 +21,7 @@
 ala_occurrences <- function(taxon_id, filters, geometry, columns,
                             mint_doi = FALSE) {
 
-  verbose <- getOption("ALA4R_config")$verbose
+  config_verbose <- getOption("ALA4R_config")$verbose
   assert_that(is.logical(mint_doi))
   #assert_that(is.logical(verbose))
   query <- list()
@@ -181,7 +181,7 @@ email_notify <- function() {
 }
 
 user_email <- function() {
-  email <- getOption("ALA4R_config")$email
+  email <- getOption("ALA4R_config")$ala_email
   if (email == "") {
     email <- Sys.getenv("email")
   }
