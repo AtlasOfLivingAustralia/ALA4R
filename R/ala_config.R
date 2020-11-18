@@ -57,7 +57,7 @@
 #' }
 #' @export ala_config
 
-ala_config <- function(preserve = FALSE, ...) {
+ala_config <- function(..., preserve = FALSE) {
   ala_option_name <- "ALA4R_config"
   current_options <- getOption(ala_option_name)
   
@@ -153,4 +153,23 @@ ala_reasons <- function() {
     # sort by id to make it less confusing
     row.names(out) <- out$id
     out[order(out$id),]
+}
+
+convert_reason <- function(reason) {
+  ## unexported function to convert string reason to numeric id
+  if (is.character(reason)) {
+    valid_reasons <- ala_reasons()
+    tryCatch({
+      reason <- match.arg(tolower(reason), valid_reasons$name)
+      reason <- valid_reasons$id[valid_reasons$name == reason]
+    },
+    error = function(e) {
+      stop("could not match download_reason_id string \"",
+           reason, "\" to valid reason string: see ",
+           getOption("ALA4R_server_config")$reasons_function,
+           "()")
+    }
+    )
+  }
+  reason
 }
