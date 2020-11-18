@@ -179,6 +179,11 @@ ala_taxa(term = id, term_type = "identifier")
 ## Occurrence data
 Download occurrence data for a taxon
 ```{r, message=FALSE}
+ala_config(ala_email = "ala4r@ala.org.au")
+print(getOption("ALA4R_config")$ala_email)
+```
+
+```{r}
 occ <- ala_occurrences(taxon_id = quoll$taxon_concept_id)
 
 head(occ)

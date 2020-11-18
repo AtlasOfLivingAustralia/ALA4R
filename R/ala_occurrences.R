@@ -177,7 +177,7 @@ email_notify <- function() {
 }
 
 user_email <- function() {
-  email <- getOption("ALA4R_config")$email
+  email <- getOption("ALA4R_config")$ala_email
   if (email == "") {
     email <- Sys.getenv("ala_email")
   }
