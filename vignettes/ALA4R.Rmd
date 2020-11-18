@@ -183,22 +183,33 @@ ala_config(ala_email = "ala4r@ala.org.au")
 print(getOption("ALA4R_config")$ala_email)
 ```
 
-```{r}
-occ <- ala_occurrences(taxon_id = quoll$taxon_concept_id)
+```{r eval = FALSE}
+occ <- ala_occurrences(taxon_id = quoll)
+```
 
+```{r include = FALSE}
+occ <- read.csv("dasyurus_viverrinus.csv")
+```
+
+```{r}
 head(occ)
 ```
 
 Plot occurrence data using ggplot
 
-```{r}
+```{r eval = FALSE}
 # build filters and columns
 cols <- ala_columns(group = "basic", extra = "country")
 filters <- ala_filters(list(year = seq(2000, 2020)))
 occ <- ala_occurrences(taxon_id = top5_banksia,
                        columns = cols, filters = filters)
+```
 
+```{r include = FALSE}
+occ <- read.csv("banksia.csv")
+```
 
+```{r}
 filtered_occ <- occ %>% filter(country == "Australia")
 head(filtered_occ)
 ```
@@ -214,12 +225,20 @@ ggplot() + geom_sf(data = ozmap_country) +
 
 ## Customising searches
 Occurrence searches can be narrowed down by area, a variety of filters, and data quality tests. 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r eval=FALSE, message=FALSE, warning=FALSE}
 # Find all reptiles within a shapefile
 id <- ala_taxa("Ornithorhynchus anatinus")
 simple_shp <- st_cast(st_read('act_rect.shp'), "MULTIPOLYGON")
 
 occ <- ala_occurrences(taxon_id = id, geometry = ala_geometry(area = simple_shp))
+```
+
+```{r include = FALSE}
+occ <- read.csv("ornithorhynchus_anatinus.csv")
+simple_shp <- st_cast(st_read('act_rect.shp'), "MULTIPOLYGON")
+```
+
+```{r}
 ggplot() + geom_sf(data = simple_shp) +
   geom_point(data = occ, mapping = aes(x = decimalLongitude, y = decimalLatitude))
 
