@@ -23,7 +23,7 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
 
   verbose <- getOption("ALA4R_config")$verbose
   assert_that(is.logical(mint_doi))
-  assert_that(is.logical(verbose))
+  #assert_that(is.logical(verbose))
   query <- list()
 
   if (missing(taxon_id) & missing(filters) & missing(geometry)) {
