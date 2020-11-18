@@ -34,9 +34,7 @@ ala_fields <- function(class = "all") {
                       path = "ws/admin/indexFields")
     return(fields[!fields$name %in% unwanted_columns("general"), ])
   }
-  
-  
-  
+
   url <- getOption("ALA4R_server_config")$base_url_biocache
   
   fields <- ala_GET(url, path = "ws/index/fields")
@@ -76,127 +74,7 @@ dwc_to_ala <- function(dwc_names) {
   }, USE.NAMES = FALSE)
 }
 
-ala_to_dwc <- function() {
-  
-}
-
 all_fields <- function() {
   url <- getOption("ALA4R_server_config")$base_url_biocache
   ala_GET(url, path = "ws/index/fields")
 }
-
-## Old functions to be deleted
-## private function to replace any full field names (descriptions) with
-## their id values
-## e.g. "Radiation - lowest period (Bio22)" to id "el871"
-fields_name_to_id <- function(fields, fields_type, make_names = FALSE) {
-  assert_that(is.character(fields))
-  assert_that(is.string(fields_type))
-  ## if TRUE, apply make.names to variable names before matching
-  assert_that(is.flag(make_names))
-  fields_type <- match.arg(tolower(fields_type), c("occurrence", "general",
-                                                   "layers", "assertions"))
-  
-  if (fields_type == "layers") {
-    valid_fields <- ala_layers()
-  } else {
-    valid_fields <- all_fields()
-  }
-  
-  ## merge differently for "layers" fields, because those column names differ
-  ## from other fields_type
-  ## for layers, the long name is in "desc", with the id in "id" (and "name"
-  ## is something different)
-  ## ** as of 17-Jun-2014, "desc" is now renamed "description"
-  ## for "occurrence" and "assertions", long name is in "description" and id
-  ## is in "name"
-  ## for general, there is no long name (description)
-  ## for each one, warn if multiple matches on long name are found
-  if (make_names) {
-    valid_fields$description <- switch(fields_type,
-                                       "layers" =,
-                                       "occurrence" =,
-                                       "assertions" =
-                                         make.names(valid_fields$description)
-    )
-  }
-  switch(fields_type,
-         "layers" = vapply(fields, function(z) {
-           if (z %in% valid_fields$description & (!z %in% valid_fields$id)) {
-             if (sum(valid_fields$description == z, na.rm = TRUE) > 1) {
-               if (nchar(z) > 0) { ## don't warn if field name is degenerate ""
-                 warning(" multiple ", fields_type,
-                         " fields match the name \"", z, "\", using first")
-               }
-             }
-             valid_fields$id[which(valid_fields$description == z)[1]]
-           }
-           else {
-             z
-           }
-         }, FUN.VALUE = "", USE.NAMES = FALSE),
-         "occurrence" =,
-         "assertions" = vapply(fields, function(z) {
-           if (z %in% valid_fields$description & (!z %in% valid_fields$name)) {
-             if (sum(valid_fields$description == z, na.rm = TRUE) > 1) {
-               if (nchar(z) > 0) {
-                 warning(" multiple ", fields_type, " fields match the name \"",
-                         z, "\", using first")
-               }
-             }
-             valid_fields$name[which(valid_fields$description == z)[1]]
-           }
-           else {
-             z
-           }
-         }
-         , FUN.VALUE = "", USE.NAMES = FALSE),
-         fields ## default to just returning the fields as supplied
-  )
-}
-
-## private function to replace any id values with their full field
-## names (descriptions)
-fields_id_to_name <- function(fields, fields_type) {
-  assert_that(is.character(fields))
-  assert_that(is.string(fields_type))
-  fields_type <- match.arg(tolower(fields_type),
-                           c("occurrence", "general", "layers", "assertions"))
-  if (fields_type == "layers") {
-    valid_fields <- ala_layers()
-  } else {
-    valid_fields <- all_fields()
-  }
-  
-  ## merge differently for "layers" fields, because those column names differ
-  ## from other fields_type
-  ## for layers, the long name is in "desc", with the id in "id" (and "name"
-  ## is something different)
-  ## ** as of 17-Jun-2014, "desc" is now renamed "description"
-  ## for "occurrence" and "assertions", long name is in "description" and id is
-  ## in "name"
-  ## for general, there is no long name (description)
-  ## for each one, warn if multiple matches on long name are found
-  switch(fields_type,
-         "layers" = vapply(fields, function(z) {
-           if (z %in% valid_fields$layer_id & (!z %in% valid_fields$description)) {
-             valid_fields$description[which(valid_fields$layer_id == z)[1]]
-           }
-           else {
-             z
-           }
-         },
-         FUN.VALUE = "", USE.NAMES = FALSE),
-         "occurrence" =,
-         "assertions" = vapply(fields, function(z) {
-           if (z %in% valid_fields$name & (!z %in% valid_fields$description)) {
-             valid_fields$name[which(valid_fields$name == z)[1]]
-           }
-           else {
-             z
-           }
-         }, FUN.VALUE = "", USE.NAMES = FALSE),
-         fields ## default to just returning the fields as supplied
-  )
-}
-
