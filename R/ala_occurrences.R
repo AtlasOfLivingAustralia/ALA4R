@@ -23,6 +23,7 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
                             mint_doi = FALSE,
                             verbose = FALSE) {
 
+  verbose <- getOption("ALA4R_config")$verbose
   assert_that(is.logical(mint_doi))
   assert_that(is.logical(verbose))
   query <- list()
@@ -82,8 +83,10 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
   }
 
   caching <- getOption("ALA4R_config")$caching
-  if((caching %in% c("on", TRUE)) & file.exists(cache_file)) {
+
+  if ((caching %in% c("on", TRUE)) & file.exists(cache_file)) {
     # if(verbose){message("Using existing file")}
+
     # look for file using query parameters
     data <- read.csv(unz(cache_file, "data.csv"), stringsAsFactors = FALSE)
     # if file doesn't exist, continue as before
