@@ -7,6 +7,7 @@
 #' work around this.
 #' @param area sf object: area to be converted to wkt
 #' @return WKT string representing area provided
+#' @export ala_geometry
 
 ala_geometry <- function(wkt, area) {
   if (nargs() > 1) {
