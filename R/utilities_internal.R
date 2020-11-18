@@ -120,3 +120,11 @@ preserve_var <- function() {
   print(set)
 }
 
+user_agent_string <- function() {
+  version_string <- "version unknown"
+  suppressWarnings(
+    try(version_string <- utils::packageDescription("ALA4R")[["Version"]],
+        silent = TRUE)) ## get the ALA4R version, if we can
+  paste0("ALA4R ", version_string)
+}
+

@@ -5,7 +5,7 @@ ala_GET <- function(url, path, params = list()) {
   cli <- HttpClient$new(
     url = url,
     headers = list(
-      useragent = ala_config()$user_agent
+      useragent = user_agent_string()
     )
   )
   
