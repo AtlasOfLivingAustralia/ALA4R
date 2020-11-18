@@ -57,216 +57,20 @@
 #' }
 #' @export ala_config
 
-ala_config <- function(..., preserve = FALSE) {
-    ## get or set options that control ALA4R behaviour
-    ## options are stored as a global option with the name defined
-    ## in ala_option_name
-    ala_option_name <- "ALA4R_config"
-    user_options <- list(...) ## the options passed by the user
-    ## default user-agent string
-    version_string <- "version unknown"
-    suppressWarnings(
-      try(version_string <- utils::packageDescription("ALA4R")[["Version"]],
-          silent = TRUE)) ## get the ALA4R version, if we can
-    user_agent_string <- paste0("ALA4R ", version_string)
-
-    ## set default options
-    default_options <- list(
-        caching = "on",
-        cache_directory = tempdir(),
-        user_agent = user_agent_string,
-        download_reason_id = 4,
-        verbose = FALSE,
-        warn_on_empty = FALSE,
-        email = "",
-        send_email = FALSE,
-        text_encoding = "UTF-8"
-    )
-
-    ## define allowed options, for those that have restricted values
-    # for now leave on/off/refresh as they are used by old functions
-    allowed_options <- list(caching = c("on", "off", "refresh", TRUE, FALSE),
-                            download_reason_id = c(0:8, 10:12))
-    ## ideally, the valid download_reason_id values should be populated
-    ## dynamically from the ala_reasons() function. However if that is
-    ## called (from here) before the ALA4R_config option has been set,
-    ## then we get infinite recursion. To be addressed later ...
-
-    ## has the user asked to reset options to defaults?
-    if (identical(tolower(user_options), "reset")) {
-        temp <- list(default_options)
-        names(temp) <- ala_option_name
-        options(temp)
-    } else {
-        names(user_options) <- tolower(names(user_options))
-        ## has the user specified something we don't recognize?
-        known_options <- names(default_options)
-        unknown <- setdiff(names(user_options), known_options)
-        if (length(unknown) > 0) {
-            stop("unknown ", getOption("ALA4R_server_config")$brand,
-                 " options: ", str_c(unknown, collapse = ", "))
-        }
-
-        current_options <- getOption(ala_option_name)
-        if (is.null(current_options)) {
-            ## ALA4R options have not been set yet, so set them to the defaults
-            current_options <- default_options
-            ## set the global option
-            temp <- list(current_options)
-            names(temp) <- ala_option_name
-            options(temp)
-        }
-
-        ## convert reason from char to numeric if needed
-        if (!is.null(user_options$download_reason_id)) {
-            user_options$download_reason_id <-
-              convert_reason(user_options$download_reason_id)
-        }
-
-        ## override any defaults with user-specified options
-        if (length(user_options) == 0) {
-          return(current_options)
-        }
-        for (i in seq_len(length(user_options))) {
-              this_option_name <- names(user_options)[i]
-              if (! is.null(allowed_options[[this_option_name]])) {
-                  ## there are restrictions on the allowed values for
-                  ## this option
-                  ## could use match.arg here but the output is a bit obscure
-                  if (! (user_options[[i]] %in%
-                         allowed_options[[this_option_name]])) {
-                      stop("value \"", user_options[[i]],
-                           "\" is not a valid choice for ", this_option_name,
-                           " (should be one of ",
-                           str_c(allowed_options[[this_option_name]],
-                                 collapse = ", "), ")")
-                  }
-              }
-              ## any other specific checks ...
-              if (identical(this_option_name, "cache_directory")) {
-                  if (!see_if(is.notempty.string(user_options[[i]]))) {
-                      stop("cache_directory should be a string")
-                  }
-                  ## strip trailing file separator, if there is one
-                  user_options[[i]] <- sub("[/\\]+$", "", user_options[[i]])
-                  if (! (file.exists(user_options[[i]]) &&
-                         file.info(user_options[[i]])$isdir)) {
-                      ## cache directory does not exist. We could create
-                      ## it, but this is probably better left to the user
-                      ## to manage
-                      stop("cache directory ", user_options[[i]],
-                           " does not exist")
-                  }
-              }
-              if (identical(this_option_name, "user_agent")) {
-                  if (!see_if(is.string(user_options[[i]]))) {
-                      stop("user_agent should be a string")
-                  }
-              }
-              if (identical(this_option_name, "email")) {
-                if (!see_if(is.string(user_options[[i]]))) {
-                  stop("user_agent should be a string")
-                }
-              }
-              if (identical(this_option_name, "verbose")) {
-                  if (!see_if(is.flag(user_options[[i]]))) {
-                      stop("verbose should be TRUE or FALSE")
-                  }
-              }
-              if (identical(this_option_name, "send_email")) {
-                if (!see_if(is.flag(user_options[[i]]))) {
-                  stop("send_email should be TRUE or FALSE")
-                }
-              }
-              if (identical(this_option_name, "warn_on_empty")) {
-                  if (!see_if(is.flag(user_options[[i]]))) {
-                      stop("warn_on_empty should be TRUE or FALSE")
-                  }
-              }
-
-              current_options[this_option_name] <- user_options[[i]]
-          }
-          ## set the global option
-          temp <- list(current_options)
-          names(temp) <- ala_option_name
-          options(temp)
-
-    }
-    if (preserve) {
-      profile_path <- file.path(Sys.getenv("HOME"), ".Rprofile")
-      message("The variables set will be stored in ", profile_path)
-      #write_options 
-    } else {
-      msg <- "These configuration options will only be saved for this session. 
-    Set `preserve = TRUE` to preserve them for future sessions."
-      # message("These configuration options will only be saved for this session.",
-      #        " Set `preserve = TRUE` to preserve them for future sessions.")
-    }
-    options(temp)
-}
-
-
-#' @rdname ala_config
-#' @export
-ala_reasons <- function() {
-    ## return list of valid "reasons for use" codes
-    out <- cached_get(
-      build_url_from_parts(getOption("ALA4R_server_config")$base_url_logger,
-                           path = "reasons"), type = "json")
-    if (any(names(out) == "deprecated")) out <- out[!out$deprecated, ]
-    out <- out[wanted_columns("reasons")]
-    # sort by id to make it less confusing
-    row.names(out) <- out$id
-    out[order(out$id),]
-}
-
-## internal function, used to define the ALA4R sourceTypeId parameter value,
-## passed by occurrences download and possibly other functions
-ala_sourcetypeid <- function() {
-
-    this_url <- build_url_from_parts(
-      getOption("ALA4R_server_config")$base_url_logger, path = "sources")
-    sids <- cached_get(this_url, type = "json")
-    if ("ALA4R" %in% sids$name) {
-        sids$id[sids$name == "ALA4R"]
-    } else {
-        warning("could not retrieve ", getOption("ALA4R_server_config")$brand,
-                " source type from ", this_url, ". ",
-                getOption("ALA4R_server_config")$notify)
-        2001 ## default value
-    }
-}
-    
-
-convert_reason <- function(reason) {
-    ## unexported function to convert string reason to numeric id
-    if (is.character(reason)) {
-        valid_reasons <- ala_reasons()
-        tryCatch({
-          reason <- match.arg(tolower(reason), valid_reasons$name)
-                   reason <- valid_reasons$id[valid_reasons$name == reason]
-                   },
-                 error = function(e) {
-                   stop("could not match download_reason_id string \"",
-                        reason, "\" to valid reason string: see ",
-                        getOption("ALA4R_server_config")$reasons_function,
-                        "()")
-                   }
-                 )
-    }
-    reason
-}
-
-new_ala_config <- function(preserve = FALSE, ...) {
+ala_config <- function(preserve = FALSE, ...) {
   ala_option_name <- "ALA4R_config"
   current_options <- getOption(ala_option_name)
   
   assert_that(is.logical(preserve))
   user_options <- list(...)
   
-  default_options <- list(caching = FALSE,
-                          download_reason = 4,
-                          send_email = FALSE)
+  default_options <- list(
+    caching = FALSE,
+    cache_directory = tempdir(),
+    download_reason_id = 4,
+    email = "",
+    send_email = FALSE
+  )
   
   current_options <- getOption(ala_option_name)
   if (length(user_options) == 0) {
@@ -305,7 +109,7 @@ new_ala_config <- function(preserve = FALSE, ...) {
   } else {
     msg <- "These configuration options will only be saved for this session. 
     Set `preserve = TRUE` to preserve them for future sessions."
-   # message("These configuration options will only be saved for this session.",
+    # message("These configuration options will only be saved for this session.",
     #        " Set `preserve = TRUE` to preserve them for future sessions.")
   }
   options(temp)
@@ -324,7 +128,7 @@ validate_option <- function(name, value) {
     if (!dir.exists("cache_directory")) {
       stop("Cache directory does not exist, please create it and try again.")
     }
-  } else if (name == "email") {
+  } else if (name == "ala_email") {
     if (!is.character(value)) {
       stop("Email must be a string")
     }
@@ -336,4 +140,17 @@ validate_option <- function(name, value) {
   } else {
     stop("\"", name, "\"", "is not a valid option name.")
   }
+}
+
+#' @rdname ala_config
+#' @export
+ala_reasons <- function() {
+    ## return list of valid "reasons for use" codes
+    out <- ala_GET(getOption("ALA4R_server_config")$base_url_logger,
+                           path = "service/logger/reasons")
+    if (any(names(out) == "deprecated")) out <- out[!out$deprecated, ]
+    out <- out[wanted_columns("reasons")]
+    # sort by id to make it less confusing
+    row.names(out) <- out$id
+    out[order(out$id),]
 }
