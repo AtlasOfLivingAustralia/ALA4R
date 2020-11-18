@@ -175,6 +175,7 @@ ala_taxa(term = id, term_type = "identifier")
 ## Occurrence data
 Download occurrence data for a taxon
 ```{r, message=FALSE}
+ala_config(ala_email = "ala4r@ala.org.au")
 occ <- ala_occurrences(taxon_id = quoll$taxon_concept_id)
 
 head(occ)
@@ -210,7 +211,7 @@ Occurrence searches can be narrowed down by area, a variety of filters, and data
 id <- ala_taxa("Ornithorhynchus anatinus")
 simple_shp <- st_cast(st_read('act_rect.shp'), "MULTIPOLYGON")
 
-occ <- ala_occurrences(taxon_id = id, geometry = ala_geometry(simple_shp))
+occ <- ala_occurrences(taxon_id = id, geometry = ala_geometry(area = simple_shp))
 ggplot() + geom_sf(data = simple_shp) +
   geom_point(data = occ, mapping = aes(x = decimalLongitude, y = decimalLatitude))
 
