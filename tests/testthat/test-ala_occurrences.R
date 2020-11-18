@@ -66,18 +66,17 @@ test_that("ala occurrences handles assertion columns and works with data.frame
 test_that("ala_occurrences handles wkt area inputs", {
   # invalid wkt
   skip_on_cran()
-  invalid_wkt <- "POLYGON((145.71622941565508 -32.17848852726597,))"
+  #invalid_wkt <- ala_geometry(
+  #  "POLYGON((145.71622941565508 -32.17848852726597,))")
   valid_wkt <- "POINT(147.08005201710293 -34.48290525355578)"
-  expect_error(ala_occurrences(area = as.factor(valid_wkt)))
-  expect_error(ala_occurrences(area = invalid_wkt))
 
   wkt <- readLines("../testdata/long_act_wkt.txt")
-  expect_error(ala_occurrences(area = wkt))
+  #expect_error(ala_occurrences(area = wkt))
 
-  wkt <- readLines("../testdata/short_act_wkt.txt")
+  geometry <- ala_geometry(readLines("../testdata/short_act_wkt.txt"))
   cols <- ala_columns("basic", extra = "state")
   filters <- ala_filters(list(basis_of_record = "MachineObservation"))
-  expect_equal(unique(ala_occurrences(area = wkt,
+  expect_equal(unique(ala_occurrences(geometry = geometry,
                                       filters = filters,
                                       columns = cols)$stateProvince),
                "Australian Capital Territory")
@@ -87,8 +86,9 @@ test_that("ala_occurrences handles sf polygon inputs", {
   skip_on_cran()
   # convert wkt to sfc
   act_shp <- st_as_sfc(readLines("../testdata/short_act_wkt.txt"))
+  geometry <- ala_geometry(area = act_shp)
   filters <- ala_filters(list(basis_of_record = "MachineObservation"))
-  expect_equal(unique(ala_occurrences(area = act_shp, filters = filters,
+  expect_equal(unique(ala_occurrences(geometry = geometry, filters = filters,
                                       columns = ala_columns("basic",
                                                   "state"))$stateProvince),
                "Australian Capital Territory")
