@@ -195,6 +195,6 @@ user_email <- function() {
 occ_error_handler <- function(code) {
   if (code == 403) {
     stop("Status code 403 was returned for this occurrence download request. This may be because
-  the email you provided is not registered with the ALA. Please check and try again. ")
+  the email you provided is not registered with the ALA. Please check and try again.")
   }
 }
