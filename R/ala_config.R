@@ -83,17 +83,19 @@ ala_config <- function(..., preserve = FALSE) {
     ## set the global option
     temp <- list(current_options)
     names(temp) <- ala_option_name
+    options(temp)
+    return(current_options)
   } else {
     # check all the options are valid, if so, set as options
-    for (x in names(user_options)) {
-      validate_option(x, user_options[[x]])
-      current_options[[x]] <- user_options[[x]]
-    }
     
-    # for backwards compatibility
     if (!is.null(user_options$download_reason_id)) {
       user_options$download_reason_id <-
         convert_reason(user_options$download_reason_id)
+    }
+    
+    for (x in names(user_options)) {
+      validate_option(x, user_options[[x]])
+      current_options[[x]] <- user_options[[x]]
     }
     
     ## set the global option
@@ -113,7 +115,6 @@ ala_config <- function(..., preserve = FALSE) {
     # message("These configuration options will only be saved for this session.",
     #        " Set `preserve = TRUE` to preserve them for future sessions.")
   }
-  options(temp)
 }
 
 validate_option <- function(name, value) {
@@ -134,7 +135,7 @@ validate_option <- function(name, value) {
       stop("Email must be a string")
     }
   } else if (name == "download_reason_id") {
-    if (!(value %in% c(ala_reasons()$name, ala_reasons()$id))) {
+    if (!(value %in% ala_reasons()$id)) {
       stop("Download reason must be a valid reason id or name ",
            "See `ala_reasons()` for valid reasons.")
     }
@@ -165,12 +166,9 @@ convert_reason <- function(reason) {
       reason <- valid_reasons$id[valid_reasons$name == reason]
     },
     error = function(e) {
-      stop("could not match download_reason_id string \"",
-           reason, "\" to valid reason string: see ",
-           getOption("ALA4R_server_config")$reasons_function,
-           "()")
-    }
-    )
+      stop("could not match download_reason_id string \"", reason,
+           "\" to valid reason id: see ala_reasons() for valid reasons")
+    })
   }
   reason
 }
