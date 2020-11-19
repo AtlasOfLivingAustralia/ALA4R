@@ -114,12 +114,6 @@ build_columns <- function(col_df) {
   paste0(ala_cols, collapse = ",")
 }
 
-# ask user if they want to preserve an environment var 
-preserve_var <- function() {
-  set <- readline(prompt = "Do you want to store this email in your .Rprofile file for future use? ")
-  print(set)
-}
-
 user_agent_string <- function() {
   version_string <- "version unknown"
   suppressWarnings(
@@ -127,4 +121,3 @@ user_agent_string <- function() {
         silent = TRUE)) ## get the ALA4R version, if we can
   paste0("ALA4R ", version_string)
 }
-
