@@ -23,7 +23,7 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
 
   config_verbose <- getOption("ALA4R_config")$verbose
   assert_that(is.logical(mint_doi))
-  #assert_that(is.logical(verbose))
+  assert_that(is.logical(config_verbose))
   query <- list()
 
   if (missing(taxon_id) & missing(filters) & missing(geometry)) {
@@ -92,7 +92,7 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
   }
 
   count <- record_count(query)
-  check_count(count)
+  check_count(count, config_verbose)
 
   assertion_cols <- columns[columns$type == "assertions", ]
   query$fields <- build_columns(columns[columns$type != "assertions", ])
@@ -151,7 +151,7 @@ wait_for_download <- function(url, query) {
   parse_url(status$downloadUrl)$path
 }
 
-check_count <- function(count) {
+check_count <- function(count, config_verbose) {
   if (count == 0) {
     stop("This query does not match any records.")
   } else if (count > 50000000) {
