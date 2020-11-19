@@ -63,7 +63,7 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
 
   # Add columns after getting record count
   if(missing(columns)) {
-    if(verbose){message("No columns specified, default columns will be returned.")}
+    if (config_verbose){ message("No columns specified, default columns will be returned.")}
     columns <- ala_columns("basic")
   }
 
@@ -83,7 +83,7 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
   caching <- getOption("ALA4R_config")$caching
 
   if ((caching %in% c("on", TRUE)) & file.exists(cache_file)) {
-    if(verbose){message("Using existing file")}
+    if (config_verbose) { message("Using existing file")}
 
     # look for file using query parameters
     data <- read.csv(unz(cache_file, "data.csv"), stringsAsFactors = FALSE)
@@ -158,7 +158,7 @@ check_count <- function(count) {
     stop("A maximum of 50 million records can be retrieved at once.",
          " Please narrow the query and try again.")
   } else {
-    if(verbose){message("This query will return ", count, " records")}
+    if (config_verbose) { message("This query will return ", count, " records")}
   }
 }
 
@@ -183,7 +183,7 @@ email_notify <- function() {
 user_email <- function() {
   email <- getOption("ALA4R_config")$ala_email
   if (email == "") {
-    email <- Sys.getenv("email")
+    email <- Sys.getenv("ala_email")
   }
   if (email == "") {
     stop("To download occurrence records you must provide a valid email ",
