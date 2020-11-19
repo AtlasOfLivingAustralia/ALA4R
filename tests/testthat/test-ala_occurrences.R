@@ -36,12 +36,14 @@ test_that("ala_occurrences handles filters correctly", {
     columns = ala_columns("basic", "year"))$year %in% seq(1971, 1981)))
 })
 
-test_that("ala occurrences handles a long query", {
+test_that("ala occurrences gives an error for too many filters", {
   skip_on_cran()
   # generate a query longer than 2000 characters
-  taxa <- ala_taxa("Hymenoptera", return_children = TRUE)
-  filters <- ala_filters(filters = list(year = 1990),
-                         data_quality_profile = "ALA")
+  assertions <- rep(TRUE, nrow(ala_fields("assertion")))
+  names(assertions) <- ala_fields("assertion")$name
+  filters <- ala_filters(filters = assertions)
+  expect_error(ala_occurrences(filters = filters,
+                               "Too many filters provided."))
 
 })
 test_that("ala occurrences returns requested columns", {
