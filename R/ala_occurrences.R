@@ -107,7 +107,7 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
              dwcHeaders = "true")
 
   download_path <- wait_for_download(url, query)
-  data_path <- ala_download(url = "https://biocache.ala.org.au",
+  data_path <- ala_download(url = url,
                        path = download_path,
                        cache_file = cache_file, ext = ".zip")
   df <- read.csv(unz(data_path, "data.csv"), stringsAsFactors = FALSE)

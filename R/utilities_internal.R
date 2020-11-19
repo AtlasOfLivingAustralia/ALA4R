@@ -76,7 +76,7 @@ build_area_query <- function(area) {
 # this is only relevant for ala_counts and ala_occurrences
 cached_query <- function(taxa_query, filter_query, area_query,
                          columns = NULL) {
-  url <- "https://biocache-ws.ala.org.au"
+  url <- getOption("ALA4R_server_config")$base_url_biocache
   resp <- ala_POST(url, path = "ws/webportal/params",
                    body = list(wkt = area_query, fq = taxa_query,
                                fields = columns))

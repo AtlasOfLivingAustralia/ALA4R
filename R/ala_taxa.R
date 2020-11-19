@@ -86,7 +86,7 @@ ala_taxa <- function(term, term_type = "name", return_children = FALSE,
 
 
 name_lookup <- function(name) {
-  url <- "https://namematching-ws-test.ala.org.au/"
+  url <- getOption("ALA4R_server_config")$base_url_name_matching
   if (is.null(names(name)) || names(name) == "") {
     # search by scientific name
     path <- "api/search"
@@ -117,7 +117,7 @@ name_lookup <- function(name) {
 }
 
 identifier_lookup <- function(identifier) {
-  taxa_url <- "https://namematching-ws-test.ala.org.au/"
+  taxa_url <- getOption("ALA4R_server_config")$base_url_name_matching
   result <- ala_GET(taxa_url, "/api/getByTaxonID", list(taxonID = identifier))
   if (isFALSE(result$success) && result$issues == "noMatch") {
     message("No match found for identifier ", identifier)
@@ -140,7 +140,7 @@ validate_rank <- function(ranks) {
 }
 
 child_concepts <- function(identifier) {
-  url <- "https://bie-ws.ala.org.au/"
+  url <- getOption("ALA4R_server_config")$base_url_bie
   path <- paste0("ws/childConcepts/",
                  URLencode(as.character(identifier), reserved = TRUE))
   children <- ala_GET(url, path)
