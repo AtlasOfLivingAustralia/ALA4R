@@ -53,26 +53,6 @@ build_taxa_query <- function(ids) {
     paste0("(lsid:", paste(ids, collapse = " OR lsid:"), ")")
 }
 
-build_area_query <- function(area) {
-    # check wkt
-    if (is.character(area)) {
-        # maybe give a more helpful error message here?
-        validate_wkt(area)
-        # should this also take other area types?
-    } else {
-      tryCatch(area <- build_wkt(area), error = function(e) {
-        e$message <-
-          "Area must be either a wkt string or an sf spatial object."
-        stop(e)
-        })
-  }
-  area
-}
-
-
-
-
-
 # this is only relevant for ala_counts and ala_occurrences
 cached_query <- function(taxa_query, filter_query, area_query,
                          columns = NULL) {
