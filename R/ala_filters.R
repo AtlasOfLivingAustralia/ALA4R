@@ -43,7 +43,7 @@ ala_filters <- function(filters = NULL, data_quality_profile = NULL) {
     row
   }))
   
-  filter_df <- rbind(filter_rows, dq_filter_rows)
+  rbind(filter_rows, dq_filter_rows)
 }
 
 
