@@ -77,12 +77,9 @@ test_that("ala occurrences handles assertion columns and works with data.frame
 test_that("ala_occurrences handles wkt area inputs", {
   # invalid wkt
   skip_on_cran()
-  #invalid_wkt <- ala_geometry(
-  #  "POLYGON((145.71622941565508 -32.17848852726597,))")
   valid_wkt <- "POINT(147.08005201710293 -34.48290525355578)"
 
   wkt <- readLines("../testdata/long_act_wkt.txt")
-  #expect_error(ala_occurrences(area = wkt))
 
   geometry <- ala_geometry(readLines("../testdata/short_act_wkt.txt"))
   cols <- ala_columns("basic", extra = "state")
