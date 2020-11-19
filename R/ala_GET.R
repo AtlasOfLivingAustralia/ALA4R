@@ -1,7 +1,7 @@
 # Wrapper for getting data
 #
 # Try using crul
-ala_GET <- function(url, path, params = list()) {
+ala_GET <- function(url, path, params = list(), on_error = NULL) {
   cli <- HttpClient$new(
     url = url,
     headers = list(
@@ -19,14 +19,15 @@ ala_GET <- function(url, path, params = list()) {
   }
   
   #print(res$request$url)
+  if (!is.null(on_error)) {
+    if (res$status_code != 200) {
+      on_error(res$status_code)
+    }
+  }
   if (res$status_code == "504") {
     stop("Status code 504 returned for url",
          res$request$url)
-  } else if (res$status_code == "403") {
-    stop("Status code 403 was returned. This may be because the email you",
-         " provided is not registered with the ALA. 
-         Please check and try again. ")
-  }  else if (res$status_code != 200) {
+  } else if (res$status_code != 200) {
     stop("Status code ", res$status_code, "returned for url ",
          res$request$url)
   }

@@ -140,7 +140,7 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
 
 wait_for_download <- function(url, query) {
   status <- ala_GET(url, "ws/occurrences/offline/download",
-                    params = query)
+                    params = query, on_error = occ_error_handler)
 
   status_url <- parse_url(status$statusUrl)
   status <- ala_GET(url, path = status_url$path)
@@ -181,13 +181,20 @@ email_notify <- function() {
 }
 
 user_email <- function() {
-  email <- getOption("ALA4R_config")$ala_email
+  email <- getOption("ALA4R_config")$email
   if (email == "") {
-    email <- Sys.getenv("ala_email")
+    email <- Sys.getenv("email")
   }
   if (email == "") {
     stop("To download occurrence records you must provide a valid email ",
-         "address registered with the ALA using `Sys.setenv(ala_email = )`")
+         "address registered with the ALA using `ala_config(email = )`")
   }
   email
+}
+
+occ_error_handler <- function(code) {
+  if (code == 403) {
+    stop("Status code 403 was returned for this occurrence download request. This may be because
+  the email you provided is not registered with the ALA. Please check and try again. ")
+  }
 }

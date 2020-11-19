@@ -68,7 +68,7 @@ ala_config <- function(..., preserve = FALSE) {
     caching = FALSE,
     cache_directory = tempdir(),
     download_reason_id = 4,
-    ala_email = "",
+    email = "",
     send_email = FALSE,
     verbose = FALSE
   )
@@ -130,7 +130,7 @@ validate_option <- function(name, value) {
     if (!dir.exists(value)) {
       stop("Cache directory does not exist, please create it and try again.")
     }
-  } else if (name == "ala_email") {
+  } else if (name == "email") {
     if (!is.character(value)) {
       stop("Email must be a string")
     }
