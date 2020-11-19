@@ -23,14 +23,13 @@ ala_GET <- function(url, path, params = list(), on_error = NULL) {
     if (res$status_code != 200) {
       on_error(res$status_code)
     }
+  } else {
+    if (res$status_code != 200) {
+      stop("Status code ", res$status_code, "returned for url ",
+           res$request$url)
+    }
   }
-  if (res$status_code == "504") {
-    stop("Status code 504 returned for url",
-         res$request$url)
-  } else if (res$status_code != 200) {
-    stop("Status code ", res$status_code, "returned for url ",
-         res$request$url)
-  }
+
   data <- res$parse("UTF-8")
   return(fromJSON(data, flatten = TRUE))
 }
