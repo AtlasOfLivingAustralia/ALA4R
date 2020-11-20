@@ -1,26 +1,16 @@
 #' List valid options for a categorical field
 #'
-#' Use for checking filters for `ala_occurrences` and `ala_counts` are valid
+#' Used for checking filter values for `ala_occurrences` and `ala_counts` are
+#' valid
 #' @param field string: field to return the categories for. Use `ala_fields`
 #' to view valid fields.
 #' @param limit numeric: maximum number of categories to return. 20 by default.
-#' @return a dataframe of field name and category name (for now)
+#' @return a dataframe of field name and category name.
 #' @examples
 #' ala_categories("basis_of_record")
 #' ala_categories("state")
 #' @export ala_categories
 
-
-# this should return the term you need to search with?
-# which is not included in the facet results- perhaps something to ask about?
-# Note: facet search often seems to be slow- should use this as little as possible?
-# What is the max number of fields that should be returned? 50?
-# should this be cached?
-# what format should this return?
-# how to handle 504 errors
-# can we modify /occurrences/search/ to return the number of facet values? It
-# seems quicker or use /ws/occurrences/facets/download?
-# should this allow
 ala_categories <- function(field, limit = 20) {
   if (missing(field)) {
     stop("`ala_categories` requires a field to search for")
