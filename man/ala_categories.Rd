@@ -13,10 +13,11 @@ to view valid fields.}
 \item{limit}{numeric: maximum number of categories to return. 20 by default.}
 }
 \value{
-a dataframe of field name and category name (for now)
+a dataframe of field name and category name.
 }
 \description{
-Use for checking filters for `ala_occurrences` and `ala_counts` are valid
+Used for checking filter values for `ala_occurrences` and `ala_counts` are
+valid
 }
 \examples{
 ala_categories("basis_of_record")
