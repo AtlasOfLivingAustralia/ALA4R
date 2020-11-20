@@ -51,81 +51,7 @@ The ALA4R package must be loaded for each new R session:
 library(ALA4R)
 ```
 
-## Customizing
 
-Various aspects of the ALA4R package can be customized.
-
-### Caching
-ALA4R can cache most results to local files. This means that if the same code is run multiple times, the second and subsequent iterations will be faster. This will also reduce load on the ALA servers.
-
-By default, this caching is session-based, meaning that the local files are stored in a temporary directory that is automatically deleted when the R session is ended. This behaviour can be altered so that caching is permanent, by setting the caching directory to a non-temporary location. For example, under Windows, use something like:
-
-```{r eval=FALSE}
-ala_config(cache_directory="c:/mydata/ala_cache") ## use forward slashes, not \
-```
-
-or for Linux:
-
-```{r eval=FALSE}
-ala_config(cache_directory="~/mydata/ala_cache")
-```
-
-Note that this directory must exist (you need to create it yourself).
-
-
-All results will be stored in that cache directory and will be used from one session to the next. They won't be re-downloaded from the server unless the user specifically deletes those files or changes the caching setting to "refresh".
-
-If you change the cache_directory to a permanent location, you may wish to add something like this to your .Rprofile file, so that it happens automatically each time the ALA4R package is loaded:
-
-```{r eval=FALSE}
-setHook(packageEvent("ALA4R", "attach"), function(...)
-    ala_config(cache_directory=file.path("~", "mydata", "ala_cache")))
-```
-
-Caching can also be turned off entirely by:
-
-```{r eval=FALSE}
-ala_config(caching="off")
-```
-
-or set to "refresh", meaning that the cached results will re-downloaded from the ALA servers and the cache updated. (This will happen for as long as caching is set to "refresh" --- so you may wish to switch back to normal "on" caching behaviour once you have updated your cache with the data you are working on).
-
-```{r}
-Sys.setenv(ala_email = "ala4r@ala.org.au")
-```
-
-### User-agent string
-Each request to the ALA servers is accompanied by a "user-agent" string that identifies the software making the request. This is a standard behaviour used by web browsers as well. The user-agent identifies the user requests to the ALA, helping the ALA to adapt and enhance the services that it provides. By default, the ALA4R user-agent string is set to "ALA4R" plus the ALA4R version number (e.g. "ALA4R 1.5.2").
-
-*NO* personal identification information is sent. You can see all configuration settings, including the the user-agent string that is being used, with the command:
-
-```{r eval=FALSE}
-ala_config()
-```
-
-### Debugging
-If things aren't working as expected, more detail (particularly about web requests and caching behaviour) can be obtained by setting the `verbose` configuration option:
-
-```{r eval=FALSE}
-ala_config(verbose=TRUE)
-```
-
-### Setting the download reason
-ALA requires that you provide a reason when downloading occurrence data (via the ALA4R `occurrences()` function). You can provide this as a parameter directly to each call of `occurrences()`, or you can set it once per session using:
-
-```{r eval=FALSE}
-ala_config(download_reason_id=your_reason_id)
-```
-
-(See `ala_reasons()` for valid download reasons)
-
-
-### Other options
-If you make a request that returns an empty result set (e.g. an un-matched name), by default you will simply get an empty data structure returned to you without any special notification. If you would like to be warned about empty result sets, you can use:
-
-```{r eval=FALSE}
-ala_config(warn_on_empty=TRUE)
-```
 
 ## Example usage
 
@@ -141,18 +67,15 @@ library(dplyr)
 library(ggplot2)
 library(ozmaps)
 library(sf)
-library(ALA4R)
-library(knitr)
 ```
 
 ## Taxon information
 Retrieve information for a taxon or taxa. For each taxon, provide a rank, multiple ranks, or an ALA taxon id.
 
-The `taxon_concept_id` column can be used as the `taxon_id` parameter in other functions. 
+The output of `ala_taxa()` can be used as the `taxon_id` parameter in other functions. 
 ```{r}
 # A single taxa
-quoll <- ala_taxa("Dasyurus viverrinus")
-quoll
+ala_taxa("Dasyurus viverrinus")
 ```
 
 Optionally include record counts for a species, and child concepts of the supplied species
@@ -177,8 +100,8 @@ ala_taxa(term = id, term_type = "identifier")
 ```
 
 ## Occurrence data
-Download occurrence data for a taxon
-```{r, message=FALSE}
+Download occurrence data for a taxon. To download occurrence data you will need to specify your email in `ala_config()`. This email must be associated with an active ALA account.
+```{r}
 ala_config(email = "ala4r@ala.org.au")
 ```
 
@@ -217,7 +140,7 @@ head(filtered_occ)
 ```{r warning=FALSE, out.width="100%", fig.width=100, eval = FALSE}
 ggplot() + geom_sf(data = ozmap_country) +
   geom_point(filtered_occ, mapping = aes(x = decimalLongitude, y = decimalLatitude,
-                                         colour = species),size = .3)
+                                         colour = scientificName),size = .3)
 
 ```
 
@@ -247,12 +170,12 @@ ggplot() + geom_sf(data = simple_shp) +
 ```{r}
 # Get all layers relating to precipitation
 layers <- ala_layers()
-layers[grepl("precipitation", tolower(layers$description)),]$display_name
+layers[grepl("precipitation", tolower(layers$description)),]$name
 
 ```
 
 ### Fields and categories
-
+`ala_fields()` displays all the fields available for filtering and 
 
 ### Data quality profile
 By default, the data quality profile is set to the ALA general.
@@ -304,3 +227,70 @@ images <- ala_media(head(occ$recordID, n = 5), download_dir = 'data/',
 images %>% filter(recognisedLicence == "CC BY-NC 4.0")
 ```
 
+
+## Config
+
+Various aspects of the ALA4R package can be customized.
+
+### Caching
+ALA4R can cache most results to local files. This means that if the same code is run multiple times, the second and subsequent iterations will be faster. This will also reduce load on the ALA servers.
+
+By default, this caching is session-based, meaning that the local files are stored in a temporary directory that is automatically deleted when the R session is ended. This behaviour can be altered so that caching is permanent, by setting the caching directory to a non-temporary location. For example, under Windows, use something like:
+
+```{r eval=FALSE}
+ala_config(cache_directory="c:/mydata/ala_cache") ## use forward slashes, not \
+```
+
+or for Linux:
+
+```{r eval=FALSE}
+ala_config(cache_directory="~/mydata/ala_cache")
+```
+
+Note that this directory must exist (you need to create it yourself).
+
+
+All results will be stored in that cache directory and will be used from one session to the next. They won't be re-downloaded from the server unless the user specifically deletes those files or changes the caching setting to "refresh".
+
+If you change the cache_directory to a permanent location, you may wish to add something like this to your .Rprofile file, so that it happens automatically each time the ALA4R package is loaded:
+
+```{r eval=FALSE}
+setHook(packageEvent("ALA4R", "attach"), function(...)
+    ala_config(cache_directory=file.path("~", "mydata", "ala_cache")))
+```
+
+Caching can also be turned off entirely by:
+
+```{r eval=FALSE}
+ala_config(caching="off")
+```
+
+or set to "refresh", meaning that the cached results will re-downloaded from the ALA servers and the cache updated. (This will happen for as long as caching is set to "refresh" --- so you may wish to switch back to normal "on" caching behaviour once you have updated your cache with the data you are working on).
+
+```{r}
+Sys.setenv(ala_email = "ala4r@ala.org.au")
+```
+
+### Debugging
+If things aren't working as expected, more detail (particularly about web requests and caching behaviour) can be obtained by setting the `verbose` configuration option:
+
+```{r eval=FALSE}
+ala_config(verbose=TRUE)
+```
+
+### Setting the download reason
+ALA requires that you provide a reason when downloading occurrence data (via the ALA4R `occurrences()` function). You can provide this as a parameter directly to each call of `occurrences()`, or you can set it once per session using:
+
+```{r eval=FALSE}
+ala_config(download_reason_id=your_reason_id)
+```
+
+(See `ala_reasons()` for valid download reasons)
+
+
+### Other options
+If you make a request that returns an empty result set (e.g. an un-matched name), by default you will simply get an empty data structure returned to you without any special notification. If you would like to be warned about empty result sets, you can use:
+
+```{r eval=FALSE}
+ala_config(warn_on_empty=TRUE)
+```
