@@ -152,16 +152,24 @@ save_config <- function(profile_path, new_options) {
       collapse = ","),
     ")")
   
-  if (is.na(str_match(old_profile,
-                      "options\\(\\s*(.*?)\\s*\\)")[1])) {
-    new_profile <- options_to_write
-  } else {
-    new_profile <- str_replace(old_profile,
-                               "options\\(\\s*(.*?)\\s*\\)", options_to_write)
-  }
+  new_profile <- build_options(old_profile, options_to_write)
+ 
   con <- file(profile_path)
   writeLines(new_profile, con)
   close(con)
+}
+
+build_options <- function(old_profile, opts) {
+  # if two brackets
+  if (!is.na(str_match(old_profile, "options\\(\\s*(.*?)\\s*\\)\\)")[1])) {
+    return(str_replace(old_profile, "options\\(\\s*(.*?)\\s*\\)\\)", opts))
+  }
+  # one bracket
+  if (!is.na(str_match(old_profile, "options\\(\\s*(.*?)\\s*\\)")[1])) {
+    return(str_replace(old_profile, "options\\(\\s*(.*?)\\s*\\)", opts))
+  }
+  # assume no match
+  return(opts)
 }
 
 
