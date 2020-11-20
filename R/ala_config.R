@@ -73,7 +73,6 @@ ala_config <- function(..., preserve = FALSE) {
     verbose = FALSE
   )
   
-  current_options <- getOption(ala_option_name)
   if (length(user_options) == 0 && !is.null(current_options)) {
     return(current_options)
   }
@@ -107,14 +106,87 @@ ala_config <- function(..., preserve = FALSE) {
   
   if (preserve) {
     profile_path <- file.path(Sys.getenv("HOME"), ".Rprofile")
-    message("The variables set will be stored in ", profile_path)
-    #write_options 
+    if (current_options$verbose) {
+      message("The config will be stored in ", profile_path)
+    }
+    save_config(profile_path, current_options)
+    
   } else {
-    msg <- "These configuration options will only be saved for this session. 
+    if (current_options$verbose) {
+      msg <- "These configuration options will only be saved for this session. 
     Set `preserve = TRUE` to preserve them for future sessions."
-    # message("These configuration options will only be saved for this session.",
-    #        " Set `preserve = TRUE` to preserve them for future sessions.")
+    }
   }
+}
+
+save_config <- function(profile_path, new_options) {
+  if (!file.exists(profile_path)) {
+    message(".Rprofile file doesn't exist yet. It will be created at ",
+            profile_path)
+    file.create(profile_path)
+    existing_options <- list()
+  } else {
+    # find existing options in file
+    old_profile <- readLines(file.path(profile_path))
+    # try one bracket and two brackets
+    existing_options <- read_options(old_profile)
+  }
+  existing_options[["ALA4R_config"]] <- new_options
+  
+  options_to_write <- paste0(
+    "options(",paste(
+      sapply(
+        seq_len(length(existing_options)), function(x) {
+          opt <- existing_options[[x]]
+          opt_name <- names(existing_options)[[x]]
+          if (is.list(opt)) {
+            opts <- paste(sapply(seq_len(length(opt)), function(y) {
+              paste(names(opt)[[y]], quoted_options(opt[[y]]), sep = " = ",
+                    collapse = ", ")
+            }), collapse = ", ")
+            paste0(opt_name," = list(", opts, ")")
+          } else {
+            paste(opt_name, quoted_options(opt), sep = " = ", collapse = ",")
+          }
+        }),
+      collapse = ","),
+    ")")
+  
+  if (is.na(str_match(old_profile,
+                      "options\\(\\s*(.*?)\\s*\\)")[1])) {
+    new_profile <- options_to_write
+  } else {
+    new_profile <- str_replace(old_profile,
+                               "options\\(\\s*(.*?)\\s*\\)", options_to_write)
+  }
+  con <- file(profile_path)
+  writeLines(new_profile, con)
+  close(con)
+}
+
+
+# function to read existing options file
+# handles case when listed options already contains a nested list
+# and when it doesn't
+read_options <- function(profile) {
+  # try two brackets
+  opts <- str_match(profile, "options\\(\\s*(.*?)\\s*\\)\\)")[1]
+  if (is.na(opts)) {
+    # try one bracket
+    opts <- str_match(profile, "options\\(\\s*(.*?)\\s*\\)")[1]
+  }
+  # no options exist
+  if (is.na(opts)) {
+    return(list())
+  }
+  eval(parse(text = opts))
+}
+
+
+quoted_options <- function(opts) {
+  sapply(opts, function(x) {
+    ifelse(is.logical(x), x, paste0("\"", x, "\""))
+  })
 }
 
 validate_option <- function(name, value) {

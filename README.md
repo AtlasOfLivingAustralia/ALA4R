@@ -32,10 +32,7 @@ branch](https://github.com/AtlasOfLivingAustralia/ALA4R/tree/dev). If
 you have any questions or suggestions, please [contact
 us](mailto:support@ala.org.au).
 
-The use-examples presented at the [2014 ALA Science
-Symposium](https://www.ala.org.au/blogs-news/2014-atlas-of-living-australia-science-symposium/)
-are available in the package vignette, via (in R): `vignette("ALA4R")`,
-or [browse it
+View the package vignette using `vignette("ALA4R")`, or [browse it
 online](https://atlasoflivingaustralia.github.io/ALA4R/articles/ALA4R.html).
 
 ## Citing ALA4R
