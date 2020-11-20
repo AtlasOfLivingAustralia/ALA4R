@@ -2,6 +2,7 @@
 
 export(ala_categories)
 export(ala_checklist)
+export(ala_citation)
 export(ala_columns)
 export(ala_config)
 export(ala_counts)
