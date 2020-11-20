@@ -98,6 +98,9 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
   query$fields <- build_columns(columns[columns$type != "assertions", ])
   query$qa <- build_columns(assertion_cols)
 
+  if (mint_doi) {
+    query$mintDoi <- "true"
+  }
   query$mintDoi <- mint_doi
   query$emailNotify <- email_notify()
 
