@@ -21,6 +21,7 @@ test_that("ala config checks inputs", {
 
 test_that("ala config writes to file", {
   skip_on_cran()
+  expect_message(ala_config(verbose = TRUE, preserve = TRUE))
   expect_silent(ala_config(verbose = FALSE, caching = FALSE,
                            preserve = TRUE))
   expect_false(ala_config()$caching)
