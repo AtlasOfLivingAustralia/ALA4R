@@ -18,11 +18,3 @@ test_that("ala config checks inputs", {
   expect_silent(ala_config(download_reason_id = "Testing"))
   expect_error(ala_config(download_reason_id = "tsting"))
 })
-
-test_that("ala config writes to file", {
-  skip_on_cran()
-  expect_message(ala_config(verbose = TRUE, preserve = TRUE))
-  expect_silent(ala_config(verbose = FALSE, caching = FALSE,
-                           preserve = TRUE))
-  expect_false(ala_config()$caching)
-})
