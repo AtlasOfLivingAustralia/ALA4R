@@ -79,7 +79,9 @@ ala_config <- function(..., preserve = FALSE) {
   if (is.null(current_options)) {
     ## ALA4R options have not been set yet, so set them to the defaults
     current_options <- default_options
-    dir.create(current_options$cache_directory)
+    if (!dir.exists(current_options$cache_directory)) {
+      dir.create(current_options$cache_directory)
+    }
     ## set the global option
     temp <- list(current_options)
     names(temp) <- ala_option_name
@@ -126,6 +128,7 @@ save_config <- function(profile_path, new_options) {
             profile_path)
     file.create(profile_path)
     existing_options <- list()
+    old_profile <- ""
   } else {
     # find existing options in file
     old_profile <- readLines(file.path(profile_path))
