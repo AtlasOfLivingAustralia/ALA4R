@@ -1,10 +1,10 @@
 ---
-title: "Introduction to ALA4R v2"
+title: "ALA4R"
 author: "Matilda Stevenson"
 date: '`r Sys.Date()`'
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to ALA4R v2}
+  %\VignetteIndexEntry{ALA4R}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,9 +16,9 @@ library(knitr)
 options(width=120)
 ```
 
-The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from https://www.ala.org.au/. Here we provide a subset of the tools to be directly used within R.
+ALA4R enables the R community to directly access data hosted by the Atlas of Living Australia (ALA).
 
-ALA4R enables the R community to directly access data and resources hosted by the ALA. 
+The ALA aggregates Australian biodiversity data from a range of sources, and makes the data freely available for scientists, policy makers, industry and the general public.
 
 ## Installing ALA4R
 
@@ -52,7 +52,6 @@ library(ALA4R)
 ```
 
 
-
 ## Example usage
 
 First, check that we have some additional packages that we'll use in the examples, and install them if necessary.
@@ -70,7 +69,7 @@ library(sf)
 ```
 
 ## Taxon information
-Retrieve information for a taxon or taxa. For each taxon, provide a rank, multiple ranks, or an ALA taxon id.
+Retrieve information for a taxon or taxa. For each taxon, provide a scientific name at one or more ranks, or an ALA taxon id.
 
 The output of `ala_taxa()` can be used as the `taxon_id` parameter in other functions. 
 ```{r}
@@ -78,7 +77,7 @@ The output of `ala_taxa()` can be used as the `taxon_id` parameter in other func
 ala_taxa("Dasyurus viverrinus")
 ```
 
-Optionally include record counts for a species, and child concepts of the supplied species
+`ala_taxa` can optionally include record counts for a taxon, and the child concepts of the supplied taxon.
 ```{r}
 banksia <- ala_taxa(list(genus = "Banksia"), return_children = TRUE, include_counts = TRUE)
 
@@ -89,11 +88,10 @@ top5_banksia <- banksia %>% filter(rank == "species") %>%
   head(n = 5)
 
 top5_banksia
-
 ```
 
 
-Lookup a taxon id
+Use `ala_taxa` to lookup a taxon id
 ```{r}
 id <- "urn:lsid:biodiversity.org.au:afd.taxon:d315deea-822c-4f2c-b439-da33d6af5fd6"
 ala_taxa(term = id, term_type = "identifier")
@@ -101,23 +99,24 @@ ala_taxa(term = id, term_type = "identifier")
 
 ## Occurrence data
 Download occurrence data for a taxon. To download occurrence data you will need to specify your email in `ala_config()`. This email must be associated with an active ALA account.
+To save your email for future sessions, set `preserve = TRUE`
 ```{r}
-ala_config(email = "ala4r@ala.org.au")
-```
-
-```{r eval = FALSE}
-occ <- ala_occurrences(taxon_id = quoll)
+ala_config(email = "ala4r@ala.org.au", preserve = TRUE)
 ```
 
 ```{r include = FALSE}
-occ <- read.csv("dasyurus_viverrinus.csv")
+occ <- read.csv("banksia.csv")
+```
+
+Download occurrence records for 5 Banksia species
+```{r eval = FALSE}
+occ <- ala_occurrences(taxon_id = top5_banksia)
 ```
 
 ```{r}
 head(occ)
 ```
 
-Plot occurrence data using ggplot
 
 ```{r eval = FALSE}
 # build filters and columns
@@ -127,16 +126,13 @@ occ <- ala_occurrences(taxon_id = top5_banksia,
                        columns = cols, filters = filters)
 ```
 
-```{r include = FALSE}
-occ <- read.csv("banksia.csv")
-```
 
 ```{r}
 filtered_occ <- occ %>% filter(country == "Australia")
 head(filtered_occ)
 ```
 
-
+Plot occurrence data using `ggplot`
 ```{r warning=FALSE, out.width="100%", fig.width=100, eval = FALSE}
 ggplot() + geom_sf(data = ozmap_country) +
   geom_point(filtered_occ, mapping = aes(x = decimalLongitude, y = decimalLatitude,
@@ -196,22 +192,6 @@ ala_counts()
 ala_counts(breakdown = "kingdom")
 ```
 
-## Species checklists
-Checklists are lists of species in the ALA matching a set of filters Run `ala_checklist()` with no arguments to retrieve a list
-of all species in the ALA. 
-```{r message=FALSE}
-# Varanus species in NT and NSW
-id <- ala_taxa("Varanus")
-nt_sp <- ala_checklist(id, filters = ala_filters(list(state = 'Northern Territory'))) %>%
-  arrange(species_name) %>% pull(species_name)
-nsw_sp <- ala_checklist(id, filters = ala_filters(list(state = 'New South Wales'))) %>%
-  arrange(species_name) %>% pull(species_name)
-
-# Species found in both states
-intersect(nsw_sp, nt_sp)
-```
-
-
 
 ## Media downloads
 ```{r warning=FALSE, message=FALSE, eval = FALSE}
@@ -238,7 +218,7 @@ ALA4R can cache most results to local files. This means that if the same code is
 By default, this caching is session-based, meaning that the local files are stored in a temporary directory that is automatically deleted when the R session is ended. This behaviour can be altered so that caching is permanent, by setting the caching directory to a non-temporary location. For example, under Windows, use something like:
 
 ```{r eval=FALSE}
-ala_config(cache_directory="c:/mydata/ala_cache") ## use forward slashes, not \
+ala_config(cache_directory="c:/mydata/ala_cache")
 ```
 
 or for Linux:
@@ -249,27 +229,18 @@ ala_config(cache_directory="~/mydata/ala_cache")
 
 Note that this directory must exist (you need to create it yourself).
 
-
 All results will be stored in that cache directory and will be used from one session to the next. They won't be re-downloaded from the server unless the user specifically deletes those files or changes the caching setting to "refresh".
 
 If you change the cache_directory to a permanent location, you may wish to add something like this to your .Rprofile file, so that it happens automatically each time the ALA4R package is loaded:
 
-```{r eval=FALSE}
-setHook(packageEvent("ALA4R", "attach"), function(...)
-    ala_config(cache_directory=file.path("~", "mydata", "ala_cache")))
-```
-
 Caching can also be turned off entirely by:
 
 ```{r eval=FALSE}
-ala_config(caching="off")
+ala_config(caching=FALSE)
 ```
 
 or set to "refresh", meaning that the cached results will re-downloaded from the ALA servers and the cache updated. (This will happen for as long as caching is set to "refresh" --- so you may wish to switch back to normal "on" caching behaviour once you have updated your cache with the data you are working on).
 
-```{r}
-Sys.setenv(ala_email = "ala4r@ala.org.au")
-```
 
 ### Debugging
 If things aren't working as expected, more detail (particularly about web requests and caching behaviour) can be obtained by setting the `verbose` configuration option:
@@ -279,18 +250,8 @@ ala_config(verbose=TRUE)
 ```
 
 ### Setting the download reason
-ALA requires that you provide a reason when downloading occurrence data (via the ALA4R `occurrences()` function). You can provide this as a parameter directly to each call of `occurrences()`, or you can set it once per session using:
+ALA requires that you provide a reason when downloading occurrence data (via the ALA4R `ala_occurrences()` function). The reason is set as "scientific research" by default, but you can change this using `ala_config`. See `ala_reasons()` for valid download reasons.
 
 ```{r eval=FALSE}
 ala_config(download_reason_id=your_reason_id)
-```
-
-(See `ala_reasons()` for valid download reasons)
-
-
-### Other options
-If you make a request that returns an empty result set (e.g. an un-matched name), by default you will simply get an empty data structure returned to you without any special notification. If you would like to be warned about empty result sets, you can use:
-
-```{r eval=FALSE}
-ala_config(warn_on_empty=TRUE)
 ```

@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Introduction to ALA4R v2 • ALA4R</title>
+<title>ALA4R • ALA4R</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to ALA4R v2">
+<script src="../pkgdown.js"></script><meta property="og:title" content="ALA4R">
 <meta property="og:description" content="ALA4R">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -74,10 +74,10 @@
 <script src="ALA4R_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Introduction to ALA4R v2</h1>
+      <h1 data-toc-skip>ALA4R</h1>
                         <h4 class="author">Matilda Stevenson</h4>
             
-            <h4 class="date">2020-11-20</h4>
+            <h4 class="date">2020-11-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/vignettes/ALA4R.Rmd"><code>vignettes/ALA4R.Rmd</code></a></small>
       <div class="hidden name"><code>ALA4R.Rmd</code></div>
@@ -89,8 +89,8 @@
 <div id="ala4r" class="section level1">
 <h1 class="hasAnchor">
 <a href="#ala4r" class="anchor"></a>ALA4R</h1>
-<p>The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from <a href="https://www.ala.org.au/" class="uri">https://www.ala.org.au/</a>. Here we provide a subset of the tools to be directly used within R.</p>
-<p>ALA4R enables the R community to directly access data and resources hosted by the ALA.</p>
+<p>ALA4R enables the R community to directly access data hosted by the Atlas of Living Australia (ALA).</p>
+<p>The ALA aggregates Australian biodiversity data from a range of sources, and makes the data freely availabel for scientists, policy makers, industry and the general public.</p>
 <div id="installing-ala4r" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installing-ala4r" class="anchor"></a>Installing ALA4R</h2>
@@ -131,7 +131,7 @@
 <div id="taxon-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#taxon-information" class="anchor"></a>Taxon information</h2>
-<p>Retrieve information for a taxon or taxa. For each taxon, provide a rank, multiple ranks, or an ALA taxon id.</p>
+<p>Retrieve information for a taxon or taxa. For each taxon, provide a scientific name at one or more ranks, or an ALA taxon id.</p>
 <p>The output of <code><a href="../reference/ala_taxa.html">ala_taxa()</a></code> can be used as the <code>taxon_id</code> parameter in other functions.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># A single taxa</span>
@@ -142,7 +142,7 @@
 ## 1 urn:lsid:biodiversity.org.au:afd.taxon:52149285-a12a-4085-a285-b41af5ba3ce3 species exactMatch Animalia Chordata
 ##      class          order     family    genus             species  issues
 ## 1 Mammalia Dasyuromorphia Dasyuridae Dasyurus Dasyurus viverrinus noIssue</code></pre>
-<p>Optionally include record counts for a species, and child concepts of the supplied species</p>
+<p><code>ala_taxa</code> can optionally include record counts for a taxon, and the child concepts of the supplied taxon.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">banksia</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ala_taxa.html">ala_taxa</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>genus <span class="op">=</span> <span class="st">"Banksia"</span><span class="op">)</span>, return_children <span class="op">=</span> <span class="cn">TRUE</span>, include_counts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
@@ -154,12 +154,12 @@
 
 <span class="va">top5_banksia</span></code></pre></div>
 <pre><code>##         scientific_name                                   taxon_concept_id count
-## 1:    Banksia marginata   https://id.biodiversity.org.au/node/apni/2912814 27329
-## 2:    Banksia spinulosa   https://id.biodiversity.org.au/node/apni/7931274 13572
-## 3:      Banksia serrata https://id.biodiversity.org.au/taxon/apni/51293610 11189
-## 4: Banksia integrifolia   https://id.biodiversity.org.au/node/apni/2892579 10305
-## 5:   Banksia ericifolia https://id.biodiversity.org.au/taxon/apni/51299883  7281</code></pre>
-<p>Lookup a taxon id</p>
+## 1:    Banksia marginata   https://id.biodiversity.org.au/node/apni/2912814 27332
+## 2:    Banksia spinulosa   https://id.biodiversity.org.au/node/apni/7931274 13574
+## 3:      Banksia serrata https://id.biodiversity.org.au/taxon/apni/51293610 11192
+## 4: Banksia integrifolia   https://id.biodiversity.org.au/node/apni/2892579 10306
+## 5:   Banksia ericifolia https://id.biodiversity.org.au/taxon/apni/51299883  7280</code></pre>
+<p>Use <code>ala_taxa</code> to lookup a taxon id</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">id</span> <span class="op">&lt;-</span> <span class="st">"urn:lsid:biodiversity.org.au:afd.taxon:d315deea-822c-4f2c-b439-da33d6af5fd6"</span>
 <span class="fu"><a href="../reference/ala_taxa.html">ala_taxa</a></span><span class="op">(</span>term <span class="op">=</span> <span class="va">id</span>, term_type <span class="op">=</span> <span class="st">"identifier"</span><span class="op">)</span></code></pre></div>
@@ -173,35 +173,35 @@
 <div id="occurrence-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#occurrence-data" class="anchor"></a>Occurrence data</h2>
-<p>Download occurrence data for a taxon. To download occurrence data you will need to specify your email in <code><a href="../reference/ala_config.html">ala_config()</a></code>. This email must be associated with an active ALA account.</p>
+<p>Download occurrence data for a taxon. To download occurrence data you will need to specify your email in <code><a href="../reference/ala_config.html">ala_config()</a></code>. This email must be associated with an active ALA account. To save your email for future sessions, set <code>preserve = TRUE</code></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/ala_config.html">ala_config</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"ala4r@ala.org.au"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/ala_config.html">ala_config</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"ala4r@ala.org.au"</span>, preserve <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p>Download occurrence records for 5 Banksia species</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">occ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ala_occurrences.html">ala_occurrences</a></span><span class="op">(</span>taxon_id <span class="op">=</span> <span class="va">quoll</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">occ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ala_occurrences.html">ala_occurrences</a></span><span class="op">(</span>taxon_id <span class="op">=</span> <span class="va">top5_banksia</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">occ</span><span class="op">)</span></code></pre></div>
-<pre><code>##   X decimalLatitude decimalLongitude  eventDate      scientificName
-## 1 1       -33.86600          151.266            Dasyurus viverrinus
-## 2 2       -33.83300          151.250            Dasyurus viverrinus
-## 3 3              NA               NA            Dasyurus viverrinus
-## 4 4              NA               NA            Dasyurus viverrinus
-## 5 5       -41.16666          147.500            Dasyurus viverrinus
-## 6 6       -34.33330          139.000 1880-01-01 Dasyurus viverrinus
-##                                                                taxonConceptID                             recordID
-## 1 urn:lsid:biodiversity.org.au:afd.taxon:52149285-a12a-4085-a285-b41af5ba3ce3 ff615c89-439e-4ef4-8554-75b33266e182
-## 2 urn:lsid:biodiversity.org.au:afd.taxon:52149285-a12a-4085-a285-b41af5ba3ce3 fe1204e0-d3ad-4051-869d-7a05e1edcdfa
-## 3 urn:lsid:biodiversity.org.au:afd.taxon:52149285-a12a-4085-a285-b41af5ba3ce3 fda8beeb-90d5-4738-a5e5-7111fd1f7b37
-## 4 urn:lsid:biodiversity.org.au:afd.taxon:52149285-a12a-4085-a285-b41af5ba3ce3 fd8b3b53-0aad-48cc-8e51-78980f72f007
-## 5 urn:lsid:biodiversity.org.au:afd.taxon:52149285-a12a-4085-a285-b41af5ba3ce3 fd3f5c13-9607-4365-b319-d051599c334d
-## 6 urn:lsid:biodiversity.org.au:afd.taxon:52149285-a12a-4085-a285-b41af5ba3ce3 fcc53fdc-12e0-4e95-8dfc-7b1dcd76b711
-##                                                data_resource
-## 1                       Australian Museum provider for OZCAM
-## 2                       Australian Museum provider for OZCAM
-## 3                       Australian Museum provider for OZCAM
-## 4 Australian National Wildlife Collection provider for OZCAM
-## 5       Queen Victoria Museum Art Gallery provider for OZCAM
-## 6       South Australian Museum Australia provider for OZCAM</code></pre>
-<p>Plot occurrence data using ggplot</p>
+<pre><code>##   X decimalLatitude decimalLongitude  eventDate                        scientificName
+## 1 1       -37.68690         149.0141 2011-01-10                     Banksia marginata
+## 2 2       -34.02774         150.9902 2011-01-01      Banksia spinulosa var. spinulosa
+## 3 3       -30.86286         152.2726 2011-01-18                     Banksia marginata
+## 4 4       -29.03396         153.4487 2019-01-20                       Banksia serrata
+## 5 5       -31.40016         151.8790 2016-01-09 Banksia integrifolia subsp. monticola
+## 6 6       -43.37276         146.1351 2000-01-31                     Banksia marginata
+##                                       taxonConceptID                             recordID
+## 1   https://id.biodiversity.org.au/node/apni/2912814 fff78000-ad2e-441e-8280-411eaced8223
+## 2   https://id.biodiversity.org.au/node/apni/2913042 ffccf591-918c-42ad-81d5-e4433e2303b3
+## 3   https://id.biodiversity.org.au/node/apni/2912814 ffc33869-0258-415e-9994-211216aac321
+## 4 https://id.biodiversity.org.au/taxon/apni/51293610 ffacc5bd-d0d1-422e-8d29-9878a783b891
+## 5   https://id.biodiversity.org.au/node/apni/2918640 ff974b09-62ec-4dda-8736-e1bff9f4edbc
+## 6   https://id.biodiversity.org.au/node/apni/2912814 ff93c77e-223a-48fb-8333-c49380859fe6
+##                       data_resource   country
+## 1      Victorian Biodiversity Atlas Australia
+## 2         OEH Atlas of NSW Wildlife Australia
+## 3         OEH Atlas of NSW Wildlife Australia
+## 4 ALA species sightings and OzAtlas Australia
+## 5         OEH Atlas of NSW Wildlife Australia
+## 6    Tasmanian Natural Values Atlas Australia</code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># build filters and columns</span>
 <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ala_columns.html">ala_columns</a></span><span class="op">(</span>group <span class="op">=</span> <span class="st">"basic"</span>, extra <span class="op">=</span> <span class="st">"country"</span><span class="op">)</span>
@@ -232,6 +232,7 @@
 ## 4 ALA species sightings and OzAtlas Australia
 ## 5         OEH Atlas of NSW Wildlife Australia
 ## 6    Tasmanian Natural Values Atlas Australia</code></pre>
+<p>Plot occurrence data using <code>ggplot</code></p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ozmap_country</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="va">filtered_occ</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">decimalLongitude</span>, y <span class="op">=</span> <span class="va">decimalLatitude</span>,
@@ -250,7 +251,7 @@
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">simple_shp</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">occ</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">decimalLongitude</span>, y <span class="op">=</span> <span class="va">decimalLatitude</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="ALA4R_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
+<p><img src="ALA4R_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <div id="environmental-layers" class="section level3">
 <h3 class="hasAnchor">
 <a href="#environmental-layers" class="anchor"></a>Environmental layers</h3>
@@ -305,43 +306,26 @@
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Total number of records in the ALA (with no data quality filters)</span>
 <span class="fu"><a href="../reference/ala_counts.html">ala_counts</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 91363709</code></pre>
+<pre><code>## [1] 91375535</code></pre>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Total number of records, broken down by kindgom</span>
 <span class="fu"><a href="../reference/ala_counts.html">ala_counts</a></span><span class="op">(</span>breakdown <span class="op">=</span> <span class="st">"kingdom"</span><span class="op">)</span></code></pre></div>
 <pre><code>##         name    count
-## 1   Animalia 66272792
-## 2    Plantae 20779832
-## 3      Fungi  1978048
-## 4  Chromista  1036445
-## 5   Protista    64585
-## 6   Bacteria    58932
-## 7   Protozoa    20791
+## 1   Animalia 66279879
+## 2    Plantae 20783619
+## 3      Fungi  1978267
+## 4  Chromista  1036472
+## 5   Protista    64587
+## 6   Bacteria    58933
+## 7   Protozoa    20798
 ## 8    Archaea     1103
 ## 9  Eukaryota      735
 ## 10     Virus      265</code></pre>
 </div>
-<div id="species-checklists" class="section level2">
-<h2 class="hasAnchor">
-<a href="#species-checklists" class="anchor"></a>Species checklists</h2>
-<p>Checklists are lists of species in the ALA matching a set of filters Run <code><a href="../reference/ala_checklist.html">ala_checklist()</a></code> with no arguments to retrieve a list of all species in the ALA.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Varanus species in NT and NSW</span>
-<span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ala_taxa.html">ala_taxa</a></span><span class="op">(</span><span class="st">"Varanus"</span><span class="op">)</span>
-<span class="va">nt_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ala_checklist.html">ala_checklist</a></span><span class="op">(</span><span class="va">id</span>, filters <span class="op">=</span> <span class="fu"><a href="../reference/ala_filters.html">ala_filters</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">'Northern Territory'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">species_name</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">species_name</span><span class="op">)</span>
-<span class="va">nsw_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ala_checklist.html">ala_checklist</a></span><span class="op">(</span><span class="va">id</span>, filters <span class="op">=</span> <span class="fu"><a href="../reference/ala_filters.html">ala_filters</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">'New South Wales'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">species_name</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">species_name</span><span class="op">)</span>
-
-<span class="co"># Species found in both states</span>
-<span class="fu"><a href="https://generics.r-lib.org/reference/setops.html">intersect</a></span><span class="op">(</span><span class="va">nsw_sp</span>, <span class="va">nt_sp</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "Varanus acanthurus" "Varanus gouldii"    "Varanus panoptes"   "Varanus storri"     "Varanus tristis"   
-## [6] "Varanus varius"</code></pre>
-</div>
 <div id="media-downloads" class="section level2">
 <h2 class="hasAnchor">
 <a href="#media-downloads" class="anchor"></a>Media downloads</h2>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Search for occurrences with images</span>
 <span class="va">filters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ala_filters.html">ala_filters</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"multimedia"</span> <span class="op">=</span> <span class="st">"Image"</span>,
                                       basis_of_record <span class="op">=</span> <span class="st">"HumanObservation"</span><span class="op">)</span><span class="op">)</span>
@@ -362,36 +346,36 @@
 <a href="#caching" class="anchor"></a>Caching</h3>
 <p>ALA4R can cache most results to local files. This means that if the same code is run multiple times, the second and subsequent iterations will be faster. This will also reduce load on the ALA servers.</p>
 <p>By default, this caching is session-based, meaning that the local files are stored in a temporary directory that is automatically deleted when the R session is ended. This behaviour can be altered so that caching is permanent, by setting the caching directory to a non-temporary location. For example, under Windows, use something like:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/ala_config.html">ala_config</a></span><span class="op">(</span>cache_directory<span class="op">=</span><span class="st">"c:/mydata/ala_cache"</span><span class="op">)</span> <span class="co">## use forward slashes, not \</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/ala_config.html">ala_config</a></span><span class="op">(</span>cache_directory<span class="op">=</span><span class="st">"c:/mydata/ala_cache"</span><span class="op">)</span></code></pre></div>
 <p>or for Linux:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ala_config.html">ala_config</a></span><span class="op">(</span>cache_directory<span class="op">=</span><span class="st">"~/mydata/ala_cache"</span><span class="op">)</span></code></pre></div>
 <p>Note that this directory must exist (you need to create it yourself).</p>
 <p>All results will be stored in that cache directory and will be used from one session to the next. They won’t be re-downloaded from the server unless the user specifically deletes those files or changes the caching setting to “refresh”.</p>
 <p>If you change the cache_directory to a permanent location, you may wish to add something like this to your .Rprofile file, so that it happens automatically each time the ALA4R package is loaded:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/userhooks.html">setHook</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/userhooks.html">packageEvent</a></span><span class="op">(</span><span class="st">"ALA4R"</span>, <span class="st">"attach"</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
     <span class="fu"><a href="../reference/ala_config.html">ala_config</a></span><span class="op">(</span>cache_directory<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"~"</span>, <span class="st">"mydata"</span>, <span class="st">"ala_cache"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Caching can also be turned off entirely by:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ala_config.html">ala_config</a></span><span class="op">(</span>caching<span class="op">=</span><span class="st">"off"</span><span class="op">)</span></code></pre></div>
 <p>or set to “refresh”, meaning that the cached results will re-downloaded from the ALA servers and the cache updated. (This will happen for as long as caching is set to “refresh” — so you may wish to switch back to normal “on” caching behaviour once you have updated your cache with the data you are working on).</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span><span class="op">(</span>ala_email <span class="op">=</span> <span class="st">"ala4r@ala.org.au"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="debugging" class="section level3">
 <h3 class="hasAnchor">
 <a href="#debugging" class="anchor"></a>Debugging</h3>
 <p>If things aren’t working as expected, more detail (particularly about web requests and caching behaviour) can be obtained by setting the <code>verbose</code> configuration option:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ala_config.html">ala_config</a></span><span class="op">(</span>verbose<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="setting-the-download-reason" class="section level3">
 <h3 class="hasAnchor">
 <a href="#setting-the-download-reason" class="anchor"></a>Setting the download reason</h3>
 <p>ALA requires that you provide a reason when downloading occurrence data (via the ALA4R <code>occurrences()</code> function). You can provide this as a parameter directly to each call of <code>occurrences()</code>, or you can set it once per session using:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ala_config.html">ala_config</a></span><span class="op">(</span>download_reason_id<span class="op">=</span><span class="va">your_reason_id</span><span class="op">)</span></code></pre></div>
 <p>(See <code><a href="../reference/ala_config.html">ala_reasons()</a></code> for valid download reasons)</p>
 </div>
@@ -399,7 +383,7 @@
 <h3 class="hasAnchor">
 <a href="#other-options" class="anchor"></a>Other options</h3>
 <p>If you make a request that returns an empty result set (e.g. an un-matched name), by default you will simply get an empty data structure returned to you without any special notification. If you would like to be warned about empty result sets, you can use:</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ala_config.html">ala_config</a></span><span class="op">(</span>warn_on_empty<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
