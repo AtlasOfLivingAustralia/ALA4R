@@ -79,6 +79,7 @@ ala_config <- function(..., preserve = FALSE) {
   if (is.null(current_options)) {
     ## ALA4R options have not been set yet, so set them to the defaults
     current_options <- default_options
+    dir.create(current_options$cache_directory)
     ## set the global option
     temp <- list(current_options)
     names(temp) <- ala_option_name

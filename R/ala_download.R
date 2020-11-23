@@ -9,6 +9,16 @@ ala_download <- function(url, path, params = list(), ext = ".csv",
       useragent = user_agent_string()
     )
   )
+
+  # check cache file exists
+  if (!is.null(cache_file) && !dir.exists(dirname(cache_file))) {
+    stop(dirname(cache_file), " does not exist. Please create it and try again.")
+  }
+  
+  # create a temporary file
+  if (is.null(cache_file)) {
+    cache_file <- tempfile(fileext = ext)
+  }
   
   # workaround for fq troubles
   if (length(params$fq) > 1) {
