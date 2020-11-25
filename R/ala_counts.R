@@ -88,9 +88,9 @@ ala_counts <- function(taxon_id, filters, geometry, breakdown,
     }
     # parse out field value
     counts <- resp$fieldResult[[1]]
-    value <- sapply(counts$fq, function(z) {
+    value <- vapply(counts$fq, function(z) {
       sub('.*?"([^"]+)"', "\\1", z)
-    }, USE.NAMES = FALSE)
+    }, USE.NAMES = FALSE, FUN.VALUE = character(1))
 
     counts <- data.frame(
       name = value,

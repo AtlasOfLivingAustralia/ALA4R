@@ -29,9 +29,9 @@ ala_categories <- function(field, limit = 20) {
     warning("This field has ", resp$count, " possible values. Only the first ",
     limit, " will be returned. Change `limit` to return more values.")
   }
-  category <- sapply(resp$fieldResult[[1]]$fq, function(n) {
+  category <- vapply(resp$fieldResult[[1]]$fq, function(n) {
     extract_category_value(n)
-  }, USE.NAMES = FALSE)
+  }, USE.NAMES = FALSE, FUN.VALUE = character(1))
   cbind(field = field, as.data.frame(category))
 }
 

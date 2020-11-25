@@ -1,5 +1,6 @@
 #' Build dataframe of columns to keep
-#' @param group string: name of column group to include (either \code{'basic'} or \code{'event'})
+#' @param group string: name of column group to include (either \code{'basic'}
+#' or \code{'event'})
 #' @param extra string: additional column names to return
 #' @details
 #' Calling the argument \code{group = 'basic'} returns the following columns:
@@ -49,11 +50,14 @@ preset_cols <- function(type) {
   valid_groups <- c("basic", "event")
   # use ALA version of taxon name to avoid ambiguity (2 fields map to dwc name)
   cols <- switch(type,
-                 "basic" = c("decimalLatitude", "decimalLongitude", "eventDate",
-                             "taxon_name", "taxonConceptID", "recordID", "data_resource"),
-                 "event" = c("eventRemarks", "eventTime", "eventID", "eventDate",
-                             "samplingEffort", "samplingProtocol"),
-                 stop("\"", type, "\" is not a valid column group. Valid groups are: ",
+                 "basic" = c("decimalLatitude", "decimalLongitude",
+                             "eventDate", "taxon_name", "taxonConceptID",
+                             "recordID", "data_resource"),
+                 "event" = c("eventRemarks", "eventTime", "eventID",
+                             "eventDate", "samplingEffort",
+                             "samplingProtocol"),
+                 stop("\"", type,
+                      "\" is not a valid column group. Valid groups are: ",
                       paste(valid_groups, collapse = ", "))
   )
   cols

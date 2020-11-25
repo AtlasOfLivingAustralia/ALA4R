@@ -57,13 +57,13 @@ ala_fields <- function(class = "all") {
 dwc_to_ala <- function(dwc_names) {
   fields <- all_fields()
   # get relevant cols
-  sapply(dwc_names, function(n) {
+  vapply(dwc_names, function(n) {
     if (n %in% fields$dwcTerm) {
       return(fields[fields$dwcTerm == n & !is.na(fields$dwcTerm), ]$name)
     } else {
       return(n)
     }
-  }, USE.NAMES = FALSE)
+  }, USE.NAMES = FALSE, FUN.VALUE = character(1))
 }
 
 all_fields <- function() {

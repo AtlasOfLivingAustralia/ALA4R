@@ -22,13 +22,7 @@ The ALA aggregates Australian biodiversity data from a range of sources, and mak
 
 ## Installing ALA4R
 
-Stable version from CRAN:
-
-```{r eval=FALSE}
-install.packages("ALA4R")
-```
-
-Or the development version from GitHub:
+Development version from GitHub:
 
 ```{r eval=FALSE}
 install.packages("devtools")
