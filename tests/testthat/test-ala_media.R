@@ -31,8 +31,9 @@ test_that("ala media handles multiple image ids", {
   skip_on_cran()
   media_dir <- "test_media"
   dir.create(media_dir)
-  media_data <- ala_media(identifier = c("24fbddc4-a95e-4e97-b588-e76321c9cc73",
-                                         "61237df1-1939-44d3-b63a-c09213f9a261"),
+  media_data <- ala_media(
+    identifier = c("24fbddc4-a95e-4e97-b588-e76321c9cc73",
+                   "61237df1-1939-44d3-b63a-c09213f9a261"),
                           identifier_type = "media", download_dir = media_dir)
   file_count <- length(list.files(media_dir))
   expect_equal(file_count, nrow(media_data))
@@ -56,9 +57,11 @@ test_that("ala media handles a multiple occurrence ids", {
   skip_on_cran()
   media_dir <- "test_media"
   dir.create(media_dir)
-  media_data <- ala_media(identifier = c("80b1d0d6-2ca5-475a-a014-302f05d51839",
-                                         "0053e37a-4bf7-4f6d-be2d-e66645b668c6"),
-                          identifier_type = "occurrence", download_dir = media_dir)
+  media_data <- ala_media(
+    dentifier = c("80b1d0d6-2ca5-475a-a014-302f05d51839",
+                  "0053e37a-4bf7-4f6d-be2d-e66645b668c6"),
+                          identifier_type = "occurrence",
+    download_dir = media_dir)
   file_count <- length(list.files(media_dir))
   expect_equal(file_count, nrow(media_data))
   unlink(media_dir, recursive = TRUE)

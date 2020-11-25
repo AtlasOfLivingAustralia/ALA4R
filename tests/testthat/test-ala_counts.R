@@ -17,8 +17,11 @@ test_that("ala counts checks inputs", {
 
 test_that("ala counts returns expected outputs", {
   skip_on_cran()
-  expect_type(ala_counts(taxon_id = "https://id.biodiversity.org.au/taxon/apni/51302291"), "integer")
-  expect_equal(class(ala_counts(taxon_id = "https://id.biodiversity.org.au/taxon/apni/51302291",
+  expect_type(ala_counts(
+    taxon_id = "https://id.biodiversity.org.au/taxon/apni/51302291"),
+    "integer")
+  expect_equal(class(ala_counts(
+    taxon_id = "https://id.biodiversity.org.au/taxon/apni/51302291",
                                 breakdown = "basis_of_record")), "data.frame")
   
   expect_warning(ala_counts(breakdown = 'phylum'))

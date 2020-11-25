@@ -40,7 +40,7 @@ rename_columns <- function(varnames, type) {
       varnames <- tolower(gsub("\\.", "_", varnames))
     } else if (type == "occurrence") {
       # change dots to camel case
-      varnames <- gsub("\\.(\\w?)", "\\U\\1", varnames, perl = T)
+      varnames <- gsub("\\.(\\w?)", "\\U\\1", varnames, perl = TRUE)
       # replace first letters with lowercase
       substr(varnames, 1, 1) <- tolower(substr(varnames, 1, 1))
     }

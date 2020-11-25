@@ -39,8 +39,12 @@ test_that("ala_taxa searches at provided rank", {
 
 test_that("ala_taxa handles identifier searches", {
   skip_on_cran()
-  expect_equal(nrow(ala_taxa(term = "https://id.biodiversity.org.au/node/apni/2902929", term_type = "identifier")), 1)
-  expect_message(ala_taxa(term = "https://id.biodiversity.org.au/node/apni/2902929", term_type = "name"))
+  expect_equal(
+    nrow(ala_taxa(term = "https://id.biodiversity.org.au/node/apni/2902929",
+                  term_type = "identifier")), 1)
+  expect_message(
+    ala_taxa(term = "https://id.biodiversity.org.au/node/apni/2902929",
+             term_type = "name"))
 })
 
 test_that("ala_taxa handles name searches", {
@@ -53,13 +57,17 @@ test_that("ala_taxa handles name searches", {
   expect_equal(nrow(ala_taxa(term = c("Eucalyptus", "Banksia", "Acacia"))), 3)
   
   # Handle list of multiple names
-  expect_equal(nrow(ala_taxa(term = list("Eucalyptus", "Banksia", "Acacia"))), 3)
+  expect_equal(nrow(ala_taxa(term = list("Eucalyptus", "Banksia", "Acacia"))),
+               3)
   
   # Handle mix of valid and invalid names
-  expect_message(expect_equal(nrow(ala_taxa(term = c("Eucalyptus", "Banksia", "Wattle"))), 3))
+  expect_message(
+    expect_equal(nrow(ala_taxa(term = c("Eucalyptus", "Banksia", "Wattle"))),
+                 3))
   
   # Handle a dataframe input
-  taxa_df <- data.frame(genus = c("Banksia", "Microseris"), kingdom = "Plantae")
+  taxa_df <- data.frame(genus = c("Banksia", "Microseris"),
+                        kingdom = "Plantae")
   expect_equal(nrow(ala_taxa(term = taxa_df)), 2)
   
   taxa_df <- data.frame(genus = c("Banksia", "Microseris"))
