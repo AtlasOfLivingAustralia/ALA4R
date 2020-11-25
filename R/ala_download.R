@@ -12,7 +12,8 @@ ala_download <- function(url, path, params = list(), ext = ".csv",
 
   # check cache file exists
   if (!is.null(cache_file) && !dir.exists(dirname(cache_file))) {
-    stop(dirname(cache_file), " does not exist. Please create it and try again.")
+    stop(dirname(cache_file),
+         " does not exist. Please create it and try again.")
   }
   
   # create a temporary file
