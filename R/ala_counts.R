@@ -83,7 +83,7 @@ ala_counts <- function(taxon_id, filters, geometry, breakdown,
     )
   } else {
     if (resp$count > limit) {
-      warning("This field has ", resp$count, limit,
+      warning("This field has ", resp$count, " values. ", limit,
               " will be returned. Change `limit` to return more values.")
     }
     # parse out field value
