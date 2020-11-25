@@ -58,7 +58,7 @@ test_that("ala media handles a multiple occurrence ids", {
   media_dir <- "test_media"
   dir.create(media_dir)
   media_data <- ala_media(
-    dentifier = c("80b1d0d6-2ca5-475a-a014-302f05d51839",
+    identifier = c("80b1d0d6-2ca5-475a-a014-302f05d51839",
                   "0053e37a-4bf7-4f6d-be2d-e66645b668c6"),
                           identifier_type = "occurrence",
     download_dir = media_dir)
