@@ -84,3 +84,10 @@ test_that("ala_taxa handles name issues", {
   expect_warning(ala_taxa("Microseris"))
 })
 
+test_that("ala_taxa returns children for multiple names", {
+  expect_equal(
+    nrow(ala_taxa(c("Osphranter", "Dasyurus"), return_children = TRUE)),
+    sum(nrow(ala_taxa("Osphranter", return_children = TRUE)),
+        nrow(ala_taxa("Dasyurus", return_children = TRUE))))
+})
+

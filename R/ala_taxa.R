@@ -67,7 +67,10 @@ ala_taxa <- function(term, term_type = "name", return_children = FALSE,
   out_data <- as.data.frame(matches, stringsAsFactors = FALSE)
   if (ncol(out_data) > 1 && return_children) {
     # look up the child concepts for the identifier
-    children <- child_concepts(out_data$taxon_concept_id)
+    children <- data.table::rbindlist(
+      lapply(out_data$taxon_concept_id, function(x) {
+        child_concepts(x) 
+      }))
     # add children to df
     out_data <- data.table::rbindlist(list(out_data, children), fill = TRUE)
   }
