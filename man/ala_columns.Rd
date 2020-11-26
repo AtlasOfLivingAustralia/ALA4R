@@ -7,7 +7,8 @@
 ala_columns(group, extra)
 }
 \arguments{
-\item{group}{string: name of column group to include (either \code{'basic'} or \code{'event'})}
+\item{group}{string: name of column group to include (either \code{'basic'}
+or \code{'event'})}
 
 \item{extra}{string: additional column names to return}
 }

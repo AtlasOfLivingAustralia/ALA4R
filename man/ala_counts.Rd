@@ -16,7 +16,9 @@ ala_counts(taxon_id, filters, geometry, breakdown, limit = 20, caching = FALSE)
 
 \item{breakdown}{field to breakdown the counts by}
 
-\item{limit}{numeric: maximum number of categories to return. 20 by default.}
+\item{limit}{numeric: maximum number of categories to return. 20 by default.
+If limit is NULL, all results are returned. For some categories this will
+take a while.}
 
 \item{caching}{logical: should the results be cached/use cache? Only used if
 `breakdown` is supplied.}

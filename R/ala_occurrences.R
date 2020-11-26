@@ -63,7 +63,9 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
 
   # Add columns after getting record count
   if(missing(columns)) {
-    if (config_verbose){ message("No columns specified, default columns will be returned.")}
+    if (config_verbose) {
+      message("No columns specified, default columns will be returned.")
+      }
     columns <- ala_columns("basic")
   }
 

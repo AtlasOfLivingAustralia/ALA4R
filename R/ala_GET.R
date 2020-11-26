@@ -1,7 +1,8 @@
 # Wrapper for getting data
 #
 # Try using crul
-ala_GET <- function(url, path, params = list(), on_error = NULL) {
+ala_GET <- function(url, path, params = list(), on_error = NULL,
+                    paginate = FALSE, limit = NULL, page_size = NULL) {
   cli <- HttpClient$new(
     url = url,
     headers = list(
@@ -15,7 +16,16 @@ ala_GET <- function(url, path, params = list(), on_error = NULL) {
     res <- cli$get()
   } else {
     cli$url <- url
-    res <- cli$get(path = path, query = params, encode = "json")
+    if (paginate) {
+      p <- Paginator$new(cli, limit_chunk = page_size, limit_param = 'flimit',
+                         offset_param = 'offset', limit = limit)
+      p$get(path = path, query = params, encode = "json")
+      res <- p$parse("UTF-8")
+      return(res)
+    } else {
+      res <- cli$get(path = path, query = params, encode = "json")
+    }
+    
   }
   
   #print(res$request$url)
