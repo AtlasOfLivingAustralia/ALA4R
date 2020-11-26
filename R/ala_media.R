@@ -21,8 +21,9 @@ ala_media <- function(identifier, download_dir, identifier_type = "media",
   if (!all(valid_media_type)) {
     stop("Valid media types are `c('image', 'sound')`")
   }
-  assert_that(identifier_type %in% c("occurrence", "media"),
-              msg = "`identifier_type` must be one of `c('occurrence', 'media')`")
+  assert_that(
+    identifier_type %in% c("occurrence", "media"),
+    msg = "`identifier_type` must be one of `c('occurrence', 'media')`")
 
   
   assert_that(!missing(download_dir), msg = "Directory to download media to is

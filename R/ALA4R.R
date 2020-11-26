@@ -14,7 +14,7 @@
 #' @docType package
 #' @references \url{https://api.ala.org.au/}
 #' @import assertthat sp sf httr
-#' @importFrom crul HttpClient
+#' @importFrom crul HttpClient Paginator
 #' @importFrom digest digest
 #' @importFrom grDevices dev.off pdf rainbow
 #' @importFrom graphics image legend points title

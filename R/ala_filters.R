@@ -22,7 +22,8 @@ ala_filters <- function(filters = NULL, data_quality_profile = NULL) {
         name <- split[1]
         include <- TRUE
       }
-      data.frame(name = name, include, value = I(list(value)), stringsAsFactors = FALSE)
+      data.frame(name = name, include, value = I(list(value)),
+                 stringsAsFactors = FALSE)
     }))
   } else {
     dq_filter_rows <- NULL
@@ -53,7 +54,8 @@ ala_filters <- function(filters = NULL, data_quality_profile = NULL) {
 # should also validate facets?
 validate_filters <- function(filters) {
   # filters are provided in a dataframe
-  # key should be a valid field name and value should be a valid category for that field
+  # key should be a valid field name and value should be a valid category for
+  # that field
   # valid options is a combination of ala_layers and ala_fields?
   
   invalid_filters <- names(filters)[!names(filters) %in%
@@ -86,9 +88,11 @@ query_term <- function(name, value, include) {
   })
   # add quotes around value
   if (include) {
-    value_str <- paste0("(", paste(name, value, collapse = " OR ", sep = ":"), ")")
+    value_str <- paste0("(", paste(name, value, collapse = " OR ", sep = ":"),
+                        ")")
   } else {
-    value_str <- paste0("(", paste(paste0("-", name), value, collapse = ' AND ', sep = ":"), ")")
+    value_str <- paste0("(", paste(paste0("-", name), value,
+                                   collapse = ' AND ', sep = ":"), ")")
   }
   #paste0("(", value_str, ")")
   value_str
