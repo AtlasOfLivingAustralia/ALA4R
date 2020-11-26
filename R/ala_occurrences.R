@@ -73,26 +73,29 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
   # look for file to download- if it doesn't exist, continue on
   # use base_url_biocache as the filename? otherwise won't be found
   # create cache file with the original query
-  cache_file <- cache_filename(c(getOption("ALA4R_server_config")$
+  caching <- getOption("ALA4R_config")$caching
+  
+  if (caching) {
+    cache_file <- cache_filename(c(getOption("ALA4R_server_config")$
                                    base_url_biocache,
-                               path = "ws/occurrences/offline/download",
-                               params = unlist(query)), ext = ".zip")
-
+                                   path = "ws/occurrences/offline/download",
+                                   params = unlist(query)), ext = ".zip")
+    if (file.exists(cache_file)) {
+      if (config_verbose) { message("Using existing file") } 
+      
+      # look for file using query parameters
+      data <- read.csv(unz(cache_file, "data.csv"), stringsAsFactors = FALSE)
+      # if file doesn't exist, continue as before
+      return(data)
+    }
+  } else {
+    cache_file <- tempfile(fileext = ".zip")
+  }
+  
   if (check_for_caching(taxa_query, filter_query, area_query, columns)) {
     query <- cached_query(taxa_query, filter_query, area_query)
   }
-
-  caching <- getOption("ALA4R_config")$caching
-
-  if ((caching %in% c("on", TRUE)) & file.exists(cache_file)) {
-    if (config_verbose) { message("Using existing file")}
-
-    # look for file using query parameters
-    data <- read.csv(unz(cache_file, "data.csv"), stringsAsFactors = FALSE)
-    # if file doesn't exist, continue as before
-    return(data)
-  }
-
+  
   count <- record_count(query)
   check_count(count, config_verbose)
 

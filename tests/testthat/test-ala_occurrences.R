@@ -15,6 +15,9 @@ test_that("ala_occurrences gives a nice error for invalid emails", {
   expect_error(ala_occurrences(taxon_id = ala_taxa("Wurmbea dioica")),
   regexp = "Status code 403 was returned for this occurrence download request. This may be because
   the email you provided is not registered with the ALA. Please check and try again.")
+  
+  ala_config(email = "")
+  expect_error(ala_occurrences(taxon_id = ala_taxa("Wurmbea dioica")))
   ala_config(email = "ala4r@ala.org.au")
 })
 
