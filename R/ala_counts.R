@@ -108,9 +108,7 @@ ala_counts <- function(taxon_id, filters, geometry, breakdown,
             " will be returned. Change `limit` to return more values.")
   }
   # parse out field value
-  
   value <- parse_fq(counts$fq)
-  
   counts <- data.frame(
     name = value,
     count = counts$count

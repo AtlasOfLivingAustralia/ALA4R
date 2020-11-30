@@ -1,6 +1,7 @@
 context("Test ala counts")
 
 test_that("ala counts checks inputs", {
+  skip_on_cran()
   # ALA counts with no arguments gives the total number of records in the ALA
   expect_gt(ala_counts(), 90000000)
   # invalid facet
@@ -52,4 +53,11 @@ test_that("ala_counts works with long queries", {
   taxa <- ala_taxa("Hymenoptera", return_children = TRUE)
   filters <- ala_filters(data_quality_profile = "ALA")
   expect_gt(ala_counts(taxa, filters), 0)
+})
+
+test_that("ala occurrences handles long queries with pagination", {
+  skip_on_cran()
+  taxa <- ala_taxa("Hymenoptera", return_children = TRUE)
+  filters <- ala_filters(data_quality_profile = "ALA")
+  expect_equal(nrow(ala_counts(breakdown = "eventDate", limit = 101)), 101)
 })

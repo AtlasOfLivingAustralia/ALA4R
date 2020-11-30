@@ -101,3 +101,5 @@ user_agent_string <- function() {
         silent = TRUE)) ## get the ALA4R version, if we can
   paste0("ALA4R ", version_string)
 }
+
+

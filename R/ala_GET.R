@@ -13,6 +13,13 @@ ala_GET <- function(url, path, params = list(), on_error = NULL,
   # workaround for fq troubles
   if (length(params$fq) > 1) {
     cli$url <- build_fq_url(url, path, params)
+    if (paginate) {
+      p <- Paginator$new(cli, limit_chunk = page_size, limit_param = 'flimit',
+                         offset_param = 'offset', limit = limit)
+      p$get()
+      res <- p$parse("UTF-8")
+      return(res)
+    }
     res <- cli$get()
   } else {
     cli$url <- url
@@ -22,10 +29,8 @@ ala_GET <- function(url, path, params = list(), on_error = NULL,
       p$get(path = path, query = params, encode = "json")
       res <- p$parse("UTF-8")
       return(res)
-    } else {
-      res <- cli$get(path = path, query = params, encode = "json")
     }
-    
+    res <- cli$get(path = path, query = params, encode = "json")
   }
   
   #print(res$request$url)
