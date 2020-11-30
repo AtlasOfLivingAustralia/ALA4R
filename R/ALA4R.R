@@ -24,6 +24,6 @@
 #' str_match str_match_all
 #' @importFrom stringr str_replace str_replace_all str_split str_trim str_match
 #' @importFrom utils data packageVersion read.csv write.csv read.table str
-#' unzip URLencode download.file txtProgressBar
+#' unzip URLencode download.file setTxtProgressBar txtProgressBar
 #' @importFrom wellknown lint
 NULL
