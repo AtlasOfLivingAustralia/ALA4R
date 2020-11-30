@@ -149,13 +149,25 @@ ala_occurrences <- function(taxon_id, filters, geometry, columns,
 wait_for_download <- function(url, query) {
   status <- ala_GET(url, "ws/occurrences/offline/download",
                     params = query, on_error = occ_error_handler)
-
+  
   status_url <- parse_url(status$statusUrl)
   status <- ala_GET(url, path = status_url$path)
-  while (tolower(status$status) %in% c("inqueue", "running")) {
+  # create a progress bar
+  pb <- txtProgressBar(max = 1, style = 3)
+  
+  while(tolower(status$status) == "inqueue") {
+    status <- ala_GET(url, path = status_url$path)
+  }
+
+  while (tolower(status$status) == "running") {
+    val <- (status$records / status$totalRecords)
+    setTxtProgressBar(pb, val)
     status <- ala_GET(url, path = status_url$path)
     Sys.sleep(2)
   }
+
+  setTxtProgressBar(pb, value = 1)
+  close(pb)
   parse_url(status$downloadUrl)$path
 }
 
@@ -166,7 +178,7 @@ check_count <- function(count, config_verbose) {
     stop("A maximum of 50 million records can be retrieved at once.",
          " Please narrow the query and try again.")
   } else {
-    if (config_verbose) { message("This query will return ", count, " records")}
+    if (config_verbose) { message("This query will return ", count, " records") }
   }
 }
 
