@@ -23,7 +23,8 @@ true if you intend to use the data in a publication or similar}
 data.frame of occurrences
 }
 \description{
-Download occurrence data from the ALA.
+If `verbose = TRUE` is set in `ala_config()`, a progress bar will be
+displayed for the download.
 }
 \examples{
 \dontrun{
