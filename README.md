@@ -24,11 +24,10 @@ hosted by the ALA.
 
 **NOTE:** ALA4R is no longer being actively developed. A new package to
 replace ALA4R, `galah`, is now [available on
-GitHub](https://github.com/AtlasOfLivingAustralia/galah), and will
-shortly be on CRAN. `galah` provides an improved interface to ALA data,
-while providing the same core functionality as ALA4R. For an
-introduction to `galah`, visit the [package
-site](https://atlasoflivingaustralia.github.io/galah).
+CRAN](https://CRAN.R-project.org/package=galah). `galah` provides an
+improved interface to ALA data, while providing the same core
+functionality as ALA4R. For an introduction to `galah`, visit the
+[package site](https://atlasoflivingaustralia.github.io/galah).
 
 The use-examples presented at the [2014 ALA Science
 Symposium](https://www.ala.org.au/blogs-news/2014-atlas-of-living-australia-science-symposium/)
