@@ -27,12 +27,11 @@ thischeck <- function() {
         ## default fields
         expect_true(setequal(names(taxinfo_download("rk_genus:Heleioporus")),
                              c("guid", "rank", "scientificName",
-                               "scientificNameAuthorship",
                                "scientificNameAuthorship", "taxonomicStatus",
                                "establishmentMeans", "genus", "family", "order",
                                "class", "phylum", "kingdom", "datasetName",
                                "parentGuid", "acceptedConceptName",
-                               "acceptedConceptID")))
+                               "acceptedConceptID", "type", "title")))
     })
 }
 check_caching(thischeck)
