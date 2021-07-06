@@ -1,7 +1,5 @@
 .onLoad <- function(libname, pkgname) {
     if (pkgname == "ALA4R") {
-        packageStartupMessage("`ALA4R` is deprecated and will be removed from CRAN at the end of 2021.
-Please use `galah` instead.")
         ## populate the options slot
         ala_config() ## will set to default values if not already set
 
@@ -37,5 +35,13 @@ Please use `galah` instead.")
         if (!"ALA4R_server_config" %in% names(options())) {
             options(ALA4R_server_config = server_config)
         }
+    }
+}
+
+.onAttach<- function(libname, pkgname){
+    if (pkgname == "ALA4R"){
+        packageStartupMessage("`ALA4R` is deprecated and will be removed from CRAN at the end of 2021. Please use `galah` to download 
+        data from the ALA. See https://github.com/AtlasOfLivingAustralia/galah for help getting started. Not all functionality from
+        galah is in ALA4R; if there is any functionality you would like to see added, please raise an issue in GitHub")
     }
 }
