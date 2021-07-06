@@ -1,3 +1,11 @@
+# ALA4R 1.9.1
+* ALA4R is no longer being actively developed. The package to replace ALA4R,
+`galah`, is now [available on CRAN](https://CRAN.R-project.org/package=galah).
+`galah` provides an improved interface to ALA data, while providing the same core
+functionality as ALA4R. For an introduction to `galah`, visit
+the [package site](https://atlasoflivingaustralia.github.io/galah).
+* M
+
 # ALA4R 1.9.0
 * Add ability to generate a DOI for data downloads in `occurrences()` with `generate_doi` parameter
 * Add `email_notify` parameter to `occurrences()`, set to `FALSE` by default
