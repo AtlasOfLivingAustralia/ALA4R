@@ -22,7 +22,7 @@ directly used within R.
 ALA4R enables the R community to directly access data and resources
 hosted by the ALA.
 
-**NOTE:** ALA4R is no longer being actively developed. A new package to
+**NOTE:** ALA4R is no longer being actively developed. The package to
 replace ALA4R, `galah`, is now [available on
 CRAN](https://CRAN.R-project.org/package=galah). `galah` provides an
 improved interface to ALA data, while providing the same core

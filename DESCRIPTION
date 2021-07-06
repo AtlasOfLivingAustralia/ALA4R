@@ -10,7 +10,12 @@ Authors@R: c(person("Matilda", "Stevenson", email="matilda.stevenson@csiro.au",r
              person("Michael", "Sumner", role="ctb"),
              person("Tom", "August", role="ctb"),
              person("John", "Baumgartner", role="ctb"))
-Description: The Atlas of Living Australia (ALA) provides tools to enable users
+Description: ALA4R is no longer being actively developed. The package to replace
+    ALA4R, `galah`, is now [available on CRAN](https://CRAN.R-project.org/package=galah).
+    `galah` provides an improved interface to ALA data, while providing the same
+    core functionality as ALA4R. For an introduction to `galah`, visit the
+    [package site](https://atlasoflivingaustralia.github.io/galah).
+    The Atlas of Living Australia (ALA) provides tools to enable users
     of biodiversity information to find, access, combine and visualise data on
     Australian plants and animals; these have been made available from
     <https://ala.org.au/>. ALA4R provides a subset of the tools to be
@@ -47,5 +52,5 @@ Maintainer: Matilda Stevenson <matilda.stevenson@csiro.au>
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Encoding: UTF-8
