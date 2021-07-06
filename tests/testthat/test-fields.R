@@ -7,8 +7,6 @@ thischeck <- function() {
         expect_gt(nrow(ala_fields(fields_type = "occurrence")), 570)
         expect_lt(nrow(ala_fields(fields_type = "occurrence_indexed")),
                   nrow(ala_fields(fields_type = "occurrence")))
-        expect_lt(nrow(ala_fields(fields_type = "occurrence_stored")),
-                  nrow(ala_fields(fields_type = "occurrence")))
         expect_gt(nrow(ala_fields(fields_type = "general")), 75)
         expect_gt(nrow(ala_fields(fields_type = "assertions")), 85)
         expect_gt(nrow(ala_fields(fields_type = "layers")), 320)

@@ -5,8 +5,8 @@ thischeck <- function() {
     test_that("ala_reasons works as expected", {
         skip_on_cran()
         expect_named(ala_reasons(), c("rkey", "name", "id"))
-        expect_equal(nrow(ala_reasons()), 12)
-        expect_equal(sort(ala_reasons()$id), c(0:8, 10:12))
+        expect_equal(nrow(ala_reasons()), 13)
+        expect_equal(sort(ala_reasons()$id), c(0:8, 10:13))
         ## this should throw an error because there is an unused argument
         expect_error(ala_reasons(TRUE))
         tmp <- ala_reasons()
@@ -30,6 +30,7 @@ check_caching(thischeck)
 
 thischeck <- function() {
     test_that("occurrences summary gives something sensible", {
+      skip("Broken by infrastructure upgrade")
         occ <- occurrences(taxon = "Amblyornis newtonianus",
                            email = "ala4r@ala.org.au",
                            download_reason_id = 10)
@@ -48,7 +49,7 @@ check_caching(thischeck)
 
 thischeck <- function() {
     test_that("occurrences retrieves the fields specified", {
-        skip_on_cran()
+        skip("Broken by infrastructure upgrade")
         expect_equal(sort(names(
             occurrences(taxon = "Eucalyptus gunnii", email = "ala4r@ala.org.au",
                         fields = c("latitude", "longitude"), qa = "none",
@@ -81,7 +82,7 @@ thischeck <- function() {
         expect_true("eventDate" %in% names(xu$data))
         expect_error(unique(x, temporal = "y"))
         #drop scientific name
-        x$data <- x$data[, !names(x$data) == "scientificName"]
+        x$data <- x$data[, !names(x$data) == "species"]
         expect_error(unique(x))
     })
 }
@@ -89,7 +90,7 @@ check_caching(thischeck)
 
 thischeck <- function() {
     test_that("occurrences subset does something sensible", {
-        skip_on_cran()
+        skip("Broken by infrastructure upgrade")
         x <- occurrences(taxon = "Amblyornis newtonianus",
                          email = "ala4r@ala.org.au", download_reason_id = 10)
         Sys.sleep(20)
@@ -147,11 +148,11 @@ thischeck <- function() {
                   download_reason_id = 10,
                   wkt = "POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))")$
         data, "data.frame")
-    expect_true("associatedMedia" %in%
+    expect_true("images" %in%
                   names(occurrences(taxon = "Amblyornis newtonianus",
                                     email = "ala4r@ala.org.au",
                                     download_reason_id = 10,
-                                    extra = "associated_media")$data))
+                                    extra = "images")$data))
   })
 }
 check_caching(thischeck)

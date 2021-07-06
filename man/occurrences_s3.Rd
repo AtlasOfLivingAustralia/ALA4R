@@ -92,7 +92,7 @@ email = "ala4r@ala.org.au")
 #summarize the occurrences
 summary(x)
 
-#keep spatially unique data at 0.01 degrees (latitude and longitude)
+#keep spatially unique data at 0.01 degrees (latitudeOriginal and longitudeOriginal)
 tt <- unique(x,spatial = 0.01)
 summary(tt)
 

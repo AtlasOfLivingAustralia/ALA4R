@@ -6,7 +6,7 @@ thischeck <- function() {
         x <- specieslist("dfjknnaklhkjf",
                                         wkt = "POLYGON((147.62 -42.83,147.60
                                         -42.86,147.65 -42.87,147.70 -42.86,
-                                        147.62 -42.83))", fq = "rank:species")
+                                        147.62 -42.83))", fq = "taxonRank:species")
         expect_is(x, "data.frame")
         expect_equal(nrow(x), 0)
     })
@@ -15,10 +15,6 @@ thischeck <- function() {
         skip_on_cran()
         ## rk_genus is the BIE field name, but specieslist uses occurrence
         ## fields, which is just "genus"
-        expect_warning(x <- specieslist(
-          wkt = "POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",
-                                        fq = "rk_genus:Heleioporus"))
-        expect_equal(nrow(x), 0)
         x <- specieslist(
           wkt = "POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))",
           fq = "genus:Heleioporus")

@@ -2,7 +2,7 @@ context("Test sites-by-species functionality")
 
 thischeck <- function() {
     test_that("sites_by_species works as expected", {
-        skip_on_cran()
+        skip("Unreliable web service")
         ss <- sites_by_species(
             taxon = "genus:Eucalyptus",
             wkt = "POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))",
@@ -16,7 +16,7 @@ check_caching(thischeck)
 
 thischeck <- function() {
     test_that("sites_by_species outputs a spatial points dataframe", {
-        skip_on_cran()
+        skip("Unreliable web service")
         ss <- sites_by_species(
           taxon = "genus:Eucalyptus",
           wkt = "POLYGON((144 -43,148 -43,148 -40,144 -40,144 -43))",

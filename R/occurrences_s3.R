@@ -52,7 +52,7 @@
 #' #summarize the occurrences
 #' summary(x)
 #'
-#' #keep spatially unique data at 0.01 degrees (latitude and longitude)
+#' #keep spatially unique data at 0.01 degrees (latitudeOriginal and longitudeOriginal)
 #' tt <- unique(x,spatial = 0.01)
 #' summary(tt)
 #'
@@ -129,17 +129,17 @@ NULL
                  or 'full'")
         }
     }
-    check_names_present("scientificName")
+    check_names_present("species")
     # start defining the columns of interest to do the "unique" by
-    cois <- list(scientificName = x$data$scientificName)
+    cois <- list(species = x$data$species)
     if (spatial >= 0) {
-        check_names_present(c("longitude", "latitude"))
+        check_names_present(c("longitudeOriginal", "latitudeOriginal"))
         if (spatial > 0) { #round the data to the spatial accuracy of interest
-            x$data$latitude <- round(x$data$latitude / spatial) * spatial
-            x$data$longitude <- round(x$data$longitude / spatial) * spatial
+            x$data$latitudeOriginal <- round(x$data$latitudeOriginal / spatial) * spatial
+            x$data$longitudeOriginal <- round(x$data$longitudeOriginal / spatial) * spatial
         }
-        # append the latitude and longitude
-        cois$latitude <- x$data$latitude; cois$longitude <- x$data$longitude
+        # append the latitudeOriginal and longitudeOriginal
+        cois$latitudeOriginal <- x$data$latitudeOriginal; cois$longitudeOriginal <- x$data$longitudeOriginal
     }
     if (!is.null(temporal)) {
         if (temporal == "full") {

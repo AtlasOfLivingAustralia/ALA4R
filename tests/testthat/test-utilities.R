@@ -53,28 +53,28 @@ thischeck <- function() {
     test_that("check_fq extracts field names correctly", {
         skip_on_cran()
         expect_equal(ALA4R:::extract_fq_fieldnames(
-          "occurrence_year:[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]"),
-          c("occurrence_year"))
+          "year:[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]"),
+          c("year"))
         expect_null(ALA4R:::check_fq(
-          "occurrence_year:[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]",
+          "year:[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]",
           "occurrence"))
 
         expect_null(ALA4R:::extract_fq_fieldnames(
-          "occurrence_year[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]"))
+          "year[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]"))
         expect_warning(ALA4R:::check_fq(
-          "occurrence_year[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]",
+          "year[2000-01-01T00:00:00Z TO 2020-01-01T23:59:59Z]",
           "occurrence"))
         expect_equal(ALA4R:::extract_fq_fieldnames(
-          c("month:12", "family:something AND longitude:[60 TO *]")),
-          c("month", "family", "longitude"))
+          c("month:12", "family:something AND decimalLongitude:[60 TO *]")),
+          c("month", "family", "decimalLongitude"))
         expect_null(ALA4R:::check_fq(
-          c("month:12", "family:something AND longitude:[60 TO *]"),
+          c("month:12", "family:something AND decimalLongitude:[60 TO *]"),
           "occurrence"))
         expect_equal(ALA4R:::extract_fq_fieldnames(
-          c("month : 12", "family:something AND longitude:[60 TO *]")),
-          c("month", "family", "longitude"))
+          c("month : 12", "family:something AND decimalLongitude:[60 TO *]")),
+          c("month", "family", "decimalLongitude"))
         expect_null(ALA4R:::check_fq(
-          c("month : 12", "family:something AND longitude:[60 TO *]"),
+          c("month : 12", "family:something AND decimalLongitude:[60 TO *]"),
           "occurrence"))
         expect_equal(ALA4R:::extract_fq_fieldnames(" notafield:something "),
                      "notafield")
