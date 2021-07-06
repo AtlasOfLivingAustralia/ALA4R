@@ -1,5 +1,7 @@
 .onLoad <- function(libname, pkgname) {
     if (pkgname == "ALA4R") {
+        packageStartupMessage("`ALA4R` is deprecated and will be removed from CRAN at the end of 2021.
+Please use `galah` instead.")
         ## populate the options slot
         ala_config() ## will set to default values if not already set
 
