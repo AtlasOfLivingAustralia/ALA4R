@@ -74,7 +74,7 @@ the taxon are known, use search_names instead." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ALA4R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@ the taxon are known, use search_names instead." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,7 +99,7 @@ the taxon are known, use search_names instead." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/AtlasOfLivingAustralia/ALA4R/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,13 +127,13 @@ If searching for a taxon name, and the scientific name or common name of
 the taxon are known, use <code><a href='search_names.html'>search_names</a></code> instead.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>search_partial_name</span>(
-  <span class='no'>taxon</span>,
-  <span class='kw'>geo_only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"simple"</span>,
-  <span class='no'>index_type</span>,
-  <span class='no'>limit</span>
-)</pre>
+    <pre class="usage"><span class='fu'>search_partial_name</span><span class='op'>(</span>
+  <span class='va'>taxon</span>,
+  geo_only <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  output_format <span class='op'>=</span> <span class='st'>"simple"</span>,
+  <span class='va'>index_type</span>,
+  <span class='va'>limit</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -182,13 +182,14 @@ frame will vary depending on the details of the search and the results.</p>
 taxonomic names</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># find any names containing "allaba"</span>
-<span class='fu'>search_partial_name</span>(<span class='st'>"allaba"</span>, <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"simple"</span>)
+<span class='fu'>search_partial_name</span><span class='op'>(</span><span class='st'>"allaba"</span>, output_format <span class='op'>=</span> <span class='st'>"simple"</span><span class='op'>)</span>
 
 <span class='co'># retrieve only species that have geolocated occurrence records</span>
-<span class='fu'>search_partial_name</span>(<span class='st'>"Gallaba"</span>, <span class='kw'>geo_only</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-}</div></pre>
+<span class='fu'>search_partial_name</span><span class='op'>(</span><span class='st'>"Gallaba"</span>, geo_only <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -204,7 +205,7 @@ taxonomic names</p></div>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -16,6 +16,15 @@ library(knitr)
 options(width=120)
 ```
 
+**`ALA4R` is deprecated and will be removed from CRAN at the end of 2021.
+The package to replace ALA4R, `galah`, is now
+[available on CRAN](https://CRAN.R-project.org/package=galah).
+`galah` provides an improved interface to ALA data, while providing the same
+core functionality as ALA4R. For an introduction to `galah`, visit the
+[GitHub page](https://github.com/AtlasOfLivingAustralia/galah). If there are any
+functions in `ALA4R` but not in `galah` that you would like to see added, please
+raise an issue in GitHub.**
+
 The Atlas of Living Australia (ALA) provides tools to enable users of biodiversity information to find, access, combine and visualise data on Australian plants and animals; these have been made available from https://www.ala.org.au/. Here we provide a subset of the tools to be directly used within R.
 
 ALA4R enables the R community to directly access data and resources hosted by the ALA. 

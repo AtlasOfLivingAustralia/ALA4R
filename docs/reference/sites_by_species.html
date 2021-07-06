@@ -75,7 +75,7 @@ corner of the grid cell." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ALA4R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@ corner of the grid cell." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +100,7 @@ corner of the grid cell." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/AtlasOfLivingAustralia/ALA4R/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -129,13 +129,13 @@ species should be returned. The coordinates returned are the TOP-LEFT
 corner of the grid cell.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sites_by_species</span>(
-  <span class='no'>taxon</span>,
-  <span class='no'>wkt</span>,
-  <span class='kw'>gridsize</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>SPdata.frame</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span>()$<span class='no'>verbose</span>
-)</pre>
+    <pre class="usage"><span class='fu'>sites_by_species</span><span class='op'>(</span>
+  <span class='va'>taxon</span>,
+  <span class='va'>wkt</span>,
+  gridsize <span class='op'>=</span> <span class='fl'>0.1</span>,
+  SPdata.frame <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  verbose <span class='op'>=</span> <span class='fu'><a href='ala_config.html'>ala_config</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>verbose</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -184,15 +184,15 @@ PointsToGrid/sitesBySpecies</p>
 <p><a href='http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html'>http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Eucalyptus in Tasmania based on a 0.1 degree grid</span>
-<span class='no'>ss</span> <span class='kw'>&lt;-</span> <span class='fu'>sites_by_species</span>(<span class='kw'>taxon</span> <span class='kw'>=</span> <span class='st'>"genus:Eucalyptus"</span>,
-<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>"POLYGON((144 -43,148 -43,148 -40,
-  144 -40,144 -43))"</span>, <span class='kw'>gridsize</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>ss</span>[, <span class='fl'>1</span>:<span class='fl'>6</span>])
+<span class='va'>ss</span> <span class='op'>&lt;-</span> <span class='fu'>sites_by_species</span><span class='op'>(</span>taxon <span class='op'>=</span> <span class='st'>"genus:Eucalyptus"</span>,
+wkt <span class='op'>=</span> <span class='st'>"POLYGON((144 -43,148 -43,148 -40,
+  144 -40,144 -43))"</span>, gridsize <span class='op'>=</span> <span class='fl'>0.1</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ss</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span><span class='op'>]</span><span class='op'>)</span>
 
 <span class='co'>## get the guid of the first species</span>
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>ss</span>,<span class='st'>"guid"</span>)[<span class='fl'>1</span>]
+<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>ss</span>,<span class='st'>"guid"</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
 <span class='co'># Steps: 1. POST webservice creates a task</span>
 <span class='co'># (use single quotes around data-binary argument)</span>
 <span class='co'>#curl 'https://spatial.ala.org.au/ws/tasks/create?userId=0'</span>
@@ -218,7 +218,9 @@ PointsToGrid/sitesBySpecies</p>
 <span class='co'># 3. download the zip and extract the file</span>
 <span class='co'># https://spatial.ala.org.au/ws/tasks/output/&lt;id&gt;/download.zip</span>
 <span class='co'># https://spatial.ala.org.au/ws/tasks/output/&lt;id&gt;/SitesBySpecies.csv</span>
-}</div></pre>
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -234,7 +236,7 @@ PointsToGrid/sitesBySpecies</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

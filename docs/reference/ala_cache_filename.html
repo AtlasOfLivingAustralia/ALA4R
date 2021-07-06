@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Returns the name of the cache file associated with a given URL.
+<title>Returns the name of the cache file associated with the given URL.
 Note that this file may not actually exist, this function just provides
 the mapping from URL to filename — ala_cache_filename • ALA4R</title>
 
@@ -41,10 +41,10 @@ the mapping from URL to filename — ala_cache_filename • ALA4R</title>
 
 
 
-<meta property="og:title" content="Returns the name of the cache file associated with a given URL.
+<meta property="og:title" content="Returns the name of the cache file associated with the given URL.
 Note that this file may not actually exist, this function just provides
 the mapping from URL to filename — ala_cache_filename" />
-<meta property="og:description" content="Returns the name of the cache file associated with a given URL.
+<meta property="og:description" content="Returns the name of the cache file associated with the given URL.
 Note that this file may not actually exist, this function just provides
 the mapping from URL to filename" />
 
@@ -78,7 +78,7 @@ the mapping from URL to filename" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ALA4R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@ the mapping from URL to filename" />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -103,7 +103,7 @@ the mapping from URL to filename" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/AtlasOfLivingAustralia/ALA4R/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@ the mapping from URL to filename" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Returns the name of the cache file associated with a given URL.
+    <h1>Returns the name of the cache file associated with the given URL.
 Note that this file may not actually exist, this function just provides
 the mapping from URL to filename</h1>
     <small class="dont-index">Source: <a href='https://github.com/AtlasOfLivingAustralia/ALA4R/blob/master/R/ala_cache_filename.R'><code>R/ala_cache_filename.R</code></a></small>
@@ -128,12 +128,12 @@ the mapping from URL to filename</h1>
     </div>
 
     <div class="ref-description">
-    <p>Returns the name of the cache file associated with a given URL.
+    <p>Returns the name of the cache file associated with the given URL.
 Note that this file may not actually exist, this function just provides
 the mapping from URL to filename</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ala_cache_filename</span>(<span class='no'>url</span>)</pre>
+    <pre class="usage"><span class='fu'>ala_cache_filename</span><span class='op'>(</span><span class='va'>url</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,7 +156,8 @@ the mapping from URL to filename</p>
 directory</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>ala_cache_filename</span>(<span class='st'>"https://biocache-ws.ala.org.au/ws/index/fields"</span>)</div><div class='output co'>#&gt; [1] "/var/folders/vj/3tg9x69j489f4c_28pvcyqq0010qw1/T//Rtmpuded1U/3b171660be082bfc39d3a216452ecd31"</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'>ala_cache_filename</span><span class='op'>(</span><span class='st'>"https://biocache-ws.ala.org.au/ws/index/fields"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "/var/folders/vj/3tg9x69j489f4c_28pvcyqq0010qw1/T//Rtmp5ZoMdX/3b171660be082bfc39d3a216452ecd31"</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -173,7 +174,7 @@ directory</p></div>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

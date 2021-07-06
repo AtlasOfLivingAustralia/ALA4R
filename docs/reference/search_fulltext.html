@@ -74,7 +74,7 @@ parameter, with optional filtering via fq." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ALA4R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@ parameter, with optional filtering via fq." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,7 +99,7 @@ parameter, with optional filtering via fq." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/AtlasOfLivingAustralia/ALA4R/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,15 +127,15 @@ Generally, the user will provide the search term via the <code>query</code>
 parameter, with optional filtering via <code>fq</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>search_fulltext</span>(
-  <span class='no'>query</span>,
-  <span class='kw'>fq</span> <span class='kw'>=</span> <span class='st'>"idxtype:TAXON"</span>,
-  <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"simple"</span>,
-  <span class='no'>start</span>,
-  <span class='no'>page_size</span>,
-  <span class='no'>sort_by</span>,
-  <span class='no'>sort_dir</span>
-)</pre>
+    <pre class="usage"><span class='fu'>search_fulltext</span><span class='op'>(</span>
+  <span class='va'>query</span>,
+  fq <span class='op'>=</span> <span class='st'>"idxtype:TAXON"</span>,
+  output_format <span class='op'>=</span> <span class='st'>"simple"</span>,
+  <span class='va'>start</span>,
+  <span class='va'>page_size</span>,
+  <span class='va'>sort_by</span>,
+  <span class='va'>sort_dir</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,16 +203,17 @@ at least the columns <code>guid</code>, <code>name</code>, <code>commonName</cod
     <div class='dont-index'><p><code><a href='ala_fields.html'>ala_fields</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
  <span class='co'># find information ALA holds on red kangaroo</span>
- <span class='fu'>search_fulltext</span>(<span class='st'>"red kangaroo"</span>)
- <span class='fu'>search_fulltext</span>(<span class='st'>"Heleioporus australiacus"</span>)
- <span class='fu'>search_fulltext</span>(<span class='st'>"urn:lsid:biodiversity.org.au:afd.taxon:
- 31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae"</span>)
+ <span class='fu'>search_fulltext</span><span class='op'>(</span><span class='st'>"red kangaroo"</span><span class='op'>)</span>
+ <span class='fu'>search_fulltext</span><span class='op'>(</span><span class='st'>"Heleioporus australiacus"</span><span class='op'>)</span>
+ <span class='fu'>search_fulltext</span><span class='op'>(</span><span class='st'>"urn:lsid:biodiversity.org.au:afd.taxon:
+ 31a9b8b8-4e8f-4343-a15f-2ed24e0bf1ae"</span><span class='op'>)</span>
 
  <span class='co'># find genus names like "Oenanthe"</span>
- <span class='fu'>search_fulltext</span>(<span class='st'>"oenanthe"</span>, <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='st'>"rk_kingdom"</span>, <span class='kw'>fq</span> <span class='kw'>=</span> <span class='st'>"rank:genus"</span>)
-}</div></pre>
+ <span class='fu'>search_fulltext</span><span class='op'>(</span><span class='st'>"oenanthe"</span>, sort_by <span class='op'>=</span> <span class='st'>"rk_kingdom"</span>, fq <span class='op'>=</span> <span class='st'>"rank:genus"</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -228,7 +229,7 @@ at least the columns <code>guid</code>, <code>name</code>, <code>commonName</cod
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

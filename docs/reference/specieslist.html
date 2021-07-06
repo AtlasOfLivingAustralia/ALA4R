@@ -73,7 +73,7 @@ area, or both." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ALA4R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@ area, or both." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +98,7 @@ area, or both." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/AtlasOfLivingAustralia/ALA4R/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,7 +125,7 @@ area, or both." />
 area, or both.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>specieslist</span>(<span class='no'>taxon</span>, <span class='no'>wkt</span>, <span class='no'>fq</span>)</pre>
+    <pre class="usage"><span class='fu'>specieslist</span><span class='op'>(</span><span class='va'>taxon</span>, <span class='va'>wkt</span>, <span class='va'>fq</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -183,23 +183,24 @@ see https://github.com/AtlasOfLivingAustralia/bie-index/issues/134</p>
 via the <code>fq</code> parameter</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>taxon</span> <span class='kw'>=</span> <span class='st'>"genus:Hakea"</span>, <span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>"POLYGON((145 -37,150 -37,
-150 -30,145 -30,145 -37))"</span>)
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>specieslist</span><span class='op'>(</span>taxon <span class='op'>=</span> <span class='st'>"genus:Hakea"</span>, wkt <span class='op'>=</span> <span class='st'>"POLYGON((145 -37,150 -37,
+150 -30,145 -30,145 -37))"</span><span class='op'>)</span>
 
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>"POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>specieslist</span><span class='op'>(</span>wkt <span class='op'>=</span> <span class='st'>"POLYGON((147.62 -42.83,147.60 -42.86,147.65 -42.87,
 147.70 -42.86,
-  147.62 -42.83))"</span>, <span class='kw'>fq</span> <span class='kw'>=</span> <span class='st'>"rank:species"</span>)
+  147.62 -42.83))"</span>, fq <span class='op'>=</span> <span class='st'>"rank:species"</span><span class='op'>)</span>
 
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>"POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))"</span>,
-<span class='kw'>fq</span> <span class='kw'>=</span> <span class='st'>"genus:Heleioporus"</span>)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>specieslist</span><span class='op'>(</span>wkt <span class='op'>=</span> <span class='st'>"POLYGON((145 -37,150 -37,150 -30,145 -30,145 -37))"</span>,
+fq <span class='op'>=</span> <span class='st'>"genus:Heleioporus"</span><span class='op'>)</span>
 
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>specieslist</span>(<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>"POLYGON((152.38 -30.43,152.5 -30.43,152.5 -30.5,
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>specieslist</span><span class='op'>(</span>wkt <span class='op'>=</span> <span class='st'>"POLYGON((152.38 -30.43,152.5 -30.43,152.5 -30.5,
 152.38 -30.5,152.38 -30.43))"</span>,
-    <span class='kw'>fq</span> <span class='kw'>=</span> <span class='st'>"kingdom:Plantae"</span>)
+    fq <span class='op'>=</span> <span class='st'>"kingdom:Plantae"</span><span class='op'>)</span>
 <span class='co'>## NOTE that this response might include records with empty or NA kingdom,</span>
 <span class='co'>## phylum, or class values, as per the note above.</span>
-}</div></pre>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -215,7 +216,7 @@ via the <code>fq</code> parameter</p></div>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
