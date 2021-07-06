@@ -10,29 +10,11 @@ teardown({
   unlink("media", recursive = TRUE)
 })
 
-expected_property_names <- sort(c("imageIdentifier", "imageUrl", "success",
-                                  "mimeType", "originalFileName",
-                                  "sizeInBytes", "rights", "rightsHolder",
-                                  "dateUploaded", "dateTaken",
-                                  "tileUrlPattern", "mmPerPixel", "height",
-                                  "width", "tileZoomLevels", "description",
-                                  "title", "creator", "license",
-                                  "recognisedLicence",
-                                  "recognisedLicence.acronym",
-                                  "recognisedLicence.id",
-                                  "recognisedLicence.version",
-                                  "recognisedLicence.imageUrl",
-                                  "recognisedLicence.name",
-                                  "recognisedLicence.url",
-                                  "dataResourceUid", "occurrenceID"))
-
-
 thischeck <- function() {
   test_that("image retrieval throws an error when no image id is provided", {
     skip_on_cran()
     expect_error(images(download = TRUE))
     expect_error(images())
-
   })
 }
 
@@ -76,7 +58,6 @@ thischeck <- function() {
     known_image_info <- images(c("84654e14-dc35-4486-9e7c-40eb2f8d3faa",
                                  "05436aca-bb91-4801-8633-3616c6a3077e"))
     expect_equal(nrow(known_image_info), 2)
-    expect_equal(sort(colnames(known_image_info)), expected_property_names)
   })
 }
 
@@ -91,7 +72,6 @@ thischeck <- function() {
                              "05436aca-bb91-4801-8633-3616c6a3077e",
                              "this-is-also-an-invalid-image-id"))
     expect_equal(nrow(mixed_images), 4)
-    expect_equal(sort(names(mixed_images)), expected_property_names)
     unmatched_images <- images("this-is-an-invalid-image-id")
     expect_equal(nrow(unmatched_images), 1)
   })
