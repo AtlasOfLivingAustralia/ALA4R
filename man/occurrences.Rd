@@ -53,7 +53,7 @@ fq matches are ANDed by default (e.g. c("field1:abc","field2:def") will
 match records that have
 field1 value "abc" and field2 value "def"). To obtain OR behaviour, use the
 form c("field1:abc OR field2:def"). See e.g.
-\url{https://lucene.apache.org/solr/guide/6_6/common-query-parameters.html}
+\url{https://solr.apache.org/guide/6_6/common-query-parameters.html}
 for more information about filter queries}
 
 \item{fields}{string vector: (optional) a vector of field names to return.
