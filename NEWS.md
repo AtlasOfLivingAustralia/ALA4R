@@ -4,7 +4,7 @@
 `galah` provides an improved interface to ALA data, while providing the same core
 functionality as ALA4R. For an introduction to `galah`, visit
 the [package site](https://atlasoflivingaustralia.github.io/galah).
-* M
+* Minor fixes to functions in response to ALA core infrastructure upgrade
 
 # ALA4R 1.9.0
 * Add ability to generate a DOI for data downloads in `occurrences()` with `generate_doi` parameter

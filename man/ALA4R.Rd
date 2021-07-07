@@ -10,7 +10,7 @@ ALA4R}
 `galah`, is now available on CRAN \url{https://CRAN.R-project.org/package=galah}.
 `galah` provides an improved interface to ALA data, while providing the same
 core functionality as ALA4R. For an introduction to `galah`, visit the
-\{https://github.com/AtlasOfLivingAustralia/galah).
+GitHub page \url{https://github.com/AtlasOfLivingAustralia/galah}.
 }
 \details{
 This project enables the R community to access data and tools hosted by the
