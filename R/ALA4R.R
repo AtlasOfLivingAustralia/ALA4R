@@ -2,10 +2,10 @@
 #' ALA4R
 #' 
 #' `ALA4R` is deprecated and will be removed from CRAN at the end of 2021.  The package to replace ALA4R, 
-#' `galah`, is now [available on CRAN](https://CRAN.R-project.org/package=galah).
+#' `galah`, is now available on CRAN \url{https://CRAN.R-project.org/package=galah}.
 #' `galah` provides an improved interface to ALA data, while providing the same
 #' core functionality as ALA4R. For an introduction to `galah`, visit the
-#' [GitHub page](https://github.com/AtlasOfLivingAustralia/galah).
+#' \{https://github.com/AtlasOfLivingAustralia/galah).
 #' 
 #' This project enables the R community to access data and tools hosted by the
 #' Atlas of Living Australia. The goal of the project is
