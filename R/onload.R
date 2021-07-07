@@ -1,8 +1,5 @@
 .onLoad <- function(libname, pkgname) {
     if (pkgname == "ALA4R") {
-        packageStartupMessage("`ALA4R` is deprecated and will be removed from CRAN at the end of 2021. The package to replace ALA4R,
-    `galah`, is now available (https://CRAN.R-project.org/package=galah). For an introduction to `galah`,
-    visit the GitHub page (https://github.com/AtlasOfLivingAustralia/galah).")
         ## populate the options slot
         ala_config() ## will set to default values if not already set
 

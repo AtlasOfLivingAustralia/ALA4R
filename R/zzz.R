@@ -1,3 +1,6 @@
 .onAttach <- function(libname, pkgname) {
-    ##packageStartupMessage("*NOTE, Feb 2018* --- some functionality may not work because of recent changes to the ALA infrastructure. These are being investigated.")
+  msg <- "`ALA4R` is deprecated and will be removed from CRAN at the end of 2021. The package to replace ALA4R,
+`galah`, is now available (https://CRAN.R-project.org/package=galah). For an introduction to `galah`,
+visit the GitHub page (https://github.com/AtlasOfLivingAustralia/galah)."
+  packageStartupMessage(msg)
 }
