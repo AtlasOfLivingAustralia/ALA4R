@@ -2,7 +2,8 @@ Package: ALA4R
 Type: Package
 Title: Atlas of Living Australia (ALA) Data and Resources in R
 Version: 1.9.1
-Authors@R: c(person("Matilda", "Stevenson", email="matilda.stevenson@csiro.au",role=c("aut","cre")),
+Authors@R: c(person("Martin", "Westgate", email="martin.westgate@csiro.au",role=c("aut","cre")),
+             person("Matilda", "Stevenson", email="matildastevenson2812@gmail.com",role="aut"),
              person("Peggy", "Newman", email="peggy.newman@csiro.au", role="aut"),
              person("Ben", "Raymond", email="ben_ala@untan.gl", role="aut"),
              person("Jeremy", "VanDerWal", role="aut"),
@@ -18,8 +19,8 @@ Description:
     directly used within R. It enables the R community to directly access data
     and resources hosted by the ALA.
     ALA4R is deprecated and will be removed from CRAN at the end of 2021.
-    The package to replace ALA4R, `galah`, is now available on CRAN <https://CRAN.R-project.org/package=galah>.
-    For an introduction to `galah`, visit the GitHub page <https://github.com/AtlasOfLivingAustralia/galah>.
+    The package to replace ALA4R, 'galah', is now available on CRAN <https://CRAN.R-project.org/package=galah>.
+    For an introduction to 'galah', visit the GitHub page <https://github.com/AtlasOfLivingAustralia/galah>.
 Imports:
     assertthat,
     data.table,
@@ -47,7 +48,7 @@ Suggests:
 License: MPL-2.0
 URL: https://github.com/AtlasOfLivingAustralia/ALA4R
 BugReports: https://github.com/AtlasOfLivingAustralia/ALA4R/issues
-Maintainer: Matilda Stevenson <matilda.stevenson@csiro.au>
+Maintainer: Martin Westgate <martin.westgate@csiro.au>
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
