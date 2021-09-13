@@ -9,12 +9,9 @@ Status](https://travis-ci.org/AtlasOfLivingAustralia/ALA4R.svg?branch=master)](h
 status](https://ci.appveyor.com/api/projects/status/g9pudc4l7053w4vn/branch/master?svg=true)](https://ci.appveyor.com/project/PeggyNewman/ala4r/branch/master)
 [![codecov](https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R/branch/master/graph/badge.svg)](https://codecov.io/gh/AtlasOfLivingAustralia/ALA4R)
 [![CRAN
-Status](https://www.r-pkg.org/badges/version/ALA4R)](https://www.r-pkg.org/pkg/ALA4R)
-[![CRAN
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ALA4R)](https://cran.r-project.org/package=ALA4R)
 
-*`ALA4R` is deprecated and will be removed from CRAN at the end of 2021.
-The package to replace ALA4R, `galah`, is now [available on
+*`ALA4R` is deprecated; we suggest you use `galah` instead [available on
 CRAN](https://CRAN.R-project.org/package=galah). `galah` provides an
 improved interface to ALA data, while providing the same core
 functionality as ALA4R. For an introduction to `galah`, visit the
@@ -35,27 +32,12 @@ are available in the package vignette, via (in R): `vignette("ALA4R")`,
 or [browse it
 online](https://atlasoflivingaustralia.github.io/ALA4R/articles/ALA4R.html).
 
-## Citing ALA4R
-
-To generate a citation for ALA4R run:
-
-``` r
-citation(package = "ALA4R")
-```
-
 ## Installing
-
-Stable version from CRAN:
-
-``` r
-install.packages("ALA4R")
-```
-
-Or the development version from GitHub:
+`ALA4R` is available from GitHub:
 
 ``` r
-install.packages("devtools")
-devtools::install_github("AtlasOfLivingAustralia/ALA4R")
+install.packages("remotes")
+remotes::install_github("AtlasOfLivingAustralia/ALA4R")
 ```
 
 On Linux you will first need to ensure that `libcurl` and `v8` (version
@@ -73,3 +55,11 @@ or install via the Software Centre.
 See the online documentation at
 <https://atlasoflivingaustralia.github.io/ALA4R/> including the [package
 vignette](https://atlasoflivingaustralia.github.io/ALA4R/articles/ALA4R.html).
+
+## Citing ALA4R
+
+To generate a citation for ALA4R run:
+
+``` r
+citation(package = "ALA4R")
+```
