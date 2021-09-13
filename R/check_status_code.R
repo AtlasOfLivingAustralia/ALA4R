@@ -85,7 +85,7 @@ check_status_code <- function(x, on_redirect = NULL, on_client_error = NULL,
                     assert_that(is.function(on_client_error))
                     return(on_client_error(xstatus))
                 } else {
-                    diag_msg <- paste0("  Either there was an error with your
+                    diag_msg <- paste0("  Either there was an error with your 
                                        request or in the ",
                                        getOption("ALA4R_server_config")$brand,
                                        " package, or the servers are down. ",
